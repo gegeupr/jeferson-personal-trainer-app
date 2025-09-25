@@ -26,7 +26,7 @@ export default function AssinaturaPage() {
       }
       setAlunoId(user.id);
 
-      // CORRIGIDO AQUI: Busca a role diretamente da tabela 'profiles'
+      // Busca a role
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('role')
@@ -39,7 +39,7 @@ export default function AssinaturaPage() {
         return;
       }
 
-      // Busca o status da assinatura do aluno no Supabase
+      // Busca o status da assinatura
       const { data: assinatura, error: assinaturaError } = await supabase
         .from('assinaturas')
         .select('status')
@@ -54,7 +54,7 @@ export default function AssinaturaPage() {
       } else if (assinatura) {
         setStatusAssinatura(assinatura.status);
         if (assinatura.status === 'active') {
-          alert('Você já possui uma assinatura ativa! Redirecionando para o Dashboard.');
+          // CORREÇÃO: Removendo alert() e mantendo apenas o redirecionamento
           router.push('/dashboard'); 
           return;
         } else if (assinatura.status === 'pending') {
@@ -94,9 +94,14 @@ export default function AssinaturaPage() {
 
       window.location.href = data.redirectUrl;
 
-    } catch (err: any) {
-      console.error('Erro ao iniciar assinatura:', err.message);
-      setError(`Erro ao iniciar assinatura: ${err.message}`);
+    } catch (err: unknown) { // CORREÇÃO: "any" substituído por "unknown"
+      if (err instanceof Error) {
+        console.error('Erro ao iniciar assinatura:', err.message);
+        setError(`Erro ao iniciar assinatura: ${err.message}`);
+      } else {
+        console.error('Erro ao iniciar assinatura: Ocorreu um erro desconhecido.');
+        setError('Erro ao iniciar assinatura: Ocorreu um erro desconhecido.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -121,6 +126,7 @@ export default function AssinaturaPage() {
     );
   }
 
+  // NOTE: Eu não mudei a lógica de renderização aqui, mas você pode querer simplificá-la.
   if (error && statusAssinatura !== 'pending') {
     return (
       <main className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-red-500 text-lg p-4">
