@@ -39,7 +39,7 @@ export default function AssinaturaPage() {
         return;
       }
 
-      // Busca o status da assinatura
+      // Busca o status da assinatura do aluno no Supabase
       const { data: assinatura, error: assinaturaError } = await supabase
         .from('assinaturas')
         .select('status')
@@ -54,7 +54,7 @@ export default function AssinaturaPage() {
       } else if (assinatura) {
         setStatusAssinatura(assinatura.status);
         if (assinatura.status === 'active') {
-          // CORREÇÃO: Removendo alert() e mantendo apenas o redirecionamento
+          // CORRIGIDO: Removendo alert() e mantendo o redirecionamento
           router.push('/dashboard'); 
           return;
         } else if (assinatura.status === 'pending') {
@@ -94,7 +94,7 @@ export default function AssinaturaPage() {
 
       window.location.href = data.redirectUrl;
 
-    } catch (err: unknown) { // CORREÇÃO: "any" substituído por "unknown"
+    } catch (err: unknown) { // CORRIGIDO: 'any' substituído por 'unknown'
       if (err instanceof Error) {
         console.error('Erro ao iniciar assinatura:', err.message);
         setError(`Erro ao iniciar assinatura: ${err.message}`);
@@ -126,7 +126,6 @@ export default function AssinaturaPage() {
     );
   }
 
-  // NOTE: Eu não mudei a lógica de renderização aqui, mas você pode querer simplificá-la.
   if (error && statusAssinatura !== 'pending') {
     return (
       <main className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-red-500 text-lg p-4">

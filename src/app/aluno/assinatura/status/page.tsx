@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react'; // Importei Suspense
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/utils/supabase';
 import Link from 'next/link';
 
-export default function AssinaturaStatusPage() {
+// Componente que contém a lógica do lado do cliente (useSearchParams)
+// Este componente será carregado dentro do <Suspense>
+function StatusLogicComponent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams(); // Agora está seguro
   const sessionId = searchParams.get('session_id');
 
   const [loading, setLoading] = useState(true);
@@ -75,10 +77,14 @@ export default function AssinaturaStatusPage() {
           router.push('/dashboard');
         }, 3000);
 
-      } catch (err: any) {
-        console.error('Erro ao verificar pagamento:', err.message);
-        setError(`Erro ao verificar pagamento: ${err.message}`);
-        setStatusAssinatura('failed');
+      } catch (err: unknown) { // CORREÇÃO: Usando 'unknown'
+        if (err instanceof Error) {
+            console.error('Erro ao verificar pagamento:', err.message);
+            setError(`Erro ao verificar pagamento: ${err.message}`);
+        } else {
+            console.error('Erro ao verificar pagamento: Erro desconhecido');
+            setError('Erro ao verificar pagamento: Ocorreu um erro desconhecido.');
+        }
       } finally {
         setLoading(false);
       }
@@ -162,4 +168,13 @@ export default function AssinaturaStatusPage() {
       </div>
     </main>
   );
+}
+
+// O componente Wrapper que aplica o Suspense para o Prerendering
+export default function AssinaturaStatusPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-gray-950 flex items-center justify-center text-white text-2xl">Aguardando Parâmetros de URL...</div>}>
+            <StatusLogicComponent />
+        </Suspense>
+    );
 }
