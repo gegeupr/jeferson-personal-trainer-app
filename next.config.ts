@@ -1,3 +1,4 @@
+// next.config.ts
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
@@ -7,7 +8,7 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
         port: '',
-        pathname: '/dmw3vgmbv/**', // Seu Cloudinary
+        pathname: '/dmw3vgmbv/**',
       },
       {
         protocol: 'https',
@@ -29,7 +30,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'sua-url-supabase.supabase.co', //https://qlbbootdpuqdncgjnkre.supabase.co
+        hostname: 'qlbbootdpuqdncgjnkre.supabase.co',
         port: '',
         pathname: '/storage/v1/object/public/**',
       },

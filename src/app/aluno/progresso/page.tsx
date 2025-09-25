@@ -3,37 +3,33 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase';
-import { CldUploadWidget, CldUploadWidgetProps } from 'next-cloudinary';
+import Image from 'next/image';
 import Link from 'next/link';
+import { v4 as uuidv4 } from 'uuid';
 
 interface ProgressoFoto {
   id: string;
   url: string;
   descricao: string | null;
-  tipo: string | null;
   data_foto: string | null;
-  public_id: string;
+  created_at: string;
 }
 
 export default function MeuProgressoPage() {
   const router = useRouter();
   const [alunoId, setAlunoId] = useState<string | null>(null);
+  const [fotos, setFotos] = useState<ProgressoFoto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [fotos, setFotos] = useState<ProgressoFoto[]>([]);
-  const [uploading, setUploading] = useState(false);
-  const [loadingDelete, setLoadingDelete] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Estados para os novos campos de upload
-  const [uploadDescricao, setUploadDescricao] = useState('');
-  const [uploadTipo, setUploadTipo] = useState('');
-  const [uploadDataFoto, setUploadDataFoto] = useState('');
-
-  // Variáveis de ambiente do Cloudinary
-  const cloudinaryCloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+  // Estados para o formulário de upload
+  const [fotoSelecionada, setFotoSelecionada] = useState<File | null>(null);
+  const [descricaoFoto, setDescricaoFoto] = useState('');
+  const [dataFoto, setDataFoto] = useState('');
 
   useEffect(() => {
-    async function checkUserAndFetchPhotos() {
+    async function fetchProgressPhotos() {
       setLoading(true);
       setError(null);
 
@@ -43,127 +39,95 @@ export default function MeuProgressoPage() {
         router.push('/login');
         return;
       }
+      
       setAlunoId(user.id);
-
-      const userRole = user.app_metadata?.user_role as string | null;
-      if (userRole !== 'aluno') {
-        setError('Acesso negado. Esta página é apenas para alunos.');
-        setLoading(false);
-        return;
-      }
-
-      const { data: fotosData, error: fotosError } = await supabase
+      
+      const { data: fotosData, error: fetchError } = await supabase
         .from('progresso_fotos')
         .select('*')
         .eq('aluno_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('data_foto', { ascending: false });
 
-      if (fotosError) {
-        console.error('Erro ao buscar fotos:', fotosError.message);
+      if (fetchError) {
+        console.error('Erro ao buscar fotos:', fetchError.message);
         setError('Não foi possível carregar suas fotos de progresso.');
       } else {
         setFotos(fotosData || []);
       }
+
       setLoading(false);
     }
-
-    checkUserAndFetchPhotos();
+    fetchProgressPhotos();
   }, [router]);
 
-  const handleUploadSuccess = async (result: any) => {
-    if (result.event === 'success') {
-      setUploading(true);
-      setError(null);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setFotoSelecionada(e.target.files[0]);
+    } else {
+      setFotoSelecionada(null);
+    }
+  };
 
-      if (!uploadDescricao.trim() || !uploadTipo.trim() || !uploadDataFoto.trim()) {
-        setError('Por favor, preencha a Descrição, Tipo e Data da foto antes de enviá-la.');
-        setUploading(false);
-        return;
+  const handleUpload = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
+
+    if (!alunoId || !fotoSelecionada) {
+      setError('Por favor, selecione uma foto para enviar.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const fileExt = fotoSelecionada.name.split('.').pop();
+      const filePath = `${alunoId}/${uuidv4()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('progressphotos')
+        .upload(filePath, fotoSelecionada);
+
+      if (uploadError) throw uploadError;
+
+      const { data: publicUrlData } = supabase.storage
+        .from('progressphotos')
+        .getPublicUrl(filePath);
+
+      if (!publicUrlData) {
+        throw new Error('Não foi possível obter a URL pública da foto.');
       }
 
-      const { secure_url, public_id } = result.info;
-
-      const { data, error: insertError } = await supabase
+      const { data: dbData, error: dbError } = await supabase
         .from('progresso_fotos')
         .insert({
           aluno_id: alunoId,
-          url: secure_url,
-          public_id: public_id,
-          descricao: uploadDescricao.trim(),
-          tipo: uploadTipo.trim(),
-          data_foto: uploadDataFoto,
+          url: publicUrlData.publicUrl,
+          descricao: descricaoFoto.trim() || null,
+          data_foto: dataFoto || null,
         })
         .select()
         .single();
 
-      if (insertError) {
-        console.error('Erro ao salvar foto no DB:', insertError.message);
-        setError('Erro ao salvar foto no banco de dados.');
-      } else {
-        setFotos(prevFotos => [data, ...prevFotos]);
-        alert('Foto enviada e salva com sucesso!');
-        setUploadDescricao('');
-        setUploadTipo('');
-        setUploadDataFoto('');
-      }
-      setUploading(false);
-    }
-  };
+      if (dbError) throw dbError;
 
-  const handleDeleteFoto = async (fotoId: string, publicId: string) => {
-    if (!confirm('Tem certeza que deseja excluir esta foto?')) return;
+      setFotos(prev => [dbData, ...prev]);
+      setFotoSelecionada(null);
+      setDescricaoFoto('');
+      setDataFoto('');
+      alert('Foto de progresso enviada com sucesso!');
 
-    setLoadingDelete(true);
-    setError(null);
-
-    try {
-      const response = await fetch('/api/cloudinary/delete-image', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ publicId }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Erro ao deletar do Cloudinary.');
-      }
-
-      const { error: deleteError } = await supabase
-        .from('progresso_fotos')
-        .delete()
-        .eq('id', fotoId)
-        .eq('aluno_id', alunoId);
-
-      if (deleteError) {
-        console.error('Erro ao deletar foto do DB:', deleteError.message);
-        setError('Erro ao deletar foto do banco de dados.');
-      } else {
-        setFotos(prevFotos => prevFotos.filter(foto => foto.id !== fotoId));
-        alert('Foto excluída com sucesso!');
-      }
     } catch (err: any) {
-      console.error('Erro ao deletar foto:', err.message);
-      setError('Erro ao excluir foto: ' + err.message);
+      console.error('Erro ao fazer upload:', err.message);
+      setError(`Erro ao enviar foto: ${err.message}`);
     } finally {
-      setLoadingDelete(false);
+      setIsSubmitting(false);
     }
   };
 
   if (loading) {
     return (
       <main className="min-h-screen bg-gray-950 flex items-center justify-center text-lime-400 text-2xl">
-        Carregando progresso...
-      </main>
-    );
-  }
-
-  if (error && error.includes('Acesso negado')) {
-    return (
-      <main className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-red-500 text-lg p-4">
-        <p>{error}</p>
-        <Link href="/dashboard" className="mt-4 bg-lime-400 text-gray-900 py-2 px-6 rounded-full hover:bg-lime-300 transition duration-300">
-          Ir para Dashboard
-        </Link>
+        Carregando fotos de progresso...
       </main>
     );
   }
@@ -172,12 +136,9 @@ export default function MeuProgressoPage() {
     return (
       <main className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-red-500 text-lg p-4">
         <p>{error}</p>
-        <button
-          onClick={() => setError(null)}
-          className="mt-4 bg-lime-400 text-gray-900 py-2 px-6 rounded-full hover:bg-lime-300 transition duration-300"
-        >
-          Tentar Novamente
-        </button>
+        <Link href="/dashboard" className="mt-4 bg-lime-400 text-gray-900 py-2 px-6 rounded-full hover:bg-lime-300 transition duration-300">
+          Voltar ao Dashboard
+        </Link>
       </main>
     );
   }
@@ -194,106 +155,78 @@ export default function MeuProgressoPage() {
         </div>
 
         <section className="bg-gray-800 p-8 rounded-lg shadow-xl border-t-4 border-lime-400 mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Enviar Nova Foto de Progresso</h2>
-          {!cloudinaryCloudName && (
-            <p className="text-red-400 mb-4">Erro de configuração: Cloudinary Cloud Name não encontrado. Verifique seu .env.local</p>
-          )}
-          {cloudinaryCloudName && (
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="uploadDescricao" className="block text-gray-300 text-sm font-bold mb-2">Descrição da Foto:</label>
-                <input
-                  type="text"
-                  id="uploadDescricao"
-                  value={uploadDescricao}
-                  onChange={(e) => setUploadDescricao(e.target.value)}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
-                  placeholder="Ex: Foto antes do treino"
-                />
-              </div>
-              <div>
-                <label htmlFor="uploadTipo" className="block text-gray-300 text-sm font-bold mb-2">Tipo da Foto:</label>
-                <select
-                  id="uploadTipo"
-                  value={uploadTipo}
-                  onChange={(e) => setUploadTipo(e.target.value)}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
-                >
-                  <option value="">Selecione o Tipo</option>
-                  <option value="Antes">Antes</option>
-                  <option value="Depois">Depois</option>
-                  <option value="Atual">Atual</option>
-                  <option value="Outro">Outro</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="uploadDataFoto" className="block text-gray-300 text-sm font-bold mb-2">Data da Foto:</label>
-                <input
-                  type="date"
-                  id="uploadDataFoto"
-                  value={uploadDataFoto}
-                  onChange={(e) => setUploadDataFoto(e.target.value)}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
-                />
-              </div>
-
-              <CldUploadWidget
-                uploadPreset="ml_default"
-                onSuccess={handleUploadSuccess}
-                options={{ 
-                  sources: ['local', 'url'], 
-                  tags: ['progresso', alunoId || ''], 
-                  clientAllowedFormats: ["png", "gif", "jpeg", "webp"],
-                  cloudName: cloudinaryCloudName
-                }}
-              >
-                {({ open }: { open: () => void }) => (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!uploadDescricao.trim() || !uploadTipo.trim() || !uploadDataFoto.trim()) {
-                        setError('Por favor, preencha a Descrição, Tipo e Data da foto antes de abrir o uploader.');
-                        return;
-                      }
-                      setError(null);
-                      open();
-                    }}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 text-lg w-full mt-4"
-                    disabled={uploading}
-                  >
-                    {uploading ? 'Enviando...' : 'Fazer Upload de Foto'}
-                  </button>
-                )}
-              </CldUploadWidget>
+          <h2 className="text-2xl font-bold text-white mb-6">Enviar Nova Foto</h2>
+          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+          <form onSubmit={handleUpload} className="space-y-6">
+            <div>
+              <label htmlFor="foto" className="block text-gray-300 text-sm font-bold mb-2">Selecionar Foto:</label>
+              <input
+                type="file"
+                id="foto"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="block w-full text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-lime-500 file:text-gray-900 hover:file:bg-lime-400"
+                required
+              />
+              {fotoSelecionada && <p className="text-gray-400 text-sm mt-2">Arquivo selecionado: {fotoSelecionada.name}</p>}
             </div>
-          )}
+            <div>
+              <label htmlFor="dataFoto" className="block text-gray-300 text-sm font-bold mb-2">Data da Foto:</label>
+              <input
+                type="date"
+                id="dataFoto"
+                value={dataFoto}
+                onChange={(e) => setDataFoto(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
+              />
+            </div>
+            <div>
+              <label htmlFor="descricaoFoto" className="block text-gray-300 text-sm font-bold mb-2">Descrição (Opcional):</label>
+              <textarea
+                id="descricaoFoto"
+                rows={3}
+                value={descricaoFoto}
+                onChange={(e) => setDescricaoFoto(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200 resize-none"
+                placeholder="Ex: Foto tirada na semana 4."
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="bg-lime-600 hover:bg-lime-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 text-lg w-full"
+            >
+              {isSubmitting ? 'Enviando...' : 'Enviar Foto'}
+            </button>
+          </form>
         </section>
 
         <section className="bg-gray-800 p-8 rounded-lg shadow-xl border-t-4 border-lime-400">
-          <h2 className="text-2xl font-bold text-white mb-6">Minhas Fotos de Progresso</h2>
+          <h2 className="text-2xl font-bold text-white mb-6">Minhas Fotos</h2>
           {fotos.length === 0 ? (
-            <p className="text-gray-400 text-center">Você ainda não enviou nenhuma foto de progresso.</p>
+            <p className="text-gray-400 text-center">Você ainda não enviou fotos de progresso.</p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {fotos.map(foto => (
-                <div key={foto.id} className="bg-gray-900 rounded-lg shadow-md overflow-hidden relative group">
-                  <img
-                    src={foto.url}
-                    alt={foto.descricao || 'Foto de Progresso'}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="p-4">
-                    <p className="text-lime-300 font-semibold mb-1">{foto.descricao || 'Sem descrição'}</p>
-                    <p className="text-gray-400 text-sm">Tipo: {foto.tipo || 'N/A'}</p>
-                    <p className="text-gray-400 text-sm">Data: {foto.data_foto ? new Date(foto.data_foto).toLocaleDateString() : 'N/A'}</p>
+                <div key={foto.id} className="bg-gray-900 p-4 rounded-lg flex flex-col items-center">
+                  <div className="relative w-full h-48 mb-4">
+                    <Image
+                      src={foto.url}
+                      alt={foto.descricao || 'Foto de progresso'}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      className="rounded-md"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
                   </div>
-                  <button
-                    onClick={() => handleDeleteFoto(foto.id, foto.public_id)}
-                    className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white text-xs py-1 px-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    disabled={loadingDelete}
-                  >
-                    Excluir
-                  </button>
+                  {foto.data_foto && (
+                    <p className="text-gray-300 text-sm font-semibold">
+                      {new Date(foto.data_foto).toLocaleDateString()}
+                    </p>
+                  )}
+                  {foto.descricao && (
+                    <p className="text-gray-400 text-xs mt-1 text-center">{foto.descricao}</p>
+                  )}
                 </div>
               ))}
             </div>

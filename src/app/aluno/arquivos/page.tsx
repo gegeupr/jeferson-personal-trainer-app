@@ -1,10 +1,10 @@
-// src/app/aluno/arquivos/page.tsx
 "use client";
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase';
 import Link from 'next/link';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Arquivo {
   id: string;
@@ -14,12 +14,12 @@ interface Arquivo {
   professor_id: string;
   tipo: string | null;
   created_at: string;
+  public_id: string;
 }
 
 export default function ArquivosPage() {
   const router = useRouter();
   const [alunoId, setAlunoId] = useState<string | null>(null);
-  const [professorId, setProfessorId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [arquivos, setArquivos] = useState<Arquivo[]>([]);
@@ -41,28 +41,7 @@ export default function ArquivosPage() {
         return;
       }
       setAlunoId(user.id);
-
-      const userRole = user.app_metadata?.user_role as string || null;
-      if (userRole !== 'aluno') {
-        setError('Acesso negado. Esta página é apenas para alunos.');
-        setLoading(false);
-        return;
-      }
-
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('professor_id')
-        .eq('id', user.id)
-        .single();
       
-      if (profileError || !profileData?.professor_id) {
-        console.error('Erro ao buscar o professor_id do perfil:', profileError?.message);
-        setError('Erro: Não foi possível encontrar o ID do seu professor. Por favor, peça ao seu professor para vincular sua conta.');
-        setLoading(false);
-        return;
-      }
-      setProfessorId(profileData.professor_id as string);
-
       const { data: arquivosData, error: arquivosError } = await supabase
         .from('arquivos')
         .select('*')
@@ -93,7 +72,7 @@ export default function ArquivosPage() {
     setIsSubmitting(true);
     setError(null);
 
-    if (!alunoId || !professorId || !arquivoSelecionado || !nomeArquivo.trim()) {
+    if (!alunoId || !arquivoSelecionado || !nomeArquivo.trim()) {
       setError('Por favor, preencha o nome do arquivo e selecione um arquivo para enviar.');
       setIsSubmitting(false);
       return;
@@ -101,15 +80,16 @@ export default function ArquivosPage() {
 
     try {
       const fileExt = arquivoSelecionado.name.split('.').pop();
-      const filePath = `${alunoId}/${Math.random()}.${fileExt}`;
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('arquivos_alunos')
+      const filePath = `${alunoId}/${uuidv4()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('arquivo')
         .upload(filePath, arquivoSelecionado);
 
       if (uploadError) throw uploadError;
 
       const { data: publicUrlData } = supabase.storage
-        .from('arquivos_alunos')
+        .from('arquivo')
         .getPublicUrl(filePath);
 
       if (!publicUrlData) {
@@ -120,10 +100,10 @@ export default function ArquivosPage() {
         .from('arquivos')
         .insert({
           aluno_id: alunoId,
-          professor_id: professorId,
           nome_arquivo: nomeArquivo.trim(),
           url: publicUrlData.publicUrl,
           tipo: arquivoSelecionado.type,
+          public_id: filePath,
         })
         .select()
         .single();
@@ -145,7 +125,38 @@ export default function ArquivosPage() {
 
   const handleDeleteFile = async (arquivoId: string) => {
     if (!confirm('Tem certeza que deseja excluir este arquivo?')) return;
-    alert('Funcionalidade de deletar arquivo será implementada aqui.');
+    
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const arquivoParaDeletar = arquivos.find(a => a.id === arquivoId);
+      if (!arquivoParaDeletar) {
+        throw new Error('Arquivo não encontrado para exclusão.');
+      }
+
+      const { error: storageError } = await supabase.storage
+        .from('arquivo')
+        .remove([arquivoParaDeletar.public_id]);
+      
+      if (storageError) throw storageError;
+
+      const { error: dbError } = await supabase
+        .from('arquivos')
+        .delete()
+        .eq('id', arquivoId);
+      
+      if (dbError) throw dbError;
+
+      setArquivos(prev => prev.filter(a => a.id !== arquivoId));
+      alert('Arquivo excluído com sucesso!');
+
+    } catch (err: any) {
+      console.error('Erro ao excluir arquivo:', err.message);
+      setError('Erro ao excluir arquivo: ' + err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (loading) {
@@ -184,7 +195,6 @@ export default function ArquivosPage() {
         <section className="bg-gray-800 p-8 rounded-lg shadow-xl border-t-4 border-lime-400 mb-12">
           <h2 className="text-2xl font-bold text-white mb-6">Enviar Novo Arquivo</h2>
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-          
           <form onSubmit={handleUpload} className="space-y-6">
             <div>
               <label htmlFor="nomeArquivo" className="block text-gray-300 text-sm font-bold mb-2">Nome do Arquivo:</label>
@@ -195,6 +205,7 @@ export default function ArquivosPage() {
                 onChange={(e) => setNomeArquivo(e.target.value)}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
                 placeholder="Ex: Exame de Sangue de Junho"
+                required
               />
             </div>
             <div>
@@ -204,6 +215,7 @@ export default function ArquivosPage() {
                 id="arquivo"
                 onChange={handleFileChange}
                 className="block w-full text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-lime-500 file:text-gray-900 hover:file:bg-lime-400"
+                required
               />
               {arquivoSelecionado && <p className="text-gray-400 text-sm mt-2">Arquivo selecionado: {arquivoSelecionado.name}</p>}
             </div>
@@ -232,7 +244,7 @@ export default function ArquivosPage() {
                     <p className="text-gray-400 text-sm">Tipo: {arquivo.tipo || 'N/A'}</p>
                     <p className="text-gray-500 text-xs">Data de envio: {new Date(arquivo.created_at).toLocaleDateString()}</p>
                   </div>
-                  <button onClick={() => handleDeleteFile(arquivo.id)} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm">
+                  <button onClick={() => handleDeleteFile(arquivo.id)} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm" disabled={isSubmitting}>
                     Excluir
                   </button>
                 </div>

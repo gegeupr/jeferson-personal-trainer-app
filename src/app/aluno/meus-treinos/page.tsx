@@ -1,4 +1,3 @@
-// src/app/aluno/meus-treinos/page.tsx
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -7,138 +6,127 @@ import { supabase } from '@/utils/supabase';
 import Link from 'next/link';
 
 // --- Interfaces de Dados ---
-interface ExercicioDetalhes {
+interface Exercicio {
   id: string;
   nome: string;
-  descricao: string | null;
   link_youtube: string | null;
+  descricao: string | null;
 }
 
-interface TreinoExercicioComDetalhes {
-  id: string; // ID da relação treino_exercicios
-  exercicio_id: string;
+interface TreinoExercicio {
   ordem: number;
   series: number | null;
   repeticoes: string | null;
   carga: string | null;
   intervalo: string | null;
   observacoes: string | null;
-  exercicios: ExercicioDetalhes; // Detalhes do exercício embutidos
+  exercicios: Exercicio | null; // Corrigido para permitir que seja null
 }
 
-interface RotinaDiariaAluno {
+interface RotinaDiaria {
   id: string;
   nome: string;
   descricao: string | null;
-  created_at: string;
-  treino_exercicios: TreinoExercicioComDetalhes[]; // Exercícios com detalhes
+  treino_exercicios: TreinoExercicio[];
 }
 
-interface PlanoTreinoAluno {
+interface PlanoTreino {
   id: string;
   nome: string;
   descricao: string | null;
-  aluno_id: string;
-  professor_id: string;
   tipo_treino: string | null;
   objetivo: string | null;
   dificuldade: string | null;
   orientacao_professor: string | null;
-  created_at: string;
-  rotinas_do_plano: RotinaDiariaAluno[]; // Agora é um array de RotinasDiariaAluno
+  professor_id: string;
+  rotinas_diarias: RotinaDiaria[];
 }
 
-export default function MeusTreinosPage() { // MANTIDO NOME DO COMPONENTE PARA O CONTEXTO
+export default function MeusTreinosPage() {
   const router = useRouter();
-  const [alunoId, setAlunoId] = useState<string | null>(null);
-  const [planoAtribuido, setPlanoAtribuido] = useState<PlanoTreinoAluno | null>(null);
+  const [treinos, setTreinos] = useState<PlanoTreino[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [expandedRotinaId, setExpandedRotinaId] = useState<string | null>(null); // Estado para expandir rotina
+  const [expandedRotinas, setExpandedRotinas] = useState<string[]>([]);
 
   useEffect(() => {
-    async function fetchMeusTreinos() {
+    async function fetchTreinosDoAluno() {
       setLoading(true);
-      setError(null);
-
       const { data: { user }, error: authError } = await supabase.auth.getUser();
 
       if (authError || !user) {
         router.push('/login');
         return;
       }
-      setAlunoId(user.id);
-
-      // 1. Verifica se o usuário é aluno (lendo do JWT)
-      const userRole = user.app_metadata?.user_role as string || null;
-      if (userRole !== 'aluno') {
-        setError('Acesso negado. Esta página é apenas para alunos.');
-        setLoading(false);
-        return;
-      }
-
-      // 2. Busca o Plano de Treino atribuído a este aluno, com suas rotinas e exercícios
-      const { data: planosData, error: planosError } = await supabase
-        .rpc('get_treino_atribuido_com_exercicios', { p_aluno_id: user.id });
-
-
-      if (planosError) {
-        console.error('Erro ao buscar planos de treino do aluno:', planosError.message);
-        setError('Não foi possível carregar seu treino. ' + planosError.message);
-      } else if (!planosData || planosData.length === 0) {
-        setPlanoAtribuido(null); // Nenhum plano atribuído
+      
+      const { data: treinosData, error: treinosError } = await supabase
+        .from('treinos')
+        .select(`
+          id,
+          nome,
+          descricao,
+          tipo_treino,
+          objetivo,
+          dificuldade,
+          orientacao_professor,
+          professor_id,
+          rotinas_diarias(
+            id,
+            nome,
+            descricao,
+            treino_exercicios(
+              ordem,
+              series,
+              repeticoes,
+              carga,
+              intervalo,
+              observacoes,
+              exercicios(
+                id,
+                nome,
+                link_youtube,
+                descricao
+              )
+            )
+          )
+        `)
+        .eq('aluno_id', user.id);
+        
+      if (treinosError) {
+        console.error('Erro ao buscar treinos:', treinosError.message);
+        setError('Não foi possível carregar seus treinos.');
       } else {
-        const rawPlano = planosData[0]; // Pega o primeiro plano atribuído
-        
-        // Mapear a estrutura da RPC para a interface PlanoTreinoAluno
-        const mappedPlano: PlanoTreinoAluno = {
-            id: rawPlano.id,
-            nome: rawPlano.nome,
-            descricao: rawPlano.descricao,
-            aluno_id: rawPlano.aluno_id,
-            professor_id: rawPlano.professor_id,
-            tipo_treino: rawPlano.tipo_treino,
-            objetivo: rawPlano.objetivo,
-            dificuldade: rawPlano.dificuldade,
-            orientacao_professor: rawPlano.orientacao_professor,
-            created_at: rawPlano.created_at,
-            rotinas_do_plano: (rawPlano.rotinas_do_plano || []).map((rotina: any) => ({
-                id: rotina.id,
-                nome: rotina.nome,
-                descricao: rotina.descricao,
-                created_at: rotina.created_at,
-                treino_exercicios: rotina.treino_exercicios || [], // Exercícios já vêm detalhados
-            })),
-        };
-        
-        setPlanoAtribuido(mappedPlano);
+        const planosComExercicios = treinosData?.map((plano: any) => {
+          const rotinasComExercicios = (plano.rotinas_diarias || []).map((rotina: any) => {
+            const exercicios = (rotina.treino_exercicios || []).map((te: any) => {
+              // Acessa diretamente a propriedade 'exercicios'
+              return { ...te, exercicios: te.exercicios };
+            });
+            return { ...rotina, treino_exercicios: exercicios };
+          });
+          return { ...plano, rotinas_diarias: rotinasComExercicios };
+        });
+        setTreinos(planosComExercicios as PlanoTreino[] || []);
       }
+      
       setLoading(false);
     }
 
-    fetchMeusTreinos();
+    fetchTreinosDoAluno();
   }, [router]);
-
-  const toggleRotinaExpansion = (rotinaId: string) => {
-    setExpandedRotinaId(prevId => (prevId === rotinaId ? null : rotinaId));
+  
+  const handleToggleRotina = (rotinaId: string) => {
+    setExpandedRotinas(prev => 
+      prev.includes(rotinaId) 
+      ? prev.filter(id => id !== rotinaId)
+      : [...prev, rotinaId]
+    );
   };
-
 
   if (loading) {
     return (
       <main className="min-h-screen bg-gray-950 flex items-center justify-center text-lime-400 text-2xl">
-        Carregando seu treino...
-      </main>
-    );
-  }
-
-  if (error && error.includes('Acesso negado')) {
-    return (
-      <main className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-red-500 text-lg p-4">
-        <p>{error}</p>
-        <Link href="/dashboard" className="mt-4 bg-lime-400 text-gray-900 py-2 px-6 rounded-full hover:bg-lime-300 transition duration-300">
-          Ir para Dashboard
-        </Link>
+        Carregando treinos...
       </main>
     );
   }
@@ -147,12 +135,9 @@ export default function MeusTreinosPage() { // MANTIDO NOME DO COMPONENTE PARA O
     return (
       <main className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-red-500 text-lg p-4">
         <p>{error}</p>
-        <button
-          onClick={() => setError(null)}
-          className="mt-4 bg-lime-400 text-gray-900 py-2 px-6 rounded-full hover:bg-lime-300 transition duration-300"
-        >
-          Tentar Novamente
-        </button>
+        <Link href="/dashboard" className="mt-4 bg-lime-400 text-gray-900 py-2 px-6 rounded-full hover:bg-lime-300 transition duration-300">
+          Voltar ao Dashboard
+        </Link>
       </main>
     );
   }
@@ -160,112 +145,94 @@ export default function MeusTreinosPage() { // MANTIDO NOME DO COMPONENTE PARA O
   return (
     <main className="min-h-screen bg-gray-950 text-white py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-lime-400 mb-8 text-center">
-          Meus Treinos
-        </h1>
+        <h1 className="text-4xl font-bold text-lime-400 mb-8 text-center">Meus Planos de Treino</h1>
 
-        {/* Botão Voltar ao Dashboard */}
         <div className="flex justify-start items-center mb-8">
           <Link href="/dashboard" className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">
             &larr; Voltar ao Dashboard
           </Link>
         </div>
 
-        {!planoAtribuido ? (
-          <section className="bg-gray-800 p-8 rounded-lg shadow-xl border-t-4 border-lime-400 text-center">
-            <h2 className="text-2xl font-bold text-white mb-4">Nenhum Plano de Treino Atribuído</h2>
-            <p className="text-gray-400 text-lg">
-              Seu professor ainda não atribuiu nenhum plano de treino. Fale com ele para começar sua jornada!
-            </p>
-            <Link href="/dashboard" className="mt-8 inline-block bg-lime-400 text-gray-900 font-bold py-3 px-8 rounded-full hover:bg-lime-300 transition duration-300 text-lg">
-              Voltar ao Dashboard
-            </Link>
-          </section>
+        {treinos.length === 0 ? (
+          <div className="bg-gray-800 p-8 rounded-lg shadow-xl text-center">
+            <p className="text-gray-400">Nenhum treino foi atribuído a você ainda.</p>
+          </div>
         ) : (
-          <section className="bg-gray-800 p-8 rounded-lg shadow-xl border-t-4 border-lime-400">
-            <h2 className="text-3xl font-bold text-lime-400 mb-4">{planoAtribuido.nome}</h2>
-            {planoAtribuido.descricao && (
-              <p className="text-gray-300 text-lg mb-6">{planoAtribuido.descricao}</p>
-            )}
-            <p className="text-gray-300 mb-2">
-                <span className="font-medium text-lime-200">Tipo:</span> {planoAtribuido.tipo_treino || 'N/A'}
-            </p>
-            <p className="text-gray-300 mb-2">
-                <span className="font-medium text-lime-200">Objetivo:</span> {planoAtribuido.objetivo || 'N/A'}
-            </p>
-            <p className="text-gray-300 mb-2">
-                <span className="font-medium text-lime-200">Dificuldade:</span> {planoAtribuido.dificuldade || 'N/A'}
-            </p>
-            <p className="text-gray-300 mb-6">
-                <span className="font-medium text-lime-200">Orientação do Professor:</span> {planoAtribuido.orientacao_professor || 'N/A'}
-            </p>
-
-
-            <h3 className="text-2xl font-bold text-white mb-6">Rotinas Diárias</h3>
-            <div className="space-y-4">
-              {planoAtribuido.rotinas_do_plano.length === 0 ? (
-                <p className="text-gray-400">Este plano não possui rotinas diárias atribuídas ainda.</p>
-              ) : (
-                planoAtribuido.rotinas_do_plano.map((rotina, rotinaIndex) => (
-                  <div key={rotina.id} className="bg-gray-900 p-6 rounded-lg border border-gray-700">
-                    <button
-                      type="button"
-                      onClick={() => toggleRotinaExpansion(rotina.id)}
-                      className="w-full text-left text-xl font-bold text-lime-300 hover:text-lime-400 flex justify-between items-center"
-                    >
-                      {rotina.nome}
-                      <svg className={`w-6 h-6 transform transition-transform ${expandedRotinaId === rotina.id ? 'rotate-180' : 'rotate-0'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    {rotina.descricao && <p className="text-gray-400 text-sm mt-1">{rotina.descricao}</p>}
-
-                    {expandedRotinaId === rotina.id && (
-                      <div className="mt-4 space-y-6">
-                        {rotina.treino_exercicios.length === 0 ? (
-                          <p className="text-gray-400 text-center">Nenhum exercício nesta rotina.</p>
-                        ) : (
-                          rotina.treino_exercicios.sort((a, b) => a.ordem - b.ordem).map((exTreino, exIndex) => (
-                            <div key={exTreino.id} className="bg-gray-700 p-4 rounded-lg border border-gray-600">
-                              <h4 className="text-xl font-bold text-white mb-2">
-                                {exIndex + 1}. {exTreino.exercicios.nome}
-                              </h4>
-                              {exTreino.exercicios.descricao && (
-                                <p className="text-gray-300 text-sm mb-2">{exTreino.exercicios.descricao}</p>
-                              )}
-                              
-                              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm text-gray-400 mb-4">
-                                {exTreino.series && <p><strong>Séries:</strong> {exTreino.series}</p>}
-                                {exTreino.repeticoes && <p><strong>Repetições:</strong> {exTreino.repeticoes}</p>}
-                                {exTreino.carga && <p><strong>Carga:</strong> {exTreino.carga}</p>}
-                                {exTreino.intervalo && <p><strong>Intervalo:</strong> {exTreino.intervalo}</p>}
+          <div className="space-y-8">
+            {treinos.map(treino => (
+              <div key={treino.id} className="bg-gray-800 p-6 rounded-lg shadow-md border-t-4 border-blue-600">
+                <h2 className="text-2xl font-semibold text-lime-300 mb-2">{treino.nome}</h2>
+                <p className="text-gray-300 mb-1">
+                  <span className="font-medium text-lime-200">Professor:</span> {treino.professor_id}
+                </p>
+                <p className="text-gray-300 mb-1">
+                  <span className="font-medium text-lime-200">Tipo:</span> {treino.tipo_treino || 'N/A'}
+                </p>
+                <p className="text-gray-300 mb-1">
+                  <span className="font-medium text-lime-200">Objetivo:</span> {treino.objetivo || 'N/A'}
+                </p>
+                <p className="text-gray-300 mb-1">
+                  <span className="font-medium text-lime-200">Dificuldade:</span> {treino.dificuldade || 'N/A'}
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <span className="font-medium text-lime-200">Orientação:</span> {treino.orientacao_professor || 'N/A'}
+                </p>
+                
+                <h3 className="text-xl font-semibold text-lime-300 mb-2">Rotinas Diárias:</h3>
+                {treino.rotinas_diarias.length > 0 ? (
+                  <ul className="space-y-4">
+                    {treino.rotinas_diarias.map(rotina => (
+                      <li key={rotina.id}>
+                        <button
+                          onClick={() => handleToggleRotina(rotina.id)}
+                          className="w-full text-left bg-gray-700 hover:bg-gray-600 text-white p-3 rounded-lg flex justify-between items-center"
+                          type="button"
+                        >
+                          <span>{rotina.nome} ({rotina.treino_exercicios.length} exercícios)</span>
+                          <span>{expandedRotinas.includes(rotina.id) ? '▲' : '▼'}</span>
+                        </button>
+                        {expandedRotinas.includes(rotina.id) && (
+                          <div className="mt-2 bg-gray-700 p-4 rounded-lg space-y-4">
+                            {rotina.descricao && (
+                              <p className="text-gray-300 text-sm italic">Descrição: {rotina.descricao}</p>
+                            )}
+                            {rotina.treino_exercicios.map((ex, index) => (
+                              <div key={index} className="bg-gray-600 p-3 rounded-lg flex flex-col space-y-2">
+                                <h4 className="text-md font-semibold text-lime-200">
+                                  {index + 1}. {ex.exercicios?.nome || 'Exercício Desconhecido'}
+                                </h4>
+                                <div className="flex flex-wrap gap-x-4 text-sm text-gray-300">
+                                  {ex.series && <span>Séries: <span className="font-bold">{ex.series}</span></span>}
+                                  {ex.repeticoes && <span>Repetições: <span className="font-bold">{ex.repeticoes}</span></span>}
+                                  {ex.carga && <span>Carga: <span className="font-bold">{ex.carga}</span></span>}
+                                  {ex.intervalo && <span>Intervalo: <span className="font-bold">{ex.intervalo}</span></span>}
+                                </div>
+                                {ex.observacoes && (
+                                  <p className="text-sm italic text-gray-400 mt-1">Obs: {ex.observacoes}</p>
+                                )}
+                                {ex.exercicios?.link_youtube && (
+                                  <a 
+                                    href={ex.exercicios.link_youtube} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    className="text-blue-400 hover:underline text-sm mt-1"
+                                  >
+                                    Ver Vídeo
+                                  </a>
+                                )}
                               </div>
-
-                              {exTreino.observacoes && (
-                                <p className="text-gray-300 text-sm mb-4">
-                                  <strong>Obs:</strong> {exTreino.observacoes}
-                                </p>
-                              )}
-
-                              {exTreino.exercicios.link_youtube && (
-                                <a
-                                  href={exTreino.exercicios.link_youtube}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-sm inline-flex items-center transition duration-300"
-                                >
-                                  <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"></path><path fillRule="evenodd" d="M.05 4.555A2 2 0 012 2.5h16A2 2 0 0119.95 4.555L10 14.555 0.05 4.555zM18 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v2H.05A2 2 0 010 4.5V15a2 2 0 002 2h16a2 2 0 002-2V4.5A2 2 0 0119.95 4.555L10 14.555 0.05 4.555z" clipRule="evenodd"></path></svg>
-                                  Ver Vídeo
-                                </a>
-                              )}
-                            </div>
-                          ))
+                            ))}
+                          </div>
                         )}
-                      </div>
-                    )}
-                  </div>
-                ))
-              )}
-            </div>
-          </section>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-400 text-sm">Nenhuma rotina diária adicionada a este plano.</p>
+                )}
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </main>

@@ -1,4 +1,3 @@
-// src/app/aluno/assinatura/status/page.tsx
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -9,12 +8,12 @@ import Link from 'next/link';
 export default function AssinaturaStatusPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const session_id = searchParams.get('session_id'); // Captura o session_id da URL
+  const sessionId = searchParams.get('session_id');
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [statusAssinatura, setStatusAssinatura] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false); // Para controlar o estado do botão
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     async function checkPaymentStatus() {
@@ -27,29 +26,30 @@ export default function AssinaturaStatusPage() {
         router.push('/login');
         return;
       }
-
-      // Verificar role do usuário (deve ser 'aluno' do JWT)
-      const userRole = user.app_metadata?.user_role as string || null;
-      if (userRole !== 'aluno') {
+      
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+        
+      if (profileError || profile?.role !== 'aluno') {
         setError('Acesso negado. Esta página é apenas para alunos.');
         setLoading(false);
         return;
       }
 
-      if (!session_id) {
+      if (!sessionId) {
         setError('Não foi possível encontrar o ID da sessão de pagamento. Pagamento não confirmado.');
         setLoading(false);
         return;
       }
 
       try {
-        // Chamada à API Route para verificar o status do pagamento no Stripe
         const response = await fetch('/api/stripe/check-payment-status', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ session_id, userId: user.id }),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId, userId: user.id }),
         });
 
         const data = await response.json();
@@ -57,9 +57,8 @@ export default function AssinaturaStatusPage() {
         if (!response.ok) {
           throw new Error(data.error || 'Erro desconhecido ao verificar status do pagamento.');
         }
-
-        // O backend (API Route) já deveria ter atualizado o Supabase
-        // Apenas para fins de exibição na tela, podemos buscar o status novamente ou confiar na resposta.
+        
+        // CORRIGIDO AQUI: A busca do status de assinatura é feita aqui
         const { data: assinatura, error: assinaturaError } = await supabase
           .from('assinaturas')
           .select('status')
@@ -72,22 +71,21 @@ export default function AssinaturaStatusPage() {
 
         setStatusAssinatura(assinatura.status);
 
-        // Redireciona para o dashboard ou exibe mensagem final após um pequeno delay
         setTimeout(() => {
           router.push('/dashboard');
-        }, 3000); // Redireciona após 3 segundos
+        }, 3000);
 
       } catch (err: any) {
         console.error('Erro ao verificar pagamento:', err.message);
         setError(`Erro ao verificar pagamento: ${err.message}`);
-        setStatusAssinatura('failed'); // Ou um status de erro apropriado
+        setStatusAssinatura('failed');
       } finally {
         setLoading(false);
       }
     }
 
     checkPaymentStatus();
-  }, [session_id, router]);
+  }, [sessionId, router]);
 
 
   if (loading) {
@@ -110,14 +108,13 @@ export default function AssinaturaStatusPage() {
     );
   }
 
-  if (error) {
+  if (error && statusAssinatura !== 'pending') {
     return (
       <main className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-red-500 text-lg p-4">
         <p>{error}</p>
         <button
           onClick={() => setError(null)}
-          className="mt-4 bg-lime-400 text-gray-900 py-2 px-6 rounded-full hover:bg-lime-300 transition duration-300"
-        >
+          className="mt-4 bg-lime-400 text-gray-900 py-2 px-6 rounded-full hover:bg-lime-300 transition duration-300">
           Tentar Novamente
         </button>
       </main>
@@ -130,7 +127,6 @@ export default function AssinaturaStatusPage() {
         <h1 className="text-4xl font-bold text-lime-400 mb-6">Status do Pagamento</h1>
         {error && <p className="text-red-500 text-md mb-4">{error}</p>}
 
-        {/* Novo botão Voltar ao Dashboard */}
         <div className="flex justify-center items-center mb-8">
           <Link href="/dashboard" className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">
             &larr; Voltar ao Dashboard

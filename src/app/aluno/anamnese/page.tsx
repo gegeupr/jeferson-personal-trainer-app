@@ -1,14 +1,14 @@
-// src/app/aluno/anamnese/page.tsx
 "use client";
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase';
-import Link from 'next/link'; // Importar Link
+import Link from 'next/link';
 
 interface AnamneseData {
   id: string;
   aluno_id: string;
+  data_preenchimento: string;
   historico_saude_doencas: string | null;
   historico_lesoes_cirurgias: string | null;
   medicamentos_suplementos: string | null;
@@ -28,8 +28,7 @@ export default function MinhaAnamnesePage() {
   const [error, setError] = useState<string | null>(null);
   const [anamnese, setAnamnese] = useState<AnamneseData | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Estado do formulário
+  
   const [formData, setFormData] = useState<Omit<AnamneseData, 'id' | 'aluno_id' | 'created_at'>>({
     historico_saude_doencas: '',
     historico_lesoes_cirurgias: '',
@@ -55,28 +54,31 @@ export default function MinhaAnamnesePage() {
         return;
       }
       setAlunoId(user.id);
-
-      // Verificar role do usuário (deve ser 'aluno' do JWT)
-      const userRole = user.app_metadata?.user_role as string || null;
-      if (userRole !== 'aluno') {
+      
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+        
+      if (profileError || profile?.role !== 'aluno') {
         setError('Acesso negado. Esta página é apenas para alunos.');
         setLoading(false);
+        router.push('/dashboard');
         return;
       }
 
-      // Tenta buscar a anamnese existente
       const { data, error: fetchError } = await supabase
         .from('anamneses')
         .select('*')
         .eq('aluno_id', user.id)
         .single();
 
-      if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 = No rows found
+      if (fetchError && fetchError.code !== 'PGRST116') {
         console.error('Erro ao buscar anamnese:', fetchError.message);
         setError('Não foi possível carregar sua anamnese.');
       } else if (data) {
         setAnamnese(data);
-        // Preenche o formulário com os dados existentes
         setFormData({
           historico_saude_doencas: data.historico_saude_doencas || '',
           historico_lesoes_cirurgias: data.historico_lesoes_cirurgias || '',
@@ -92,7 +94,6 @@ export default function MinhaAnamnesePage() {
       }
       setLoading(false);
     }
-
     checkUserAndFetchAnamnese();
   }, [router]);
 
@@ -114,7 +115,6 @@ export default function MinhaAnamnesePage() {
 
     try {
       if (anamnese) {
-        // Atualizar anamnese existente
         const { error: updateError } = await supabase
           .from('anamneses')
           .update(formData)
@@ -123,7 +123,6 @@ export default function MinhaAnamnesePage() {
         if (updateError) throw updateError;
         alert('Anamnese atualizada com sucesso!');
       } else {
-        // Inserir nova anamnese
         const { error: insertError } = await supabase
           .from('anamneses')
           .insert({ ...formData, aluno_id: alunoId });
@@ -131,7 +130,7 @@ export default function MinhaAnamnesePage() {
         if (insertError) throw insertError;
         alert('Anamnese salva com sucesso!');
       }
-      // Após salvar/atualizar, recarrega os dados para refletir as mudanças
+      
       const { data, error: fetchErrorAfterSave } = await supabase
         .from('anamneses')
         .select('*')
@@ -155,7 +154,7 @@ export default function MinhaAnamnesePage() {
     );
   }
 
-  if (error && error.includes('Acesso negado')) {
+  if (error) {
     return (
       <main className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-red-500 text-lg p-4">
         <p>{error}</p>
@@ -166,26 +165,11 @@ export default function MinhaAnamnesePage() {
     );
   }
 
-  if (error) {
-    return (
-      <main className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-red-500 text-lg p-4">
-        <p>{error}</p>
-        <button
-          onClick={() => setError(null)}
-          className="mt-4 bg-lime-400 text-gray-900 py-2 px-6 rounded-full hover:bg-lime-300 transition duration-300"
-        >
-          Tentar Novamente
-        </button>
-      </main>
-    );
-  }
-
   return (
     <main className="min-h-screen bg-gray-950 text-white py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-lime-400 mb-8 text-center">Minha Anamnese</h1>
 
-        {/* Botão Voltar ao Dashboard */}
         <div className="flex justify-start items-center mb-8">
           <Link href="/dashboard" className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">
             &larr; Voltar ao Dashboard
@@ -197,7 +181,6 @@ export default function MinhaAnamnesePage() {
             {anamnese ? 'Editar Minha Anamnese' : 'Preencher Minha Anamnese'}
           </h2>
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Histórico de Saúde e Doenças */}
             <div>
               <label htmlFor="historico_saude_doencas" className="block text-gray-300 text-sm font-bold mb-2">
                 Histórico de Saúde e Doenças:
@@ -213,7 +196,6 @@ export default function MinhaAnamnesePage() {
               ></textarea>
             </div>
 
-            {/* Histórico de Lesões e Cirurgias */}
             <div>
               <label htmlFor="historico_lesoes_cirurgias" className="block text-gray-300 text-sm font-bold mb-2">
                 Histórico de Lesões e Cirurgias:
@@ -229,7 +211,6 @@ export default function MinhaAnamnesePage() {
               ></textarea>
             </div>
 
-            {/* Medicamentos e Suplementos */}
             <div>
               <label htmlFor="medicamentos_suplementos" className="block text-gray-300 text-sm font-bold mb-2">
                 Medicamentos e Suplementos (uso contínuo):
@@ -245,7 +226,6 @@ export default function MinhaAnamnesePage() {
               ></textarea>
             </div>
 
-            {/* Alergias */}
             <div>
               <label htmlFor="alergias" className="block text-gray-300 text-sm font-bold mb-2">
                 Alergias:
@@ -261,7 +241,6 @@ export default function MinhaAnamnesePage() {
               />
             </div>
 
-            {/* Fumante/Álcool */}
             <div>
               <label htmlFor="fumante_alcool" className="block text-gray-300 text-sm font-bold mb-2">
                 Fumante / Consumo de Álcool:
@@ -282,7 +261,6 @@ export default function MinhaAnamnesePage() {
               </select>
             </div>
 
-            {/* Nível de Atividade Física Atual */}
             <div>
               <label htmlFor="nivel_atividade_fisica_atual" className="block text-gray-300 text-sm font-bold mb-2">
                 Nível de Atividade Física Atual:
@@ -302,7 +280,6 @@ export default function MinhaAnamnesePage() {
               </select>
             </div>
 
-            {/* Objetivos Principais */}
             <div>
               <label htmlFor="objetivos_principais" className="block text-gray-300 text-sm font-bold mb-2">
                 Objetivos Principais com o Treino:
@@ -318,7 +295,6 @@ export default function MinhaAnamnesePage() {
               ></textarea>
             </div>
 
-            {/* Restrições Alimentares */}
             <div>
               <label htmlFor="restricoes_alimentares" className="block text-gray-300 text-sm font-bold mb-2">
                 Restrições Alimentares ou Dieta:
@@ -334,7 +310,6 @@ export default function MinhaAnamnesePage() {
               ></textarea>
             </div>
 
-            {/* Disponibilidade de Treino */}
             <div>
               <label htmlFor="disponibilidade_treino" className="block text-gray-300 text-sm font-bold mb-2">
                 Disponibilidade para Treinar (dias/horários):
@@ -350,7 +325,6 @@ export default function MinhaAnamnesePage() {
               ></textarea>
             </div>
 
-            {/* Observações Gerais */}
             <div>
               <label htmlFor="observacoes_gerais" className="block text-gray-300 text-sm font-bold mb-2">
                 Observações Gerais:

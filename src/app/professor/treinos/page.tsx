@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase';
 import Link from 'next/link';
+import { v4 as uuidv4 } from 'uuid';
 
 // --- Interfaces de Dados ---
 interface Exercicio {
@@ -43,7 +44,7 @@ interface PlanoTreino {
   id: string;
   nome: string;
   descricao: string | null;
-  aluno_id: string;
+  aluno_id: string | null;
   professor_id: string;
   tipo_treino: string | null;
   objetivo: string | null;
@@ -54,24 +55,17 @@ interface PlanoTreino {
   rotinas_diarias: RotinaDiaria[];
 }
 
-interface Aluno {
-  id: string;
-  nome_completo: string | null;
-  email: string;
-}
-
 // --- Componente Principal ProfessorTreinosPage ---
 export default function ProfessorTreinosPage() {
   const router = useRouter();
-  
+
   // Estados de Carregamento e Erro
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // Dados Globais
   const [professorId, setProfessorId] = useState<string | null>(null);
-  const [alunos, setAlunos] = useState<Aluno[]>([]);
   const [exerciciosBiblioteca, setExerciciosBiblioteca] = useState<Exercicio[]>([]);
   const [planosTreino, setPlanosTreino] = useState<PlanoTreino[]>([]);
 
@@ -80,14 +74,13 @@ export default function ProfessorTreinosPage() {
   const [showEditPlanoModal, setShowEditPlanoModal] = useState(false);
   const [showCreateRotinaModal, setShowCreateRotinaModal] = useState(false);
   const [showEditRotinaModal, setShowEditRotinaModal] = useState(false);
-  
+
   // Estados para dados dos modais
   const [currentPlano, setCurrentPlano] = useState<PlanoTreino | null>(null);
   const [currentRotina, setCurrentRotina] = useState<RotinaDiaria | null>(null);
   const [planoFormData, setPlanoFormData] = useState({
     nome: '',
     descricao: '',
-    aluno_id: '',
     tipo_treino: '',
     objetivo: '',
     dificuldade: '',
@@ -98,6 +91,21 @@ export default function ProfessorTreinosPage() {
     descricao: '',
   });
   const [exerciciosNaRotinaModal, setExerciciosNaRotinaModal] = useState<TreinoExercicioDisplay[]>([]);
+  const [editPlanoFormData, setEditPlanoFormData] = useState({
+    nome: '',
+    descricao: '',
+    aluno_id: '',
+    tipo_treino: '',
+    objetivo: '',
+    dificuldade: '',
+    orientacao_professor: '',
+  });
+  const [editRotinaFormData, setEditRotinaFormData] = useState({
+    nome: '',
+    descricao: '',
+  });
+  const [exerciciosNaEdicaoDeRotinaModal, setExerciciosNaEdicaoDeRotinaModal] = useState<TreinoExercicioDisplay[]>([]);
+
 
   // --- Efeitos e Busca de Dados ---
   useEffect(() => {
@@ -131,10 +139,6 @@ export default function ProfessorTreinosPage() {
     setLoading(true);
     setError(null);
     try {
-      const { data: alunosData, error: alunosError } = await supabase.rpc('get_all_aluno_profiles');
-      if (alunosError) throw alunosError;
-      setAlunos(alunosData as Aluno[] || []);
-
       const { data: exerciciosData, error: exerciciosError } = await supabase
         .from('exercicios')
         .select('id, nome, descricao, link_youtube, professor_id')
@@ -155,9 +159,9 @@ export default function ProfessorTreinosPage() {
           dificuldade,
           orientacao_professor,
           created_at,
-          aluno_profile:aluno_id(nome_completo),
           rotinas_diarias(
             id,
+            plano_id,
             nome,
             descricao,
             created_at,
@@ -171,7 +175,6 @@ export default function ProfessorTreinosPage() {
 
       const formattedPlanosTreino: PlanoTreino[] = planosTreinoRawData.map((plano: any) => ({
         ...plano,
-        aluno_nome: plano.aluno_profile?.[0]?.nome_completo || 'Aluno Desconhecido',
         rotinas_diarias: (plano.rotinas_diarias || []).map((rotina: any) => ({
           ...rotina,
           treino_exercicios: rotina.treino_exercicios || []
@@ -192,15 +195,59 @@ export default function ProfessorTreinosPage() {
     const { name, value } = e.target;
     setPlanoFormData(prev => ({ ...prev, [name]: value }));
   };
-  
+
   const handleRotinaFormInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setRotinaFormData(prev => ({ ...prev, [name]: value }));
   };
+  
+  const handleEditPlanoFormInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setEditPlanoFormData(prev => ({ ...prev, [name]: value }));
+  };
+  
+  const handleEditRotinaFormInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setEditRotinaFormData(prev => ({ ...prev, [name]: value }));
+  };
+  
+  const addExercicioToEditRotinaModal = (exercicio: Exercicio) => {
+    setExerciciosNaEdicaoDeRotinaModal(prev => {
+        if (prev.find(ex => ex.exercicio_id === exercicio.id)) {
+            setError('Este exercício já foi adicionado a esta rotina.');
+            return prev;
+        }
+        setError(null);
+        return [...prev, { 
+            id: uuidv4(), 
+            nomeExercicio: exercicio.nome,
+            exercicio_id: exercicio.id, 
+            rotina_id: currentRotina?.id || '',
+            ordem: prev.length + 1,
+            series: null,
+            repeticoes: '',
+            carga: '',
+            intervalo: '',
+            observacoes: '',
+        }];
+    });
+  };
+
+  const updateExercicioNaEdicaoDeRotinaModal = (exercicioId: string, field: keyof TreinoExercicioDisplay, value: string | number | null) => {
+    setExerciciosNaEdicaoDeRotinaModal(prev =>
+        prev.map(ex =>
+            ex.id === exercicioId ? { ...ex, [field]: value } : ex
+        )
+    );
+  };
+  
+  const removeExercicioNaEdicaoDeRotinaModal = (exercicioId: string) => {
+    setExerciciosNaEdicaoDeRotinaModal(prev => prev.filter(ex => ex.id !== exercicioId));
+  };
 
   // --- Manipulação de Modais de Plano ---
   const handleOpenCreatePlanoModal = () => {
-    setPlanoFormData({ nome: '', descricao: '', aluno_id: '', tipo_treino: '', objetivo: '', dificuldade: '', orientacao_professor: '' });
+    setPlanoFormData({ nome: '', descricao: '', tipo_treino: '', objetivo: '', dificuldade: '', orientacao_professor: '' });
     setError(null);
     setShowCreatePlanoModal(true);
   };
@@ -208,12 +255,12 @@ export default function ProfessorTreinosPage() {
   const handleCloseCreatePlanoModal = () => {
     setShowCreatePlanoModal(false);
     setError(null);
-    setPlanoFormData({ nome: '', descricao: '', aluno_id: '', tipo_treino: '', objetivo: '', dificuldade: '', orientacao_professor: '' });
+    setPlanoFormData({ nome: '', descricao: '', tipo_treino: '', objetivo: '', dificuldade: '', orientacao_professor: '' });
   };
 
   const handleCreatePlano = async () => {
-    if (!planoFormData.nome.trim() || !planoFormData.aluno_id || !planoFormData.tipo_treino || !planoFormData.objetivo || !planoFormData.dificuldade) {
-      setError('Por favor, preencha todos os campos obrigatórios do Plano (Nome, Aluno, Tipo, Objetivo, Dificuldade).');
+    if (!planoFormData.nome.trim() || !planoFormData.tipo_treino || !planoFormData.objetivo || !planoFormData.dificuldade) {
+      setError('Por favor, preencha todos os campos obrigatórios do Plano (Nome, Tipo, Objetivo, Dificuldade).');
       return;
     }
     setLoading(true);
@@ -225,7 +272,7 @@ export default function ProfessorTreinosPage() {
         .insert({
           nome: planoFormData.nome,
           descricao: planoFormData.descricao || null,
-          aluno_id: planoFormData.aluno_id,
+          aluno_id: null,
           professor_id: professorId,
           tipo_treino: planoFormData.tipo_treino,
           objetivo: planoFormData.objetivo,
@@ -251,10 +298,10 @@ export default function ProfessorTreinosPage() {
 
   const handleOpenEditPlanoModal = (plano: PlanoTreino) => {
     setCurrentPlano(plano);
-    setPlanoFormData({
+    setEditPlanoFormData({
       nome: plano.nome,
       descricao: plano.descricao || '',
-      aluno_id: plano.aluno_id,
+      aluno_id: plano.aluno_id || '',
       tipo_treino: plano.tipo_treino || '',
       objetivo: plano.objetivo || '',
       dificuldade: plano.dificuldade || '',
@@ -264,17 +311,16 @@ export default function ProfessorTreinosPage() {
     setShowEditPlanoModal(true);
   };
 
-  const handleCloseEditPlanoModal = () => { 
+  const handleCloseEditPlanoModal = () => {
     setShowEditPlanoModal(false);
     setError(null);
     setCurrentPlano(null);
-    setPlanoFormData({ nome: '', descricao: '', aluno_id: '', tipo_treino: '', objetivo: '', dificuldade: '', orientacao_professor: '' });
+    setEditPlanoFormData({ nome: '', descricao: '', aluno_id: '', tipo_treino: '', objetivo: '', dificuldade: '', orientacao_professor: '' });
   };
 
   const handleUpdatePlano = async () => {
-    if (!currentPlano || !planoFormData.nome.trim() || !planoFormData.aluno_id || 
-        !planoFormData.tipo_treino || !planoFormData.objetivo || !planoFormData.dificuldade) {
-      setError('Por favor, preencha todos os campos obrigatórios do Plano (Nome, Aluno, Tipo, Objetivo, Dificuldade).');
+    if (!currentPlano || !editPlanoFormData.nome.trim() || !editPlanoFormData.tipo_treino || !editPlanoFormData.objetivo || !editPlanoFormData.dificuldade) {
+      setError('Por favor, preencha todos os campos obrigatórios do Plano (Nome, Tipo, Objetivo, Dificuldade).');
       return;
     }
     setLoading(true);
@@ -284,13 +330,13 @@ export default function ProfessorTreinosPage() {
       const { error: planoError } = await supabase
         .from('treinos')
         .update({
-          nome: planoFormData.nome,
-          descricao: planoFormData.descricao || null,
-          aluno_id: planoFormData.aluno_id,
-          tipo_treino: planoFormData.tipo_treino,
-          objetivo: planoFormData.objetivo,
-          dificuldade: planoFormData.dificuldade,
-          orientacao_professor: planoFormData.orientacao_professor || null,
+          nome: editPlanoFormData.nome,
+          descricao: editPlanoFormData.descricao || null,
+          aluno_id: editPlanoFormData.aluno_id || null,
+          tipo_treino: editPlanoFormData.tipo_treino,
+          objetivo: editPlanoFormData.objetivo,
+          dificuldade: editPlanoFormData.dificuldade,
+          orientacao_professor: editPlanoFormData.orientacao_professor || null,
         })
         .eq('id', currentPlano.id);
 
@@ -318,7 +364,7 @@ export default function ProfessorTreinosPage() {
         .delete()
         .eq('id', planoId);
       if (deleteError) throw deleteError;
-      
+
       alert('Plano de treino deletado com sucesso!');
       fetchData(professorId!);
     } catch (err: any) {
@@ -347,10 +393,15 @@ export default function ProfessorTreinosPage() {
   };
 
   const handleCreateRotina = async () => {
-    if (!currentPlano || !rotinaFormData.nome.trim() || exerciciosNaRotinaModal.length === 0) {
-      setError('Por favor, preencha o Nome da Rotina e adicione pelo menos um exercício.');
+    if (!currentPlano || !rotinaFormData.nome.trim()) {
+      setError('Por favor, preencha o Nome da Rotina.');
       return;
     }
+    if (exerciciosNaRotinaModal.length === 0) {
+      setError('Por favor, adicione pelo menos um exercício à rotina.');
+      return;
+    }
+
     setLoading(true);
     setIsSubmitting(true);
     setError(null);
@@ -399,16 +450,11 @@ export default function ProfessorTreinosPage() {
 
   const addExercicioToRotinaModal = (exercicio: Exercicio) => {
     setExerciciosNaRotinaModal(prev => {
-      if (prev.find(ex => ex.id === exercicio.id)) {
-        setError('Este exercício já foi adicionado a esta rotina.');
-        return prev;
-      }
-      setError(null);
-      return [...prev, { 
-        id: exercicio.id, 
+      const newExerciciosNaRotina = [...prev, {
+        id: uuidv4(),
         nomeExercicio: exercicio.nome,
-        exercicio_id: exercicio.id, 
-        rotina_id: '', // Adicionado para satisfazer a interface
+        exercicio_id: exercicio.id,
+        rotina_id: '',
         ordem: prev.length + 1,
         series: null,
         repeticoes: '',
@@ -416,6 +462,7 @@ export default function ProfessorTreinosPage() {
         intervalo: '',
         observacoes: '',
       }];
+      return newExerciciosNaRotina;
     });
   };
 
@@ -430,6 +477,7 @@ export default function ProfessorTreinosPage() {
   const removeExercicioNaRotinaModal = (exercicioId: string) => {
     setExerciciosNaRotinaModal(prev => prev.filter(ex => ex.id !== exercicioId));
   };
+
 
   // --- Renderização do Componente ---
   if (loading) {
@@ -460,7 +508,7 @@ export default function ProfessorTreinosPage() {
         <h1 className="text-4xl font-bold text-lime-400 mb-8 text-center">Gerenciar Planos de Treino</h1>
 
         <div className="flex justify-between items-center mb-8">
-          <Link href="/dashboard" className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">
+          <Link href="/professor/dashboard" className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">
             &larr; Voltar ao Dashboard
           </Link>
           <button
@@ -479,7 +527,7 @@ export default function ProfessorTreinosPage() {
               <div key={plano.id} className="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700">
                 <h2 className="text-2xl font-semibold text-lime-300 mb-2">{plano.nome}</h2>
                 <p className="text-gray-300 mb-1">
-                  <span className="font-medium text-lime-200">Aluno:</span> {plano.aluno_nome}
+                  <span className="font-medium text-lime-200">Aluno:</span> {plano.aluno_nome || 'Nenhum'}
                 </p>
                 <p className="text-gray-300 mb-1">
                   <span className="font-medium text-lime-200">Tipo:</span> {plano.tipo_treino || 'N/A'}
@@ -493,7 +541,6 @@ export default function ProfessorTreinosPage() {
                 <p className="text-gray-300 mb-4">
                   <span className="font-medium text-lime-200">Orientação:</span> {plano.orientacao_professor || 'N/A'}
                 </p>
-                <p className="text-gray-400 text-sm mb-4">Criado em: {new Date(plano.created_at).toLocaleDateString()}</p>
                 
                 <h3 className="text-xl font-semibold text-lime-300 mb-2">Rotinas Diárias:</h3>
                 {plano.rotinas_diarias && plano.rotinas_diarias.length > 0 ? (
@@ -559,21 +606,6 @@ export default function ProfessorTreinosPage() {
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
                     placeholder="Ex: Plano de Força A"
                   />
-                </div>
-                <div>
-                  <label htmlFor="create-alunoSelect" className="block text-gray-300 text-sm font-bold mb-2">Atribuir ao Aluno:</label>
-                  <select
-                    id="create-alunoSelect"
-                    name="aluno_id"
-                    value={planoFormData.aluno_id}
-                    onChange={handlePlanoFormInputChange}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
-                  >
-                    <option value="">Selecione um Aluno</option>
-                    {alunos.map(aluno => (
-                      <option key={aluno.id} value={aluno.id}>{aluno.nome_completo} ({aluno.email})</option>
-                    ))}
-                  </select>
                 </div>
                 <div>
                   <label htmlFor="create-tipoTreino" className="block text-gray-300 text-sm font-bold mb-2">Tipo de Treino:</label>
@@ -670,34 +702,19 @@ export default function ProfessorTreinosPage() {
                     type="text"
                     id="edit-planoNome"
                     name="nome"
-                    value={planoFormData.nome}
-                    onChange={handlePlanoFormInputChange}
+                    value={editPlanoFormData.nome}
+                    onChange={(e) => setEditPlanoFormData(prev => ({ ...prev, nome: e.target.value }))}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
                     placeholder="Ex: Treino de Força A"
                   />
-                </div>
-                <div>
-                  <label htmlFor="edit-alunoSelect" className="block text-gray-300 text-sm font-bold mb-2">Atribuir ao Aluno:</label>
-                  <select
-                    id="edit-alunoSelect"
-                    name="aluno_id"
-                    value={planoFormData.aluno_id}
-                    onChange={handlePlanoFormInputChange}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
-                  >
-                    <option value="">Selecione um Aluno</option>
-                    {alunos.map(aluno => (
-                      <option key={aluno.id} value={aluno.id}>{aluno.nome_completo} ({aluno.email})</option>
-                    ))}
-                  </select>
                 </div>
                 <div>
                   <label htmlFor="edit-tipoTreino" className="block text-gray-300 text-sm font-bold mb-2">Tipo de Treino:</label>
                   <select
                     id="edit-tipoTreino"
                     name="tipo_treino"
-                    value={planoFormData.tipo_treino}
-                    onChange={handlePlanoFormInputChange}
+                    value={editPlanoFormData.tipo_treino}
+                    onChange={(e) => setEditPlanoFormData(prev => ({ ...prev, tipo_treino: e.target.value }))}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
                   >
                     <option value="">Selecione o Tipo</option>
@@ -710,8 +727,8 @@ export default function ProfessorTreinosPage() {
                   <select
                     id="edit-objetivo"
                     name="objetivo"
-                    value={planoFormData.objetivo}
-                    onChange={handlePlanoFormInputChange}
+                    value={editPlanoFormData.objetivo}
+                    onChange={(e) => setEditPlanoFormData(prev => ({ ...prev, objetivo: e.target.value }))}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
                   >
                     <option value="">Selecione o Objetivo</option>
@@ -727,8 +744,8 @@ export default function ProfessorTreinosPage() {
                   <select
                     id="edit-dificuldade"
                     name="dificuldade"
-                    value={planoFormData.dificuldade}
-                    onChange={handlePlanoFormInputChange}
+                    value={editPlanoFormData.dificuldade}
+                    onChange={(e) => setEditPlanoFormData(prev => ({ ...prev, dificuldade: e.target.value }))}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
                   >
                     <option value="">Selecione a Dificuldade</option>
@@ -743,8 +760,8 @@ export default function ProfessorTreinosPage() {
                   <textarea
                     id="edit-orientacaoProfessor"
                     name="orientacao_professor"
-                    value={planoFormData.orientacao_professor}
-                    onChange={handlePlanoFormInputChange}
+                    value={editPlanoFormData.orientacao_professor}
+                    onChange={(e) => setEditPlanoFormData(prev => ({ ...prev, orientacao_professor: e.target.value }))}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200 h-24 resize-none"
                     placeholder="Ex: Aquecimento: 5 min de cardio. Fazer os exercícios com boa forma..."
                   ></textarea>
@@ -832,7 +849,7 @@ export default function ProfessorTreinosPage() {
                 <p className="text-gray-400 mb-4">Nenhum exercício selecionado para esta rotina.</p>
               ) : (
                 <div className="mb-6 border border-gray-700 p-2 rounded max-h-48 overflow-y-auto">
-                  {exerciciosNaRotinaModal.map(ex => {
+                  {exerciciosNaRotinaModal.map((ex) => {
                     const fullEx = exerciciosBiblioteca.find(e => e.id === ex.exercicio_id);
                     return (
                       <div key={ex.id} className="bg-gray-700 p-3 rounded mb-2 flex flex-wrap items-center justify-between gap-2">

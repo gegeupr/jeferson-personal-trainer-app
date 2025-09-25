@@ -1,4 +1,3 @@
-// src/app/aluno/assinatura/page.tsx
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -19,17 +18,22 @@ export default function AssinaturaPage() {
       setLoading(true);
       setError(null);
 
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-      if (!user) {
+      if (authError || !user) {
         router.push('/login');
         return;
       }
       setAlunoId(user.id);
 
-      // Verifica se o usuário é aluno (lendo do JWT)
-      const userRole = user.app_metadata?.user_role as string || null;
-      if (userRole !== 'aluno') {
+      // CORRIGIDO AQUI: Busca a role diretamente da tabela 'profiles'
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+      
+      if (profileError || profile?.role !== 'aluno') {
         setError('Acesso negado. Esta página é apenas para alunos.');
         setLoading(false);
         return;
@@ -40,21 +44,21 @@ export default function AssinaturaPage() {
         .from('assinaturas')
         .select('status')
         .eq('aluno_id', user.id)
+        .order('data_fim', { ascending: false })
+        .limit(1)
         .single();
 
-      if (assinaturaError && assinaturaError.code !== 'PGRST116') { // PGRST116 = No rows found (assinatura não existe)
+      if (assinaturaError && assinaturaError.code !== 'PGRST116') {
         console.error('Erro ao buscar status da assinatura:', assinaturaError.message);
         setError('Não foi possível carregar o status da sua assinatura.');
       } else if (assinatura) {
         setStatusAssinatura(assinatura.status);
         if (assinatura.status === 'active') {
-            // Se a assinatura está ativa, redireciona para o dashboard
-            alert('Você já possui uma assinatura ativa! Redirecionando para o Dashboard.');
-            router.push('/dashboard'); 
-            return; // Impede que o restante do componente seja renderizado
+          alert('Você já possui uma assinatura ativa! Redirecionando para o Dashboard.');
+          router.push('/dashboard'); 
+          return;
         } else if (assinatura.status === 'pending') {
-            // Se a assinatura está pendente, vamos permitir que ele conclua ou inicie nova
-            setError('Sua assinatura está pendente. Por favor, conclua o pagamento.');
+          setError('Sua assinatura está pendente. Por favor, conclua o pagamento.');
         }
       }
       setLoading(false);
@@ -88,7 +92,6 @@ export default function AssinaturaPage() {
         throw new Error(data.error || 'Erro desconhecido ao iniciar assinatura.');
       }
 
-      // Redireciona o aluno para a URL de checkout do Stripe
       window.location.href = data.redirectUrl;
 
     } catch (err: any) {
@@ -118,14 +121,13 @@ export default function AssinaturaPage() {
     );
   }
 
-  if (error && statusAssinatura !== 'pending') { // Só exibe o erro geral se não for o de 'pending'
+  if (error && statusAssinatura !== 'pending') {
     return (
       <main className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-red-500 text-lg p-4">
         <p>{error}</p>
         <button
           onClick={() => setError(null)}
-          className="mt-4 bg-lime-400 text-gray-900 py-2 px-6 rounded-full hover:bg-lime-300 transition duration-300"
-        >
+          className="mt-4 bg-lime-400 text-gray-900 py-2 px-6 rounded-full hover:bg-lime-300 transition duration-300">
           Tentar Novamente
         </button>
       </main>
@@ -141,38 +143,29 @@ export default function AssinaturaPage() {
         <p className="text-lg text-gray-300 mb-8">
           Acesse treinos personalizados e todas as funcionalidades por apenas R$ 150,00/mês.
         </p>
-
-        {/* Botão Voltar ao Dashboard */}
         <div className="flex justify-center items-center mb-8">
           <Link href="/dashboard" className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">
             &larr; Voltar ao Dashboard
           </Link>
         </div>
-
-
         {error && statusAssinatura === 'pending' ? (
-            // Mensagem e botão para assinatura PENDENTE
-            <>
-                <p className="text-yellow-400 text-xl font-bold mb-4">{error}</p>
-                <button
-                    onClick={handleInitiateSubscription} // Reutiliza a função para gerar nova sessão
-                    className="bg-orange-500 hover:bg-orange-600 text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 text-lg"
-                    disabled={isSubmitting}
-                >
-                    {isSubmitting ? 'Redirecionando...' : 'Concluir Pagamento'}
-                </button>
-            </>
-        ) : (
-            // Botão para INICIAR nova assinatura
+          <>
+            <p className="text-yellow-400 text-xl font-bold mb-4">{error}</p>
             <button
-                onClick={handleInitiateSubscription}
-                className="bg-lime-400 hover:bg-lime-300 text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 text-lg"
-                disabled={isSubmitting}
-            >
-                {isSubmitting ? 'Redirecionando...' : 'Assinar agora'}
+              onClick={handleInitiateSubscription}
+              className="bg-orange-500 hover:bg-orange-600 text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 text-lg"
+              disabled={isSubmitting}>
+              {isSubmitting ? 'Redirecionando...' : 'Concluir Pagamento'}
             </button>
+          </>
+        ) : (
+          <button
+            onClick={handleInitiateSubscription}
+            className="bg-lime-400 hover:bg-lime-300 text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 text-lg"
+            disabled={isSubmitting}>
+            {isSubmitting ? 'Redirecionando...' : 'Assinar agora'}
+          </button>
         )}
-
         <p className="text-gray-500 text-sm mt-8">
           Ao clicar no botão, você será redirecionado para o ambiente seguro do Stripe para concluir o pagamento.
         </p>

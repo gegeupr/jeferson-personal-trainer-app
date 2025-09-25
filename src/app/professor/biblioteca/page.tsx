@@ -44,17 +44,24 @@ export default function BibliotecaExerciciosPage() {
         router.push('/login');
         return;
       }
-      setProfessorId(user.id);
-
-      // 1. Verificar se o usuário é professor (lendo do JWT)
-      const userRole = user.app_metadata?.user_role as string | null;
-      if (userRole !== 'professor') {
+      
+      // Corrigido: Busca a role diretamente da tabela 'profiles'
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+        
+      if (profileError || profileData?.role !== 'professor') {
         setError('Acesso negado. Esta página é apenas para professores.');
         setLoading(false);
+        router.push('/dashboard');
         return;
       }
 
-      // 2. Buscar exercícios do professor logado
+      setProfessorId(user.id);
+
+      // Busca exercícios do professor logado
       const { data: exerciciosData, error: exerciciosError } = await supabase
         .from('exercicios')
         .select('*')
@@ -72,6 +79,9 @@ export default function BibliotecaExerciciosPage() {
 
     checkUserAndFetchExercicios();
   }, [router]);
+
+  // Restante do código da página (handleAddExercicio, handleUpdateExercicio, etc.) é o mesmo.
+  // ... (código do formulário e lista de exercícios)
 
   const handleAddExercicio = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -241,7 +251,7 @@ export default function BibliotecaExerciciosPage() {
         <h1 className="text-4xl font-bold text-lime-400 mb-8 text-center">Biblioteca de Exercícios</h1>
 
         <div className="flex justify-start items-center mb-8">
-          <Link href="/dashboard" className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">
+          <Link href="/professor/dashboard" className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">
             &larr; Voltar ao Dashboard
           </Link>
         </div>
@@ -315,10 +325,6 @@ export default function BibliotecaExerciciosPage() {
                       rel="noopener noreferrer"
                       className="text-blue-400 hover:text-blue-300 text-sm inline-flex items-center"
                     >
-                      <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
-                        <path fillRule="evenodd" d="M.05 4.555A2 2 0 012 2.5h16A2 2 0 0119.95 4.555L10 14.555 0.05 4.555zM18 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v2H.05A2 2 0 010 4.5V15a2 2 0 002 2h16a2 2 0 002-2V4.5A2 2 0 0119.95 4.555L10 14.555 0.05 4.555z" clipRule="evenodd" />
-                      </svg>
                       Ver Vídeo
                     </a>
                   )}
