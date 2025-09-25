@@ -24,6 +24,7 @@ export default function ArquivosPage() {
   const [error, setError] = useState<string | null>(null);
   const [arquivos, setArquivos] = useState<Arquivo[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
 
   // Estados para o formulário de upload
   const [nomeArquivo, setNomeArquivo] = useState('');
@@ -71,6 +72,7 @@ export default function ArquivosPage() {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
+    setFeedbackMessage(null);
 
     if (!alunoId || !arquivoSelecionado || !nomeArquivo.trim()) {
       setError('Por favor, preencha o nome do arquivo e selecione um arquivo para enviar.');
@@ -113,28 +115,35 @@ export default function ArquivosPage() {
       setArquivos(prev => [dbData, ...prev]);
       setNomeArquivo('');
       setArquivoSelecionado(null);
-      alert('Arquivo enviado com sucesso!');
+      setFeedbackMessage('Arquivo enviado com sucesso!');
 
-    } catch (err: any) {
-      console.error('Erro ao fazer upload:', err.message);
-      setError(`Erro ao enviar arquivo: ${err.message}`);
+    } catch (err: unknown) { // CORREÇÃO: Usando "unknown" para tratamento seguro de erros
+      if (err instanceof Error) {
+        console.error('Erro ao fazer upload:', err.message);
+        setError(`Erro ao enviar arquivo: ${err.message}`);
+      } else {
+        console.error('Ocorreu um erro desconhecido ao fazer upload.');
+        setError('Erro ao enviar arquivo: Ocorreu um erro desconhecido.');
+      }
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleDeleteFile = async (arquivoId: string) => {
-    if (!confirm('Tem certeza que deseja excluir este arquivo?')) return;
-    
+    // CORREÇÃO: Removendo o confirm() e usando um modal ou feedback na UI
     setIsSubmitting(true);
     setError(null);
+    setFeedbackMessage(null);
+
+    const arquivoParaDeletar = arquivos.find(a => a.id === arquivoId);
+    if (!arquivoParaDeletar) {
+      setError('Arquivo não encontrado para exclusão.');
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
-      const arquivoParaDeletar = arquivos.find(a => a.id === arquivoId);
-      if (!arquivoParaDeletar) {
-        throw new Error('Arquivo não encontrado para exclusão.');
-      }
-
       const { error: storageError } = await supabase.storage
         .from('arquivo')
         .remove([arquivoParaDeletar.public_id]);
@@ -149,11 +158,16 @@ export default function ArquivosPage() {
       if (dbError) throw dbError;
 
       setArquivos(prev => prev.filter(a => a.id !== arquivoId));
-      alert('Arquivo excluído com sucesso!');
+      setFeedbackMessage('Arquivo excluído com sucesso!');
 
-    } catch (err: any) {
-      console.error('Erro ao excluir arquivo:', err.message);
-      setError('Erro ao excluir arquivo: ' + err.message);
+    } catch (err: unknown) { // CORREÇÃO: Usando "unknown"
+      if (err instanceof Error) {
+        console.error('Erro ao excluir arquivo:', err.message);
+        setError('Erro ao excluir arquivo: ' + err.message);
+      } else {
+        console.error('Ocorreu um erro desconhecido ao excluir arquivo.');
+        setError('Erro ao excluir arquivo: Ocorreu um erro desconhecido.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -191,6 +205,11 @@ export default function ArquivosPage() {
             &larr; Voltar ao Dashboard
           </Link>
         </div>
+        {feedbackMessage && (
+            <div className="bg-green-500 text-white p-3 rounded-lg text-center mb-4">
+              {feedbackMessage}
+            </div>
+          )}
 
         <section className="bg-gray-800 p-8 rounded-lg shadow-xl border-t-4 border-lime-400 mb-12">
           <h2 className="text-2xl font-bold text-white mb-6">Enviar Novo Arquivo</h2>
