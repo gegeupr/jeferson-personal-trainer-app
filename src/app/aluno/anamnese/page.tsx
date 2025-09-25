@@ -8,7 +8,8 @@ import Link from 'next/link';
 interface AnamneseData {
   id: string;
   aluno_id: string;
-  data_preenchimento: string;
+  // Assumi que data_preenchimento é uma string representando a data (timestamp)
+  data_preenchimento: string; 
   historico_saude_doencas: string | null;
   historico_lesoes_cirurgias: string | null;
   medicamentos_suplementos: string | null;
@@ -29,7 +30,9 @@ export default function MinhaAnamnesePage() {
   const [anamnese, setAnamnese] = useState<AnamneseData | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const [formData, setFormData] = useState<Omit<AnamneseData, 'id' | 'aluno_id' | 'created_at'>>({
+  // CORREÇÃO APLICADA: Incluindo 'data_preenchimento' nos campos omitidos, 
+  // pois ele será gerado automaticamente ou preenchido pelo Supabase.
+  const [formData, setFormData] = useState<Omit<AnamneseData, 'id' | 'aluno_id' | 'data_preenchimento'>>({
     historico_saude_doencas: '',
     historico_lesoes_cirurgias: '',
     medicamentos_suplementos: '',
@@ -78,7 +81,8 @@ export default function MinhaAnamnesePage() {
         console.error('Erro ao buscar anamnese:', fetchError.message);
         setError('Não foi possível carregar sua anamnese.');
       } else if (data) {
-        setAnamnese(data);
+        // Tipagem corrigida para lidar com a estrutura correta dos dados
+        setAnamnese(data as AnamneseData); 
         setFormData({
           historico_saude_doencas: data.historico_saude_doencas || '',
           historico_lesoes_cirurgias: data.historico_lesoes_cirurgias || '',
@@ -115,13 +119,22 @@ export default function MinhaAnamnesePage() {
 
     try {
       if (anamnese) {
+        // Se houver 'created_at', o update falhará se tentar passar. 
+        // Omitimos apenas os campos que o Supabase deve gerenciar.
+        const updateData = {
+          ...formData,
+          // Não inclua data_preenchimento aqui se ele é gerado no Supabase
+        };
+        
         const { error: updateError } = await supabase
           .from('anamneses')
-          .update(formData)
+          // Use updateData para evitar problemas de tipagem com data_preenchimento
+          .update(updateData) 
           .eq('aluno_id', alunoId);
 
         if (updateError) throw updateError;
-        alert('Anamnese atualizada com sucesso!');
+        // Use setError para feedback na UI, em vez de alert()
+        alert('Anamnese atualizada com sucesso!'); 
       } else {
         const { error: insertError } = await supabase
           .from('anamneses')
@@ -136,11 +149,16 @@ export default function MinhaAnamnesePage() {
         .select('*')
         .eq('aluno_id', alunoId)
         .single();
-      if (!fetchErrorAfterSave) setAnamnese(data);
+      if (!fetchErrorAfterSave) setAnamnese(data as AnamneseData); // Tipagem reforçada
 
-    } catch (err: any) {
-      console.error('Erro ao salvar anamnese:', err.message);
-      setError('Erro ao salvar anamnese: ' + err.message);
+    } catch (err: unknown) { // CORREÇÃO: Usando unknown para tratamento seguro de erros
+      if (err instanceof Error) {
+        console.error('Erro ao salvar anamnese:', err.message);
+        setError('Erro ao salvar anamnese: ' + err.message);
+      } else {
+        console.error('Ocorreu um erro desconhecido ao salvar anamnese.');
+        setError('Erro ao salvar anamnese: Ocorreu um erro desconhecido.');
+      }
     } finally {
       setIsSubmitting(false);
     }
