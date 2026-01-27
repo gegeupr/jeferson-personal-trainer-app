@@ -1,6 +1,6 @@
 // src/components/MontarTreinoExtra.tsx
 import React, { useState, useEffect } from 'react';
-import { supabase } from '@/utils/supabase';
+import { supabase } from '@/utils/supabase-browser';
 import { v4 as uuidv4 } from 'uuid';
 
 // Tipos de dados

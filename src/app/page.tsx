@@ -1,153 +1,353 @@
-// src/app/page.tsx
+"use client";
 
-import Link from 'next/link';
-import Image from 'next/image';
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+export default function HomePage() {
+  const [hideHeader, setHideHeader] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setHideHeader(window.scrollY > 80);
+      if (window.scrollY > 10) setMobileMenuOpen(false);
+    };
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <main className="min-h-screen bg-gray-900 text-white">
+    <main className="min-h-screen bg-black text-white">
+      {/* Header overlay (some ao rolar) */}
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
+          hideHeader ? "-translate-y-full" : "translate-y-0"
+        }`}
+      >
+        <div className="border-b border-white/10 bg-black/35 backdrop-blur-md">
+          <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+            <Link href="/" className="flex items-center gap-3">
+              <Image
+                src="/images/motion-m-green.png"
+                alt="Motion"
+                width={36}
+                height={36}
+                priority
+                className="h-9 w-9"
+              />
 
-      {/* Seção Hero - Primeira Dobra */}
-      <section className="relative bg-gradient-to-r from-gray-950 to-gray-800 text-white py-24 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center min-h-screen text-center overflow-hidden">
-        {/* Efeito de grade/pontos futurista */}
-        <div className="absolute inset-0 z-0 opacity-10" style={{
-            backgroundImage: 'radial-gradient(#222 1px, transparent 1px)',
-            backgroundSize: '20px 20px',
-            backgroundPosition: 'center center'
-        }}></div>
-        {/* Overlay para escurecer a imagem de fundo */}
-        <div className="absolute inset-0 bg-black opacity-40 z-10"></div>
-        
-        {/* IMAGEM DE FUNDO DO HERO */}
-        <Image
-          src="/images/hero-background.png" // CONFIRME o NOME e EXTENSÃO EXATOS do seu arquivo de imagem do hero
-          alt="Jeferson Parowski Personal Trainer"
-          layout="fill"
-          objectFit="cover"
-          quality={90}
-          className="z-0"
-          priority
+              <span className="text-[15px] font-semibold uppercase tracking-[0.28em]">
+                <span className="text-lime-400">M</span>
+                <span className="text-white">OTION</span>
+                <span className="ml-3 text-[10px] font-medium tracking-normal text-white/50">
+                  for trainers
+                </span>
+              </span>
+            </Link>
+
+            {/* Desktop nav */}
+            <nav className="hidden items-center gap-6 text-sm text-white/70 md:flex">
+              <a href="#como-funciona" className="hover:text-white">
+                Como funciona
+              </a>
+              <a href="#recursos" className="hover:text-white">
+                Recursos
+              </a>
+              <a href="#seguranca" className="hover:text-white">
+                Segurança
+              </a>
+            </nav>
+
+            {/* Right actions */}
+            <div className="flex items-center gap-2">
+              {/* Apenas Entrar (desktop) */}
+              <Link
+                href="/login"
+                className="hidden rounded-full border border-white/20 px-4 py-2 text-sm text-white/80 hover:border-white/40 hover:text-white md:inline-flex"
+              >
+                Entrar
+              </Link>
+
+              {/* Mobile menu button */}
+              <button
+                type="button"
+                aria-label="Abrir menu"
+                onClick={() => setMobileMenuOpen((v) => !v)}
+                className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-3 py-2 text-white/90 hover:bg-white/10 md:hidden"
+              >
+                <span className="text-lg leading-none">☰</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile dropdown menu */}
+          {mobileMenuOpen ? (
+            <div className="md:hidden">
+              <div className="mx-auto max-w-6xl px-4 pb-4">
+                <div className="rounded-2xl border border-white/10 bg-black/60 p-3 backdrop-blur">
+                  <div className="flex flex-col gap-2 text-sm text-white/80">
+                    <a
+                      href="#como-funciona"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="rounded-xl px-3 py-2 hover:bg-white/10"
+                    >
+                      Como funciona
+                    </a>
+                    <a
+                      href="#recursos"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="rounded-xl px-3 py-2 hover:bg-white/10"
+                    >
+                      Recursos
+                    </a>
+                    <a
+                      href="#seguranca"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="rounded-xl px-3 py-2 hover:bg-white/10"
+                    >
+                      Segurança
+                    </a>
+
+                    <div className="my-2 h-px w-full bg-white/10" />
+
+                    <Link
+                      href="/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="rounded-xl bg-white/5 px-3 py-2 font-semibold hover:bg-white/10"
+                    >
+                      Entrar
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </header>
+
+      {/* ✅ CAPA LIMPA (sem texto) | Mobile = vídeo 9:16 | Desktop = imagem 16:9 */}
+      <section className="relative h-screen w-full overflow-hidden">
+        {/* ✅ Mobile video (coloque em: public/videos/capa-mobile.mp4) */}
+        <video
+          className="absolute inset-0 h-full w-full object-cover object-center md:hidden"
+          src="/videos/capa-mobile.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster="/images/capa.png"
         />
 
-        {/* Conteúdo do Hero - Adicionei padding-top para não ser coberto pelo cabeçalho */}
-        <div className="relative z-20 max-w-4xl pt-[70px] {/* Adicionei padding-top aqui */}"> 
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 text-lime-400 drop-shadow-lg">
-            Transforme seu Corpo e Mente
-          </h1>
-          <p className="text-lg sm:text-xl lg:text-2xl mb-8 text-gray-200">
-            Treinos personalizados, acompanhamento exclusivo e resultados reais com Jeferson Parowski. Sua jornada fitness futurista começa aqui.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link href="#servicos" className="bg-lime-400 text-gray-900 hover:bg-lime-300 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 text-lg">
-              Ver Planos
-            </Link>
-            <Link href="https://wa.me/5542988311053" target="_blank" rel="noopener noreferrer" className="bg-transparent border-2 border-lime-400 text-lime-400 hover:bg-lime-400 hover:text-gray-900 font-bold py-3 px-8 rounded-full transition duration-300 text-lg inline-flex items-center justify-center">
-              <svg className="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
-              Fale no WhatsApp
-            </Link>
+        {/* ✅ Desktop image (coloque em: public/images/capa.png) */}
+        <img
+          src="/images/capa.png"
+          alt="Motion - Capa"
+          className="absolute inset-0 hidden h-full w-full object-cover object-center md:block"
+          loading="eager"
+        />
+
+        {/* overlays premium (bem discretos) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/10" />
+        <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_120px_rgba(0,0,0,0.55)]" />
+
+        {/* espaço do header (não tem conteúdo aqui, é só para não “cortar” a capa) */}
+        <div className="relative z-10 h-full w-full pt-20 md:pt-24" />
+      </section>
+
+      {/* ✅ BLOCO DE TEXTO ABAIXO DA CAPA, mas “entra por cima” ao começar a rolar */}
+      <section className="relative z-20 -mt-24 sm:-mt-28 md:-mt-36">
+        <div className="mx-auto max-w-6xl px-4">
+          {/* sticky cria o efeito premium: texto “passa por cima” da capa */}
+          <div className="sticky top-16 md:top-20">
+            <div className="rounded-3xl border border-white/10 bg-black/55 p-6 backdrop-blur-md shadow-[0_25px_80px_rgba(0,0,0,0.65)] md:p-8">
+              <div className="max-w-2xl">
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
+                  <span className="h-2 w-2 rounded-full bg-lime-400" />
+                  Plataforma gratuita para professores
+                </div>
+
+                <h1 className="mt-4 text-3xl font-extrabold leading-tight tracking-tight md:text-5xl">
+                  Gestão inteligente para{" "}
+                  <span className="text-lime-400">personal trainers</span>
+                </h1>
+
+                <p className="mt-3 text-sm leading-relaxed text-white/75 md:text-base">
+                  Organize alunos, treinos, biblioteca de exercícios e evolução
+                  em um só lugar — com visual premium e controle real de acesso
+                  do aluno.
+                </p>
+
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                  <Link
+                    href="/login"
+                    className="inline-flex items-center justify-center rounded-full bg-lime-400 px-6 py-3 text-sm font-semibold text-black hover:bg-lime-300"
+                  >
+                    Criar conta grátis
+                  </Link>
+
+                  <a
+                    href="#como-funciona"
+                    className="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white/90 hover:border-white/30"
+                  >
+                    Ver como funciona
+                  </a>
+                </div>
+
+                <div className="mt-7 grid grid-cols-3 gap-3 text-center">
+                  <Stat label="Treinos" value="Rápidos" />
+                  <Stat label="Biblioteca" value="Sua" />
+                  <Stat label="Acesso" value="Controlado" />
+                </div>
+
+                <p className="mt-5 text-xs text-white/45">
+                  Pagamento do aluno direto com o professor (Pix/links). O Motion
+                  organiza o acesso e a gestão.
+                </p>
+              </div>
+            </div>
+
+            {/* “respiro” para o sticky não ficar prendendo demais */}
+            <div className="h-10 md:h-14" />
           </div>
         </div>
       </section>
 
-      {/* Seção Sobre o Personal Trainer - Breve introdução */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-950 text-center">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-4xl font-bold text-lime-400 mb-6">
-            Quem é Jeferson Parowski?
+      {/* Features */}
+      <section id="recursos" className="mx-auto max-w-6xl px-4 py-14">
+        <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
+          Feito para o seu dia a dia
+        </h2>
+        <p className="mt-2 max-w-2xl text-white/70">
+          Você mantém sua metodologia, seus nomes de exercícios, seus vídeos e
+          seu relacionamento direto com o aluno.
+        </p>
+
+        <div className="mt-8 grid gap-4 md:grid-cols-3">
+          <Card
+            title="Biblioteca própria"
+            desc="Cada professor cria seus exercícios com o nome da sua região e pode linkar seu vídeo do YouTube."
+            badge="Professor"
+          />
+          <Card
+            title="Treinos reutilizáveis"
+            desc="Monte, salve e atribua treinos para cada aluno. Rápido de ajustar, fácil de evoluir."
+            badge="Gestão"
+          />
+          <Card
+            title="Acesso do aluno"
+            desc="Aluno só acessa quando estiver ativo. Você controla o status e mantém tudo organizado."
+            badge="Controle"
+          />
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section id="como-funciona" className="border-t border-white/10">
+        <div className="mx-auto max-w-6xl px-4 py-14">
+          <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
+            Como funciona
           </h2>
-          {/* Imagem de perfil do Jeferson */}
-          <div className="w-32 h-32 mx-auto rounded-full overflow-hidden mb-8 border-4 border-lime-400 shadow-lg">
+
+          <div className="mt-8 grid gap-4 md:grid-cols-4">
+            <Step n="01" title="Crie sua conta" desc="Professor entra grátis." />
+            <Step n="02" title="Monte sua biblioteca" desc="Exercícios + vídeos." />
+            <Step n="03" title="Crie e salve treinos" desc="Rotinas e planos." />
+            <Step n="04" title="Atribua ao aluno" desc="Acesso conforme status." />
+          </div>
+
+          <div className="mt-10 rounded-3xl border border-white/10 bg-white/5 p-6 md:p-8">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-sm font-semibold text-lime-400">
+                  Pagamento do aluno direto com você
+                </p>
+                <p className="mt-1 text-white/70">
+                  Pix, Mercado Pago, PicPay… você escolhe. O Motion organiza o
+                  acesso e a gestão.
+                </p>
+              </div>
+              <Link
+                href="/login"
+                className="inline-flex items-center justify-center rounded-full bg-lime-400 px-6 py-3 text-sm font-semibold text-black hover:bg-lime-300"
+              >
+                Começar agora
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-white/10">
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 md:flex-row md:items-center md:justify-between">
+          <div className="flex items-center gap-3">
             <Image
-              src="/images/jeferson-profile.png" // Use .png aqui, conforme você me informou
-              alt="Foto de perfil de Jeferson Parowski"
-              width={128}
-              height={128}
-              objectFit="cover"
+              src="/images/motion-m-green.png"
+              alt="Motion"
+              width={26}
+              height={26}
+              className="h-7 w-7"
             />
+            <p className="text-sm text-white/70">
+              © {new Date().getFullYear()}{" "}
+              <span className="uppercase tracking-[0.22em]">
+                <span className="text-lime-400">M</span>OTION
+              </span>
+              . Todos os direitos reservados.
+            </p>
           </div>
-          <p className="text-lg text-gray-300 leading-relaxed mb-8">
-            Com anos de experiência e paixão por transformar vidas, Jeferson Parowski é dedicado a ajudar você a atingir seus objetivos de saúde e fitness. Minha metodologia é baseada em ciência, individualidade, tecnologia e motivação constante para resultados que transcendem.
-          </p>
-          <Link href="/sobre" className="mt-8 inline-block text-lime-400 hover:text-lime-300 font-semibold transition duration-300 text-lg">
-            Saiba mais sobre mim →
-          </Link>
-        </div>
-      </section>
 
-      {/* Seção de Serviços/Planos - Cards */}
-      <section id="servicos" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-900">
-        <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-lime-400 mb-12">
-            Meus Serviços de Treinamento
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Card 1: Treino Online Personalizado */}
-            <div className="bg-gray-800 rounded-lg shadow-xl p-8 transform hover:scale-105 transition duration-300 ease-in-out border-t-4 border-lime-400">
-              <h3 className="text-3xl font-bold text-lime-400 mb-4">Treino Online</h3>
-              <p className="text-gray-300 mb-6 text-lg">
-                Fichas de treino personalizadas para você fazer onde e quando quiser, com acompanhamento via plataforma exclusiva.
-              </p>
-              <ul className="text-gray-200 text-left mb-6 space-y-3">
-                <li className="flex items-center"><svg className="w-6 h-6 text-lime-400 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>Acesso à plataforma de membros</li>
-                <li className="flex items-center"><svg className="w-6 h-6 text-lime-400 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>Vídeos demonstrativos de exercícios</li>
-                <li className="flex items-center"><svg className="w-6 h-6 text-lime-400 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>Suporte direto via chat</li>
-              </ul>
-              <Link href="/planos" className="block bg-lime-400 text-gray-900 font-bold py-3 px-6 rounded-full hover:bg-lime-300 transition duration-300 text-lg">
-                Ver Detalhes
-              </Link>
-            </div>
-
-            {/* Card 2: Consultoria Fitness */}
-            <div className="bg-gray-800 rounded-lg shadow-xl p-8 transform hover:scale-105 transition duration-300 ease-in-out border-t-4 border-lime-400">
-              <h3 className="text-3xl font-bold text-lime-400 mb-4">Consultoria Fitness</h3>
-              <p className="text-gray-300 mb-6 text-lg">
-                Sessões de consultoria para alinhamento de metas, avaliação de progresso e ajuste de estratégias personalizadas.
-              </p>
-              <ul className="text-gray-200 text-left mb-6 space-y-3">
-                <li className="flex items-center"><svg className="w-6 h-6 text-lime-400 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>Chamadas de vídeo exclusivas</li>
-                <li className="flex items-center"><svg className="w-6 h-6 text-lime-400 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>Feedback detalhado e plano de ação</li>
-                <li className="flex items-center"><svg className="w-6 h-6 text-lime-400 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>Ajustes de metas e rotina</li>
-              </ul>
-              <Link href="/consultoria" className="block bg-lime-400 text-gray-900 font-bold py-3 px-6 rounded-full hover:bg-lime-300 transition duration-300 text-lg">
-                Saiba Mais
-              </Link>
-            </div>
-
-            {/* Card 3: Treino Presencial */}
-            <div className="bg-gray-800 rounded-lg shadow-xl p-8 transform hover:scale-105 transition duration-300 ease-in-out border-t-4 border-lime-400">
-              <h3 className="text-3xl font-bold text-lime-400 mb-4">Treino Presencial</h3>
-              <p className="text-gray-300 mb-6 text-lg">
-                Sessões de treinamento individualizadas ou em pequenos grupos em Ponta Grossa, PR.
-              </p>
-              <ul className="text-gray-200 text-left mb-6 space-y-3">
-                <li className="flex items-center"><svg className="w-6 h-6 text-lime-400 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>Treino em academia ou local a combinar</li>
-                <li className="flex items-center"><svg className="w-6 h-6 text-lime-400 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>Acompanhamento direto e ajuste em tempo real</li>
-                <li className="flex items-center"><svg className="w-6 h-6 text-lime-400 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>Foco total na sua execução e segurança</li>
-              </ul>
-              <Link href="https://wa.me/5542988311053" target="_blank" rel="noopener noreferrer" className="block bg-lime-400 text-gray-900 font-bold py-3 px-6 rounded-full hover:bg-lime-300 transition duration-300 text-lg">
-                Agendar Aula
-              </Link>
-            </div>
+          <div className="flex gap-4 text-sm text-white/60">
+            <Link href="/termos" className="hover:text-white">
+              Termos
+            </Link>
+            <Link href="/privacidade" className="hover:text-white">
+              Privacidade
+            </Link>
           </div>
         </div>
-      </section>
-
-      {/* Seção de Chamada para Ação Final */}
-      <section id="contato" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-gray-950 to-gray-800 text-white text-center border-t border-gray-800">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-lime-400 mb-6">
-            Pronto para Transformar sua Vida?
-          </h2>
-          <p className="text-lg text-gray-200 mb-8">
-            Entre em contato hoje mesmo para agendar sua primeira consulta e começar sua jornada rumo a uma vida mais saudável e ativa. Sua melhor versão está esperando!
-          </p>
-          <Link href="https://wa.me/5542988311053" target="_blank" rel="noopener noreferrer" className="bg-lime-400 text-gray-900 hover:bg-lime-300 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 inline-flex items-center text-lg">
-            <svg className="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
-            Fale com Jeferson no WhatsApp
-          </Link>
-          <p className="text-sm text-gray-400 mt-6">Ou ligue para: (42) 98831-1053</p>
-        </div>
-      </section>
+      </footer>
     </main>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+      <p className="text-xs text-white/50">{label}</p>
+      <p className="mt-1 text-sm font-semibold text-white">{value}</p>
+    </div>
+  );
+}
+
+function Card({
+  title,
+  desc,
+  badge,
+}: {
+  title: string;
+  desc: string;
+  badge: string;
+}) {
+  return (
+    <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+      <div className="inline-flex items-center rounded-full border border-white/10 bg-black/40 px-3 py-1 text-xs text-white/70">
+        {badge}
+      </div>
+      <h3 className="mt-4 text-lg font-semibold">{title}</h3>
+      <p className="mt-2 text-sm leading-relaxed text-white/70">{desc}</p>
+    </div>
+  );
+}
+
+function Step({ n, title, desc }: { n: string; title: string; desc: string }) {
+  return (
+    <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+      <p className="text-sm font-semibold text-lime-400">{n}</p>
+      <h4 className="mt-3 font-semibold">{title}</h4>
+      <p className="mt-2 text-sm text-white/70">{desc}</p>
+    </div>
   );
 }

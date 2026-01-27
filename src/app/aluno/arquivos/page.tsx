@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/utils/supabase';
+import { supabase } from '@/utils/supabase-browser';
 import Link from 'next/link';
 import { v4 as uuidv4 } from 'uuid';
 

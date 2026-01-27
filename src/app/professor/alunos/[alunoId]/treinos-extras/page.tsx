@@ -1,74 +1,96 @@
 // src/app/professor/alunos/[alunoId]/treinos-extras/page.tsx
 "use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
-import { supabase } from '@/utils/supabase';
-import Link from 'next/link';
-import MontarTreinoExtra from '@/components/MontarTreinoExtra'; // Importar o componente
-
-interface AlunoProfile {
-  id: string;
-  nome_completo: string | null;
-  aluno_email: string;
-}
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import { supabase } from "@/utils/supabase-browser";
+import MontarTreinoExtra from "@/components/MontarTreinoExtra";
 
 export default function TreinosExtrasAlunoPage() {
   const router = useRouter();
-  const params = useParams();
-  const alunoId = params.alunoId as string; // ID do aluno da URL
+  const params = useParams<{ alunoId: string }>();
+  const alunoId = params?.alunoId;
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [alunoNome, setAlunoNome] = useState<string | null>(null);
+
   const [professorId, setProfessorId] = useState<string | null>(null);
+  const [alunoNome, setAlunoNome] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchData() {
+    (async () => {
       setLoading(true);
       setError(null);
 
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      // 1) precisa estar logado
+      const { data: auth, error: authError } = await supabase.auth.getUser();
+      const user = auth?.user;
+
       if (authError || !user) {
-        router.push('/login');
-        return;
-      }
-      setProfessorId(user.id);
-
-      // 1. Verificar se o usuário logado é um professor
-      const userRole = user.app_metadata?.user_role as string || null;
-      if (userRole !== 'professor') {
-        setError('Acesso negado. Esta página é apenas para professores.');
-        setLoading(false);
+        router.push("/login");
         return;
       }
 
-      // 2. Buscar informações do aluno específico para exibir o nome
-      const { data: alunosRawData, error: alunosError } = await supabase.rpc('get_all_aluno_profiles');
-      if (alunosError) {
-        console.error('Erro ao buscar alunos via RPC:', alunosError.message);
-        setError('Erro ao carregar informações do aluno.');
+      // 2) precisa ser professor (lendo do profiles.role)
+      const { data: prof, error: profErr } = await supabase
+        .from("profiles")
+        .select("id, role")
+        .eq("id", user.id)
+        .single();
+
+      if (profErr || !prof) {
+        setError("Não foi possível carregar seu perfil.");
         setLoading(false);
         return;
       }
-      const alunoProfile = (alunosRawData as AlunoProfile[]).find((a) => a.id === alunoId);
-      if (!alunoProfile) {
-        setError('Aluno não encontrado.');
+
+      if ((prof.role || "").toLowerCase() !== "professor") {
+        setError("Acesso negado. Esta página é apenas para professores.");
         setLoading(false);
         return;
       }
-      setAlunoNome(alunoProfile.nome_completo || 'Aluno Desconhecido');
+
+      setProfessorId(prof.id);
+
+      // 3) valida o aluno (tem que existir e estar vinculado a este professor)
+      if (!alunoId) {
+        setError("Aluno inválido.");
+        setLoading(false);
+        return;
+      }
+
+      const { data: aluno, error: alunoErr } = await supabase
+        .from("profiles")
+        .select("id, nome_completo, professor_id, role")
+        .eq("id", alunoId)
+        .single();
+
+      if (alunoErr || !aluno) {
+        setError("Aluno não encontrado.");
+        setLoading(false);
+        return;
+      }
+
+      if ((aluno.role || "").toLowerCase() !== "aluno") {
+        setError("Este perfil não é um aluno.");
+        setLoading(false);
+        return;
+      }
+
+      if (aluno.professor_id !== prof.id) {
+        setError("Acesso negado. Este aluno não está vinculado ao seu perfil.");
+        setLoading(false);
+        return;
+      }
+
+      setAlunoNome(aluno.nome_completo || "Aluno");
       setLoading(false);
-    }
-
-    if (alunoId) {
-      fetchData();
-    }
+    })();
   }, [alunoId, router]);
 
   const handleSuccess = () => {
-    alert('Treino extra enviado com sucesso!');
-    // Opcional: redirecionar ou recarregar a página
+    alert("Treino extra enviado com sucesso!");
   };
 
   const handleError = (message: string) => {
@@ -83,13 +105,24 @@ export default function TreinosExtrasAlunoPage() {
     );
   }
 
-  if (error && error.includes('Acesso negado')) {
+  if (error) {
     return (
       <main className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-red-500 text-lg p-4">
-        <p>{error}</p>
-        <Link href="/dashboard" className="mt-4 bg-lime-400 text-gray-900 py-2 px-6 rounded-full hover:bg-lime-300 transition duration-300">
-          Ir para Dashboard
-        </Link>
+        <p className="text-center">{error}</p>
+        <div className="mt-4 flex gap-2">
+          <Link
+            href="/professor/alunos"
+            className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition duration-300"
+          >
+            ← Voltar para Alunos
+          </Link>
+          <Link
+            href="/professor/dashboard"
+            className="bg-lime-500 hover:bg-lime-400 text-black font-bold py-2 px-4 rounded-full transition duration-300"
+          >
+            Dashboard
+          </Link>
+        </div>
       </main>
     );
   }
@@ -97,21 +130,30 @@ export default function TreinosExtrasAlunoPage() {
   return (
     <main className="min-h-screen bg-gray-950 text-white py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-lime-400 mb-8 text-center">
-          Treinos Extras de {alunoNome}
-        </h1>
-        <div className="flex justify-start items-center mb-8">
-          <Link href={`/professor/alunos`} className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">
-            &larr; Voltar para Gerenciar Alunos
+        <div className="flex items-center justify-between gap-3 mb-8">
+          <div>
+            <p className="text-white/60 text-sm">Motion</p>
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-lime-300">
+              Treinos Extras
+            </h1>
+            <p className="text-white/60 mt-1">
+              Enviando para: <span className="text-white">{alunoNome}</span>
+            </p>
+          </div>
+
+          <Link
+            href="/professor/alunos"
+            className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10 transition"
+          >
+            ← Voltar
           </Link>
         </div>
 
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
-        <section>
-          {/* O componente MontarTreinoExtra renderiza o formulário de montagem */}
+        <section className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-6">
           <MontarTreinoExtra
-            alunoId={alunoId}
+            alunoId={alunoId!}
             onSuccess={handleSuccess}
             onError={handleError}
           />

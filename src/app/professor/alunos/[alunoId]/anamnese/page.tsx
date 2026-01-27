@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { supabase } from '@/utils/supabase';
+import { supabase } from '@/utils/supabase-browser';
 import Link from 'next/link';
 
 interface Anamnese {
