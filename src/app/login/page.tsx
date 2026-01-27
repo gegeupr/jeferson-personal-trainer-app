@@ -10,9 +10,7 @@ const PROF_STORAGE_KEY = "motion_prof_slug";
 const WELCOME_PENDING_KEY = "motion_welcome_pending";
 
 function getSiteUrl() {
-  // client-side
   if (typeof window !== "undefined") return window.location.origin;
-  // fallback
   return process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 }
 
@@ -24,16 +22,12 @@ function onlyDigits(s: string) {
 }
 
 function normalizeBRPhone(raw: string) {
-  // guarda só dígitos (DDD + número). Se vier com +55, mantém 55 + resto.
   return onlyDigits(raw);
 }
 
 function isValidBRPhone(raw: string) {
   const d = onlyDigits(raw);
 
-  // Aceita:
-  // 10 dígitos (DDD + fixo) ou 11 dígitos (DDD + celular)
-  // Se usuário digitar com 55 na frente, vira 12/13 (também ok)
   if (d.startsWith("55")) {
     const rest = d.slice(2);
     return rest.length === 10 || rest.length === 11;
@@ -63,6 +57,13 @@ function LoginInner() {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
+  // --- reset senha (card)
+  const [showReset, setShowReset] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetErr, setResetErr] = useState<string | null>(null);
+  const [resetMsg, setResetMsg] = useState<string | null>(null);
+
   // Se entrou via link do professor: /login?prof=slug
   useEffect(() => {
     if (!profFromUrl) return;
@@ -70,6 +71,11 @@ function LoginInner() {
     localStorage.setItem(WELCOME_PENDING_KEY, "1"); // welcome 1x
     setRole("aluno");
     setIsLoginView(false); // abre cadastro direto (funil)
+
+    // fecha reset, se estava aberto
+    setShowReset(false);
+    setResetErr(null);
+    setResetMsg(null);
   }, [profFromUrl]);
 
   async function tryLinkAlunoToProfessorIfNeeded() {
@@ -82,13 +88,44 @@ function LoginInner() {
       prof_slug: profSlug,
     });
 
-    // se ok (vinculou ou já estava), limpa o slug
     if (!error && data?.ok) {
       localStorage.removeItem(PROF_STORAGE_KEY);
-      // garante welcome 1x depois do vínculo
       localStorage.setItem(WELCOME_PENDING_KEY, "1");
     }
-    // se falhar, não bloqueia o login
+  }
+
+  // -------------------
+  // RESET SENHA (EMAIL)
+  // -------------------
+  async function handleResetPassword(e: React.FormEvent) {
+    e.preventDefault();
+    setResetLoading(true);
+    setResetErr(null);
+    setResetMsg(null);
+
+    try {
+      const emailToUse = (resetEmail || email).trim();
+      if (!emailToUse) {
+        setResetErr("Informe seu e-mail para receber o link.");
+        setResetLoading(false);
+        return;
+      }
+
+      // manda para a página de redefinição (você precisa ter /redefinir-senha)
+      const redirectTo = `${getSiteUrl()}/redefinir-senha`;
+
+      const { error: rErr } = await supabase.auth.resetPasswordForEmail(emailToUse, {
+        redirectTo,
+      });
+
+      if (rErr) throw rErr;
+
+      setResetMsg("Enviamos um link de recuperação para seu e-mail. Verifique a caixa de entrada e spam.");
+    } catch (err: any) {
+      setResetErr(err?.message || "Não foi possível enviar o e-mail de recuperação.");
+    } finally {
+      setResetLoading(false);
+    }
   }
 
   const handleAuth = async (e: React.FormEvent) => {
@@ -111,10 +148,7 @@ function LoginInner() {
         const user = data.user;
         if (!user) throw new Error("Falha ao autenticar. Tente novamente.");
 
-        // Se veio do “Treinar comigo”, tenta vincular
         await tryLinkAlunoToProfessorIfNeeded();
-
-        // Centraliza redirecionamento no /dashboard
         router.push("/dashboard");
         return;
       }
@@ -147,8 +181,6 @@ function LoginInner() {
 
       const telefoneNorm = normalizeBRPhone(telefone);
 
-      // após confirmar e-mail, volta pro login (se veio do professor)
-      // para forçar o vínculo acontecer no login e depois ir ao dashboard
       const nextAfterConfirm =
         profSlug && role === "aluno"
           ? `/login?prof=${encodeURIComponent(profSlug)}`
@@ -164,7 +196,6 @@ function LoginInner() {
         options: {
           emailRedirectTo: redirectTo,
           data: {
-            // isso vai para raw_user_meta_data, que o TRIGGER usa
             nome_completo: nomeCompleto,
             telefone: telefoneNorm,
             role: role,
@@ -176,6 +207,11 @@ function LoginInner() {
 
       setMessage("Cadastro realizado! Verifique seu email para confirmar a conta.");
       setIsLoginView(true);
+
+      // fecha reset ao voltar pro login
+      setShowReset(false);
+      setResetErr(null);
+      setResetMsg(null);
     } catch (err: any) {
       const msg = err?.message || "Ocorreu um erro. Por favor, tente novamente.";
 
@@ -216,6 +252,67 @@ function LoginInner() {
           <p className="mt-4 rounded-xl border border-lime-400/20 bg-lime-400/10 p-3 text-sm text-lime-200">
             {message}
           </p>
+        )}
+
+        {/* ✅ CARD ESQUECI SENHA (só no login) */}
+        {isLoginView && (
+          <div className="mt-4">
+            <button
+              type="button"
+              onClick={() => {
+                setShowReset((v) => !v);
+                setResetErr(null);
+                setResetMsg(null);
+                setResetEmail(email); // pré-preenche com o email do login
+              }}
+              className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm font-semibold text-white/80 hover:bg-white/5 transition"
+            >
+              {showReset ? "Fechar recuperação de senha" : "Esqueci minha senha"}
+            </button>
+
+            {showReset && (
+              <div className="mt-3 rounded-2xl border border-white/10 bg-black/30 p-4">
+                <p className="text-xs text-white/60">
+                  Informe seu e-mail. Enviaremos um link para redefinir a senha.
+                </p>
+
+                {resetErr ? (
+                  <p className="mt-3 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-200">
+                    {resetErr}
+                  </p>
+                ) : null}
+
+                {resetMsg ? (
+                  <p className="mt-3 rounded-xl border border-lime-400/20 bg-lime-400/10 p-3 text-sm text-lime-200">
+                    {resetMsg}
+                  </p>
+                ) : null}
+
+                <form onSubmit={handleResetPassword} className="mt-3 space-y-3">
+                  <input
+                    type="email"
+                    placeholder="Seu e-mail"
+                    value={resetEmail}
+                    onChange={(e) => setResetEmail(e.target.value)}
+                    className="w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white outline-none focus:border-lime-400/40"
+                    required
+                  />
+
+                  <button
+                    type="submit"
+                    disabled={resetLoading}
+                    className="w-full rounded-2xl bg-lime-400 px-4 py-3 text-sm font-bold text-black hover:bg-lime-300 disabled:opacity-60"
+                  >
+                    {resetLoading ? "Enviando..." : "Enviar link de recuperação"}
+                  </button>
+
+                  <p className="text-[11px] text-white/40 leading-relaxed">
+                    Dica: confira a caixa de spam. O link abre a tela para criar uma nova senha.
+                  </p>
+                </form>
+              </div>
+            )}
+          </div>
         )}
 
         <form onSubmit={handleAuth} className="mt-6 space-y-4">
@@ -307,6 +404,11 @@ function LoginInner() {
               setIsLoginView(!isLoginView);
               setError(null);
               setMessage(null);
+
+              // fecha reset se trocar de view
+              setShowReset(false);
+              setResetErr(null);
+              setResetMsg(null);
             }}
             className="text-lime-300 hover:underline"
             type="button"
