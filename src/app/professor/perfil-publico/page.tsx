@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -38,6 +38,16 @@ function uniqueNonEmpty(arr: string[]) {
   return Array.from(set);
 }
 
+/**
+ * Cache-buster simples:
+ * - evita o Next/Image/Supabase te entregar a imagem antiga.
+ */
+function bust(url: string | null, v?: string) {
+  if (!url) return null;
+  const stamp = v || Date.now().toString();
+  return url.includes("?") ? `${url}&v=${stamp}` : `${url}?v=${stamp}`;
+}
+
 export default function ProfessorPerfilPublicoPage() {
   const router = useRouter();
 
@@ -62,6 +72,9 @@ export default function ProfessorPerfilPublicoPage() {
 
   const [toast, setToast] = useState<{ type: "ok" | "err"; msg: string } | null>(null);
 
+  // muda toda vez que você atualiza imagem (pra forçar refresh visual)
+  const imgVersionRef = useRef<string>(Date.now().toString());
+
   const publicLink = useMemo(() => {
     if (!profile?.slug) return null;
     if (typeof window === "undefined") return null;
@@ -84,9 +97,7 @@ export default function ProfessorPerfilPublicoPage() {
 
     const { data: p, error } = await supabase
       .from("profiles")
-      .select(
-        "id, role, slug, nome_completo, bio, cidade, instagram, especialidades, avatar_url, cover_url, pagamento"
-      )
+      .select("id, role, slug, nome_completo, bio, cidade, instagram, especialidades, avatar_url, cover_url, pagamento")
       .eq("id", user.id)
       .maybeSingle();
 
@@ -111,8 +122,9 @@ export default function ProfessorPerfilPublicoPage() {
     setInstagram(prof.instagram ?? "");
     setEspecialidades(prof.especialidades ?? []);
 
-    setAvatarUrl(prof.avatar_url ?? null);
-    setCoverUrl(prof.cover_url ?? null);
+    // 👇 aplica cache-buster no que vem do banco também
+    setAvatarUrl(bust(prof.avatar_url ?? null, imgVersionRef.current));
+    setCoverUrl(bust(prof.cover_url ?? null, imgVersionRef.current));
 
     setLoading(false);
   }
@@ -164,7 +176,6 @@ export default function ProfessorPerfilPublicoPage() {
     setToast(null);
 
     try {
-      // Preview instantâneo
       const localPreview = URL.createObjectURL(file);
       setAvatarUrl(localPreview);
 
@@ -173,12 +184,17 @@ export default function ProfessorPerfilPublicoPage() {
       const { error } = await supabase.from("profiles").update({ avatar_url: url }).eq("id", userId);
       if (error) throw error;
 
-      setAvatarUrl(url);
+      // 🔥 força refresh visual em todo lugar
+      imgVersionRef.current = Date.now().toString();
+
+      // atualiza states + profile em memória
+      setProfile((p) => (p ? { ...p, avatar_url: url } : p));
+      setAvatarUrl(bust(url, imgVersionRef.current));
+
       showOk("Avatar atualizado.");
     } catch (e: any) {
       showErr(e?.message || "Erro ao enviar avatar.");
-      // volta pro valor do banco
-      setAvatarUrl(profile?.avatar_url ?? null);
+      setAvatarUrl(bust(profile?.avatar_url ?? null, imgVersionRef.current));
     } finally {
       setUploadingAvatar(false);
     }
@@ -198,11 +214,15 @@ export default function ProfessorPerfilPublicoPage() {
       const { error } = await supabase.from("profiles").update({ cover_url: url }).eq("id", userId);
       if (error) throw error;
 
-      setCoverUrl(url);
+      imgVersionRef.current = Date.now().toString();
+
+      setProfile((p) => (p ? { ...p, cover_url: url } : p));
+      setCoverUrl(bust(url, imgVersionRef.current));
+
       showOk("Capa atualizada.");
     } catch (e: any) {
       showErr(e?.message || "Erro ao enviar capa.");
-      setCoverUrl(profile?.cover_url ?? null);
+      setCoverUrl(bust(profile?.cover_url ?? null, imgVersionRef.current));
     } finally {
       setUploadingCover(false);
     }
@@ -212,7 +232,6 @@ export default function ProfessorPerfilPublicoPage() {
     const raw = novaEspecialidade.trim();
     if (!raw) return;
 
-    // permite colar "A, B, C"
     const parts = raw.split(",").map((s) => s.trim()).filter(Boolean);
     const merged = uniqueNonEmpty([...especialidades, ...parts]);
     setEspecialidades(merged);
@@ -303,9 +322,7 @@ export default function ProfessorPerfilPublicoPage() {
 
               <div className="flex-1">
                 <h1 className="text-2xl sm:text-3xl font-bold">Perfil Público do Professor</h1>
-                <p className="mt-1 text-white/60 text-sm">
-                  Personalize sua página e compartilhe o link com seus alunos.
-                </p>
+                <p className="mt-1 text-white/60 text-sm">Personalize sua página e compartilhe o link com seus alunos.</p>
 
                 <div className="mt-4 flex flex-wrap gap-2">
                   <Link
@@ -460,9 +477,7 @@ export default function ProfessorPerfilPublicoPage() {
                     ))}
                   </div>
                 ) : (
-                  <p className="mt-3 text-xs text-white/50">
-                    Adicione tags para aparecerem como “chips” na sua página pública.
-                  </p>
+                  <p className="mt-3 text-xs text-white/50">Adicione tags para aparecerem como “chips” na sua página pública.</p>
                 )}
               </div>
 
@@ -489,7 +504,6 @@ export default function ProfessorPerfilPublicoPage() {
 
           {/* COLUNA DIREITA */}
           <div className="space-y-6">
-            {/* Card: Planos & Pagamentos (NOVO) */}
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
               <h2 className="text-lg font-bold">Planos & Pagamentos</h2>
               <p className="text-sm text-white/60 mt-1">
@@ -498,9 +512,7 @@ export default function ProfessorPerfilPublicoPage() {
 
               <div className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-4 text-sm text-white/70">
                 O pagamento cai <span className="text-white">direto na sua conta</span>.
-                <div className="mt-2 text-xs text-white/50">
-                  O aluno paga, envia o comprovante e você ativa manualmente o acesso.
-                </div>
+                <div className="mt-2 text-xs text-white/50">O aluno paga, envia o comprovante e você ativa manualmente o acesso.</div>
               </div>
 
               <div className="mt-4 flex flex-col gap-2">
@@ -521,7 +533,6 @@ export default function ProfessorPerfilPublicoPage() {
               </div>
             </div>
 
-            {/* Preview card (o seu) */}
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
               <h2 className="text-lg font-bold">Prévia rápida</h2>
               <p className="text-sm text-white/60 mt-1">Como seu perfil vai aparecer para o aluno.</p>
@@ -598,5 +609,3 @@ export default function ProfessorPerfilPublicoPage() {
     </main>
   );
 }
-
-
