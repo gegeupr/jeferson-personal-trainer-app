@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
   },
 
   images: {
-    // ✅ resolve na lata em alguns casos
+    // ✅ libera o host do Supabase (também funciona com domains)
     domains: ["wgonvfstqepffthzaugo.supabase.co"],
 
     remotePatterns: [
@@ -37,10 +37,19 @@ const nextConfig: NextConfig = {
         hostname: "lh3.googleusercontent.com",
         pathname: "/**",
       },
+
+      // ✅ Supabase Storage (links públicos)
       {
         protocol: "https",
         hostname: "wgonvfstqepffthzaugo.supabase.co",
-        pathname: "/storage/v1/object/**",
+        pathname: "/storage/v1/object/public/**",
+      },
+
+      // ✅ Supabase Image Renderer (às vezes aparece em algumas URLs)
+      {
+        protocol: "https",
+        hostname: "wgonvfstqepffthzaugo.supabase.co",
+        pathname: "/storage/v1/render/image/public/**",
       },
     ],
   },
