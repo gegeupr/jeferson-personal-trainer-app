@@ -32,9 +32,35 @@ type ConclusaoFeed = {
   aluno_id: string;
   treino_id: string;
   rotina_id: string;
-  aluno?: { id: string; nome_completo: string | null; telefone: string | null; avatar_url?: string | null } | null;
+  aluno?: {
+    id: string;
+    nome_completo: string | null;
+    telefone: string | null;
+    avatar_url?: string | null;
+  } | null;
   treino?: { id: string; nome: string | null } | null;
   rotina?: { id: string; nome: string | null } | null;
+};
+
+type AssinaturaStatus = "pending" | "active" | "expired" | "canceled";
+type Assinatura = {
+  id: string;
+  professor_id: string;
+  aluno_id: string;
+  plano_id: string | null;
+  duration_days: 30 | 90 | 180;
+  status: AssinaturaStatus;
+  start_at: string | null;
+  end_at: string | null;
+  note: string | null;
+  activated_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+// Lista “pendente” já enriquecida com aluno
+type PendingItem = Assinatura & {
+  aluno?: { id: string; nome_completo: string | null; telefone: string | null; avatar_url?: string | null } | null;
 };
 
 function onlyDigits(s: string) {
@@ -48,6 +74,13 @@ function waLink(phoneBR: string, msg: string) {
   return `https://wa.me/${full}?text=${encodeURIComponent(msg)}`;
 }
 
+function formatDate(iso?: string | null) {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "—";
+  return d.toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+}
+
 function Pill({ children }: { children: React.ReactNode }) {
   return (
     <span className="rounded-full border border-white/10 bg-black/30 px-3 py-1 text-white/70 text-xs">
@@ -56,15 +89,7 @@ function Pill({ children }: { children: React.ReactNode }) {
   );
 }
 
-function StatCard({
-  title,
-  value,
-  hint,
-}: {
-  title: string;
-  value: string | number;
-  hint?: string;
-}) {
+function StatCard({ title, value, hint }: { title: string; value: string | number; hint?: string }) {
   return (
     <div className="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-2xl">
       <p className="text-white/60 text-xs">{title}</p>
@@ -88,6 +113,11 @@ export default function ProfessorDashboardPremium() {
   const [alunosCount, setAlunosCount] = useState(0);
   const [concluidosCount, setConcluidosCount] = useState(0);
 
+  // ✅ NOVO: pendências
+  const [pending, setPending] = useState<PendingItem[]>([]);
+  const [pendingCount, setPendingCount] = useState(0);
+  const [pendingBusyId, setPendingBusyId] = useState<string | null>(null);
+
   const profName = prof?.nome_completo || "Professor";
   const profSlug = prof?.slug || null;
 
@@ -97,6 +127,120 @@ export default function ProfessorDashboardPremium() {
     return `${window.location.origin}/p/${profSlug}`;
   }, [profSlug]);
 
+  async function copyPublicLink() {
+    if (!publicLink) return;
+    try {
+      await navigator.clipboard.writeText(publicLink);
+      alert("Link do seu perfil público copiado!");
+    } catch {
+      alert("Não consegui copiar automaticamente. Copie manualmente:\n" + publicLink);
+    }
+  }
+
+  // ✅ NOVO: carregar pendências e “enriquecer” com dados do aluno
+  async function loadPendencias(profId: string) {
+    const { data: pend, error: pendErr } = await supabase
+      .from("aluno_assinaturas")
+      .select("id, professor_id, aluno_id, plano_id, duration_days, status, start_at, end_at, note, activated_by, created_at, updated_at")
+      .eq("professor_id", profId)
+      .eq("status", "pending")
+      .order("created_at", { ascending: false })
+      .limit(30);
+
+    if (pendErr || !pend) {
+      setPending([]);
+      setPendingCount(0);
+      return;
+    }
+
+    setPendingCount(pend.length);
+
+    const alunoIds = [...new Set(pend.map((x: any) => x.aluno_id))].filter(Boolean);
+    if (alunoIds.length === 0) {
+      setPending(pend as any);
+      return;
+    }
+
+    const { data: alunosMini } = await supabase
+      .from("profiles")
+      .select("id, nome_completo, telefone, avatar_url")
+      .in("id", alunoIds);
+
+    const alunosMap = new Map((alunosMini || []).map((a: any) => [a.id, a]));
+
+    const pendFinal: PendingItem[] = (pend as any[]).map((x) => ({
+      ...x,
+      aluno: alunosMap.get(x.aluno_id) || null,
+    }));
+
+    setPending(pendFinal);
+  }
+
+  // ✅ NOVO: aprovar pendência (ativa assinatura)
+  async function aprovarPendencia(p: PendingItem, profId: string) {
+    setPendingBusyId(p.id);
+    try {
+      // 1) expira qualquer assinatura ativa atual do aluno
+      const { error: closeErr } = await supabase
+        .from("aluno_assinaturas")
+        .update({ status: "expired" })
+        .eq("aluno_id", p.aluno_id)
+        .eq("status", "active");
+
+      if (closeErr) throw closeErr;
+
+      // 2) define período (start/end)
+      const start = new Date();
+      const end = new Date(start);
+      end.setDate(end.getDate() + Number(p.duration_days));
+      end.setHours(23, 59, 59, 999);
+
+      // 3) atualiza a própria pendência -> active
+      const { error: updErr } = await supabase
+        .from("aluno_assinaturas")
+        .update({
+          status: "active",
+          start_at: start.toISOString(),
+          end_at: end.toISOString(),
+          activated_by: profId,
+          note: p.note || `Ativado manualmente: ${p.duration_days} dias`,
+        })
+        .eq("id", p.id)
+        .eq("professor_id", profId);
+
+      if (updErr) throw updErr;
+
+      // recarrega pendências (some da lista)
+      await loadPendencias(profId);
+      alert(`Assinatura ativada: ${p.duration_days} dias.`);
+    } catch (e: any) {
+      alert(e?.message || "Erro ao aprovar pendência.");
+    } finally {
+      setPendingBusyId(null);
+    }
+  }
+
+  // ✅ NOVO: cancelar pendência
+  async function cancelarPendencia(p: PendingItem, profId: string) {
+    setPendingBusyId(p.id);
+    try {
+      const { error } = await supabase
+        .from("aluno_assinaturas")
+        .update({ status: "canceled" })
+        .eq("id", p.id)
+        .eq("professor_id", profId);
+
+      if (error) throw error;
+
+      await loadPendencias(profId);
+      alert("Pendência cancelada.");
+    } catch (e: any) {
+      alert(e?.message || "Erro ao cancelar pendência.");
+    } finally {
+      setPendingBusyId(null);
+    }
+  }
+
   useEffect(() => {
     let mounted = true;
 
@@ -104,7 +248,8 @@ export default function ProfessorDashboardPremium() {
       setLoading(true);
       setErr(null);
 
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      const { data: auth, error: authError } = await supabase.auth.getUser();
+      const user = auth?.user;
 
       if (authError || !user) {
         router.replace("/login");
@@ -133,6 +278,9 @@ export default function ProfessorDashboardPremium() {
 
       setProf(myProf as ProfProfile);
 
+      // ✅ NOVO: carrega pendências
+      await loadPendencias(user.id);
+
       // Alunos do professor
       const { data: alunosData, error: aErr } = await supabase
         .from("profiles")
@@ -151,7 +299,7 @@ export default function ProfessorDashboardPremium() {
         setAlunosCount(0);
       }
 
-      // Quantidade de treinos atribuídos (professor -> aluno)
+      // Quantidade de treinos atribuídos
       const { count: tCount } = await supabase
         .from("treinos")
         .select("id", { count: "exact", head: true })
@@ -159,7 +307,7 @@ export default function ProfessorDashboardPremium() {
 
       setTreinosCount(tCount || 0);
 
-      // Feed: últimas rotinas concluídas (se policy permitir)
+      // Feed: últimas rotinas concluídas
       const { data: concl, error: cErr } = await supabase
         .from("aluno_rotina_conclusoes")
         .select("id, aluno_id, treino_id, rotina_id, concluido_em, feedback_nota, feedback_texto")
@@ -208,16 +356,6 @@ export default function ProfessorDashboardPremium() {
     };
   }, [router]);
 
-  async function copyPublicLink() {
-    if (!publicLink) return;
-    try {
-      await navigator.clipboard.writeText(publicLink);
-      alert("Link do seu perfil público copiado!");
-    } catch {
-      alert("Não consegui copiar automaticamente. Copie manualmente:\n" + publicLink);
-    }
-  }
-
   if (loading) {
     return (
       <main className="min-h-screen bg-gray-950 flex items-center justify-center text-lime-300 text-xl">
@@ -244,6 +382,8 @@ export default function ProfessorDashboardPremium() {
     );
   }
 
+  const profId = prof?.id || null;
+
   return (
     <main className="min-h-screen bg-gray-950 text-white px-6 py-10">
       <div className="max-w-7xl mx-auto">
@@ -251,13 +391,7 @@ export default function ProfessorDashboardPremium() {
         <div className="rounded-[2rem] border border-white/10 bg-white/5 overflow-hidden shadow-2xl">
           <div className="relative h-48 w-full">
             {prof?.cover_url ? (
-              <Image
-                src={prof.cover_url}
-                alt="Capa"
-                fill
-                className="object-cover"
-                priority
-              />
+              <Image src={prof.cover_url} alt="Capa" fill className="object-cover" priority />
             ) : (
               <div className="absolute inset-0 bg-gradient-to-br from-lime-400/20 via-black/40 to-black" />
             )}
@@ -284,7 +418,8 @@ export default function ProfessorDashboardPremium() {
                 <div className="mt-2 flex flex-wrap gap-2">
                   <Pill>Alunos: {alunosCount}</Pill>
                   <Pill>Planos atribuídos: {treinosCount}</Pill>
-                  <Pill>Últimos concluídos: {concluidosCount}</Pill>
+                  <Pill>Concluídos: {concluidosCount}</Pill>
+                  <Pill>Pendentes: {pendingCount}</Pill>
                 </div>
               </div>
             </div>
@@ -305,7 +440,6 @@ export default function ProfessorDashboardPremium() {
                 Biblioteca
               </Link>
 
-              {/* ✅ BOTÃO NOVO - Comunidade (moderar) */}
               <Link
                 href="/professor/community"
                 className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/80 hover:bg-white/10 transition"
@@ -332,10 +466,118 @@ export default function ProfessorDashboardPremium() {
         </div>
 
         {/* STATS */}
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <StatCard title="Alunos ativos" value={alunosCount} hint="Alunos vinculados ao seu perfil" />
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+          <StatCard title="Alunos" value={alunosCount} hint="Alunos vinculados ao seu perfil" />
           <StatCard title="Planos atribuídos" value={treinosCount} hint="Treinos criados/atribuídos por você" />
           <StatCard title="Concluídos (recentes)" value={concluidosCount} hint="Últimas rotinas concluídas (feed)" />
+          <StatCard title="Pendências PIX" value={pendingCount} hint="Aguardando sua validação manual" />
+        </div>
+
+        {/* ✅ NOVO: PENDÊNCIAS */}
+        <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 overflow-hidden">
+          <div className="p-5 border-b border-white/10 flex items-center justify-between">
+            <div>
+              <p className="font-extrabold text-white">Assinaturas pendentes (PIX manual)</p>
+              <p className="text-sm text-white/50">Quando o aluno envia comprovante, aparece aqui para você aprovar.</p>
+            </div>
+
+            <button
+              className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/80 hover:bg-white/10"
+              onClick={() => profId && loadPendencias(profId)}
+              disabled={!profId || pendingBusyId !== null}
+              title="Recarregar pendências"
+            >
+              ↻ Atualizar
+            </button>
+          </div>
+
+          <div className="p-5 space-y-3">
+            {pending.length === 0 ? (
+              <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white/70">
+                Nenhuma pendência no momento.
+                <p className="mt-2 text-white/50 text-sm">
+                  Para aparecer aqui, o aluno precisa gerar uma solicitação com status <b>pending</b> na tabela{" "}
+                  <b>aluno_assinaturas</b>.
+                </p>
+              </div>
+            ) : (
+              pending.map((p) => {
+                const alunoNome = p.aluno?.nome_completo || "Aluno";
+                const alunoTel = p.aluno?.telefone || "";
+                const alunoWa = alunoTel
+                  ? waLink(
+                      alunoTel,
+                      `Olá, ${alunoNome}! Vi seu comprovante no Motion. Vou validar e liberar seu acesso. ✅`
+                    )
+                  : null;
+
+                const busy = pendingBusyId === p.id;
+
+                return (
+                  <div
+                    key={p.id}
+                    className="rounded-2xl border border-white/10 bg-black/30 p-4 flex flex-col md:flex-row md:items-center gap-3"
+                  >
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <div className="relative h-10 w-10 rounded-xl overflow-hidden border border-white/10 bg-black/40 flex-shrink-0">
+                        {p.aluno?.avatar_url ? (
+                          <Image src={p.aluno.avatar_url} alt="Aluno" fill className="object-cover" />
+                        ) : (
+                          <div className="h-full w-full flex items-center justify-center text-lime-300 font-extrabold">
+                            {(alunoNome || "A").slice(0, 1).toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="min-w-0">
+                        <p className="font-bold text-white truncate">{alunoNome}</p>
+                        <p className="text-xs text-white/50 truncate">
+                          Solicitado em {formatDate(p.created_at)} • Plano: <b>{p.duration_days} dias</b>
+                        </p>
+                        {p.note ? <p className="text-xs text-white/40 truncate">Nota: {p.note}</p> : null}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 justify-end">
+                      {alunoWa ? (
+                        <a
+                          href={alunoWa}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-lime-300 hover:bg-white/10"
+                        >
+                          WhatsApp
+                        </a>
+                      ) : null}
+
+                      <button
+                        disabled={!profId || busy}
+                        onClick={() => profId && aprovarPendencia(p, profId)}
+                        className="rounded-xl bg-lime-400 px-4 py-2 text-xs font-extrabold text-black hover:bg-lime-300 disabled:opacity-60"
+                      >
+                        {busy ? "Processando..." : "Aprovar e ativar"}
+                      </button>
+
+                      <button
+                        disabled={!profId || busy}
+                        onClick={() => profId && cancelarPendencia(p, profId)}
+                        className="rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-2 text-xs font-bold text-red-200 hover:bg-red-400/15 disabled:opacity-60"
+                      >
+                        Cancelar
+                      </button>
+
+                      <Link
+                        href={`/professor/alunos/${p.aluno_id}/financeiro`}
+                        className="rounded-xl border border-white/10 bg-black/20 px-4 py-2 text-xs font-bold text-white/80 hover:bg-white/5"
+                      >
+                        Abrir financeiro →
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
         </div>
 
         {/* GRID */}
@@ -344,10 +586,7 @@ export default function ProfessorDashboardPremium() {
           <div className="lg:col-span-1 rounded-3xl border border-white/10 bg-white/5 overflow-hidden">
             <div className="p-5 border-b border-white/10 flex items-center justify-between">
               <p className="font-extrabold text-white">Seus alunos</p>
-              <Link
-                href="/professor/alunos"
-                className="text-sm font-bold text-lime-300 hover:underline"
-              >
+              <Link href="/professor/alunos" className="text-sm font-bold text-lime-300 hover:underline">
                 Ver tudo
               </Link>
             </div>
@@ -367,7 +606,10 @@ export default function ProfessorDashboardPremium() {
                     : null;
 
                   return (
-                    <div key={a.id} className="rounded-2xl border border-white/10 bg-black/30 p-4 flex items-center gap-3">
+                    <div
+                      key={a.id}
+                      className="rounded-2xl border border-white/10 bg-black/30 p-4 flex items-center gap-3"
+                    >
                       <div className="relative h-10 w-10 rounded-xl overflow-hidden border border-white/10 bg-black/40 flex-shrink-0">
                         {a.avatar_url ? (
                           <Image src={a.avatar_url} alt="Aluno" fill className="object-cover" />
@@ -383,18 +625,27 @@ export default function ProfessorDashboardPremium() {
                         <p className="text-xs text-white/50 truncate">{a.telefone || "sem telefone"}</p>
                       </div>
 
-                      {wa ? (
-                        <a
-                          href={wa}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-lime-300 hover:bg-white/10"
+                      <div className="flex items-center gap-2">
+                        <Link
+                          href={`/professor/alunos/${a.id}/financeiro`}
+                          className="rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-xs font-bold text-white/80 hover:bg-white/5"
                         >
-                          WhatsApp
-                        </a>
-                      ) : (
-                        <span className="text-xs text-white/40">—</span>
-                      )}
+                          Financeiro
+                        </Link>
+
+                        {wa ? (
+                          <a
+                            href={wa}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-lime-300 hover:bg-white/10"
+                          >
+                            WhatsApp
+                          </a>
+                        ) : (
+                          <span className="text-xs text-white/40">—</span>
+                        )}
+                      </div>
                     </div>
                   );
                 })
@@ -416,9 +667,7 @@ export default function ProfessorDashboardPremium() {
             <div className="p-5 border-b border-white/10 flex items-center justify-between">
               <div>
                 <p className="font-extrabold text-white">Últimos treinos concluídos</p>
-                <p className="text-sm text-white/50">
-                  Veja feedback e reaja rápido (nível premium Motion).
-                </p>
+                <p className="text-sm text-white/50">Veja feedback e reaja rápido (nível premium Motion).</p>
               </div>
               {publicLink ? (
                 <a
@@ -538,9 +787,7 @@ export default function ProfessorDashboardPremium() {
         </div>
 
         {/* Rodapé */}
-        <div className="mt-8 text-center text-xs text-white/40">
-          Motion • Dashboard do Professor
-        </div>
+        <div className="mt-8 text-center text-xs text-white/40">Motion • Dashboard do Professor</div>
       </div>
     </main>
   );
