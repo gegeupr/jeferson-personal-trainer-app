@@ -20,10 +20,16 @@ function safePublicUrl(bucket: string, path: string) {
   return data.publicUrl;
 }
 
+function isImage(file: File) {
+  return file.type?.startsWith("image/");
+}
+
 /**
  * Upload de avatar (professor ou aluno)
  * Bucket: avatars (público)
- * Path: avatars/{userId}/avatar_{timestamp}.{ext}
+ *
+ * IMPORTANTE (pra bater com as policies):
+ * Path: {userId}/avatar_{timestamp}.{ext}
  *
  * Por que assim?
  * - evita cache (URL muda sempre)
@@ -32,14 +38,17 @@ function safePublicUrl(bucket: string, path: string) {
 export async function uploadAvatar(file: File, userId: string) {
   if (!file) throw new Error("Arquivo inválido.");
   if (!userId) throw new Error("userId inválido.");
+  if (!isImage(file)) throw new Error("Envie um arquivo de imagem.");
 
   const ext = getExt(file, "png");
-  const path = `avatars/${userId}/avatar_${Date.now()}.${ext}`;
+
+  // ✅ PRIMEIRO NÍVEL = userId (pra policy liberar)
+  const path = `${userId}/avatar_${Date.now()}.${ext}`;
 
   const { error } = await supabase.storage.from("avatars").upload(path, file, {
-    upsert: false,          // NÃO sobrescreve
+    upsert: false,
     contentType: file.type,
-    cacheControl: "0",      // força a não cachear
+    cacheControl: "0",
   });
 
   if (error) throw error;
@@ -50,14 +59,18 @@ export async function uploadAvatar(file: File, userId: string) {
 /**
  * Upload de capa do perfil público do professor
  * Bucket: covers (público)
- * Path: covers/{userId}/cover_{timestamp}.{ext}
+ *
+ * Path: {userId}/cover_{timestamp}.{ext}
  */
 export async function uploadCover(file: File, userId: string) {
   if (!file) throw new Error("Arquivo inválido.");
   if (!userId) throw new Error("userId inválido.");
+  if (!isImage(file)) throw new Error("Envie um arquivo de imagem.");
 
   const ext = getExt(file, "jpg");
-  const path = `covers/${userId}/cover_${Date.now()}.${ext}`;
+
+  // ✅ PRIMEIRO NÍVEL = userId (pra policy liberar)
+  const path = `${userId}/cover_${Date.now()}.${ext}`;
 
   const { error } = await supabase.storage.from("covers").upload(path, file, {
     upsert: false,
