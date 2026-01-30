@@ -9,56 +9,41 @@ type PlanKey = "30" | "90" | "180";
 
 type Plan = {
   title: string;
-  // UI mostra "R$ 100,00", mas no banco guardamos cents (10000)
-  price_text: string;
-  price_cents: number;
+  price: string;        // texto no input (ex: "R$ 100,00")
+  price_cents: number;  // salvo no banco
   description: string;
   payment_url: string;
   is_active: boolean;
+};
+
+type DbPlanRow = {
+  id: string;
+  professor_id: string;
+  duration_days: number;
+  title: string | null;
+  description: string | null;
+  price_cents: number | null;
+  payment_url: string | null;
+  whatsapp: string | null;
+  is_active: boolean | null;
 };
 
 function onlyDigits(v: string) {
   return (v || "").replace(/\D/g, "");
 }
 
-function safeUrl(v: string) {
-  const s = (v || "").trim();
-  if (!s) return "";
-  return s; // aceita qualquer coisa (link, pix copia/cola etc)
+function moneyToCentsBR(v: string) {
+  // aceita "100", "100,00", "R$ 100,00"
+  const s = (v || "")
+    .replace(/[^\d,.-]/g, "")
+    .replace(/\./g, "")
+    .replace(",", ".");
+  const num = Number(s);
+  if (Number.isNaN(num)) return 0;
+  return Math.round(num * 100);
 }
 
-function parseBRLToCents(input: string) {
-  // aceita "R$100,00", "100,00", "100.00", "100"
-  const s = (input || "").toString().trim();
-  if (!s) return 0;
-
-  // mantém dígitos, vírgula e ponto
-  const cleaned = s.replace(/[^\d.,-]/g, "").replace(/\s/g, "");
-  if (!cleaned) return 0;
-
-  // estratégia: se tiver vírgula, assume vírgula como decimal final
-  // remove pontos como separador de milhar
-  let normalized = cleaned;
-
-  const hasComma = normalized.includes(",");
-  const hasDot = normalized.includes(".");
-
-  if (hasComma && hasDot) {
-    // "1.234,56" -> "1234.56"
-    normalized = normalized.replace(/\./g, "").replace(",", ".");
-  } else if (hasComma && !hasDot) {
-    // "1234,56" -> "1234.56"
-    normalized = normalized.replace(",", ".");
-  } else {
-    // "1234.56" ou "1234" ok
-  }
-
-  const num = Number(normalized);
-  if (Number.isNaN(num) || !Number.isFinite(num)) return 0;
-  return Math.max(0, Math.round(num * 100));
-}
-
-function centsToBRL(cents: number) {
+function centsToMoneyBR(cents: number) {
   const v = (cents || 0) / 100;
   return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
@@ -67,7 +52,7 @@ function defaultPlans(): Record<PlanKey, Plan> {
   return {
     "30": {
       title: "Plano Mensal (30 dias)",
-      price_text: "R$ 0,00",
+      price: "R$ 0,00",
       price_cents: 0,
       description: "Acesso completo por 30 dias.",
       payment_url: "",
@@ -75,7 +60,7 @@ function defaultPlans(): Record<PlanKey, Plan> {
     },
     "90": {
       title: "Plano Trimestral (90 dias)",
-      price_text: "R$ 0,00",
+      price: "R$ 0,00",
       price_cents: 0,
       description: "Acesso completo por 90 dias.",
       payment_url: "",
@@ -83,7 +68,7 @@ function defaultPlans(): Record<PlanKey, Plan> {
     },
     "180": {
       title: "Plano Semestral (180 dias)",
-      price_text: "R$ 0,00",
+      price: "R$ 0,00",
       price_cents: 0,
       description: "Acesso completo por 180 dias.",
       payment_url: "",
@@ -101,7 +86,6 @@ export default function ProfessorPlanosPage() {
   const [errMsg, setErrMsg] = useState<string | null>(null);
 
   const [profId, setProfId] = useState<string | null>(null);
-
   const [whatsapp, setWhatsapp] = useState("");
   const [plans, setPlans] = useState<Record<PlanKey, Plan>>(defaultPlans());
 
@@ -118,95 +102,83 @@ export default function ProfessorPlanosPage() {
     }));
   }
 
-  useEffect(() => {
-    let mounted = true;
+  async function load() {
+    setLoading(true);
+    setErrMsg(null);
+    setOkMsg(null);
 
-    (async () => {
-      setLoading(true);
-      setErrMsg(null);
-      setOkMsg(null);
+    const { data: auth, error: authError } = await supabase.auth.getUser();
+    const user = auth?.user;
 
-      const { data: auth, error: authError } = await supabase.auth.getUser();
-      const user = auth?.user;
-      if (authError || !user) {
-        router.replace("/login");
-        return;
-      }
+    if (authError || !user) {
+      router.replace("/login");
+      return;
+    }
 
-      // perfil do professor
-      const { data: prof, error: pErr } = await supabase
-        .from("profiles")
-        .select("id, role, telefone, pagamento")
-        .eq("id", user.id)
-        .single();
+    // perfil do professor (pra pegar role e telefone)
+    const { data: prof, error: pErr } = await supabase
+      .from("profiles")
+      .select("id, role, telefone")
+      .eq("id", user.id)
+      .single();
 
-      if (!mounted) return;
-
-      if (pErr || !prof) {
-        setErrMsg("Não foi possível carregar seu perfil.");
-        setLoading(false);
-        return;
-      }
-
-      if ((prof.role || "").toLowerCase() !== "professor") {
-        router.replace("/dashboard");
-        return;
-      }
-
-      setProfId(prof.id);
-
-      // whatsapp: tenta primeiro profiles.pagamento.whatsapp, senão usa telefone
-      const existingPay = (prof.pagamento || null) as any;
-      const wa = existingPay?.whatsapp ?? onlyDigits(prof.telefone || "") ?? "";
-      setWhatsapp(wa);
-
-      // 🔥 carrega planos da TABELA professor_planos
-      const { data: planosDB, error: plErr } = await supabase
-        .from("professor_planos")
-        .select("duration_days, title, description, price_cents, payment_url, is_active, whatsapp")
-        .eq("professor_id", prof.id)
-        .order("duration_days", { ascending: true });
-
-      if (!mounted) return;
-
-      // se RLS bloquear, aqui vai aparecer o erro
-      if (plErr) {
-        console.warn("Erro carregando professor_planos:", plErr.message);
-        // ainda deixa o usuário editar defaults e salvar
-        setPlans((prev) => prev);
-        setLoading(false);
-        return;
-      }
-
-      const base = defaultPlans();
-      const merged = { ...base };
-
-      if (Array.isArray(planosDB) && planosDB.length > 0) {
-        for (const row of planosDB as any[]) {
-          const k = String(row.duration_days) as PlanKey;
-          if (k !== "30" && k !== "90" && k !== "180") continue;
-
-          merged[k] = {
-            title: row.title ?? base[k].title,
-            description: row.description ?? base[k].description,
-            price_cents: Number(row.price_cents || 0),
-            price_text: centsToBRL(Number(row.price_cents || 0)),
-            payment_url: row.payment_url ?? "",
-            is_active: row.is_active ?? true,
-          };
-          // se whatsapp vier na linha, prioriza
-          if (row.whatsapp) setWhatsapp(String(row.whatsapp));
-        }
-      }
-
-      setPlans(merged);
+    if (pErr || !prof) {
+      setErrMsg("Não foi possível carregar seu perfil.");
       setLoading(false);
-    })();
+      return;
+    }
 
-    return () => {
-      mounted = false;
-    };
-  }, [router]);
+    if ((prof.role || "").toLowerCase() !== "professor") {
+      router.replace("/dashboard");
+      return;
+    }
+
+    setProfId(prof.id);
+
+    // whatsapp padrão
+    setWhatsapp(onlyDigits(prof.telefone || ""));
+
+    // carrega planos do banco
+    const { data: rows, error: rErr } = await supabase
+      .from("professor_planos")
+      .select("id, professor_id, duration_days, title, description, price_cents, payment_url, whatsapp, is_active")
+      .eq("professor_id", prof.id);
+
+    if (rErr) {
+      // se der erro aqui, quase sempre é RLS bloqueando SELECT
+      setErrMsg(`Erro ao carregar planos: ${rErr.message}`);
+      setLoading(false);
+      return;
+    }
+
+    const base = defaultPlans();
+
+    // aplica o que existe no banco por duration_days
+    const merged = { ...base };
+    (rows || []).forEach((r: DbPlanRow) => {
+      const key = String(r.duration_days) as PlanKey;
+      if (!merged[key]) return;
+
+      merged[key] = {
+        title: r.title ?? merged[key].title,
+        description: r.description ?? merged[key].description,
+        price_cents: r.price_cents ?? merged[key].price_cents,
+        price: centsToMoneyBR(r.price_cents ?? 0),
+        payment_url: r.payment_url ?? merged[key].payment_url,
+        is_active: r.is_active ?? true,
+      };
+
+      if (r.whatsapp) setWhatsapp(onlyDigits(r.whatsapp));
+    });
+
+    setPlans(merged);
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function save() {
     if (!profId) return;
@@ -218,40 +190,32 @@ export default function ProfessorPlanosPage() {
     try {
       const wa = onlyDigits(whatsapp);
 
-      // 1) upsert dos 3 planos na tabela professor_planos
-      const rows = (["30", "90", "180"] as PlanKey[]).map((k) => {
+      // monta 3 linhas para UPSERT
+      const payload = (["30", "90", "180"] as PlanKey[]).map((k) => {
         const p = plans[k];
-        const cents = p.price_cents ?? parseBRLToCents(p.price_text);
+        const cents = p.price_cents || moneyToCentsBR(p.price);
 
         return {
           professor_id: profId,
-          duration_days: Number(k), // 30/90/180
+          duration_days: Number(k),
           title: (p.title || "").trim(),
           description: (p.description || "").trim(),
           price_cents: cents,
-          payment_url: safeUrl(p.payment_url),
-          is_active: !!p.is_active,
+          payment_url: (p.payment_url || "").trim(),
           whatsapp: wa,
+          is_active: !!p.is_active,
         };
       });
 
-      // ⚠️ precisa ter UNIQUE(professor_id, duration_days) no banco
-      // se não tiver, vai inserir duplicado. Recomendo criar esse unique.
-      const { error: upErr } = await supabase
+      // IMPORTANTE: para upsert funcionar bem, tenha UNIQUE(professor_id, duration_days)
+      const { error } = await supabase
         .from("professor_planos")
-        .upsert(rows, { onConflict: "professor_id,duration_days" });
+        .upsert(payload, { onConflict: "professor_id,duration_days" });
 
-      if (upErr) throw upErr;
+      if (error) throw error;
 
-      // 2) salva whatsapp também em profiles.pagamento (pra manter compatibilidade)
-      const { error: profErr } = await supabase
-        .from("profiles")
-        .update({ pagamento: { whatsapp: wa } })
-        .eq("id", profId);
-
-      if (profErr) throw profErr;
-
-      setOkMsg("Planos salvos com sucesso (tabela professor_planos).");
+      setOkMsg("Planos salvos com sucesso na tabela professor_planos.");
+      await load();
     } catch (e: any) {
       setErrMsg(e?.message || "Erro ao salvar planos.");
     } finally {
@@ -269,7 +233,6 @@ export default function ProfessorPlanosPage() {
 
   return (
     <main className="min-h-screen bg-gray-950 text-white">
-      {/* TOP BAR */}
       <div className="sticky top-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur">
         <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
           <Link
@@ -278,7 +241,7 @@ export default function ProfessorPlanosPage() {
           >
             ← Voltar ao Dashboard
           </Link>
-          <div className="text-sm text-white/60">Meus Planos (links de pagamento)</div>
+          <div className="text-sm text-white/60">Meus Planos (tabela professor_planos)</div>
         </div>
       </div>
 
@@ -288,7 +251,7 @@ export default function ProfessorPlanosPage() {
             Planos do <span className="text-lime-300">Professor</span>
           </h1>
           <p className="mt-2 text-white/60 text-sm">
-            Você define preços e links. O aluno paga e te envia comprovante no WhatsApp.
+            Aqui salva direto na tabela <b>professor_planos</b>.
           </p>
 
           {errMsg ? (
@@ -303,26 +266,25 @@ export default function ProfessorPlanosPage() {
             </div>
           ) : null}
 
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            <div className="md:col-span-2">
-              <label className="text-sm text-white/60">WhatsApp para comprovante</label>
-              <input
-                value={whatsapp}
-                onChange={(e) => setWhatsapp(e.target.value)}
-                className="mt-2 w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 outline-none focus:border-lime-400/40 focus:ring-2 focus:ring-lime-400/10 transition"
-                placeholder="Ex: 42988311053"
-              />
-              <p className="mt-2 text-xs text-white/40">
-                Dica: só números. Se você não colocar DDI, o app assume Brasil (55).
+          <div className="mt-6">
+            <label className="text-sm text-white/60">WhatsApp para comprovante</label>
+            <input
+              value={whatsapp}
+              onChange={(e) => setWhatsapp(e.target.value)}
+              className="mt-2 w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 outline-none focus:border-lime-400/40 focus:ring-2 focus:ring-lime-400/10 transition"
+              placeholder="Ex: 42988311053"
+            />
+            <p className="mt-2 text-xs text-white/40">
+              Dica: só números. Se você não colocar DDI, o app assume Brasil (55).
+            </p>
+            {waFinal ? (
+              <p className="mt-2 text-xs text-white/50">
+                Preview: <span className="text-lime-300">wa.me/{waFinal}</span>
               </p>
+            ) : null}
+          </div>
 
-              {waFinal ? (
-                <p className="mt-2 text-xs text-white/50">
-                  Preview: <span className="text-lime-300">wa.me/{waFinal}</span>
-                </p>
-              ) : null}
-            </div>
-
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
             {(["30", "90", "180"] as PlanKey[]).map((k) => {
               const p = plans[k];
               const label = k === "30" ? "30 dias" : k === "90" ? "90 dias" : "180 dias";
@@ -335,16 +297,16 @@ export default function ProfessorPlanosPage() {
                     <label className="text-xs text-white/60 flex items-center gap-2">
                       <input
                         type="checkbox"
-                        checked={p.is_active}
+                        checked={!!p.is_active}
                         onChange={(e) => updatePlan(k, { is_active: e.target.checked })}
                       />
-                      ativo
+                      Ativo
                     </label>
                   </div>
 
                   <div className="mt-4 space-y-3">
                     <div>
-                      <label className="text-xs text-white/50">Nome do plano</label>
+                      <label className="text-xs text-white/50">Título do plano</label>
                       <input
                         value={p.title}
                         onChange={(e) => updatePlan(k, { title: e.target.value })}
@@ -353,18 +315,14 @@ export default function ProfessorPlanosPage() {
                     </div>
 
                     <div>
-                      <label className="text-xs text-white/50">Valor</label>
+                      <label className="text-xs text-white/50">Valor (ex: R$ 149,90)</label>
                       <input
-                        value={p.price_text}
-                        onChange={(e) => {
-                          const txt = e.target.value;
-                          updatePlan(k, { price_text: txt, price_cents: parseBRLToCents(txt) });
-                        }}
+                        value={p.price}
+                        onChange={(e) => updatePlan(k, { price: e.target.value, price_cents: 0 })}
                         className="mt-2 w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 outline-none focus:border-lime-400/40 focus:ring-2 focus:ring-lime-400/10 transition"
-                        placeholder="Ex: R$ 149,90"
                       />
-                      <p className="mt-1 text-xs text-white/40">
-                        Salvo no banco como centavos: <b>{p.price_cents}</b>
+                      <p className="mt-2 text-xs text-white/40">
+                        (Salva em <b>price_cents</b> automaticamente)
                       </p>
                     </div>
 
@@ -374,7 +332,6 @@ export default function ProfessorPlanosPage() {
                         value={p.description}
                         onChange={(e) => updatePlan(k, { description: e.target.value })}
                         className="mt-2 w-full min-h-[90px] rounded-2xl bg-black/30 border border-white/10 px-4 py-3 outline-none focus:border-lime-400/40 focus:ring-2 focus:ring-lime-400/10 transition"
-                        placeholder="O que está incluso"
                       />
                     </div>
 
@@ -386,9 +343,6 @@ export default function ProfessorPlanosPage() {
                         className="mt-2 w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 outline-none focus:border-lime-400/40 focus:ring-2 focus:ring-lime-400/10 transition"
                         placeholder="https://..."
                       />
-                      <p className="mt-2 text-xs text-white/40">
-                        Pode ser Mercado Pago, Stripe, PagSeguro, Pix, o que você quiser.
-                      </p>
                     </div>
                   </div>
                 </div>
@@ -406,7 +360,7 @@ export default function ProfessorPlanosPage() {
             </button>
 
             <p className="text-sm text-white/45">
-              Esses planos devem aparecer para seus alunos na tela de planos do professor.
+              Esses planos devem aparecer para seus alunos no link público / página de planos.
             </p>
           </div>
         </div>
