@@ -9,6 +9,9 @@ import { supabase } from "@/utils/supabase-browser";
 const PROF_STORAGE_KEY = "motion_prof_slug";
 const WELCOME_PENDING_KEY = "motion_welcome_pending";
 
+// ✅ cooldown do reset (persistente)
+const RESET_COOLDOWN_UNTIL_KEY = "motion_reset_cooldown_until";
+
 function getSiteUrl() {
   if (typeof window !== "undefined") return window.location.origin;
   return process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -33,6 +36,26 @@ function isValidBRPhone(raw: string) {
     return rest.length === 10 || rest.length === 11;
   }
   return d.length === 10 || d.length === 11;
+}
+
+// ✅ helpers cooldown
+function readCooldownUntil(): number {
+  if (typeof window === "undefined") return 0;
+  const v = localStorage.getItem(RESET_COOLDOWN_UNTIL_KEY);
+  const n = v ? Number(v) : 0;
+  return Number.isFinite(n) ? n : 0;
+}
+
+function writeCooldownUntil(untilMs: number) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(RESET_COOLDOWN_UNTIL_KEY, String(untilMs));
+}
+
+function formatMMSS(totalSeconds: number) {
+  const s = Math.max(0, Math.floor(totalSeconds));
+  const mm = String(Math.floor(s / 60)).padStart(2, "0");
+  const ss = String(s % 60).padStart(2, "0");
+  return `${mm}:${ss}`;
 }
 
 function LoginInner() {
@@ -63,6 +86,31 @@ function LoginInner() {
   const [resetLoading, setResetLoading] = useState(false);
   const [resetErr, setResetErr] = useState<string | null>(null);
   const [resetMsg, setResetMsg] = useState<string | null>(null);
+
+  // ✅ estado do cooldown
+  const [cooldownUntil, setCooldownUntil] = useState<number>(0);
+  const [cooldownNow, setCooldownNow] = useState<number>(() => Date.now());
+
+  const cooldownLeftSeconds = useMemo(() => {
+    if (!cooldownUntil) return 0;
+    const diff = Math.ceil((cooldownUntil - cooldownNow) / 1000);
+    return Math.max(0, diff);
+  }, [cooldownUntil, cooldownNow]);
+
+  const isCooldownActive = cooldownLeftSeconds > 0;
+
+  // ✅ carrega cooldown salvo (persistente)
+  useEffect(() => {
+    setCooldownUntil(readCooldownUntil());
+  }, []);
+
+  // ✅ timer para atualizar contagem
+  useEffect(() => {
+    if (!isCooldownActive) return;
+
+    const t = setInterval(() => setCooldownNow(Date.now()), 250);
+    return () => clearInterval(t);
+  }, [isCooldownActive]);
 
   // Se entrou via link do professor: /login?prof=slug
   useEffect(() => {
@@ -99,6 +147,15 @@ function LoginInner() {
   // -------------------
   async function handleResetPassword(e: React.FormEvent) {
     e.preventDefault();
+
+    // ✅ bloqueio local se estiver em cooldown
+    if (isCooldownActive) {
+      setResetErr(
+        `Aguarde ${formatMMSS(cooldownLeftSeconds)} para solicitar um novo e-mail.`
+      );
+      return;
+    }
+
     setResetLoading(true);
     setResetErr(null);
     setResetMsg(null);
@@ -111,18 +168,39 @@ function LoginInner() {
         return;
       }
 
-      // manda para a página de redefinição (você precisa ter /redefinir-senha)
       const redirectTo = `${getSiteUrl()}/redefinir-senha`;
 
-      const { error: rErr } = await supabase.auth.resetPasswordForEmail(emailToUse, {
-        redirectTo,
-      });
+      const { error: rErr } = await supabase.auth.resetPasswordForEmail(
+        emailToUse,
+        { redirectTo }
+      );
 
       if (rErr) throw rErr;
 
-      setResetMsg("Enviamos um link de recuperação para seu e-mail. Verifique a caixa de entrada e spam.");
+      // ✅ cooldown padrão (60s) para evitar spam/cliques
+      const until = Date.now() + 60 * 1000;
+      setCooldownUntil(until);
+      writeCooldownUntil(until);
+
+      setResetMsg(
+        "Enviamos um link de recuperação para seu e-mail. Verifique a caixa de entrada e spam."
+      );
     } catch (err: any) {
-      setResetErr(err?.message || "Não foi possível enviar o e-mail de recuperação.");
+      const msg = (err?.message || "").toLowerCase();
+
+      // ✅ caso clássico do Supabase
+      if (msg.includes("rate limit") || msg.includes("too many requests")) {
+        // cooldown maior (5 min)
+        const until = Date.now() + 5 * 60 * 1000;
+        setCooldownUntil(until);
+        writeCooldownUntil(until);
+
+        setResetErr(
+          "Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente."
+        );
+      } else {
+        setResetErr(err?.message || "Não foi possível enviar o e-mail de recuperação.");
+      }
     } finally {
       setResetLoading(false);
     }
@@ -160,7 +238,6 @@ function LoginInner() {
         .trim()
         .toLowerCase();
 
-      // validações adicionais (telefone obrigatório)
       if (!nomeCompleto.trim()) {
         setError("Informe seu nome completo.");
         setLoading(false);
@@ -208,7 +285,6 @@ function LoginInner() {
       setMessage("Cadastro realizado! Verifique seu email para confirmar a conta.");
       setIsLoginView(true);
 
-      // fecha reset ao voltar pro login
       setShowReset(false);
       setResetErr(null);
       setResetMsg(null);
@@ -263,7 +339,7 @@ function LoginInner() {
                 setShowReset((v) => !v);
                 setResetErr(null);
                 setResetMsg(null);
-                setResetEmail(email); // pré-preenche com o email do login
+                setResetEmail(email);
               }}
               className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm font-semibold text-white/80 hover:bg-white/5 transition"
             >
@@ -300,14 +376,19 @@ function LoginInner() {
 
                   <button
                     type="submit"
-                    disabled={resetLoading}
+                    disabled={resetLoading || isCooldownActive}
                     className="w-full rounded-2xl bg-lime-400 px-4 py-3 text-sm font-bold text-black hover:bg-lime-300 disabled:opacity-60"
                   >
-                    {resetLoading ? "Enviando..." : "Enviar link de recuperação"}
+                    {resetLoading
+                      ? "Enviando..."
+                      : isCooldownActive
+                      ? `Aguarde ${formatMMSS(cooldownLeftSeconds)}`
+                      : "Enviar link de recuperação"}
                   </button>
 
                   <p className="text-[11px] text-white/40 leading-relaxed">
-                    Dica: confira a caixa de spam. O link abre a tela para criar uma nova senha.
+                    Dica: confira a caixa de spam. Por segurança, o reenvio fica
+                    disponível após alguns segundos.
                   </p>
                 </form>
               </div>
@@ -318,7 +399,6 @@ function LoginInner() {
         <form onSubmit={handleAuth} className="mt-6 space-y-4">
           {!isLoginView && (
             <>
-              {/* escolha de papel */}
               <div className="rounded-2xl border border-white/10 bg-black/40 p-2">
                 <div className="grid grid-cols-2 gap-2">
                   <button
@@ -405,7 +485,6 @@ function LoginInner() {
               setError(null);
               setMessage(null);
 
-              // fecha reset se trocar de view
               setShowReset(false);
               setResetErr(null);
               setResetMsg(null);
