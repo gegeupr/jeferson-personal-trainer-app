@@ -8,7 +8,7 @@ const inter = Inter({
   display: "swap",
 });
 
-// ✅ No App Router, themeColor e viewport ficam aqui:
+// ✅ No App Router, viewport + themeColor ficam aqui:
 export const viewport: Viewport = {
   themeColor: "#00FF88",
   width: "device-width",
@@ -20,7 +20,6 @@ export const metadata: Metadata = {
     default: "Motion",
     template: "%s | Motion",
   },
-
   description: "Gestão inteligente para personal trainers",
   applicationName: "Motion",
 
@@ -35,17 +34,14 @@ export const metadata: Metadata = {
   ],
 
   authors: [
-    {
-      name: "Jeferson Parowski",
-      url: "https://motionpersonal.com.br",
-    },
+    { name: "Jeferson Parowski", url: "https://motionpersonal.com.br" },
   ],
   creator: "Jeferson Parowski",
 
-  // ✅ Seu manifest agora é o novo nome:
+  // ✅ Manifest
   manifest: "/manifest.webmanifest",
 
-  // ✅ Ícones completos (PWA + navegador + iOS)
+  // ✅ Ícones
   icons: {
     icon: [
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
@@ -55,7 +51,7 @@ export const metadata: Metadata = {
       { url: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" },
     ],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
-    shortcut: ["/favicon.ico"],
+    shortcut: "/favicon.ico",
   },
 
   openGraph: {
