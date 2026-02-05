@@ -21,11 +21,15 @@ type TreinoExercicio = {
   intervalo: string | null;
   observacoes: string | null;
 
-  // Biblioteca do professor (quando existir)
+  // ✅ Pode vir da biblioteca do professor
   exercicios?: ExercicioBase | null;
 
-  // Catálogo (se você salvou catalogo_id)
-  catalogo?: ExercicioBase | null;
+  // ✅ Pode vir do catálogo
+  exercicios_catalogo?: ExercicioBase | null;
+
+  // (Opcional) IDs puros se você quiser debugar
+  exercicio_id?: string | null;
+  catalogo_id?: string | null;
 };
 
 type Rotina = {
@@ -114,6 +118,11 @@ function Modal({
   );
 }
 
+// ✅ helpers pra escolher a fonte certa (biblioteca ou catálogo)
+function getExercicio(e: TreinoExercicio): ExercicioBase | null {
+  return e.exercicios || e.exercicios_catalogo || null;
+}
+
 export default function AlunoMeusTreinosPremium() {
   const router = useRouter();
 
@@ -121,9 +130,7 @@ export default function AlunoMeusTreinosPremium() {
   const [error, setError] = useState<string | null>(null);
 
   const [treinos, setTreinos] = useState<Treino[]>([]);
-  const [conclusoes, setConclusoes] = useState<Record<string, AlunoConclusao>>(
-    {}
-  );
+  const [conclusoes, setConclusoes] = useState<Record<string, AlunoConclusao>>({});
   const [professor, setProfessor] = useState<ProfessorMini | null>(null);
 
   const [expandedTreinoId, setExpandedTreinoId] = useState<string | null>(null);
@@ -193,12 +200,10 @@ export default function AlunoMeusTreinosPremium() {
         return;
       }
 
-      // ✅ busca treinos do aluno com rotinas + exercícios
-      // ⚠️ aqui é o ponto: buscamos tanto a biblioteca (exercicios) quanto o catálogo (exercicios_catalogo)
+      // ✅ QUERY CORRETA: busca biblioteca e catálogo sem quebrar o select
       const { data: treinoData, error: treinoError } = await supabase
         .from("treinos")
-        .select(
-          `
+        .select(`
           id,
           nome,
           descricao,
@@ -221,20 +226,23 @@ export default function AlunoMeusTreinosPremium() {
               carga,
               intervalo,
               observacoes,
-
-              -- biblioteca (caso exista)
-              exercicios:exercicios!treino_exercicios_exercicio_id_fkey (
-                id, nome, descricao, link_youtube
+              exercicio_id,
+              catalogo_id,
+              exercicios (
+                id,
+                nome,
+                descricao,
+                link_youtube
               ),
-
-              -- catálogo (se você salvou catalogo_id)
-              catalogo:exercicios_catalogo!treino_exercicios_catalogo_id_fkey (
-                id, nome, descricao, link_youtube
+              exercicios_catalogo (
+                id,
+                nome,
+                descricao,
+                link_youtube
               )
             )
           )
-        `
-        )
+        `)
         .eq("aluno_id", user.id)
         .order("created_at", { ascending: false });
 
@@ -242,9 +250,7 @@ export default function AlunoMeusTreinosPremium() {
 
       if (treinoError) {
         console.error("Erro ao carregar treinos:", treinoError.message);
-        setError(
-          "Não foi possível carregar seus treinos: " + treinoError.message
-        );
+        setError("Não foi possível carregar seus treinos: " + treinoError.message);
         setTreinos([]);
         setLoading(false);
         return;
@@ -257,7 +263,7 @@ export default function AlunoMeusTreinosPremium() {
         setExpandedTreinoId(list[0].id);
       }
 
-      // conclusões do aluno (plano atual)
+      // conclusões
       if (list.length) {
         const treinoAtualLocal = list[0];
 
@@ -498,9 +504,7 @@ export default function AlunoMeusTreinosPremium() {
                 </h2>
 
                 {rotinaDoDia?.descricao ? (
-                  <p className="mt-2 text-white/70 text-sm">
-                    {rotinaDoDia.descricao}
-                  </p>
+                  <p className="mt-2 text-white/70 text-sm">{rotinaDoDia.descricao}</p>
                 ) : null}
 
                 {rotinaDoDia && (
@@ -520,7 +524,7 @@ export default function AlunoMeusTreinosPremium() {
                   </div>
                 )}
 
-                {/* preview exercícios */}
+                {/* preview */}
                 {rotinaDoDia?.treino_exercicios?.length ? (
                   <div className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-4">
                     <p className="text-sm font-bold text-white">Hoje você fará</p>
@@ -530,12 +534,10 @@ export default function AlunoMeusTreinosPremium() {
                         .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0))
                         .slice(0, 4)
                         .map((e) => {
-                          const ex = e.exercicios ?? e.catalogo;
+                          const ex = getExercicio(e);
                           return (
                             <li key={e.id}>
-                              <span className="text-lime-300 font-bold mr-2">
-                                {e.ordem}.
-                              </span>
+                              <span className="text-lime-300 font-bold mr-2">{e.ordem}.</span>
                               {ex?.nome || "Exercício"}
                               <span className="text-white/50">
                                 {" "}
@@ -553,8 +555,7 @@ export default function AlunoMeusTreinosPremium() {
                     </ul>
                     {rotinaDoDia.treino_exercicios.length > 4 ? (
                       <p className="mt-2 text-xs text-white/50">
-                        +{rotinaDoDia.treino_exercicios.length - 4} exercícios
-                        (veja na rotina)
+                        +{rotinaDoDia.treino_exercicios.length - 4} exercícios (veja na rotina)
                       </p>
                     ) : null}
                   </div>
@@ -596,12 +597,8 @@ export default function AlunoMeusTreinosPremium() {
 
             {treinoAtual?.orientacao_professor ? (
               <div className="mt-5 rounded-2xl border border-white/10 bg-black/30 p-4">
-                <p className="text-sm font-bold text-lime-300">
-                  Orientação do professor
-                </p>
-                <p className="mt-1 text-sm text-white/70">
-                  {treinoAtual.orientacao_professor}
-                </p>
+                <p className="text-sm font-bold text-lime-300">Orientação do professor</p>
+                <p className="mt-1 text-sm text-white/70">{treinoAtual.orientacao_professor}</p>
               </div>
             ) : null}
           </div>
@@ -612,25 +609,15 @@ export default function AlunoMeusTreinosPremium() {
           <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 overflow-hidden shadow-2xl">
             <div className="p-6">
               <p className="text-xs text-white/60">Plano atual</p>
-              <h2 className="mt-1 text-2xl font-extrabold text-white">
-                {treinoAtual.nome}
-              </h2>
+              <h2 className="mt-1 text-2xl font-extrabold text-white">{treinoAtual.nome}</h2>
               {treinoAtual.descricao ? (
-                <p className="mt-2 text-white/70 text-sm">
-                  {treinoAtual.descricao}
-                </p>
+                <p className="mt-2 text-white/70 text-sm">{treinoAtual.descricao}</p>
               ) : null}
 
               <div className="mt-4 flex flex-wrap gap-2 text-xs">
-                {treinoAtual.tipo_treino ? (
-                  <Pill>{treinoAtual.tipo_treino}</Pill>
-                ) : null}
-                {treinoAtual.objetivo ? (
-                  <Pill>Objetivo: {treinoAtual.objetivo}</Pill>
-                ) : null}
-                {treinoAtual.dificuldade ? (
-                  <Pill>Nível: {treinoAtual.dificuldade}</Pill>
-                ) : null}
+                {treinoAtual.tipo_treino ? <Pill>{treinoAtual.tipo_treino}</Pill> : null}
+                {treinoAtual.objetivo ? <Pill>Objetivo: {treinoAtual.objetivo}</Pill> : null}
+                {treinoAtual.dificuldade ? <Pill>Nível: {treinoAtual.dificuldade}</Pill> : null}
               </div>
             </div>
           </div>
@@ -638,16 +625,13 @@ export default function AlunoMeusTreinosPremium() {
 
         <div id="rotinas-anchor" className="mt-6" />
 
-        {/* Lista */}
+        {/* Accordion */}
         <div className="mt-2 grid grid-cols-1 gap-4">
           {treinos.map((t) => {
             const openTreino = expandedTreinoId === t.id;
 
             return (
-              <div
-                key={t.id}
-                className="rounded-3xl border border-white/10 bg-white/5 overflow-hidden"
-              >
+              <div key={t.id} className="rounded-3xl border border-white/10 bg-white/5 overflow-hidden">
                 <button
                   onClick={() => {
                     setExpandedTreinoId(openTreino ? null : t.id);
@@ -657,9 +641,7 @@ export default function AlunoMeusTreinosPremium() {
                 >
                   <div>
                     <p className="text-lg font-bold text-white">{t.nome}</p>
-                    {t.descricao ? (
-                      <p className="mt-1 text-sm text-white/60">{t.descricao}</p>
-                    ) : null}
+                    {t.descricao ? <p className="mt-1 text-sm text-white/60">{t.descricao}</p> : null}
                   </div>
                   <span className="text-white/50">{openTreino ? "−" : "+"}</span>
                 </button>
@@ -679,21 +661,14 @@ export default function AlunoMeusTreinosPremium() {
                             const done = Boolean(conclusoes[r.id]);
 
                             return (
-                              <div
-                                key={r.id}
-                                className="rounded-2xl border border-white/10 bg-black/30 overflow-hidden"
-                              >
+                              <div key={r.id} className="rounded-2xl border border-white/10 bg-black/30 overflow-hidden">
                                 <button
-                                  onClick={() =>
-                                    setExpandedRotinaId(openRotina ? null : r.id)
-                                  }
+                                  onClick={() => setExpandedRotinaId(openRotina ? null : r.id)}
                                   className="w-full text-left px-5 py-4 hover:bg-white/5 transition flex items-center justify-between gap-4"
                                 >
                                   <div>
                                     <div className="flex items-center gap-2">
-                                      <p className="font-bold text-lime-300">
-                                        {r.nome}
-                                      </p>
+                                      <p className="font-bold text-lime-300">{r.nome}</p>
                                       {done ? (
                                         <span className="text-xs text-lime-300 border border-lime-300/30 bg-lime-400/10 px-2 py-0.5 rounded-full">
                                           Concluído
@@ -705,22 +680,16 @@ export default function AlunoMeusTreinosPremium() {
                                       )}
                                     </div>
                                     {r.descricao ? (
-                                      <p className="mt-1 text-sm text-white/60">
-                                        {r.descricao}
-                                      </p>
+                                      <p className="mt-1 text-sm text-white/60">{r.descricao}</p>
                                     ) : null}
                                     {done && conclusoes[r.id]?.concluido_em ? (
                                       <p className="mt-1 text-xs text-white/40">
                                         Concluído em:{" "}
-                                        {new Date(
-                                          conclusoes[r.id].concluido_em
-                                        ).toLocaleString()}
+                                        {new Date(conclusoes[r.id].concluido_em).toLocaleString()}
                                       </p>
                                     ) : null}
                                   </div>
-                                  <span className="text-white/50">
-                                    {openRotina ? "−" : "+"}
-                                  </span>
+                                  <span className="text-white/50">{openRotina ? "−" : "+"}</span>
                                 </button>
 
                                 {openRotina ? (
@@ -732,44 +701,30 @@ export default function AlunoMeusTreinosPremium() {
                                     ) : (
                                       <div className="mt-2 grid grid-cols-1 gap-3">
                                         {[...(r.treino_exercicios || [])]
-                                          .sort(
-                                            (a, b) =>
-                                              (a.ordem ?? 0) - (b.ordem ?? 0)
-                                          )
+                                          .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0))
                                           .map((e) => {
-                                            const ex = e.exercicios ?? e.catalogo;
+                                            const ex = getExercicio(e);
 
                                             return (
-                                              <div
-                                                key={e.id}
-                                                className="rounded-2xl border border-white/10 bg-black/40 p-4"
-                                              >
+                                              <div key={e.id} className="rounded-2xl border border-white/10 bg-black/40 p-4">
                                                 <p className="font-extrabold text-white">
-                                                  <span className="text-lime-300 mr-2">
-                                                    {e.ordem}.
-                                                  </span>
+                                                  <span className="text-lime-300 mr-2">{e.ordem}.</span>
                                                   {ex?.nome || "Exercício"}
                                                 </p>
 
                                                 <p className="mt-1 text-sm text-white/60">
                                                   {[
                                                     e.series ? `${e.series} séries` : null,
-                                                    e.repeticoes
-                                                      ? `${e.repeticoes} reps`
-                                                      : null,
+                                                    e.repeticoes ? `${e.repeticoes} reps` : null,
                                                     e.carga ? `carga: ${e.carga}` : null,
-                                                    e.intervalo
-                                                      ? `intervalo: ${e.intervalo}`
-                                                      : null,
+                                                    e.intervalo ? `intervalo: ${e.intervalo}` : null,
                                                   ]
                                                     .filter(Boolean)
                                                     .join(" • ") || "Sem detalhes"}
                                                 </p>
 
                                                 {e.observacoes ? (
-                                                  <p className="mt-2 text-sm text-white/60">
-                                                    {e.observacoes}
-                                                  </p>
+                                                  <p className="mt-2 text-sm text-white/60">{e.observacoes}</p>
                                                 ) : null}
 
                                                 {ex?.link_youtube ? (
@@ -802,7 +757,7 @@ export default function AlunoMeusTreinosPremium() {
         </div>
       </div>
 
-      {/* Modal Concluir */}
+      {/* Modal */}
       <Modal
         open={modalOpen}
         title="Concluir treino do dia"
@@ -816,9 +771,7 @@ export default function AlunoMeusTreinosPremium() {
         <div className="space-y-4">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
             <p className="text-sm text-white/60">Rotina</p>
-            <p className="text-white font-extrabold text-lg">
-              {rotinaDoDia?.nome || "-"}
-            </p>
+            <p className="text-white font-extrabold text-lg">{rotinaDoDia?.nome || "-"}</p>
             {rotinaDoDiaConcluida ? (
               <p className="mt-2 text-lime-300 text-sm font-bold">
                 Esta rotina já foi marcada como concluída.
@@ -831,9 +784,7 @@ export default function AlunoMeusTreinosPremium() {
           </div>
 
           <div>
-            <label className="text-sm text-white/70 font-semibold">
-              Nota (1 a 5)
-            </label>
+            <label className="text-sm text-white/70 font-semibold">Nota (1 a 5)</label>
             <div className="mt-2 flex gap-2">
               {[1, 2, 3, 4, 5].map((n) => (
                 <button
@@ -841,9 +792,7 @@ export default function AlunoMeusTreinosPremium() {
                   onClick={() => setNota(n)}
                   className={
                     "h-10 w-10 rounded-2xl border border-white/10 font-extrabold " +
-                    (nota === n
-                      ? "bg-lime-400 text-black"
-                      : "bg-white/5 text-white/70 hover:bg-white/10")
+                    (nota === n ? "bg-lime-400 text-black" : "bg-white/5 text-white/70 hover:bg-white/10")
                   }
                   type="button"
                   disabled={saving || rotinaDoDiaConcluida}
@@ -855,9 +804,7 @@ export default function AlunoMeusTreinosPremium() {
           </div>
 
           <div>
-            <label className="text-sm text-white/70 font-semibold">
-              Feedback (opcional)
-            </label>
+            <label className="text-sm text-white/70 font-semibold">Feedback (opcional)</label>
             <textarea
               value={feedback}
               onChange={(e) => setFeedback(e.target.value)}
