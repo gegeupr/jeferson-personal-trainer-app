@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/utils/supabase-browser";
 import Image from "next/image";
@@ -15,13 +15,67 @@ interface ProgressoFoto {
   created_at: string;
 }
 
+function formatDateBR(iso: string) {
+  try {
+    return new Date(iso).toLocaleDateString("pt-BR");
+  } catch {
+    return iso;
+  }
+}
+
+/**
+ * Card de imagem robusto:
+ * - tenta Next/Image com unoptimized (não chama /_next/image)
+ * - se der erro (broken), cai para <img> direto
+ */
+function ProgressPhoto({
+  src,
+  alt,
+}: {
+  src: string;
+  alt: string;
+}) {
+  const [fallback, setFallback] = useState(false);
+
+  if (fallback) {
+    return (
+      <img
+        src={src}
+        alt={alt}
+        className="w-full h-full object-cover rounded-md"
+        onError={() => {
+          // se até o <img> falhar, a gente só deixa vazio mesmo
+          // (pode colocar um placeholder aqui se quiser)
+        }}
+      />
+    );
+  }
+
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      unoptimized
+      className="object-cover rounded-md"
+      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+      onError={() => setFallback(true)}
+    />
+  );
+}
+
 export default function MeuProgressoPage() {
   const router = useRouter();
+
   const [alunoId, setAlunoId] = useState<string | null>(null);
 
   const [fotos, setFotos] = useState<ProgressoFoto[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [pageLoading, setPageLoading] = useState(true);
+
+  // mensagens/erros sem travar a página
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // upload form
@@ -29,10 +83,15 @@ export default function MeuProgressoPage() {
   const [descricaoFoto, setDescricaoFoto] = useState("");
   const [dataFoto, setDataFoto] = useState("");
 
+  const canSubmit = useMemo(() => {
+    return !!fotoSelecionada && !!alunoId && !isSubmitting;
+  }, [fotoSelecionada, alunoId, isSubmitting]);
+
   useEffect(() => {
     async function fetchProgressPhotos() {
-      setLoading(true);
+      setPageLoading(true);
       setError(null);
+      setMessage(null);
 
       const {
         data: { user },
@@ -46,47 +105,53 @@ export default function MeuProgressoPage() {
 
       setAlunoId(user.id);
 
+      // Preferir ordenar por data_foto, mas quando for null,
+      // created_at garante que não bagunça.
       const { data: fotosData, error: fetchError } = await supabase
         .from("progresso_fotos")
         .select("*")
         .eq("aluno_id", user.id)
-        .order("data_foto", { ascending: false });
+        .order("data_foto", { ascending: false })
+        .order("created_at", { ascending: false });
 
       if (fetchError) {
         console.error("Erro ao buscar fotos:", fetchError.message);
         setError("Não foi possível carregar suas fotos de progresso.");
+        setFotos([]);
       } else {
-        setFotos(fotosData || []);
+        setFotos((fotosData as ProgressoFoto[]) || []);
       }
 
-      setLoading(false);
+      setPageLoading(false);
     }
 
     fetchProgressPhotos();
   }, [router]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setFotoSelecionada(e.target.files[0]);
-    } else {
-      setFotoSelecionada(null);
-    }
+    const f = e.target.files?.[0] || null;
+    setFotoSelecionada(f);
   };
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setError(null);
+    setMessage(null);
 
     if (!alunoId || !fotoSelecionada) {
       setError("Por favor, selecione uma foto para enviar.");
-      setIsSubmitting(false);
       return;
     }
 
+    setIsSubmitting(true);
+
     try {
       const fileExt = fotoSelecionada.name.split(".").pop() || "jpg";
-      const filePath = `${alunoId}/${uuidv4()}.${fileExt}`;
+
+      // Garantir extensão coerente quando vier sem type
+      const safeExt = fileExt.toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+
+      const filePath = `${alunoId}/${uuidv4()}.${safeExt}`;
 
       const { error: uploadError } = await supabase.storage
         .from("progressphotos")
@@ -120,13 +185,13 @@ export default function MeuProgressoPage() {
 
       if (dbError) throw dbError;
 
-      setFotos((prev) => [dbData as any, ...prev]);
+      setFotos((prev) => [dbData as ProgressoFoto, ...prev]);
 
       setFotoSelecionada(null);
       setDescricaoFoto("");
       setDataFoto("");
 
-      alert("Foto de progresso enviada com sucesso!");
+      setMessage("Foto enviada com sucesso!");
     } catch (err: any) {
       console.error("Erro ao fazer upload:", err?.message || err);
       setError(`Erro ao enviar foto: ${err?.message || "erro desconhecido"}`);
@@ -135,25 +200,10 @@ export default function MeuProgressoPage() {
     }
   };
 
-  if (loading) {
+  if (pageLoading) {
     return (
       <main className="min-h-screen bg-gray-950 flex items-center justify-center text-lime-400 text-2xl">
         Carregando fotos de progresso...
-      </main>
-    );
-  }
-
-  // ⚠️ não travar a página inteira por erro de upload; mas mantive seu comportamento
-  if (error) {
-    return (
-      <main className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-red-500 text-lg p-4">
-        <p>{error}</p>
-        <Link
-          href="/dashboard"
-          className="mt-4 bg-lime-400 text-gray-900 py-2 px-6 rounded-full hover:bg-lime-300 transition duration-300"
-        >
-          Voltar ao Dashboard
-        </Link>
       </main>
     );
   }
@@ -174,8 +224,22 @@ export default function MeuProgressoPage() {
           </Link>
         </div>
 
+        {/* Alerts */}
+        {error && (
+          <div className="mb-6 rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-red-200">
+            {error}
+          </div>
+        )}
+        {message && (
+          <div className="mb-6 rounded-xl border border-lime-400/20 bg-lime-400/10 p-4 text-lime-200">
+            {message}
+          </div>
+        )}
+
         <section className="bg-gray-800 p-8 rounded-lg shadow-xl border-t-4 border-lime-400 mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Enviar Nova Foto</h2>
+          <h2 className="text-2xl font-bold text-white mb-6">
+            Enviar Nova Foto
+          </h2>
 
           <form onSubmit={handleUpload} className="space-y-6">
             <div>
@@ -235,7 +299,7 @@ export default function MeuProgressoPage() {
 
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={!canSubmit}
               className="bg-lime-600 hover:bg-lime-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 text-lg w-full disabled:opacity-60"
             >
               {isSubmitting ? "Enviando..." : "Enviar Foto"}
@@ -258,21 +322,18 @@ export default function MeuProgressoPage() {
                   className="bg-gray-900 p-4 rounded-lg flex flex-col items-center"
                 >
                   <div className="relative w-full h-48 mb-4 overflow-hidden rounded-md">
-                    <Image
+                    <ProgressPhoto
                       src={foto.url}
                       alt={foto.descricao || "Foto de progresso"}
-                      fill
-                      unoptimized
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   </div>
 
-                  {foto.data_foto && (
-                    <p className="text-gray-300 text-sm font-semibold">
-                      {new Date(foto.data_foto).toLocaleDateString()}
-                    </p>
-                  )}
+                  <p className="text-gray-300 text-sm font-semibold">
+                    {foto.data_foto
+                      ? formatDateBR(foto.data_foto)
+                      : formatDateBR(foto.created_at)}
+                  </p>
+
                   {foto.descricao && (
                     <p className="text-gray-400 text-xs mt-1 text-center">
                       {foto.descricao}
