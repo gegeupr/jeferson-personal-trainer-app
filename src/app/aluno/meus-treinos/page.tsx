@@ -5,6 +5,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/utils/supabase-browser";
 
+type ExercicioBase = {
+  id: string;
+  nome: string;
+  descricao: string | null;
+  link_youtube: string | null;
+};
+
 type TreinoExercicio = {
   id: string;
   ordem: number;
@@ -13,12 +20,12 @@ type TreinoExercicio = {
   carga: string | null;
   intervalo: string | null;
   observacoes: string | null;
-  exercicios?: {
-    id: string;
-    nome: string;
-    descricao: string | null;
-    link_youtube: string | null;
-  } | null;
+
+  // Biblioteca do professor (quando existir)
+  exercicios?: ExercicioBase | null;
+
+  // Catálogo (se você salvou catalogo_id)
+  catalogo?: ExercicioBase | null;
 };
 
 type Rotina = {
@@ -62,7 +69,6 @@ function onlyDigits(s: string) {
 function waLink(phoneBR: string, msg: string) {
   const phone = onlyDigits(phoneBR);
   if (!phone) return null;
-  // Brasil: 55 + DDD + número
   const full = phone.startsWith("55") ? phone : `55${phone}`;
   return `https://wa.me/${full}?text=${encodeURIComponent(msg)}`;
 }
@@ -115,7 +121,9 @@ export default function AlunoMeusTreinosPremium() {
   const [error, setError] = useState<string | null>(null);
 
   const [treinos, setTreinos] = useState<Treino[]>([]);
-  const [conclusoes, setConclusoes] = useState<Record<string, AlunoConclusao>>({});
+  const [conclusoes, setConclusoes] = useState<Record<string, AlunoConclusao>>(
+    {}
+  );
   const [professor, setProfessor] = useState<ProfessorMini | null>(null);
 
   const [expandedTreinoId, setExpandedTreinoId] = useState<string | null>(null);
@@ -135,16 +143,13 @@ export default function AlunoMeusTreinosPremium() {
 
   const rotinasOrdenadas = useMemo(() => {
     const r = treinoAtual?.rotinas_diarias || [];
-    // mantém ordem estável: created_at (ou você pode ordenar por nome)
     return [...r].sort((a, b) => (a.created_at > b.created_at ? 1 : -1));
   }, [treinoAtual]);
 
   const rotinaDoDia = useMemo(() => {
-    // primeira rotina não concluída
     for (const r of rotinasOrdenadas) {
       if (!conclusoes[r.id]) return r;
     }
-    // se todas concluídas, retorna a primeira (ou null)
     return rotinasOrdenadas[0] || null;
   }, [rotinasOrdenadas, conclusoes]);
 
@@ -160,7 +165,11 @@ export default function AlunoMeusTreinosPremium() {
       setLoading(true);
       setError(null);
 
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser();
+
       if (authError || !user) {
         router.replace("/login");
         return;
@@ -184,10 +193,12 @@ export default function AlunoMeusTreinosPremium() {
         return;
       }
 
-      // busca treinos do aluno (com rotinas + exercícios)
+      // ✅ busca treinos do aluno com rotinas + exercícios
+      // ⚠️ aqui é o ponto: buscamos tanto a biblioteca (exercicios) quanto o catálogo (exercicios_catalogo)
       const { data: treinoData, error: treinoError } = await supabase
         .from("treinos")
-        .select(`
+        .select(
+          `
           id,
           nome,
           descricao,
@@ -210,10 +221,20 @@ export default function AlunoMeusTreinosPremium() {
               carga,
               intervalo,
               observacoes,
-              exercicios ( id, nome, descricao, link_youtube )
+
+              -- biblioteca (caso exista)
+              exercicios:exercicios!treino_exercicios_exercicio_id_fkey (
+                id, nome, descricao, link_youtube
+              ),
+
+              -- catálogo (se você salvou catalogo_id)
+              catalogo:exercicios_catalogo!treino_exercicios_catalogo_id_fkey (
+                id, nome, descricao, link_youtube
+              )
             )
           )
-        `)
+        `
+        )
         .eq("aluno_id", user.id)
         .order("created_at", { ascending: false });
 
@@ -221,7 +242,9 @@ export default function AlunoMeusTreinosPremium() {
 
       if (treinoError) {
         console.error("Erro ao carregar treinos:", treinoError.message);
-        setError("Não foi possível carregar seus treinos: " + treinoError.message);
+        setError(
+          "Não foi possível carregar seus treinos: " + treinoError.message
+        );
         setTreinos([]);
         setLoading(false);
         return;
@@ -234,7 +257,7 @@ export default function AlunoMeusTreinosPremium() {
         setExpandedTreinoId(list[0].id);
       }
 
-      // busca conclusões do aluno (para o plano atual)
+      // conclusões do aluno (plano atual)
       if (list.length) {
         const treinoAtualLocal = list[0];
 
@@ -255,7 +278,7 @@ export default function AlunoMeusTreinosPremium() {
           setConclusoes(map);
         }
 
-        // professor mini (para WhatsApp)
+        // professor mini (WhatsApp)
         if (treinoAtualLocal.professor_id) {
           const { data: prof, error: profErr } = await supabase
             .from("profiles")
@@ -283,7 +306,6 @@ export default function AlunoMeusTreinosPremium() {
     if (!treinoAtual || !rotinaDoDia) return;
     setExpandedTreinoId(treinoAtual.id);
     setExpandedRotinaId(rotinaDoDia.id);
-    // rolar suavemente até a lista de rotinas
     setTimeout(() => {
       const el = document.getElementById("rotinas-anchor");
       el?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -323,7 +345,6 @@ export default function AlunoMeusTreinosPremium() {
       return;
     }
 
-    // atualiza estado local (sem precisar reload)
     setConclusoes((prev) => ({
       ...prev,
       [rotinaDoDia.id]: {
@@ -339,7 +360,6 @@ export default function AlunoMeusTreinosPremium() {
     setFeedback("");
     setNota(5);
 
-    // abre automaticamente a próxima rotina (se houver)
     setTimeout(() => openTreinoDoDia(), 150);
   }
 
@@ -385,7 +405,6 @@ export default function AlunoMeusTreinosPremium() {
     );
   }
 
-  // Sem treino
   if (!treinos.length) {
     return (
       <main className="min-h-screen bg-gray-950 text-white px-6 py-10">
@@ -468,7 +487,7 @@ export default function AlunoMeusTreinosPremium() {
           </div>
         </div>
 
-        {/* ✅ Treino do dia (fixo) */}
+        {/* Treino do dia */}
         <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 overflow-hidden shadow-2xl">
           <div className="p-6">
             <div className="flex items-start justify-between gap-4">
@@ -477,8 +496,11 @@ export default function AlunoMeusTreinosPremium() {
                 <h2 className="mt-1 text-2xl font-extrabold text-lime-300">
                   {rotinaDoDia?.nome || "Sem rotina disponível"}
                 </h2>
+
                 {rotinaDoDia?.descricao ? (
-                  <p className="mt-2 text-white/70 text-sm">{rotinaDoDia.descricao}</p>
+                  <p className="mt-2 text-white/70 text-sm">
+                    {rotinaDoDia.descricao}
+                  </p>
                 ) : null}
 
                 {rotinaDoDia && (
@@ -492,11 +514,13 @@ export default function AlunoMeusTreinosPremium() {
                         <span className="text-yellow-200 font-bold">Pendente</span>
                       )}
                     </Pill>
-                    {treinoAtual?.dificuldade ? <Pill>Nível: {treinoAtual.dificuldade}</Pill> : null}
+                    {treinoAtual?.dificuldade ? (
+                      <Pill>Nível: {treinoAtual.dificuldade}</Pill>
+                    ) : null}
                   </div>
                 )}
 
-                {/* preview de exercícios */}
+                {/* preview exercícios */}
                 {rotinaDoDia?.treino_exercicios?.length ? (
                   <div className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-4">
                     <p className="text-sm font-bold text-white">Hoje você fará</p>
@@ -505,26 +529,32 @@ export default function AlunoMeusTreinosPremium() {
                         .slice()
                         .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0))
                         .slice(0, 4)
-                        .map((e) => (
-                          <li key={e.id}>
-                            <span className="text-lime-300 font-bold mr-2">{e.ordem}.</span>
-                            {e.exercicios?.nome || "Exercício"}
-                            <span className="text-white/50">
-                              {" "}
-                              —{" "}
-                              {[
-                                e.series ? `${e.series} séries` : null,
-                                e.repeticoes ? `${e.repeticoes}` : null,
-                              ]
-                                .filter(Boolean)
-                                .join(" • ") || "detalhes no treino"}
-                            </span>
-                          </li>
-                        ))}
+                        .map((e) => {
+                          const ex = e.exercicios ?? e.catalogo;
+                          return (
+                            <li key={e.id}>
+                              <span className="text-lime-300 font-bold mr-2">
+                                {e.ordem}.
+                              </span>
+                              {ex?.nome || "Exercício"}
+                              <span className="text-white/50">
+                                {" "}
+                                —{" "}
+                                {[
+                                  e.series ? `${e.series} séries` : null,
+                                  e.repeticoes ? `${e.repeticoes}` : null,
+                                ]
+                                  .filter(Boolean)
+                                  .join(" • ") || "detalhes no treino"}
+                              </span>
+                            </li>
+                          );
+                        })}
                     </ul>
                     {rotinaDoDia.treino_exercicios.length > 4 ? (
                       <p className="mt-2 text-xs text-white/50">
-                        +{rotinaDoDia.treino_exercicios.length - 4} exercícios (veja na rotina)
+                        +{rotinaDoDia.treino_exercicios.length - 4} exercícios
+                        (veja na rotina)
                       </p>
                     ) : null}
                   </div>
@@ -564,11 +594,14 @@ export default function AlunoMeusTreinosPremium() {
               </div>
             </div>
 
-            {/* orientação do professor (do plano) */}
             {treinoAtual?.orientacao_professor ? (
               <div className="mt-5 rounded-2xl border border-white/10 bg-black/30 p-4">
-                <p className="text-sm font-bold text-lime-300">Orientação do professor</p>
-                <p className="mt-1 text-sm text-white/70">{treinoAtual.orientacao_professor}</p>
+                <p className="text-sm font-bold text-lime-300">
+                  Orientação do professor
+                </p>
+                <p className="mt-1 text-sm text-white/70">
+                  {treinoAtual.orientacao_professor}
+                </p>
               </div>
             ) : null}
           </div>
@@ -579,30 +612,42 @@ export default function AlunoMeusTreinosPremium() {
           <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 overflow-hidden shadow-2xl">
             <div className="p-6">
               <p className="text-xs text-white/60">Plano atual</p>
-              <h2 className="mt-1 text-2xl font-extrabold text-white">{treinoAtual.nome}</h2>
+              <h2 className="mt-1 text-2xl font-extrabold text-white">
+                {treinoAtual.nome}
+              </h2>
               {treinoAtual.descricao ? (
-                <p className="mt-2 text-white/70 text-sm">{treinoAtual.descricao}</p>
+                <p className="mt-2 text-white/70 text-sm">
+                  {treinoAtual.descricao}
+                </p>
               ) : null}
 
               <div className="mt-4 flex flex-wrap gap-2 text-xs">
-                {treinoAtual.tipo_treino ? <Pill>{treinoAtual.tipo_treino}</Pill> : null}
-                {treinoAtual.objetivo ? <Pill>Objetivo: {treinoAtual.objetivo}</Pill> : null}
-                {treinoAtual.dificuldade ? <Pill>Nível: {treinoAtual.dificuldade}</Pill> : null}
+                {treinoAtual.tipo_treino ? (
+                  <Pill>{treinoAtual.tipo_treino}</Pill>
+                ) : null}
+                {treinoAtual.objetivo ? (
+                  <Pill>Objetivo: {treinoAtual.objetivo}</Pill>
+                ) : null}
+                {treinoAtual.dificuldade ? (
+                  <Pill>Nível: {treinoAtual.dificuldade}</Pill>
+                ) : null}
               </div>
             </div>
           </div>
         ) : null}
 
-        {/* Anchor */}
         <div id="rotinas-anchor" className="mt-6" />
 
-        {/* Lista de treinos (accordion) */}
+        {/* Lista */}
         <div className="mt-2 grid grid-cols-1 gap-4">
           {treinos.map((t) => {
             const openTreino = expandedTreinoId === t.id;
 
             return (
-              <div key={t.id} className="rounded-3xl border border-white/10 bg-white/5 overflow-hidden">
+              <div
+                key={t.id}
+                className="rounded-3xl border border-white/10 bg-white/5 overflow-hidden"
+              >
                 <button
                   onClick={() => {
                     setExpandedTreinoId(openTreino ? null : t.id);
@@ -612,7 +657,9 @@ export default function AlunoMeusTreinosPremium() {
                 >
                   <div>
                     <p className="text-lg font-bold text-white">{t.nome}</p>
-                    {t.descricao ? <p className="mt-1 text-sm text-white/60">{t.descricao}</p> : null}
+                    {t.descricao ? (
+                      <p className="mt-1 text-sm text-white/60">{t.descricao}</p>
+                    ) : null}
                   </div>
                   <span className="text-white/50">{openTreino ? "−" : "+"}</span>
                 </button>
@@ -632,14 +679,21 @@ export default function AlunoMeusTreinosPremium() {
                             const done = Boolean(conclusoes[r.id]);
 
                             return (
-                              <div key={r.id} className="rounded-2xl border border-white/10 bg-black/30 overflow-hidden">
+                              <div
+                                key={r.id}
+                                className="rounded-2xl border border-white/10 bg-black/30 overflow-hidden"
+                              >
                                 <button
-                                  onClick={() => setExpandedRotinaId(openRotina ? null : r.id)}
+                                  onClick={() =>
+                                    setExpandedRotinaId(openRotina ? null : r.id)
+                                  }
                                   className="w-full text-left px-5 py-4 hover:bg-white/5 transition flex items-center justify-between gap-4"
                                 >
                                   <div>
                                     <div className="flex items-center gap-2">
-                                      <p className="font-bold text-lime-300">{r.nome}</p>
+                                      <p className="font-bold text-lime-300">
+                                        {r.nome}
+                                      </p>
                                       {done ? (
                                         <span className="text-xs text-lime-300 border border-lime-300/30 bg-lime-400/10 px-2 py-0.5 rounded-full">
                                           Concluído
@@ -651,15 +705,22 @@ export default function AlunoMeusTreinosPremium() {
                                       )}
                                     </div>
                                     {r.descricao ? (
-                                      <p className="mt-1 text-sm text-white/60">{r.descricao}</p>
+                                      <p className="mt-1 text-sm text-white/60">
+                                        {r.descricao}
+                                      </p>
                                     ) : null}
                                     {done && conclusoes[r.id]?.concluido_em ? (
                                       <p className="mt-1 text-xs text-white/40">
-                                        Concluído em: {new Date(conclusoes[r.id].concluido_em).toLocaleString()}
+                                        Concluído em:{" "}
+                                        {new Date(
+                                          conclusoes[r.id].concluido_em
+                                        ).toLocaleString()}
                                       </p>
                                     ) : null}
                                   </div>
-                                  <span className="text-white/50">{openRotina ? "−" : "+"}</span>
+                                  <span className="text-white/50">
+                                    {openRotina ? "−" : "+"}
+                                  </span>
                                 </button>
 
                                 {openRotina ? (
@@ -671,41 +732,59 @@ export default function AlunoMeusTreinosPremium() {
                                     ) : (
                                       <div className="mt-2 grid grid-cols-1 gap-3">
                                         {[...(r.treino_exercicios || [])]
-                                          .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0))
-                                          .map((e) => (
-                                            <div key={e.id} className="rounded-2xl border border-white/10 bg-black/40 p-4">
-                                              <p className="font-extrabold text-white">
-                                                <span className="text-lime-300 mr-2">{e.ordem}.</span>
-                                                {e.exercicios?.nome || "Exercício"}
-                                              </p>
+                                          .sort(
+                                            (a, b) =>
+                                              (a.ordem ?? 0) - (b.ordem ?? 0)
+                                          )
+                                          .map((e) => {
+                                            const ex = e.exercicios ?? e.catalogo;
 
-                                              <p className="mt-1 text-sm text-white/60">
-                                                {[
-                                                  e.series ? `${e.series} séries` : null,
-                                                  e.repeticoes ? `${e.repeticoes} reps` : null,
-                                                  e.carga ? `carga: ${e.carga}` : null,
-                                                  e.intervalo ? `intervalo: ${e.intervalo}` : null,
-                                                ]
-                                                  .filter(Boolean)
-                                                  .join(" • ") || "Sem detalhes"}
-                                              </p>
+                                            return (
+                                              <div
+                                                key={e.id}
+                                                className="rounded-2xl border border-white/10 bg-black/40 p-4"
+                                              >
+                                                <p className="font-extrabold text-white">
+                                                  <span className="text-lime-300 mr-2">
+                                                    {e.ordem}.
+                                                  </span>
+                                                  {ex?.nome || "Exercício"}
+                                                </p>
 
-                                              {e.observacoes ? (
-                                                <p className="mt-2 text-sm text-white/60">{e.observacoes}</p>
-                                              ) : null}
+                                                <p className="mt-1 text-sm text-white/60">
+                                                  {[
+                                                    e.series ? `${e.series} séries` : null,
+                                                    e.repeticoes
+                                                      ? `${e.repeticoes} reps`
+                                                      : null,
+                                                    e.carga ? `carga: ${e.carga}` : null,
+                                                    e.intervalo
+                                                      ? `intervalo: ${e.intervalo}`
+                                                      : null,
+                                                  ]
+                                                    .filter(Boolean)
+                                                    .join(" • ") || "Sem detalhes"}
+                                                </p>
 
-                                              {e.exercicios?.link_youtube ? (
-                                                <a
-                                                  href={e.exercicios.link_youtube}
-                                                  target="_blank"
-                                                  rel="noreferrer"
-                                                  className="inline-flex mt-3 text-sm font-semibold text-lime-300 hover:underline"
-                                                >
-                                                  Ver vídeo no YouTube ↗
-                                                </a>
-                                              ) : null}
-                                            </div>
-                                          ))}
+                                                {e.observacoes ? (
+                                                  <p className="mt-2 text-sm text-white/60">
+                                                    {e.observacoes}
+                                                  </p>
+                                                ) : null}
+
+                                                {ex?.link_youtube ? (
+                                                  <a
+                                                    href={ex.link_youtube}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="inline-flex mt-3 text-sm font-semibold text-lime-300 hover:underline"
+                                                  >
+                                                    Ver vídeo no YouTube ↗
+                                                  </a>
+                                                ) : null}
+                                              </div>
+                                            );
+                                          })}
                                       </div>
                                     )}
                                   </div>
@@ -723,7 +802,7 @@ export default function AlunoMeusTreinosPremium() {
         </div>
       </div>
 
-      {/* Modal Concluir + Feedback */}
+      {/* Modal Concluir */}
       <Modal
         open={modalOpen}
         title="Concluir treino do dia"
@@ -737,7 +816,9 @@ export default function AlunoMeusTreinosPremium() {
         <div className="space-y-4">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
             <p className="text-sm text-white/60">Rotina</p>
-            <p className="text-white font-extrabold text-lg">{rotinaDoDia?.nome || "-"}</p>
+            <p className="text-white font-extrabold text-lg">
+              {rotinaDoDia?.nome || "-"}
+            </p>
             {rotinaDoDiaConcluida ? (
               <p className="mt-2 text-lime-300 text-sm font-bold">
                 Esta rotina já foi marcada como concluída.
@@ -750,7 +831,9 @@ export default function AlunoMeusTreinosPremium() {
           </div>
 
           <div>
-            <label className="text-sm text-white/70 font-semibold">Nota (1 a 5)</label>
+            <label className="text-sm text-white/70 font-semibold">
+              Nota (1 a 5)
+            </label>
             <div className="mt-2 flex gap-2">
               {[1, 2, 3, 4, 5].map((n) => (
                 <button
@@ -758,7 +841,9 @@ export default function AlunoMeusTreinosPremium() {
                   onClick={() => setNota(n)}
                   className={
                     "h-10 w-10 rounded-2xl border border-white/10 font-extrabold " +
-                    (nota === n ? "bg-lime-400 text-black" : "bg-white/5 text-white/70 hover:bg-white/10")
+                    (nota === n
+                      ? "bg-lime-400 text-black"
+                      : "bg-white/5 text-white/70 hover:bg-white/10")
                   }
                   type="button"
                   disabled={saving || rotinaDoDiaConcluida}
@@ -770,7 +855,9 @@ export default function AlunoMeusTreinosPremium() {
           </div>
 
           <div>
-            <label className="text-sm text-white/70 font-semibold">Feedback (opcional)</label>
+            <label className="text-sm text-white/70 font-semibold">
+              Feedback (opcional)
+            </label>
             <textarea
               value={feedback}
               onChange={(e) => setFeedback(e.target.value)}
