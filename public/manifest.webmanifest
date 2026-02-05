@@ -1,0 +1,13 @@
+{
+  "name": "Motion",
+  "short_name": "Motion",
+  "description": "Gestão inteligente para personal trainers",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#A3FF12",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

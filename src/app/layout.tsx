@@ -1,6 +1,5 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
-
 import "./globals.css";
 
 const inter = Inter({
@@ -9,6 +8,13 @@ const inter = Inter({
   display: "swap",
 });
 
+// ✅ No App Router, themeColor e viewport ficam aqui:
+export const viewport: Viewport = {
+  themeColor: "#00FF88",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   title: {
     default: "Motion",
@@ -16,7 +22,6 @@ export const metadata: Metadata = {
   },
 
   description: "Gestão inteligente para personal trainers",
-
   applicationName: "Motion",
 
   keywords: [
@@ -35,18 +40,23 @@ export const metadata: Metadata = {
       url: "https://motionpersonal.com.br",
     },
   ],
-
   creator: "Jeferson Parowski",
 
-  themeColor: "#00FF88",
+  // ✅ Seu manifest agora é o novo nome:
+  manifest: "/manifest.webmanifest",
 
+  // ✅ Ícones completos (PWA + navegador + iOS)
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
+    icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.ico" },
+      { url: "/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: ["/favicon.ico"],
   },
-
-  manifest: "/site.webmanifest", // opcional
 
   openGraph: {
     title: "Motion",
@@ -62,21 +72,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
-      <head />
-
-      <body
-        className={`${inter.className} bg-black text-white antialiased min-h-screen`}
-      >
+      <body className={`${inter.className} bg-black text-white antialiased min-h-screen`}>
         {children}
       </body>
     </html>
   );
 }
-
