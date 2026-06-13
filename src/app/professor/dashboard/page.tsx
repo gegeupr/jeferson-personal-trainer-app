@@ -42,6 +42,11 @@ type ConclusaoFeed = {
   rotina?: { id: string; nome: string | null } | null;
 };
 
+type ProfAssinatura = {
+  status: string;
+  trial_ends_at: string | null;
+};
+
 type AssinaturaStatus = "pending" | "active" | "expired" | "canceled";
 type Assinatura = {
   id: string;
@@ -150,6 +155,8 @@ export default function ProfessorDashboard() {
   const [treinosCount, setTreinosCount] = useState(0);
   const [alunosCount, setAlunosCount] = useState(0);
   const [concluidosCount, setConcluidosCount] = useState(0);
+
+  const [assinatura, setAssinatura] = useState<ProfAssinatura | null>(null);
 
   const [pending, setPending] = useState<PendingItem[]>([]);
   const [pendingCount, setPendingCount] = useState(0);
@@ -287,6 +294,14 @@ export default function ProfessorDashboard() {
       if (myProf.role !== "professor") { router.replace("/dashboard"); return; }
 
       setProf(myProf as ProfProfile);
+
+      const { data: assinData } = await supabase
+        .from("professor_assinaturas")
+        .select("status, trial_ends_at")
+        .eq("professor_id", user.id)
+        .maybeSingle();
+      if (assinData) setAssinatura(assinData as ProfAssinatura);
+
       await loadPendencias(user.id);
 
       const { data: alunosData, error: aErr } = await supabase
@@ -368,11 +383,38 @@ export default function ProfessorDashboard() {
 
   const profId = prof?.id || null;
 
+  const trialDaysLeft = assinatura?.trial_ends_at
+    ? Math.max(0, Math.ceil((new Date(assinatura.trial_ends_at).getTime() - Date.now()) / 86400000))
+    : null;
+
   return (
     <>
       <ToastList toasts={toasts} />
 
       <div className="px-5 py-8 max-w-7xl mx-auto space-y-6">
+        {/* ── Banner de trial ───────────────────────────────────────────────── */}
+        {assinatura?.status === "trial" && (
+          <div className="rounded-2xl border border-amber-400/15 bg-amber-400/[0.04] px-5 py-4 flex items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold text-amber-200">
+                Período de teste
+                {trialDaysLeft !== null && trialDaysLeft > 0
+                  ? ` — ${trialDaysLeft} dia${trialDaysLeft !== 1 ? "s" : ""} restante${trialDaysLeft !== 1 ? "s" : ""}`
+                  : " — expira hoje"}
+              </p>
+              <p className="text-xs text-amber-200/60 mt-0.5">
+                Após o trial, R$ 59,90/mês para continuar usando o Motion.
+              </p>
+            </div>
+            <Link
+              href="/professor/pricing"
+              className="shrink-0 rounded-full bg-white px-4 py-2 text-xs font-semibold text-black hover:bg-white/90 transition-colors"
+            >
+              Assinar agora
+            </Link>
+          </div>
+        )}
+
         {/* ── Hero ──────────────────────────────────────────────────────────── */}
         <div className="rounded-2xl border border-white/8 bg-white/[0.03] overflow-hidden">
           {/* Cover */}

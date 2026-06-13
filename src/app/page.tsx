@@ -18,8 +18,8 @@ export default function HomePage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-black text-white">
-      {/* Header overlay (some ao rolar) */}
+    <main className="min-h-screen bg-[#0a0a0a] text-white">
+      {/* Header */}
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
           hideHeader ? "-translate-y-full" : "translate-y-0"
@@ -36,10 +36,8 @@ export default function HomePage() {
                 priority
                 className="h-9 w-9"
               />
-
               <span className="text-[15px] font-semibold uppercase tracking-[0.28em]">
-                <span className="text-lime-400">M</span>
-                <span className="text-white">OTION</span>
+                MOTION
                 <span className="ml-3 text-[10px] font-medium tracking-normal text-white/50">
                   for trainers
                 </span>
@@ -54,22 +52,18 @@ export default function HomePage() {
               <a href="#recursos" className="hover:text-white">
                 Recursos
               </a>
-              <a href="#seguranca" className="hover:text-white">
-                Segurança
+              <a href="#precos" className="hover:text-white">
+                Preços
               </a>
             </nav>
 
-            {/* Right actions */}
             <div className="flex items-center gap-2">
-              {/* Apenas Entrar (desktop) */}
               <Link
                 href="/login"
                 className="hidden rounded-full border border-white/20 px-4 py-2 text-sm text-white/80 hover:border-white/40 hover:text-white md:inline-flex"
               >
                 Entrar
               </Link>
-
-              {/* Mobile menu button */}
               <button
                 type="button"
                 aria-label="Abrir menu"
@@ -81,7 +75,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Mobile dropdown menu */}
+          {/* Mobile dropdown */}
           {mobileMenuOpen ? (
             <div className="md:hidden">
               <div className="mx-auto max-w-6xl px-4 pb-4">
@@ -102,15 +96,13 @@ export default function HomePage() {
                       Recursos
                     </a>
                     <a
-                      href="#seguranca"
+                      href="#precos"
                       onClick={() => setMobileMenuOpen(false)}
                       className="rounded-xl px-3 py-2 hover:bg-white/10"
                     >
-                      Segurança
+                      Preços
                     </a>
-
                     <div className="my-2 h-px w-full bg-white/10" />
-
                     <Link
                       href="/login"
                       onClick={() => setMobileMenuOpen(false)}
@@ -126,9 +118,8 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* ✅ CAPA LIMPA (sem texto) | Mobile = vídeo 9:16 | Desktop = imagem 16:9 */}
+      {/* Hero — capa full-screen */}
       <section className="relative h-screen w-full overflow-hidden">
-        {/* ✅ Mobile video (coloque em: public/videos/capa-mobile.mp4) */}
         <video
           className="absolute inset-0 h-full w-full object-cover object-center md:hidden"
           src="/videos/capa-mobile.mp4"
@@ -139,38 +130,31 @@ export default function HomePage() {
           preload="auto"
           poster="/images/capa.png"
         />
-
-        {/* ✅ Desktop image (coloque em: public/images/capa.png) */}
         <img
           src="/images/capa.png"
           alt="Motion - Capa"
           className="absolute inset-0 hidden h-full w-full object-cover object-center md:block"
           loading="eager"
         />
-
-        {/* overlays premium (bem discretos) */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/10" />
         <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_120px_rgba(0,0,0,0.55)]" />
-
-        {/* espaço do header (não tem conteúdo aqui, é só para não “cortar” a capa) */}
         <div className="relative z-10 h-full w-full pt-20 md:pt-24" />
       </section>
 
-      {/* ✅ BLOCO DE TEXTO ABAIXO DA CAPA, mas “entra por cima” ao começar a rolar */}
+      {/* Bloco de texto — entra por cima da capa ao rolar */}
       <section className="relative z-20 -mt-24 sm:-mt-28 md:-mt-36">
         <div className="mx-auto max-w-6xl px-4">
-          {/* sticky cria o efeito premium: texto “passa por cima” da capa */}
           <div className="sticky top-16 md:top-20">
-            <div className="rounded-3xl border border-white/10 bg-black/55 p-6 backdrop-blur-md shadow-[0_25px_80px_rgba(0,0,0,0.65)] md:p-8">
+            <div className="rounded-2xl border border-white/10 bg-black/55 p-6 shadow-[0_25px_80px_rgba(0,0,0,0.65)] backdrop-blur-md md:p-8">
               <div className="max-w-2xl">
                 <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
-                  <span className="h-2 w-2 rounded-full bg-lime-400" />
-                  Plataforma gratuita para professores
+                  <span className="h-2 w-2 rounded-full bg-white" />
+                  Teste grátis por 7 dias
                 </div>
 
                 <h1 className="mt-4 text-3xl font-extrabold leading-tight tracking-tight md:text-5xl">
                   Gestão inteligente para{" "}
-                  <span className="text-lime-400">personal trainers</span>
+                  <span className="text-white">personal trainers</span>
                 </h1>
 
                 <p className="mt-3 text-sm leading-relaxed text-white/75 md:text-base">
@@ -182,11 +166,10 @@ export default function HomePage() {
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                   <Link
                     href="/login"
-                    className="inline-flex items-center justify-center rounded-full bg-lime-400 px-6 py-3 text-sm font-semibold text-black hover:bg-lime-300"
+                    className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-white/90"
                   >
-                    Criar conta grátis
+                    Começar teste grátis
                   </Link>
-
                   <a
                     href="#como-funciona"
                     className="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white/90 hover:border-white/30"
@@ -202,19 +185,16 @@ export default function HomePage() {
                 </div>
 
                 <p className="mt-5 text-xs text-white/45">
-                  Pagamento do aluno direto com o professor (Pix/links). O Motion
-                  organiza o acesso e a gestão.
+                  7 dias grátis, depois R$ 59,90/mês. Cancele quando quiser.
                 </p>
               </div>
             </div>
-
-            {/* “respiro” para o sticky não ficar prendendo demais */}
             <div className="h-10 md:h-14" />
           </div>
         </div>
       </section>
 
-      {/* Features */}
+      {/* Recursos */}
       <section id="recursos" className="mx-auto max-w-6xl px-4 py-14">
         <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
           Feito para o seu dia a dia
@@ -243,7 +223,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* How it works */}
+      {/* Como funciona */}
       <section id="como-funciona" className="border-t border-white/10">
         <div className="mx-auto max-w-6xl px-4 py-14">
           <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
@@ -251,29 +231,97 @@ export default function HomePage() {
           </h2>
 
           <div className="mt-8 grid gap-4 md:grid-cols-4">
-            <Step n="01" title="Crie sua conta" desc="Professor entra grátis." />
+            <Step n="01" title="Crie sua conta" desc="7 dias grátis, depois R$ 59,90/mês." />
             <Step n="02" title="Monte sua biblioteca" desc="Exercícios + vídeos." />
             <Step n="03" title="Crie e salve treinos" desc="Rotinas e planos." />
             <Step n="04" title="Atribua ao aluno" desc="Acesso conforme status." />
           </div>
 
-          <div className="mt-10 rounded-3xl border border-white/10 bg-white/5 p-6 md:p-8">
+          <div className="mt-10 rounded-2xl border border-white/8 bg-white/[0.03] p-6 md:p-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
-                <p className="text-sm font-semibold text-lime-400">
+                <p className="text-sm font-semibold text-white/80">
                   Pagamento do aluno direto com você
                 </p>
                 <p className="mt-1 text-white/70">
-                  Pix, Mercado Pago, PicPay… você escolhe. O Motion organiza o
-                  acesso e a gestão.
+                  Pix direto entre você e o aluno — sem intermediários. O
+                  Motion organiza o acesso e a gestão.
                 </p>
               </div>
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center rounded-full bg-lime-400 px-6 py-3 text-sm font-semibold text-black hover:bg-lime-300"
+                className="inline-flex shrink-0 items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-white/90"
               >
                 Começar agora
               </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section id="precos" className="border-t border-white/10">
+        <div className="mx-auto max-w-6xl px-4 py-14">
+          <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
+            Simples. Sem surpresas.
+          </h2>
+          <p className="mt-2 text-white/70">
+            Um plano para você começar hoje e escalar no seu ritmo.
+          </p>
+
+          <div className="mt-8 flex flex-col gap-8 md:flex-row md:items-start">
+            <div className="w-full max-w-sm rounded-2xl border border-white/8 bg-white/[0.03] p-8">
+              <p className="text-xs font-semibold uppercase tracking-widest text-white/40">
+                Motion Pro
+              </p>
+              <div className="mt-4 flex items-end gap-1">
+                <span className="text-4xl font-bold">R$ 59,90</span>
+                <span className="mb-1 text-sm text-white/50">/mês</span>
+              </div>
+              <p className="mt-1 text-sm text-white/50">
+                7 dias grátis — cancele quando quiser
+              </p>
+
+              <ul className="mt-6 space-y-3 text-sm text-white/70">
+                {[
+                  "Alunos ilimitados",
+                  "Biblioteca própria de exercícios",
+                  "Treinos e rotinas reutilizáveis",
+                  "Controle de acesso por aluno",
+                  "Perfil público do professor",
+                  "Anamnese e histórico de progresso",
+                ].map((feature) => (
+                  <li key={feature} className="flex items-center gap-2">
+                    <span className="text-xs text-white">✓</span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+
+              <Link
+                href="/login"
+                className="mt-8 inline-flex w-full items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-white/90"
+              >
+                Começar teste grátis
+              </Link>
+              <p className="mt-3 text-center text-xs text-white/35">
+                Cartão necessário. Sem cobrança nos primeiros 7 dias.
+              </p>
+            </div>
+
+            <div className="flex max-w-xs flex-col gap-4 pt-2 text-sm text-white/60 md:pt-6">
+              <p className="font-medium text-white/80">
+                O aluno paga direto com você
+              </p>
+              <p>
+                Você define o valor e recebe via Pix. O Motion cuida da
+                organização, treinos e acesso — sem comissão sobre os seus
+                alunos.
+              </p>
+              <p>
+                Você tem controle total: ativa, pausa ou remove o acesso do
+                aluno quando quiser.
+              </p>
             </div>
           </div>
         </div>
@@ -292,13 +340,12 @@ export default function HomePage() {
             />
             <p className="text-sm text-white/70">
               © {new Date().getFullYear()}{" "}
-              <span className="uppercase tracking-[0.22em]">
-                <span className="text-lime-400">M</span>OTION
+              <span className="uppercase tracking-[0.22em] text-white">
+                MOTION
               </span>
               . Todos os direitos reservados.
             </p>
           </div>
-
           <div className="flex gap-4 text-sm text-white/60">
             <Link href="/termos" className="hover:text-white">
               Termos
@@ -332,7 +379,7 @@ function Card({
   badge: string;
 }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+    <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-6">
       <div className="inline-flex items-center rounded-full border border-white/10 bg-black/40 px-3 py-1 text-xs text-white/70">
         {badge}
       </div>
@@ -344,8 +391,8 @@ function Card({
 
 function Step({ n, title, desc }: { n: string; title: string; desc: string }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-      <p className="text-sm font-semibold text-lime-400">{n}</p>
+    <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-6">
+      <p className="text-sm font-semibold text-white/40">{n}</p>
       <h4 className="mt-3 font-semibold">{title}</h4>
       <p className="mt-2 text-sm text-white/70">{desc}</p>
     </div>

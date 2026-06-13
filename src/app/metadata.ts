@@ -3,20 +3,31 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Jeferson Parowski Personal - Treino Fitness Online e Presencial",
-  description: "Transforme seu corpo e mente com treinos personalizados e acompanhamento exclusivo em Ponta Grossa, PR. Foco em resultados reais e metodologia futurista.",
-  keywords: ["personal trainer", "Jeferson Parowski", "treino online", "treino presencial", "fitness", "Ponta Grossa", "Paraná", "academia", "saúde", "bem-estar", "consultoria fitness"],
+  title: "Motion — Plataforma para Personal Trainers",
+  description:
+    "Gerencie alunos, treinos e biblioteca de exercícios em um só lugar. 7 dias grátis, depois R$ 59,90/mês. Feito para personal trainers que querem organização e profissionalismo.",
+  keywords: [
+    "motion",
+    "plataforma para personal trainer",
+    "gestão de alunos personal trainer",
+    "software personal trainer",
+    "treinos online personal trainer",
+    "controle de acesso aluno",
+    "biblioteca de exercícios",
+    "personal trainer SaaS",
+  ],
   openGraph: {
-    title: "Jeferson Parowski Personal",
-    description: "Transforme seu corpo e mente com treinos personalizados e acompanhamento exclusivo.",
-    url: "https://jefersonparowski.vercel.app",
-    siteName: "Jeferson Parowski Personal",
+    title: "Motion — Plataforma para Personal Trainers",
+    description:
+      "Organize alunos, treinos e biblioteca de exercícios em um só lugar. 7 dias grátis.",
+    url: "https://www.motionpersonal.com.br",
+    siteName: "Motion",
     images: [
       {
         url: "/images/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Jeferson Parowski Personal Trainer",
+        alt: "Motion — Plataforma para Personal Trainers",
       },
     ],
     locale: "pt_BR",
@@ -24,8 +35,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Jeferson Parowski Personal - Treino Fitness Online e Presencial",
-    description: "Transforme seu corpo e mente com treinos personalizados e acompanhamento exclusivo.",
+    title: "Motion — Plataforma para Personal Trainers",
+    description:
+      "Organize alunos, treinos e biblioteca de exercícios em um só lugar. 7 dias grátis.",
     images: ["/images/twitter-image.jpg"],
   },
 };

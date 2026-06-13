@@ -59,6 +59,15 @@ function IconExternalLink() {
   );
 }
 
+function IconCreditCard() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+      <line x1="1" y1="10" x2="23" y2="10"/>
+    </svg>
+  );
+}
+
 const NAV = [
   { href: "/professor/dashboard",    label: "Dashboard",  icon: <IconHome /> },
   { href: "/professor/alunos",       label: "Alunos",     icon: <IconUsers /> },
@@ -107,14 +116,29 @@ export default function ProfessorLayout({ children }: { children: React.ReactNod
           ))}
         </nav>
 
-        {/* Bottom link */}
-        <div className="px-3 py-3 border-t border-white/[0.06]">
+        {/* Bottom links */}
+        <div className="px-3 py-3 border-t border-white/[0.06] space-y-px">
           <Link
             href="/professor/perfil-publico"
-            className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13.5px] font-medium text-white/40 hover:text-white/70 hover:bg-white/[0.04] transition-colors"
+            className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13.5px] font-medium transition-colors ${
+              active("/professor/perfil-publico")
+                ? "bg-white/10 text-white"
+                : "text-white/40 hover:text-white/70 hover:bg-white/[0.04]"
+            }`}
           >
             <IconExternalLink />
             Perfil público
+          </Link>
+          <Link
+            href="/professor/pricing"
+            className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13.5px] font-medium transition-colors ${
+              active("/professor/pricing")
+                ? "bg-white/10 text-white"
+                : "text-white/40 hover:text-white/70 hover:bg-white/[0.04]"
+            }`}
+          >
+            <IconCreditCard />
+            Assinatura
           </Link>
         </div>
       </aside>
