@@ -53,7 +53,6 @@ export default function MeusTreinosExtrasPage() {
         return;
       }
 
-      // ✅ Valida role via profiles (não app_metadata)
       const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("role")
@@ -101,7 +100,7 @@ export default function MeusTreinosExtrasPage() {
         setError("Não foi possível carregar seus treinos extras: " + fetchError.message);
         setTreinosExtras([]);
       } else {
-        setTreinosExtras((data as TreinoExtra[]) || []);
+        setTreinosExtras((data as unknown as TreinoExtra[]) || []);
       }
 
       setLoading(false);
@@ -116,21 +115,21 @@ export default function MeusTreinosExtrasPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-950 flex items-center justify-center text-lime-300 text-xl">
-        Carregando treinos extras…
-      </main>
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <p className="text-white/40 text-sm">Carregando treinos extras…</p>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <main className="min-h-screen bg-gray-950 text-white px-6 py-10">
-        <div className="max-w-3xl mx-auto rounded-3xl border border-white/10 bg-white/5 p-6">
-          <p className="text-red-200">{error}</p>
+      <main className="min-h-screen bg-[#0a0a0a] text-white px-4 py-10">
+        <div className="max-w-3xl mx-auto rounded-2xl border border-white/8 bg-white/[0.03] p-6">
+          <p className="text-red-300">{error}</p>
           <div className="mt-4">
             <Link
               href="/aluno/dashboard"
-              className="inline-flex rounded-2xl bg-lime-400 px-4 py-2 text-sm font-bold text-black hover:bg-lime-300"
+              className="inline-flex rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white/80 hover:bg-white/10 transition-colors"
             >
               Voltar ao dashboard
             </Link>
@@ -141,63 +140,61 @@ export default function MeusTreinosExtrasPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white px-6 py-10">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="text-white/60 text-sm">Aluno • Motion</p>
-            <h1 className="mt-1 text-3xl font-extrabold">
-              Treinos <span className="text-lime-300">Extras</span>
-            </h1>
-            <p className="mt-2 text-white/60 text-sm">
-              Treinos complementares enviados pelo seu professor.
-            </p>
-          </div>
-
-          <Link
-            href="/aluno/dashboard"
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white/80 hover:bg-white/10"
-          >
-            Voltar
-          </Link>
+    <main className="min-h-screen bg-[#0a0a0a] text-white px-4 py-8 pb-16">
+      <div className="max-w-4xl mx-auto space-y-5">
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-2 text-sm text-white/40">
+          <Link href="/aluno/dashboard" className="hover:text-white/70 transition-colors">Dashboard</Link>
+          <span>/</span>
+          <Link href="/aluno/meus-treinos" className="hover:text-white/70 transition-colors">Meus Treinos</Link>
+          <span>/</span>
+          <span className="text-white/60">Treinos Extras</span>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Treinos Extras</h1>
+          <p className="mt-1 text-white/50 text-sm">
+            Treinos complementares enviados pelo seu professor.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-3">
           {treinosExtras.length === 0 ? (
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-white/70">
-              Nenhum treino extra disponível no momento.
+            <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-8 text-center">
+              <p className="text-white/40 text-sm">Nenhum treino extra disponível no momento.</p>
             </div>
           ) : (
             treinosExtras.map((t) => {
               const open = expandedTreinoId === t.id;
               return (
-                <div key={t.id} className="rounded-3xl border border-white/10 bg-white/5 overflow-hidden">
+                <div key={t.id} className="rounded-2xl border border-white/8 bg-white/[0.03] overflow-hidden">
                   <button
                     onClick={() => setExpandedTreinoId(open ? null : t.id)}
-                    className="w-full text-left p-6 hover:bg-white/5 transition flex items-center justify-between gap-4"
+                    className="w-full text-left p-5 hover:bg-white/5 transition flex items-center justify-between gap-4"
                   >
                     <div>
-                      <p className="text-lg font-bold text-white">{t.nome}</p>
-                      {t.descricao ? <p className="text-sm text-white/60 mt-1">{t.descricao}</p> : null}
+                      <p className="font-semibold text-white">{t.nome}</p>
+                      {t.descricao ? <p className="text-sm text-white/50 mt-0.5">{t.descricao}</p> : null}
                     </div>
-                    <span className="text-white/50">{open ? "−" : "+"}</span>
+                    <span className="text-white/40 shrink-0">{open ? "−" : "+"}</span>
                   </button>
 
                   {open ? (
-                    <div className="px-6 pb-6">
-                      <div className="grid grid-cols-1 gap-3">
+                    <div className="px-5 pb-5">
+                      <div className="grid grid-cols-1 gap-2">
                         {(t.treinos_extras_exercicios || [])
                           .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0))
                           .map((e) => (
                             <div
                               key={e.id}
-                              className="rounded-2xl border border-white/10 bg-black/30 p-4"
+                              className="rounded-xl border border-white/10 bg-black/30 p-4"
                             >
-                              <p className="font-bold text-lime-300">
-                                {e.ordem}. {e.exercicios?.nome || "Exercício"}
+                              <p className="font-semibold text-white">
+                                <span className="text-white/50 mr-2">{e.ordem}.</span>
+                                {e.exercicios?.nome || "Exercício"}
                               </p>
 
-                              <p className="text-sm text-white/60 mt-1">
+                              <p className="text-sm text-white/50 mt-1">
                                 {[
                                   e.series ? `${e.series} séries` : null,
                                   e.repeticoes ? `${e.repeticoes} reps` : null,
@@ -209,7 +206,7 @@ export default function MeusTreinosExtrasPage() {
                               </p>
 
                               {e.observacoes ? (
-                                <p className="text-sm text-white/60 mt-2">{e.observacoes}</p>
+                                <p className="text-sm text-white/50 mt-1.5">{e.observacoes}</p>
                               ) : null}
 
                               {e.exercicios?.link_youtube ? (
@@ -217,7 +214,7 @@ export default function MeusTreinosExtrasPage() {
                                   href={e.exercicios.link_youtube}
                                   target="_blank"
                                   rel="noreferrer"
-                                  className="inline-flex mt-3 text-sm font-semibold text-lime-300 hover:underline"
+                                  className="inline-flex mt-3 text-sm font-semibold text-white/60 hover:text-white hover:underline transition-colors"
                                 >
                                   Ver vídeo no YouTube ↗
                                 </a>

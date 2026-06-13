@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { v4 as uuidv4 } from "uuid";
 import { supabase } from "@/utils/supabase-browser";
 
@@ -176,6 +175,20 @@ export default function ProfessorTreinosPage() {
 
   // Busca / filtro planos
   const [busca, setBusca] = useState("");
+
+  // Toast + confirmação inline
+  const [toasts, setToasts] = useState<{ id: number; msg: string; kind: "ok" | "err" | "info" }[]>([]);
+  const [confirmState, setConfirmState] = useState<{ msg: string; onOk: () => void } | null>(null);
+
+  function pushToast(msg: string, kind: "ok" | "err" | "info" = "info") {
+    const id = Date.now();
+    setToasts((t) => [...t, { id, msg, kind }]);
+    setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 4000);
+  }
+
+  function showConfirm(msg: string, onOk: () => void) {
+    setConfirmState({ msg, onOk });
+  }
 
   // Modais
   const [showCreatePlanoModal, setShowCreatePlanoModal] = useState(false);
@@ -433,7 +446,7 @@ export default function ProfessorTreinosPage() {
 
       if (planoError) throw planoError;
 
-      alert("Plano criado! Agora adicione as rotinas.");
+      pushToast("Plano criado! Agora adicione as rotinas.", "ok");
       setShowCreatePlanoModal(false);
       await fetchData(professorId!);
     } catch (err: any) {
@@ -496,7 +509,7 @@ export default function ProfessorTreinosPage() {
 
       if (planoError) throw planoError;
 
-      alert("Plano atualizado!");
+      pushToast("Plano atualizado!", "ok");
       setShowEditPlanoModal(false);
       setCurrentPlano(null);
       await fetchData(professorId!);
@@ -507,23 +520,21 @@ export default function ProfessorTreinosPage() {
     }
   };
 
-  const handleDeletePlano = async (planoId: string) => {
-    if (!confirm("Deletar este Plano e todas as rotinas/exercícios associados?")) return;
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const { error: deleteError } = await supabase.from("treinos").delete().eq("id", planoId);
-      if (deleteError) throw deleteError;
-
-      alert("Plano deletado!");
-      await fetchData(professorId!);
-    } catch (err: any) {
-      setError("Erro ao deletar plano: " + (err?.message || "desconhecido"));
-    } finally {
-      setLoading(false);
-    }
+  const handleDeletePlano = (planoId: string) => {
+    showConfirm("Deletar este plano e todas as rotinas/exercícios associados?", async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const { error: deleteError } = await supabase.from("treinos").delete().eq("id", planoId);
+        if (deleteError) throw deleteError;
+        pushToast("Plano deletado.", "info");
+        await fetchData(professorId!);
+      } catch (err: any) {
+        setError("Erro ao deletar plano: " + (err?.message || "desconhecido"));
+      } finally {
+        setLoading(false);
+      }
+    });
   };
 
   // -------------------- Rotina: criar --------------------
@@ -664,7 +675,7 @@ export default function ProfessorTreinosPage() {
       const { error: insertError } = await supabase.from("treino_exercicios").insert(payload);
       if (insertError) throw insertError;
 
-      alert(`Rotina "${novaRotina.nome}" criada com sucesso!`);
+      pushToast(`Rotina "${novaRotina.nome}" criada!`, "ok");
       handleCloseCreateRotinaModal();
       await fetchData(professorId!);
     } catch (err: any) {
@@ -878,7 +889,7 @@ export default function ProfessorTreinosPage() {
       const { error: insErr } = await supabase.from("treino_exercicios").insert(payload);
       if (insErr) throw insErr;
 
-      alert("Rotina atualizada com sucesso!");
+      pushToast("Rotina atualizada!", "ok");
       handleCloseEditRotinaModal();
       await fetchData(professorId!);
     } catch (err: any) {
@@ -888,25 +899,23 @@ export default function ProfessorTreinosPage() {
     }
   };
 
-  const handleDeleteRotina = async () => {
+  const handleDeleteRotina = () => {
     if (!currentRotina) return;
-    if (!confirm("Deletar esta rotina e seus exercícios?")) return;
-
-    setIsSubmitting(true);
-    setError(null);
-
-    try {
-      const { error: delErr } = await supabase.from("rotinas_diarias").delete().eq("id", currentRotina.id);
-      if (delErr) throw delErr;
-
-      alert("Rotina deletada!");
-      handleCloseEditRotinaModal();
-      await fetchData(professorId!);
-    } catch (err: any) {
-      setError("Erro ao deletar rotina: " + (err?.message || "desconhecido"));
-    } finally {
-      setIsSubmitting(false);
-    }
+    showConfirm("Deletar esta rotina e seus exercícios?", async () => {
+      setIsSubmitting(true);
+      setError(null);
+      try {
+        const { error: delErr } = await supabase.from("rotinas_diarias").delete().eq("id", currentRotina.id);
+        if (delErr) throw delErr;
+        pushToast("Rotina deletada!", "ok");
+        handleCloseEditRotinaModal();
+        await fetchData(professorId!);
+      } catch (err: any) {
+        setError("Erro ao deletar rotina: " + (err?.message || "desconhecido"));
+      } finally {
+        setIsSubmitting(false);
+      }
+    });
   };
 
   // -------------------- Catálogo: opções de filtros (dinâmicas) --------------------
@@ -1008,23 +1017,23 @@ export default function ProfessorTreinosPage() {
   // -------------------- Render: loading/error --------------------
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-950 flex items-center justify-center text-lime-400 text-2xl">
-        Carregando treinos...
-      </main>
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <p className="text-white/40 text-sm">Carregando treinos…</p>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <main className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-red-500 text-lg p-4">
-        <p className="text-center">{error}</p>
-        <button
-          onClick={() => setError(null)}
-          className="mt-4 bg-lime-400 text-gray-900 py-2 px-6 rounded-full hover:bg-lime-300 transition duration-300"
-        >
-          Tentar Novamente
-        </button>
-      </main>
+      <div className="p-6 max-w-lg mx-auto mt-10">
+        <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-6">
+          <p className="text-red-300 text-sm">{error}</p>
+          <button onClick={() => setError(null)}
+            className="mt-4 bg-white text-black font-semibold py-2 px-4 rounded-xl hover:bg-white/90 text-sm transition-colors">
+            Tentar novamente
+          </button>
+        </div>
+      </div>
     );
   }
   // -------------------- UI helpers --------------------
@@ -1036,7 +1045,7 @@ export default function ProfessorTreinosPage() {
             value={catBusca}
             onChange={(e) => setCatBusca(e.target.value)}
             placeholder="Buscar no catálogo: nome, músculo, objetivo, equipamento..."
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 outline-none focus:ring-2 focus:ring-lime-500/40"
+            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white outline-none focus:border-white/25 transition-colors"
           />
 
           <button
@@ -1045,7 +1054,7 @@ export default function ProfessorTreinosPage() {
               const desc = mode === "create" ? rotinaFormData.descricao : editRotinaFormData.descricao;
               applyTurboFrom(desc || "");
             }}
-            className="shrink-0 rounded-full bg-lime-600 hover:bg-lime-700 px-4 py-2 text-sm font-bold"
+            className="shrink-0 rounded-xl bg-white text-black px-4 py-2 text-sm font-semibold hover:bg-white/90 transition-colors"
           >
             ⚡ TURBO
           </button>
@@ -1055,7 +1064,7 @@ export default function ProfessorTreinosPage() {
           <select
             value={fCategoria}
             onChange={(e) => setFCategoria(e.target.value)}
-            className="rounded bg-gray-200 text-gray-900 px-2 py-2"
+            className="rounded-lg bg-white/8 text-white border border-white/10 px-2 py-2 outline-none"
           >
             <option value="Todas">Categoria: Todas</option>
             {optCategoria.map((x) => (
@@ -1068,7 +1077,7 @@ export default function ProfessorTreinosPage() {
           <select
             value={fGrupo}
             onChange={(e) => setFGrupo(e.target.value)}
-            className="rounded bg-gray-200 text-gray-900 px-2 py-2"
+            className="rounded-lg bg-white/8 text-white border border-white/10 px-2 py-2 outline-none"
           >
             <option value="Todos">Grupo: Todos</option>
             {optGrupo.map((x) => (
@@ -1081,7 +1090,7 @@ export default function ProfessorTreinosPage() {
           <select
             value={fEquipamento}
             onChange={(e) => setFEquipamento(e.target.value)}
-            className="rounded bg-gray-200 text-gray-900 px-2 py-2"
+            className="rounded-lg bg-white/8 text-white border border-white/10 px-2 py-2 outline-none"
           >
             <option value="Todos">Equip.: Todos</option>
             {optEquip.map((x) => (
@@ -1094,7 +1103,7 @@ export default function ProfessorTreinosPage() {
           <select
             value={fAmbiente}
             onChange={(e) => setFAmbiente(e.target.value)}
-            className="rounded bg-gray-200 text-gray-900 px-2 py-2"
+            className="rounded-lg bg-white/8 text-white border border-white/10 px-2 py-2 outline-none"
           >
             <option value="Todos">Ambiente: Todos</option>
             {optAmb.map((x) => (
@@ -1107,7 +1116,7 @@ export default function ProfessorTreinosPage() {
           <select
             value={fObjetivo}
             onChange={(e) => setFObjetivo(e.target.value)}
-            className="rounded bg-gray-200 text-gray-900 px-2 py-2"
+            className="rounded-lg bg-white/8 text-white border border-white/10 px-2 py-2 outline-none"
           >
             <option value="Todos">Objetivo: Todos</option>
             {optObj.map((x) => (
@@ -1120,7 +1129,7 @@ export default function ProfessorTreinosPage() {
           <select
             value={fNivel}
             onChange={(e) => setFNivel(e.target.value)}
-            className="rounded bg-gray-200 text-gray-900 px-2 py-2"
+            className="rounded-lg bg-white/8 text-white border border-white/10 px-2 py-2 outline-none"
           >
             <option value="Todos">Nível: Todos</option>
             {optNivel.map((x) => (
@@ -1155,7 +1164,7 @@ export default function ProfessorTreinosPage() {
               type="button"
               onClick={mode === "create" ? addSelectedToCreateModal : addSelectedToEditModal}
               disabled={catSelectedIds.size === 0}
-              className="rounded-full bg-green-600 hover:bg-green-700 px-4 py-2 text-sm font-bold disabled:opacity-40"
+              className="rounded-xl bg-white text-black px-4 py-2 text-sm font-semibold hover:bg-white/90 disabled:opacity-40 transition-colors"
             >
               Adicionar selecionados
             </button>
@@ -1209,7 +1218,7 @@ export default function ProfessorTreinosPage() {
             <button
               type="button"
               onClick={() => (mode === "create" ? addCatalogoToRotinaModal(ex) : addCatalogoToEditRotinaModal(ex))}
-              className="rounded-full bg-green-600 hover:bg-green-700 px-3 py-1 text-sm shrink-0"
+              className="rounded-lg bg-white/10 text-white px-3 py-1 text-sm hover:bg-white/15 transition-colors shrink-0"
             >
               + Add
             </button>
@@ -1221,39 +1230,28 @@ export default function ProfessorTreinosPage() {
 
   // -------------------- Render principal --------------------
   return (
-    <main className="min-h-screen bg-gray-950 text-white py-16 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[#0a0a0a] text-white py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
-        <div className="flex items-start justify-between gap-4 mb-8">
+        <div className="flex items-start justify-between gap-4 mb-7">
           <div>
-            <p className="text-white/60 text-sm">Motion</p>
-            <h1 className="text-4xl font-bold text-lime-400">Gerenciar Planos de Treino</h1>
-            <p className="text-white/60 mt-1">Crie, organize e edite rotinas sem perder tempo.</p>
+            <h1 className="text-2xl font-bold text-white">Planos de Treino</h1>
+            <p className="text-white/40 text-sm mt-1">Crie, organize e atribua rotinas.</p>
           </div>
-
-          <div className="flex gap-2">
-            <Link
-              href="/professor/dashboard"
-              className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition duration-300"
-            >
-              ← Dashboard
-            </Link>
-            <button
-              onClick={handleOpenCreatePlanoModal}
-              className="bg-lime-600 hover:bg-lime-700 text-white font-bold py-2 px-6 rounded-full shadow-lg transition duration-300"
-              type="button"
-            >
-              Criar Novo Plano
-            </button>
-          </div>
+          <button
+            onClick={handleOpenCreatePlanoModal}
+            className="bg-white text-black font-semibold py-2 px-5 rounded-xl hover:bg-white/90 transition-colors text-sm shrink-0"
+            type="button"
+          >
+            Novo plano
+          </button>
         </div>
 
-        {/* Busca premium */}
-        <div className="mb-8">
+        <div className="mb-6">
           <input
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
-            placeholder="Buscar por plano, objetivo, dificuldade, aluno..."
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 outline-none focus:ring-2 focus:ring-lime-500/40"
+            placeholder="Buscar por plano, objetivo, dificuldade, aluno…"
+            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-white text-sm outline-none focus:border-white/25 transition-colors placeholder-white/30"
           />
         </div>
 
@@ -1262,29 +1260,29 @@ export default function ProfessorTreinosPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {planosFiltrados.map((plano) => (
-              <div key={plano.id} className="bg-gray-800 p-6 rounded-2xl shadow-md border border-gray-700">
-                <h2 className="text-2xl font-semibold text-lime-300 mb-2">{plano.nome}</h2>
+              <div key={plano.id} className="rounded-2xl border border-white/8 bg-white/[0.03] p-5">
+                <h2 className="text-lg font-semibold text-white mb-2">{plano.nome}</h2>
 
                 <div className="text-gray-300 space-y-1">
                   <p>
-                    <span className="font-medium text-lime-200">Aluno:</span> {plano.aluno_nome || "Nenhum"}
+                    <span className="font-medium text-white/60">Aluno:</span> {plano.aluno_nome || "Nenhum"}
                   </p>
                   <p>
-                    <span className="font-medium text-lime-200">Tipo:</span> {plano.tipo_treino || "N/A"}
+                    <span className="font-medium text-white/60">Tipo:</span> {plano.tipo_treino || "N/A"}
                   </p>
                   <p>
-                    <span className="font-medium text-lime-200">Objetivo:</span> {plano.objetivo || "N/A"}
+                    <span className="font-medium text-white/60">Objetivo:</span> {plano.objetivo || "N/A"}
                   </p>
                   <p>
-                    <span className="font-medium text-lime-200">Dificuldade:</span> {plano.dificuldade || "N/A"}
+                    <span className="font-medium text-white/60">Dificuldade:</span> {plano.dificuldade || "N/A"}
                   </p>
                   <p>
-                    <span className="font-medium text-lime-200">Orientação:</span> {plano.orientacao_professor || "N/A"}
+                    <span className="font-medium text-white/60">Orientação:</span> {plano.orientacao_professor || "N/A"}
                   </p>
                 </div>
 
                 <div className="mt-4">
-                  <h3 className="text-xl font-semibold text-lime-300 mb-2">Rotinas Diárias</h3>
+                  <h3 className="text-sm font-semibold text-white/80 mb-2">Rotinas Diárias</h3>
 
                   {plano.rotinas_diarias && plano.rotinas_diarias.length > 0 ? (
                     <div className="space-y-2">
@@ -1300,7 +1298,7 @@ export default function ProfessorTreinosPage() {
 
                           <button
                             onClick={() => handleOpenEditRotinaModal(plano, rotina)}
-                            className="text-sm rounded-full bg-blue-600 hover:bg-blue-700 px-4 py-2 transition"
+                            className="text-xs rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-white/70 hover:bg-white/10 transition-colors"
                             type="button"
                           >
                             Ver / Editar
@@ -1316,21 +1314,21 @@ export default function ProfessorTreinosPage() {
                 <div className="flex justify-end space-x-2 mt-6">
                   <button
                     onClick={() => handleOpenCreateRotinaModal(plano)}
-                    className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-full transition duration-300"
+                    className="bg-white/10 text-white py-2 px-4 rounded-xl hover:bg-white/15 transition-colors text-sm font-medium"
                     type="button"
                   >
                     + Rotina
                   </button>
                   <button
                     onClick={() => handleOpenEditPlanoModal(plano)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-full transition duration-300"
+                    className="border border-white/10 bg-white/5 text-white/80 py-2 px-4 rounded-xl hover:bg-white/10 transition-colors text-sm font-medium"
                     type="button"
                   >
                     Editar Plano
                   </button>
                   <button
                     onClick={() => handleDeletePlano(plano.id)}
-                    className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-full transition duration-300"
+                    className="border border-red-400/15 bg-red-400/8 text-red-300 font-medium py-2 px-4 rounded-xl hover:bg-red-400/12 transition-colors text-sm"
                     type="button"
                   >
                     Deletar Plano
@@ -1344,29 +1342,29 @@ export default function ProfessorTreinosPage() {
         {/* ---------------- MODAL: Criar Plano ---------------- */}
         {showCreatePlanoModal && (
           <div className="fixed inset-0 bg-black/75 flex items-center justify-center p-4 z-50">
-            <div className="bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-              <h2 className="text-3xl font-bold text-lime-400 mb-6 text-center">Criar Novo Plano</h2>
+            <div className="bg-[#111] border border-white/10 p-6 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              <h2 className="text-xl font-semibold text-white mb-5">Criar Novo Plano</h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="block text-gray-300 text-sm font-bold mb-2">Nome do Plano</label>
+                  <label className="block text-white/60 text-xs font-medium mb-1.5">Nome do Plano</label>
                   <input
                     type="text"
                     name="nome"
                     value={planoFormData.nome}
                     onChange={handlePlanoFormInputChange}
-                    className="w-full rounded px-3 py-2 text-gray-900 bg-gray-200"
+                    className="w-full rounded-lg px-3 py-2 text-white bg-white/8 border border-white/10 outline-none focus:border-white/25"
                     placeholder="Ex: Plano Hipertrofia A"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-gray-300 text-sm font-bold mb-2">Tipo de Treino</label>
+                  <label className="block text-white/60 text-xs font-medium mb-1.5">Tipo de Treino</label>
                   <select
                     name="tipo_treino"
                     value={planoFormData.tipo_treino}
                     onChange={handlePlanoFormInputChange}
-                    className="w-full rounded px-3 py-2 text-gray-900 bg-gray-200"
+                    className="w-full rounded-lg px-3 py-2 text-white bg-white/8 border border-white/10 outline-none focus:border-white/25"
                   >
                     <option value="">Selecione</option>
                     <option value="Dias da Semana">Dias da Semana</option>
@@ -1375,12 +1373,12 @@ export default function ProfessorTreinosPage() {
                 </div>
 
                 <div>
-                  <label className="block text-gray-300 text-sm font-bold mb-2">Objetivo</label>
+                  <label className="block text-white/60 text-xs font-medium mb-1.5">Objetivo</label>
                   <select
                     name="objetivo"
                     value={planoFormData.objetivo}
                     onChange={handlePlanoFormInputChange}
-                    className="w-full rounded px-3 py-2 text-gray-900 bg-gray-200"
+                    className="w-full rounded-lg px-3 py-2 text-white bg-white/8 border border-white/10 outline-none focus:border-white/25"
                   >
                     <option value="">Selecione</option>
                     <option value="Hipertrofia">Hipertrofia</option>
@@ -1392,12 +1390,12 @@ export default function ProfessorTreinosPage() {
                 </div>
 
                 <div>
-                  <label className="block text-gray-300 text-sm font-bold mb-2">Dificuldade</label>
+                  <label className="block text-white/60 text-xs font-medium mb-1.5">Dificuldade</label>
                   <select
                     name="dificuldade"
                     value={planoFormData.dificuldade}
                     onChange={handlePlanoFormInputChange}
-                    className="w-full rounded px-3 py-2 text-gray-900 bg-gray-200"
+                    className="w-full rounded-lg px-3 py-2 text-white bg-white/8 border border-white/10 outline-none focus:border-white/25"
                   >
                     <option value="">Selecione</option>
                     <option value="Adaptacao">Adaptação</option>
@@ -1408,12 +1406,12 @@ export default function ProfessorTreinosPage() {
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-gray-300 text-sm font-bold mb-2">Orientações</label>
+                  <label className="block text-white/60 text-xs font-medium mb-1.5">Orientações</label>
                   <textarea
                     name="orientacao_professor"
                     value={planoFormData.orientacao_professor}
                     onChange={handlePlanoFormInputChange}
-                    className="w-full rounded px-3 py-2 text-gray-900 bg-gray-200 h-24"
+                    className="w-full rounded-lg px-3 py-2 text-white bg-white/8 border border-white/10 h-24 outline-none focus:border-white/25"
                     placeholder="Ex: aquecer 5 min, manter forma, cadência..."
                   />
                 </div>
@@ -1423,14 +1421,14 @@ export default function ProfessorTreinosPage() {
                 <button
                   type="button"
                   onClick={handleCloseCreatePlanoModal}
-                  className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full"
+                  className="border border-white/10 bg-white/5 text-white/70 font-medium py-2 px-4 rounded-xl hover:bg-white/8 transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
                   type="button"
                   onClick={handleCreatePlano}
-                  className="bg-lime-600 hover:bg-lime-700 text-white font-bold py-2 px-6 rounded-full"
+                  className="bg-white text-black font-semibold py-2 px-5 rounded-xl hover:bg-white/90 transition-colors"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Salvando..." : "Salvar Plano"}
@@ -1443,26 +1441,26 @@ export default function ProfessorTreinosPage() {
         {/* ---------------- MODAL: Editar Plano ---------------- */}
         {showEditPlanoModal && currentPlano && (
           <div className="fixed inset-0 bg-black/75 flex items-center justify-center p-4 z-50">
-            <div className="bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-              <h2 className="text-3xl font-bold text-lime-400 mb-6 text-center">Editar Plano</h2>
+            <div className="bg-[#111] border border-white/10 p-6 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              <h2 className="text-xl font-semibold text-white mb-5">Editar Plano</h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="block text-gray-300 text-sm font-bold mb-2">Nome</label>
+                  <label className="block text-white/60 text-xs font-medium mb-1.5">Nome</label>
                   <input
                     type="text"
                     value={editPlanoFormData.nome}
                     onChange={(e) => setEditPlanoFormData((p) => ({ ...p, nome: e.target.value }))}
-                    className="w-full rounded px-3 py-2 text-gray-900 bg-gray-200"
+                    className="w-full rounded-lg px-3 py-2 text-white bg-white/8 border border-white/10 outline-none focus:border-white/25"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-gray-300 text-sm font-bold mb-2">Tipo</label>
+                  <label className="block text-white/60 text-xs font-medium mb-1.5">Tipo</label>
                   <select
                     value={editPlanoFormData.tipo_treino}
                     onChange={(e) => setEditPlanoFormData((p) => ({ ...p, tipo_treino: e.target.value }))}
-                    className="w-full rounded px-3 py-2 text-gray-900 bg-gray-200"
+                    className="w-full rounded-lg px-3 py-2 text-white bg-white/8 border border-white/10 outline-none focus:border-white/25"
                   >
                     <option value="">Selecione</option>
                     <option value="Dias da Semana">Dias da Semana</option>
@@ -1471,11 +1469,11 @@ export default function ProfessorTreinosPage() {
                 </div>
 
                 <div>
-                  <label className="block text-gray-300 text-sm font-bold mb-2">Objetivo</label>
+                  <label className="block text-white/60 text-xs font-medium mb-1.5">Objetivo</label>
                   <select
                     value={editPlanoFormData.objetivo}
                     onChange={(e) => setEditPlanoFormData((p) => ({ ...p, objetivo: e.target.value }))}
-                    className="w-full rounded px-3 py-2 text-gray-900 bg-gray-200"
+                    className="w-full rounded-lg px-3 py-2 text-white bg-white/8 border border-white/10 outline-none focus:border-white/25"
                   >
                     <option value="">Selecione</option>
                     <option value="Hipertrofia">Hipertrofia</option>
@@ -1487,11 +1485,11 @@ export default function ProfessorTreinosPage() {
                 </div>
 
                 <div>
-                  <label className="block text-gray-300 text-sm font-bold mb-2">Dificuldade</label>
+                  <label className="block text-white/60 text-xs font-medium mb-1.5">Dificuldade</label>
                   <select
                     value={editPlanoFormData.dificuldade}
                     onChange={(e) => setEditPlanoFormData((p) => ({ ...p, dificuldade: e.target.value }))}
-                    className="w-full rounded px-3 py-2 text-gray-900 bg-gray-200"
+                    className="w-full rounded-lg px-3 py-2 text-white bg-white/8 border border-white/10 outline-none focus:border-white/25"
                   >
                     <option value="">Selecione</option>
                     <option value="Adaptacao">Adaptação</option>
@@ -1502,11 +1500,11 @@ export default function ProfessorTreinosPage() {
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-gray-300 text-sm font-bold mb-2">Orientações</label>
+                  <label className="block text-white/60 text-xs font-medium mb-1.5">Orientações</label>
                   <textarea
                     value={editPlanoFormData.orientacao_professor}
                     onChange={(e) => setEditPlanoFormData((p) => ({ ...p, orientacao_professor: e.target.value }))}
-                    className="w-full rounded px-3 py-2 text-gray-900 bg-gray-200 h-24"
+                    className="w-full rounded-lg px-3 py-2 text-white bg-white/8 border border-white/10 h-24 outline-none focus:border-white/25"
                   />
                 </div>
               </div>
@@ -1515,14 +1513,14 @@ export default function ProfessorTreinosPage() {
                 <button
                   type="button"
                   onClick={handleCloseEditPlanoModal}
-                  className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full"
+                  className="border border-white/10 bg-white/5 text-white/70 font-medium py-2 px-4 rounded-xl hover:bg-white/8 transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
                   type="button"
                   onClick={handleUpdatePlano}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full"
+                  className="bg-white text-black font-semibold py-2 px-5 rounded-xl hover:bg-white/90 transition-colors"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Salvando..." : "Salvar Alterações"}
@@ -1535,31 +1533,31 @@ export default function ProfessorTreinosPage() {
         {/* ---------------- MODAL: Criar Rotina ---------------- */}
         {showCreateRotinaModal && currentPlano && (
           <div className="fixed inset-0 bg-black/75 flex items-center justify-center p-4 z-50">
-            <div className="bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-5xl max-h-[90vh] overflow-y-auto">
-              <h2 className="text-3xl font-bold text-lime-400 mb-2 text-center">
-                Criar Rotina para {currentPlano.nome}
+            <div className="bg-[#111] border border-white/10 p-6 rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto">
+              <h2 className="text-xl font-semibold text-white mb-2">
+                Criar Rotina · {currentPlano.nome}
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
                 <div>
-                  <label className="block text-gray-300 text-sm font-bold mb-2">Nome da Rotina</label>
+                  <label className="block text-white/60 text-xs font-medium mb-1.5">Nome da Rotina</label>
                   <input
                     type="text"
                     name="nome"
                     value={rotinaFormData.nome}
                     onChange={handleRotinaFormInputChange}
-                    className="w-full rounded px-3 py-2 text-gray-900 bg-gray-200"
+                    className="w-full rounded-lg px-3 py-2 text-white bg-white/8 border border-white/10 outline-none focus:border-white/25"
                     placeholder="Ex: Segunda-feira"
                   />
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-gray-300 text-sm font-bold mb-2">Descrição (opcional)</label>
+                  <label className="block text-white/60 text-xs font-medium mb-1.5">Descrição (opcional)</label>
                   <textarea
                     name="descricao"
                     value={rotinaFormData.descricao}
                     onChange={handleRotinaFormInputChange}
-                    className="w-full rounded px-3 py-2 text-gray-900 bg-gray-200 h-20"
+                    className="w-full rounded-lg px-3 py-2 text-white bg-white/8 border border-white/10 h-20 outline-none focus:border-white/25"
                     placeholder="Ex: Posterior e glúteos, foco em força e controle..."
                   />
                 </div>
@@ -1573,7 +1571,7 @@ export default function ProfessorTreinosPage() {
                     type="button"
                     onClick={() => setFonteLista("catalogo")}
                     className={`rounded-full px-4 py-2 text-sm font-bold border border-white/10 ${
-                      fonteLista === "catalogo" ? "bg-lime-600" : "bg-white/5 hover:bg-white/10"
+                      fonteLista === "catalogo" ? "bg-white/15 text-white" : "bg-white/5 text-white/50 hover:bg-white/10"
                     }`}
                   >
                     Catálogo Premium
@@ -1582,7 +1580,7 @@ export default function ProfessorTreinosPage() {
                     type="button"
                     onClick={() => setFonteLista("biblioteca")}
                     className={`rounded-full px-4 py-2 text-sm font-bold border border-white/10 ${
-                      fonteLista === "biblioteca" ? "bg-lime-600" : "bg-white/5 hover:bg-white/10"
+                      fonteLista === "biblioteca" ? "bg-white/15 text-white" : "bg-white/5 text-white/50 hover:bg-white/10"
                     }`}
                   >
                     Minha Biblioteca
@@ -1597,7 +1595,7 @@ export default function ProfessorTreinosPage() {
               <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {/* Lista */}
                 <div className="rounded-xl border border-white/10 bg-white/5 p-3">
-                  <h3 className="text-lg font-bold text-lime-300 mb-3">
+                  <h3 className="text-sm font-semibold text-white/80 mb-3">
                     {fonteLista === "catalogo" ? "Catálogo Premium" : "Minha Biblioteca"}
                   </h3>
 
@@ -1628,7 +1626,7 @@ export default function ProfessorTreinosPage() {
 
                           <button
                             onClick={() => addExercicioBibliotecaToRotinaModal(ex)}
-                            className="rounded-full bg-green-600 hover:bg-green-700 px-3 py-1 text-sm"
+                            className="rounded-lg bg-white/10 text-white px-3 py-1 text-sm hover:bg-white/15 transition-colors"
                             type="button"
                           >
                             + Add
@@ -1642,7 +1640,7 @@ export default function ProfessorTreinosPage() {
                 {/* Exercícios da rotina */}
                 <div className="rounded-xl border border-white/10 bg-white/5 p-3">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-lg font-bold text-lime-300">Exercícios da Rotina</h3>
+                    <h3 className="text-sm font-semibold text-white/80">Exercícios da Rotina</h3>
                     <span className="text-white/60 text-sm">{exerciciosNaRotinaModal.length} itens</span>
                   </div>
 
@@ -1676,7 +1674,7 @@ export default function ProfessorTreinosPage() {
 
                             <button
                               onClick={() => removeExercicioNaRotinaModal(ex.id)}
-                              className="rounded-full bg-red-600 hover:bg-red-700 px-3 py-1 text-sm"
+                              className="rounded-lg border border-red-400/15 bg-red-400/8 text-red-300 px-3 py-1 text-xs hover:bg-red-400/12 transition-colors"
                               type="button"
                             >
                               Remover
@@ -1690,7 +1688,7 @@ export default function ProfessorTreinosPage() {
                               onChange={(e) =>
                                 updateExercicioNaRotinaModal(ex.id, "series", Number(e.target.value) || null)
                               }
-                              className="rounded bg-gray-200 text-gray-900 px-2 py-1"
+                              className="rounded-lg bg-white/8 text-white border border-white/10 px-2 py-1 outline-none"
                               placeholder="Séries"
                               min={0}
                             />
@@ -1698,27 +1696,27 @@ export default function ProfessorTreinosPage() {
                               type="text"
                               value={ex.repeticoes ?? ""}
                               onChange={(e) => updateExercicioNaRotinaModal(ex.id, "repeticoes", e.target.value)}
-                              className="rounded bg-gray-200 text-gray-900 px-2 py-1"
+                              className="rounded-lg bg-white/8 text-white border border-white/10 px-2 py-1 outline-none"
                               placeholder="Reps (8-12)"
                             />
                             <input
                               type="text"
                               value={ex.carga ?? ""}
                               onChange={(e) => updateExercicioNaRotinaModal(ex.id, "carga", e.target.value)}
-                              className="rounded bg-gray-200 text-gray-900 px-2 py-1"
+                              className="rounded-lg bg-white/8 text-white border border-white/10 px-2 py-1 outline-none"
                               placeholder="Carga"
                             />
                             <input
                               type="text"
                               value={ex.intervalo ?? ""}
                               onChange={(e) => updateExercicioNaRotinaModal(ex.id, "intervalo", e.target.value)}
-                              className="rounded bg-gray-200 text-gray-900 px-2 py-1"
+                              className="rounded-lg bg-white/8 text-white border border-white/10 px-2 py-1 outline-none"
                               placeholder="Intervalo (60s)"
                             />
                             <textarea
                               value={ex.observacoes ?? ""}
                               onChange={(e) => updateExercicioNaRotinaModal(ex.id, "observacoes", e.target.value)}
-                              className="col-span-2 rounded bg-gray-200 text-gray-900 px-2 py-1"
+                              className="col-span-2 rounded-lg bg-white/8 text-white border border-white/10 px-2 py-1 outline-none"
                               placeholder="Observações"
                             />
                           </div>
@@ -1733,7 +1731,7 @@ export default function ProfessorTreinosPage() {
                 <button
                   type="button"
                   onClick={handleCloseCreateRotinaModal}
-                  className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full"
+                  className="border border-white/10 bg-white/5 text-white/70 font-medium py-2 px-4 rounded-xl hover:bg-white/8 transition-colors"
                 >
                   Cancelar
                 </button>
@@ -1741,7 +1739,7 @@ export default function ProfessorTreinosPage() {
                 <button
                   type="button"
                   onClick={handleCreateRotina}
-                  className="bg-lime-600 hover:bg-lime-700 text-white font-bold py-2 px-6 rounded-full"
+                  className="bg-white text-black font-semibold py-2 px-5 rounded-xl hover:bg-white/90 transition-colors"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Criando..." : "Salvar Rotina"}
@@ -1754,10 +1752,10 @@ export default function ProfessorTreinosPage() {
         {/* ---------------- MODAL: Editar Rotina ---------------- */}
         {showEditRotinaModal && currentPlano && currentRotina && (
           <div className="fixed inset-0 bg-black/75 flex items-center justify-center p-4 z-50">
-            <div className="bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-6xl max-h-[90vh] overflow-y-auto">
+            <div className="bg-[#111] border border-white/10 p-6 rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-y-auto">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h2 className="text-3xl font-bold text-lime-400">Editar Rotina</h2>
+                  <h2 className="text-xl font-semibold text-white">Editar Rotina</h2>
                   <p className="text-white/60 mt-1">
                     Plano: <span className="text-white">{currentPlano.nome}</span>
                   </p>
@@ -1774,22 +1772,22 @@ export default function ProfessorTreinosPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
                 <div>
-                  <label className="block text-gray-300 text-sm font-bold mb-2">Nome da Rotina</label>
+                  <label className="block text-white/60 text-xs font-medium mb-1.5">Nome da Rotina</label>
                   <input
                     type="text"
                     value={editRotinaFormData.nome}
                     onChange={(e) => setEditRotinaFormData((p) => ({ ...p, nome: e.target.value }))}
-                    className="w-full rounded px-3 py-2 text-gray-900 bg-gray-200"
+                    className="w-full rounded-lg px-3 py-2 text-white bg-white/8 border border-white/10 outline-none focus:border-white/25"
                     placeholder="Ex: Treino A"
                   />
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-gray-300 text-sm font-bold mb-2">Descrição (opcional)</label>
+                  <label className="block text-white/60 text-xs font-medium mb-1.5">Descrição (opcional)</label>
                   <textarea
                     value={editRotinaFormData.descricao}
                     onChange={(e) => setEditRotinaFormData((p) => ({ ...p, descricao: e.target.value }))}
-                    className="w-full rounded px-3 py-2 text-gray-900 bg-gray-200 h-20"
+                    className="w-full rounded-lg px-3 py-2 text-white bg-white/8 border border-white/10 h-20 outline-none focus:border-white/25"
                     placeholder="Ex: foco em posterior, cadência controlada..."
                   />
                 </div>
@@ -1802,7 +1800,7 @@ export default function ProfessorTreinosPage() {
                     type="button"
                     onClick={() => setFonteLista("catalogo")}
                     className={`rounded-full px-4 py-2 text-sm font-bold border border-white/10 ${
-                      fonteLista === "catalogo" ? "bg-lime-600" : "bg-white/5 hover:bg-white/10"
+                      fonteLista === "catalogo" ? "bg-white/15 text-white" : "bg-white/5 text-white/50 hover:bg-white/10"
                     }`}
                   >
                     Catálogo Premium
@@ -1811,7 +1809,7 @@ export default function ProfessorTreinosPage() {
                     type="button"
                     onClick={() => setFonteLista("biblioteca")}
                     className={`rounded-full px-4 py-2 text-sm font-bold border border-white/10 ${
-                      fonteLista === "biblioteca" ? "bg-lime-600" : "bg-white/5 hover:bg-white/10"
+                      fonteLista === "biblioteca" ? "bg-white/15 text-white" : "bg-white/5 text-white/50 hover:bg-white/10"
                     }`}
                   >
                     Minha Biblioteca
@@ -1826,7 +1824,7 @@ export default function ProfessorTreinosPage() {
               <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {/* Fonte */}
                 <div className="rounded-xl border border-white/10 bg-white/5 p-3">
-                  <h3 className="text-lg font-bold text-lime-300 mb-3">
+                  <h3 className="text-sm font-semibold text-white/80 mb-3">
                     {fonteLista === "catalogo" ? "Catálogo Premium" : "Minha Biblioteca"}
                   </h3>
 
@@ -1857,7 +1855,7 @@ export default function ProfessorTreinosPage() {
 
                           <button
                             onClick={() => addExercicioBibliotecaToEditRotinaModal(ex)}
-                            className="rounded-full bg-green-600 hover:bg-green-700 px-3 py-1 text-sm"
+                            className="rounded-lg bg-white/10 text-white px-3 py-1 text-sm hover:bg-white/15 transition-colors"
                             type="button"
                           >
                             + Add
@@ -1871,7 +1869,7 @@ export default function ProfessorTreinosPage() {
                 {/* Exercícios */}
                 <div className="rounded-xl border border-white/10 bg-white/5 p-3">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-lg font-bold text-lime-300">Exercícios da Rotina</h3>
+                    <h3 className="text-sm font-semibold text-white/80">Exercícios da Rotina</h3>
                     <span className="text-white/60 text-sm">{exerciciosNaEdicaoDeRotinaModal.length} itens</span>
                   </div>
 
@@ -1924,7 +1922,7 @@ export default function ProfessorTreinosPage() {
                               <button
                                 type="button"
                                 onClick={() => removeExercicioNaEdicaoDeRotinaModal(ex.id)}
-                                className="rounded-full bg-red-600 hover:bg-red-700 px-3 py-1 text-sm"
+                                className="rounded-lg border border-red-400/15 bg-red-400/8 text-red-300 px-3 py-1 text-xs hover:bg-red-400/12 transition-colors"
                               >
                                 Remover
                               </button>
@@ -1938,7 +1936,7 @@ export default function ProfessorTreinosPage() {
                               onChange={(e) =>
                                 updateExercicioNaEdicaoDeRotinaModal(ex.id, "series", Number(e.target.value) || null)
                               }
-                              className="rounded bg-gray-200 text-gray-900 px-2 py-1"
+                              className="rounded-lg bg-white/8 text-white border border-white/10 px-2 py-1 outline-none"
                               placeholder="Séries"
                               min={0}
                             />
@@ -1946,27 +1944,27 @@ export default function ProfessorTreinosPage() {
                               type="text"
                               value={ex.repeticoes ?? ""}
                               onChange={(e) => updateExercicioNaEdicaoDeRotinaModal(ex.id, "repeticoes", e.target.value)}
-                              className="rounded bg-gray-200 text-gray-900 px-2 py-1"
+                              className="rounded-lg bg-white/8 text-white border border-white/10 px-2 py-1 outline-none"
                               placeholder="Reps (8-12)"
                             />
                             <input
                               type="text"
                               value={ex.carga ?? ""}
                               onChange={(e) => updateExercicioNaEdicaoDeRotinaModal(ex.id, "carga", e.target.value)}
-                              className="rounded bg-gray-200 text-gray-900 px-2 py-1"
+                              className="rounded-lg bg-white/8 text-white border border-white/10 px-2 py-1 outline-none"
                               placeholder="Carga"
                             />
                             <input
                               type="text"
                               value={ex.intervalo ?? ""}
                               onChange={(e) => updateExercicioNaEdicaoDeRotinaModal(ex.id, "intervalo", e.target.value)}
-                              className="rounded bg-gray-200 text-gray-900 px-2 py-1"
+                              className="rounded-lg bg-white/8 text-white border border-white/10 px-2 py-1 outline-none"
                               placeholder="Intervalo (60s)"
                             />
                             <textarea
                               value={ex.observacoes ?? ""}
                               onChange={(e) => updateExercicioNaEdicaoDeRotinaModal(ex.id, "observacoes", e.target.value)}
-                              className="col-span-2 rounded bg-gray-200 text-gray-900 px-2 py-1"
+                              className="col-span-2 rounded-lg bg-white/8 text-white border border-white/10 px-2 py-1 outline-none"
                               placeholder="Observações"
                             />
                           </div>
@@ -1981,7 +1979,7 @@ export default function ProfessorTreinosPage() {
                 <button
                   type="button"
                   onClick={handleDeleteRotina}
-                  className="bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-6 rounded-full"
+                  className="border border-red-400/15 bg-red-400/8 text-red-300 font-medium py-2 px-5 rounded-xl hover:bg-red-400/12 transition-colors"
                   disabled={isSubmitting}
                 >
                   Deletar Rotina
@@ -1991,7 +1989,7 @@ export default function ProfessorTreinosPage() {
                   <button
                     type="button"
                     onClick={handleCloseEditRotinaModal}
-                    className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full"
+                    className="border border-white/10 bg-white/5 text-white/70 font-medium py-2 px-4 rounded-xl hover:bg-white/8 transition-colors"
                   >
                     Cancelar
                   </button>
@@ -1999,7 +1997,7 @@ export default function ProfessorTreinosPage() {
                   <button
                     type="button"
                     onClick={handleUpdateRotina}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full"
+                    className="bg-white text-black font-semibold py-2 px-5 rounded-xl hover:bg-white/90 transition-colors"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? "Salvando..." : "Salvar Alterações"}
@@ -2010,6 +2008,28 @@ export default function ProfessorTreinosPage() {
           </div>
         )}
       </div>
+
+      {toasts.length > 0 && (
+        <div className="fixed bottom-24 lg:bottom-6 right-4 z-[100] flex flex-col gap-2 max-w-sm">
+          {toasts.map((t) => (
+            <div key={t.id} className={`rounded-xl px-4 py-3 text-sm font-medium shadow-xl border ${
+              t.kind === "ok" ? "bg-white text-black border-transparent" : t.kind === "err" ? "bg-red-500/10 text-red-200 border-red-500/20" : "bg-white/10 text-white border-white/10"
+            }`}>{t.msg}</div>
+          ))}
+        </div>
+      )}
+
+      {confirmState && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[200] p-4">
+          <div className="bg-[#111] border border-white/10 rounded-2xl p-6 max-w-sm w-full">
+            <p className="text-white text-sm">{confirmState.msg}</p>
+            <div className="flex gap-2 mt-5 justify-end">
+              <button onClick={() => setConfirmState(null)} className="border border-white/10 bg-white/5 px-4 py-2 rounded-xl text-sm text-white/70 hover:bg-white/10 transition-colors">Cancelar</button>
+              <button onClick={() => { confirmState.onOk(); setConfirmState(null); }} className="bg-white text-black px-4 py-2 rounded-xl text-sm font-semibold hover:bg-white/90 transition-colors">Confirmar</button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

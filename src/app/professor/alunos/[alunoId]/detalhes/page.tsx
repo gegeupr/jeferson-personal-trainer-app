@@ -24,8 +24,7 @@ type AlunoProfile = {
 
 type Assinatura = {
   status: string | null;
-  data_fim?: string | null; // se existir
-  next_payment_date?: string | null; // se existir
+  end_at?: string | null;
 };
 
 function onlyDigits(v: string) {
@@ -42,13 +41,13 @@ function buildWhatsAppLink(rawPhone: string | null, msg: string) {
 function badgeClass(kind: "ok" | "warn" | "bad" | "neutral") {
   switch (kind) {
     case "ok":
-      return "bg-lime-400/15 text-lime-300 border border-lime-400/25";
+      return "bg-white/10 text-white/80 border border-white/15";
     case "warn":
-      return "bg-yellow-400/15 text-yellow-300 border border-yellow-400/25";
+      return "bg-amber-400/10 text-amber-300 border border-amber-400/20";
     case "bad":
-      return "bg-red-400/15 text-red-300 border border-red-400/25";
+      return "bg-red-400/10 text-red-300 border border-red-400/20";
     default:
-      return "bg-white/5 text-white/70 border border-white/10";
+      return "bg-white/5 text-white/50 border border-white/10";
   }
 }
 
@@ -74,6 +73,9 @@ export default function ProfessorAlunoDetalhesPremiumPage() {
   const [profId, setProfId] = useState<string | null>(null);
   const [aluno, setAluno] = useState<AlunoProfile | null>(null);
   const [assinatura, setAssinatura] = useState<Assinatura | null>(null);
+
+  const [confirmState, setConfirmState] = useState<{ msg: string; onOk: () => void } | null>(null);
+  function showConfirm(msg: string, onOk: () => void) { setConfirmState({ msg, onOk }); }
 
   const alunoNome = useMemo(() => aluno?.nome_completo || "Aluno", [aluno?.nome_completo]);
   const initials = useMemo(() => (alunoNome.slice(0, 1) || "M").toUpperCase(), [alunoNome]);
@@ -143,10 +145,10 @@ export default function ProfessorAlunoDetalhesPremiumPage() {
 
       // Assinatura (tenta buscar, mas não quebra se não existir)
       const { data: asData } = await supabase
-        .from("assinaturas")
-        .select("status, data_fim, next_payment_date")
+        .from("aluno_assinaturas")
+        .select("status, end_at")
         .eq("aluno_id", alunoId)
-        .order("data_fim", { ascending: false })
+        .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle();
 
@@ -160,23 +162,21 @@ export default function ProfessorAlunoDetalhesPremiumPage() {
     };
   }, [router, alunoId]);
 
-  async function handleInativarAluno() {
+  function handleInativarAluno() {
     if (!aluno) return;
-    if (!confirm(`Tem certeza que deseja inativar o aluno ${aluno.nome_completo || ""}?`)) return;
-
-    try {
-      setSaving(true);
-      setError(null);
-
-      const { error: upErr } = await supabase.from("profiles").update({ ativo: false }).eq("id", aluno.id);
-      if (upErr) throw upErr;
-
-      setAluno({ ...aluno, ativo: false });
-    } catch (e: any) {
-      setError(e?.message || "Erro ao inativar aluno.");
-    } finally {
-      setSaving(false);
-    }
+    showConfirm(`Inativar o aluno ${aluno.nome_completo || ""}?`, async () => {
+      try {
+        setSaving(true);
+        setError(null);
+        const { error: upErr } = await supabase.from("profiles").update({ ativo: false }).eq("id", aluno.id);
+        if (upErr) throw upErr;
+        setAluno({ ...aluno, ativo: false });
+      } catch (e: any) {
+        setError(e?.message || "Erro ao inativar aluno.");
+      } finally {
+        setSaving(false);
+      }
+    });
   }
 
   async function handleAtivarAluno() {
@@ -198,50 +198,42 @@ export default function ProfessorAlunoDetalhesPremiumPage() {
   }
 
   // ⚠️ Excluir de verdade envolve Auth + dados relacionados. Aqui deixo como “soft delete” opcional.
-  async function handleExcluirAlunoSoft() {
+  function handleExcluirAlunoSoft() {
     if (!aluno) return;
-    if (!confirm(`Tem certeza que deseja remover (desvincular) o aluno ${aluno.nome_completo || ""}?`)) return;
-
-    try {
-      setSaving(true);
-      setError(null);
-
-      // Desvincula do professor (mantém dados do aluno)
-      const { error: upErr } = await supabase.from("profiles").update({ professor_id: null }).eq("id", aluno.id);
-      if (upErr) throw upErr;
-
-      router.replace("/professor/alunos");
-    } catch (e: any) {
-      setError(e?.message || "Erro ao remover aluno.");
-    } finally {
-      setSaving(false);
-    }
+    showConfirm(`Remover (desvincular) o aluno ${aluno.nome_completo || ""}?`, async () => {
+      try {
+        setSaving(true);
+        setError(null);
+        const { error: upErr } = await supabase.from("profiles").update({ professor_id: null }).eq("id", aluno.id);
+        if (upErr) throw upErr;
+        router.replace("/professor/alunos");
+      } catch (e: any) {
+        setError(e?.message || "Erro ao remover aluno.");
+      } finally {
+        setSaving(false);
+      }
+    });
   }
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-950 flex items-center justify-center text-lime-300 text-xl">
-        Carregando perfil do aluno…
-      </main>
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <p className="text-white/40 text-sm">Carregando…</p>
+      </div>
     );
   }
 
   if (error || !aluno) {
     return (
-      <main className="min-h-screen bg-gray-950 text-white flex items-center justify-center p-6">
-        <div className="max-w-xl w-full rounded-3xl border border-white/10 bg-white/5 p-6">
-          <h1 className="text-xl font-semibold text-red-200">Erro</h1>
-          <p className="mt-2 text-white/70">{error || "Erro desconhecido"}</p>
-          <div className="mt-4 flex gap-2">
-            <Link
-              href="/professor/alunos"
-              className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 hover:bg-white/10 transition"
-            >
-              ← Voltar para Alunos
-            </Link>
-          </div>
+      <div className="p-6 max-w-lg mx-auto mt-10">
+        <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-6">
+          <p className="text-red-300 text-sm font-medium">Erro</p>
+          <p className="mt-1 text-white/60 text-sm">{error || "Erro desconhecido"}</p>
+          <Link href="/professor/alunos" className="mt-4 inline-block rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/70 hover:bg-white/10 transition-colors">
+            ← Alunos
+          </Link>
         </div>
-      </main>
+      </div>
     );
   }
 
@@ -254,175 +246,116 @@ export default function ProfessorAlunoDetalhesPremiumPage() {
   );
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
-      {/* TOP BAR */}
-      <div className="sticky top-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur">
-        <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link
-              href="/professor/alunos"
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10 transition"
-            >
-              ← Voltar para Alunos
-            </Link>
+    <main className="min-h-screen bg-[#0a0a0a] text-white">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8 space-y-5">
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-2 text-sm text-white/40">
+          <Link href="/professor/alunos" className="hover:text-white/70 transition-colors">Alunos</Link>
+          <span>/</span>
+          <span className="text-white/60">{alunoNome}</span>
+        </div>
+
+        {/* HERO */}
+        <div className="rounded-2xl border border-white/8 bg-white/[0.03] overflow-hidden">
+          <div className="relative h-44 w-full">
+            {aluno.cover_url ? (
+              <Image src={aluno.cover_url} alt="Capa do aluno" fill className="object-cover opacity-80" priority />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent" />
+            )}
+            <div className="absolute inset-0 bg-black/50" />
           </div>
 
-          <div className="text-sm text-white/70">Perfil do aluno</div>
-        </div>
-      </div>
-
-      <div className="mx-auto max-w-6xl px-4 py-8">
-        {/* HERO (capa + avatar + status) */}
-        <div className="rounded-3xl border border-white/10 bg-white/5 overflow-hidden shadow-2xl">
-          <div className="relative h-56 w-full bg-black/40">
-            {aluno.cover_url ? (
-              <Image src={aluno.cover_url} alt="Capa do aluno" fill className="object-cover opacity-90" priority />
-            ) : (
-              <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/40 to-black/90" />
-            )}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/40 to-black/90" />
-
-            <div className="absolute left-6 bottom-[-30px] flex items-end gap-3">
-              <div className="relative h-20 w-20 rounded-2xl overflow-hidden border border-white/10 bg-black/40">
+          <div className="px-6 pb-6 -mt-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div className="flex items-end gap-4">
+              <div className="relative h-16 w-16 rounded-xl overflow-hidden border border-white/10 bg-[#0a0a0a] shrink-0">
                 {aluno.avatar_url ? (
-                  <Image src={aluno.avatar_url} alt="Avatar do aluno" fill className="object-cover" />
+                  <Image src={aluno.avatar_url} alt="Avatar" fill className="object-cover" />
                 ) : (
-                  <div className="h-full w-full flex items-center justify-center text-lime-300 font-extrabold text-2xl">
+                  <div className="h-full w-full flex items-center justify-center text-white font-bold text-xl">
                     {initials}
                   </div>
                 )}
               </div>
-
-              <div className="pb-2">
-                <p className="text-xs text-white/60">Aluno</p>
-                <p className="text-lg font-bold">
-                  <span className="text-lime-300">{alunoNome}</span>
-                </p>
-
-                <div className="mt-2 flex flex-wrap gap-2">
-                  <span className={`text-xs px-2 py-1 rounded-full ${badgeClass(badge.kind)}`}>{badge.label}</span>
-                  <span className={`text-xs px-2 py-1 rounded-full ${badgeClass(isAtivo ? "ok" : "bad")}`}>
+              <div>
+                <p className="text-white/50 text-xs">Aluno</p>
+                <p className="text-xl font-semibold text-white mt-0.5">{alunoNome}</p>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  <span className={`text-xs px-2.5 py-1 rounded-full ${badgeClass(badge.kind)}`}>{badge.label}</span>
+                  <span className={`text-xs px-2.5 py-1 rounded-full ${badgeClass(isAtivo ? "ok" : "bad")}`}>
                     {isAtivo ? "Ativo" : "Inativo"}
                   </span>
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="pt-12 px-6 pb-6 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
-            <div className="text-sm text-white/60">
-              <p className="text-white/80 font-semibold">Contato</p>
-              <p className="mt-1">{aluno.email || "—"}</p>
-              <p className="mt-1">{aluno.telefone ? onlyDigits(aluno.telefone) : "—"}</p>
-
-              {aluno.instagram ? (
-                <p className="mt-2 text-white/80">
-                  Instagram: <span className="text-lime-300">{aluno.instagram}</span>
-                </p>
-              ) : null}
-
-              {aluno.bio ? <p className="mt-3 text-white/60 max-w-2xl">{aluno.bio}</p> : null}
-            </div>
 
             <div className="flex flex-wrap gap-2">
               {wa ? (
-                <a
-                  href={wa}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="rounded-2xl border border-lime-400/20 bg-lime-400/10 px-4 py-2 text-sm text-lime-200 hover:bg-lime-400/15 transition"
-                >
+                <a href={wa} target="_blank" rel="noreferrer"
+                  className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/70 hover:bg-white/10 transition-colors">
                   WhatsApp
                 </a>
-              ) : (
-                <span className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/30">
-                  WhatsApp (sem telefone)
-                </span>
-              )}
+              ) : null}
 
               {isAtivo ? (
-                <button
-                  disabled={saving}
-                  onClick={handleInativarAluno}
-                  className="rounded-2xl bg-yellow-500 px-4 py-2 text-sm font-bold text-black hover:bg-yellow-400 disabled:opacity-50"
-                >
+                <button disabled={saving} onClick={handleInativarAluno}
+                  className="rounded-xl border border-amber-400/15 bg-amber-400/8 px-4 py-2 text-sm font-medium text-amber-300 hover:bg-amber-400/12 disabled:opacity-50 transition-colors">
                   Inativar
                 </button>
               ) : (
-                <button
-                  disabled={saving}
-                  onClick={handleAtivarAluno}
-                  className="rounded-2xl bg-lime-400 px-4 py-2 text-sm font-bold text-black hover:bg-lime-300 disabled:opacity-50"
-                >
+                <button disabled={saving} onClick={handleAtivarAluno}
+                  className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-white/90 disabled:opacity-50 transition-colors">
                   Ativar
                 </button>
               )}
 
-              <button
-                disabled={saving}
-                onClick={handleExcluirAlunoSoft}
-                className="rounded-2xl border border-red-400/25 bg-red-400/10 px-4 py-2 text-sm text-red-200 hover:bg-red-400/15 disabled:opacity-50"
-              >
-                Remover aluno
+              <button disabled={saving} onClick={handleExcluirAlunoSoft}
+                className="rounded-xl border border-red-400/15 bg-red-400/8 px-4 py-2 text-sm font-medium text-red-300 hover:bg-red-400/12 disabled:opacity-50 transition-colors">
+                Remover
               </button>
             </div>
           </div>
+
+          {/* Info contato */}
+          <div className="px-6 pb-5 border-t border-white/8 pt-4 text-sm text-white/50 flex flex-wrap gap-x-6 gap-y-1">
+            {aluno.email && <span>{aluno.email}</span>}
+            {aluno.telefone && <span>{aluno.telefone}</span>}
+            {aluno.instagram && <span>@{aluno.instagram}</span>}
+            {aluno.bio && <p className="w-full text-white/40 italic mt-1">{aluno.bio}</p>}
+          </div>
         </div>
 
-        {/* AÇÕES (atalhos) */}
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          <Link
-            href={`/professor/alunos/${alunoId}/anamnese`}
-            className="rounded-3xl border border-white/10 bg-white/5 p-5 hover:bg-white/10 transition"
-          >
-            <p className="font-bold text-white">Anamnese</p>
-            <p className="mt-1 text-sm text-white/60">Ver e editar informações de saúde</p>
-          </Link>
-
-          <Link
-            href={`/professor/alunos/${alunoId}/arquivos`}
-            className="rounded-3xl border border-white/10 bg-white/5 p-5 hover:bg-white/10 transition"
-          >
-            <p className="font-bold text-white">Arquivos</p>
-            <p className="mt-1 text-sm text-white/60">Exames, PDFs e documentos</p>
-          </Link>
-
-          <Link
-            href={`/professor/alunos/${alunoId}/atribuir-treino`}
-            className="rounded-3xl border border-white/10 bg-white/5 p-5 hover:bg-white/10 transition"
-          >
-            <p className="font-bold text-white">Atribuir treino</p>
-            <p className="mt-1 text-sm text-white/60">Montar rotina e enviar plano</p>
-          </Link>
-
-          <Link
-            href={`/professor/alunos/${alunoId}/progresso-aluno`}
-            className="rounded-3xl border border-white/10 bg-white/5 p-5 hover:bg-white/10 transition"
-          >
-            <p className="font-bold text-white">Progresso</p>
-            <p className="mt-1 text-sm text-white/60">Evolução e registros</p>
-          </Link>
-
-          <Link
-            href={`/professor/alunos/${alunoId}/treinos-extras`}
-            className="rounded-3xl border border-white/10 bg-white/5 p-5 hover:bg-white/10 transition"
-          >
-            <p className="font-bold text-white">Treinos extras</p>
-            <p className="mt-1 text-sm text-white/60">Complementos e condicionamento</p>
-          </Link>
-
-          <Link
-            href={`/professor/alunos/${alunoId}/financeiro`}
-            className="rounded-3xl border border-white/10 bg-white/5 p-5 hover:bg-white/10 transition"
-          >
-            <p className="font-bold text-white">Financeiro</p>
-            <p className="mt-1 text-sm text-white/60">Assinatura, status e datas</p>
-          </Link>
+        {/* AÇÕES */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {[
+            { href: `anamnese`, label: "Anamnese", desc: "Saúde e histórico" },
+            { href: `arquivos`, label: "Arquivos", desc: "Exames e documentos" },
+            { href: `atribuir-treino`, label: "Atribuir treino", desc: "Montar e enviar plano" },
+            { href: `progresso-aluno`, label: "Progresso", desc: "Evolução e registros" },
+            { href: `treinos-extras`, label: "Treinos extras", desc: "Complementos" },
+            { href: `financeiro`, label: "Financeiro", desc: "Assinatura e datas" },
+          ].map(({ href, label, desc }) => (
+            <Link key={href}
+              href={`/professor/alunos/${alunoId}/${href}`}
+              className="rounded-2xl border border-white/8 bg-white/[0.03] p-4 hover:bg-white/[0.06] transition-colors">
+              <p className="font-medium text-white text-sm">{label}</p>
+              <p className="mt-0.5 text-xs text-white/40">{desc}</p>
+            </Link>
+          ))}
         </div>
-
-        {/* Rodapé pequeno */}
-        <div className="mt-10 text-center text-xs text-white/40">Motion — gestão premium.</div>
       </div>
+
+      {confirmState && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[200] p-4">
+          <div className="bg-[#111] border border-white/10 rounded-2xl p-6 max-w-sm w-full">
+            <p className="text-white text-sm">{confirmState.msg}</p>
+            <div className="flex gap-2 mt-5 justify-end">
+              <button onClick={() => setConfirmState(null)} className="border border-white/10 bg-white/5 px-4 py-2 rounded-xl text-sm text-white/70 hover:bg-white/10 transition-colors">Cancelar</button>
+              <button onClick={() => { confirmState.onOk(); setConfirmState(null); }} className="bg-white text-black px-4 py-2 rounded-xl text-sm font-semibold hover:bg-white/90 transition-colors">Confirmar</button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

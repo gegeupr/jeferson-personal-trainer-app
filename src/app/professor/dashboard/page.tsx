@@ -58,7 +58,6 @@ type Assinatura = {
   updated_at: string;
 };
 
-// Lista “pendente” já enriquecida com aluno
 type PendingItem = Assinatura & {
   aluno?: { id: string; nome_completo: string | null; telefone: string | null; avatar_url?: string | null } | null;
 };
@@ -83,7 +82,7 @@ function formatDate(iso?: string | null) {
 
 function Pill({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rounded-full border border-white/10 bg-black/30 px-3 py-1 text-white/70 text-xs">
+    <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/60 text-xs">
       {children}
     </span>
   );
@@ -91,16 +90,55 @@ function Pill({ children }: { children: React.ReactNode }) {
 
 function StatCard({ title, value, hint }: { title: string; value: string | number; hint?: string }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-2xl">
-      <p className="text-white/60 text-xs">{title}</p>
-      <p className="mt-2 text-3xl font-extrabold text-white">{value}</p>
-      {hint ? <p className="mt-2 text-white/50 text-xs">{hint}</p> : null}
+    <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-5">
+      <p className="text-white/50 text-xs font-medium uppercase tracking-wide">{title}</p>
+      <p className="mt-2 text-3xl font-bold text-white">{value}</p>
+      {hint ? <p className="mt-1.5 text-white/40 text-xs">{hint}</p> : null}
     </div>
   );
 }
 
-export default function ProfessorDashboardPremium() {
+// Toast simples (substitui alert())
+type Toast = { id: number; msg: string; kind: "info" | "ok" | "err" };
+let _toastId = 0;
+
+function useToast() {
+  const [toasts, setToasts] = useState<Toast[]>([]);
+
+  function push(msg: string, kind: Toast["kind"] = "info") {
+    const id = ++_toastId;
+    setToasts((t) => [...t, { id, msg, kind }]);
+    setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 4000);
+  }
+
+  return { toasts, push };
+}
+
+function ToastList({ toasts }: { toasts: Toast[] }) {
+  if (!toasts.length) return null;
+  return (
+    <div className="fixed bottom-24 lg:bottom-6 right-4 z-[100] flex flex-col gap-2 max-w-sm">
+      {toasts.map((t) => (
+        <div
+          key={t.id}
+          className={`rounded-xl px-4 py-3 text-sm font-medium shadow-xl border animate-in fade-in slide-in-from-bottom-2 ${
+            t.kind === "ok"
+              ? "bg-white text-black border-white/20"
+              : t.kind === "err"
+              ? "bg-red-500/10 text-red-200 border-red-500/20"
+              : "bg-white/10 text-white border-white/10"
+          }`}
+        >
+          {t.msg}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default function ProfessorDashboard() {
   const router = useRouter();
+  const { toasts, push } = useToast();
 
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
@@ -113,7 +151,6 @@ export default function ProfessorDashboardPremium() {
   const [alunosCount, setAlunosCount] = useState(0);
   const [concluidosCount, setConcluidosCount] = useState(0);
 
-  // ✅ NOVO: pendências
   const [pending, setPending] = useState<PendingItem[]>([]);
   const [pendingCount, setPendingCount] = useState(0);
   const [pendingBusyId, setPendingBusyId] = useState<string | null>(null);
@@ -131,13 +168,12 @@ export default function ProfessorDashboardPremium() {
     if (!publicLink) return;
     try {
       await navigator.clipboard.writeText(publicLink);
-      alert("Link do seu perfil público copiado!");
+      push("Link copiado!", "ok");
     } catch {
-      alert("Não consegui copiar automaticamente. Copie manualmente:\n" + publicLink);
+      push("Copie manualmente: " + publicLink, "info");
     }
   }
 
-  // ✅ NOVO: carregar pendências e “enriquecer” com dados do aluno
   async function loadPendencias(profId: string) {
     const { data: pend, error: pendErr } = await supabase
       .from("aluno_assinaturas")
@@ -168,34 +204,26 @@ export default function ProfessorDashboardPremium() {
 
     const alunosMap = new Map((alunosMini || []).map((a: any) => [a.id, a]));
 
-    const pendFinal: PendingItem[] = (pend as any[]).map((x) => ({
-      ...x,
-      aluno: alunosMap.get(x.aluno_id) || null,
-    }));
-
-    setPending(pendFinal);
+    setPending(
+      (pend as any[]).map((x) => ({ ...x, aluno: alunosMap.get(x.aluno_id) || null }))
+    );
   }
 
-  // ✅ NOVO: aprovar pendência (ativa assinatura)
   async function aprovarPendencia(p: PendingItem, profId: string) {
     setPendingBusyId(p.id);
     try {
-      // 1) expira qualquer assinatura ativa atual do aluno
       const { error: closeErr } = await supabase
         .from("aluno_assinaturas")
         .update({ status: "expired" })
         .eq("aluno_id", p.aluno_id)
         .eq("status", "active");
-
       if (closeErr) throw closeErr;
 
-      // 2) define período (start/end)
       const start = new Date();
       const end = new Date(start);
       end.setDate(end.getDate() + Number(p.duration_days));
       end.setHours(23, 59, 59, 999);
 
-      // 3) atualiza a própria pendência -> active
       const { error: updErr } = await supabase
         .from("aluno_assinaturas")
         .update({
@@ -207,20 +235,17 @@ export default function ProfessorDashboardPremium() {
         })
         .eq("id", p.id)
         .eq("professor_id", profId);
-
       if (updErr) throw updErr;
 
-      // recarrega pendências (some da lista)
       await loadPendencias(profId);
-      alert(`Assinatura ativada: ${p.duration_days} dias.`);
+      push(`Assinatura ativada: ${p.duration_days} dias.`, "ok");
     } catch (e: any) {
-      alert(e?.message || "Erro ao aprovar pendência.");
+      push(e?.message || "Erro ao aprovar pendência.", "err");
     } finally {
       setPendingBusyId(null);
     }
   }
 
-  // ✅ NOVO: cancelar pendência
   async function cancelarPendencia(p: PendingItem, profId: string) {
     setPendingBusyId(p.id);
     try {
@@ -229,13 +254,12 @@ export default function ProfessorDashboardPremium() {
         .update({ status: "canceled" })
         .eq("id", p.id)
         .eq("professor_id", profId);
-
       if (error) throw error;
 
       await loadPendencias(profId);
-      alert("Pendência cancelada.");
+      push("Pendência cancelada.", "info");
     } catch (e: any) {
-      alert(e?.message || "Erro ao cancelar pendência.");
+      push(e?.message || "Erro ao cancelar pendência.", "err");
     } finally {
       setPendingBusyId(null);
     }
@@ -250,13 +274,8 @@ export default function ProfessorDashboardPremium() {
 
       const { data: auth, error: authError } = await supabase.auth.getUser();
       const user = auth?.user;
+      if (authError || !user) { router.replace("/login"); return; }
 
-      if (authError || !user) {
-        router.replace("/login");
-        return;
-      }
-
-      // Perfil do professor
       const { data: myProf, error: pErr } = await supabase
         .from("profiles")
         .select("id, role, nome_completo, telefone, avatar_url, cover_url, slug")
@@ -264,24 +283,12 @@ export default function ProfessorDashboardPremium() {
         .single();
 
       if (!mounted) return;
-
-      if (pErr || !myProf) {
-        setErr("Não foi possível carregar seu perfil.");
-        setLoading(false);
-        return;
-      }
-
-      if (myProf.role !== "professor") {
-        router.replace("/dashboard");
-        return;
-      }
+      if (pErr || !myProf) { setErr("Não foi possível carregar seu perfil."); setLoading(false); return; }
+      if (myProf.role !== "professor") { router.replace("/dashboard"); return; }
 
       setProf(myProf as ProfProfile);
-
-      // ✅ NOVO: carrega pendências
       await loadPendencias(user.id);
 
-      // Alunos do professor
       const { data: alunosData, error: aErr } = await supabase
         .from("profiles")
         .select("id, nome_completo, telefone, avatar_url")
@@ -290,24 +297,14 @@ export default function ProfessorDashboardPremium() {
         .order("created_at", { ascending: false });
 
       if (!mounted) return;
+      if (!aErr && alunosData) { setAlunos(alunosData as any); setAlunosCount(alunosData.length); }
 
-      if (!aErr && alunosData) {
-        setAlunos(alunosData as any);
-        setAlunosCount(alunosData.length);
-      } else {
-        setAlunos([]);
-        setAlunosCount(0);
-      }
-
-      // Quantidade de treinos atribuídos
       const { count: tCount } = await supabase
         .from("treinos")
         .select("id", { count: "exact", head: true })
         .eq("professor_id", user.id);
-
       setTreinosCount(tCount || 0);
 
-      // Feed: últimas rotinas concluídas
       const { data: concl, error: cErr } = await supabase
         .from("aluno_rotina_conclusoes")
         .select("id, aluno_id, treino_id, rotina_id, concluido_em, feedback_nota, feedback_texto")
@@ -315,13 +312,7 @@ export default function ProfessorDashboardPremium() {
         .limit(12);
 
       if (!mounted) return;
-
-      if (cErr || !concl) {
-        setFeed([]);
-        setConcluidosCount(0);
-        setLoading(false);
-        return;
-      }
+      if (cErr || !concl) { setConcluidosCount(0); setLoading(false); return; }
 
       setConcluidosCount(concl.length);
 
@@ -339,238 +330,205 @@ export default function ProfessorDashboardPremium() {
       const treinosMap = new Map((treinosMini.data || []).map((t: any) => [t.id, t]));
       const rotinasMap = new Map((rotinasMini.data || []).map((r: any) => [r.id, r]));
 
-      const feedFinal: ConclusaoFeed[] = (concl as any[]).map((x) => ({
-        ...x,
-        aluno: alunosMap.get(x.aluno_id) || null,
-        treino: treinosMap.get(x.treino_id) || null,
-        rotina: rotinasMap.get(x.rotina_id) || null,
-      }));
-
-      setFeed(feedFinal);
+      setFeed(
+        (concl as any[]).map((x) => ({
+          ...x,
+          aluno: alunosMap.get(x.aluno_id) || null,
+          treino: treinosMap.get(x.treino_id) || null,
+          rotina: rotinasMap.get(x.rotina_id) || null,
+        }))
+      );
       setLoading(false);
     }
 
     boot();
-    return () => {
-      mounted = false;
-    };
+    return () => { mounted = false; };
   }, [router]);
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-950 flex items-center justify-center text-lime-300 text-xl">
-        Carregando dashboard do professor…
-      </main>
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <p className="text-white/40 text-sm">Carregando…</p>
+      </div>
     );
   }
 
   if (err) {
     return (
-      <main className="min-h-screen bg-gray-950 text-white px-6 py-10">
-        <div className="max-w-3xl mx-auto rounded-3xl border border-white/10 bg-white/5 p-6">
-          <p className="text-red-200">{err}</p>
-          <div className="mt-4 flex gap-2">
-            <Link
-              href="/login"
-              className="rounded-2xl bg-lime-400 px-4 py-2 text-sm font-bold text-black hover:bg-lime-300"
-            >
-              Ir para login
-            </Link>
-          </div>
+      <div className="p-6 max-w-lg mx-auto mt-10">
+        <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-6">
+          <p className="text-red-300 text-sm">{err}</p>
+          <Link href="/login" className="mt-4 inline-block rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-white/90">
+            Ir para login
+          </Link>
         </div>
-      </main>
+      </div>
     );
   }
 
   const profId = prof?.id || null;
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white px-6 py-10">
-      <div className="max-w-7xl mx-auto">
-        {/* HERO */}
-        <div className="rounded-[2rem] border border-white/10 bg-white/5 overflow-hidden shadow-2xl">
-          <div className="relative h-48 w-full">
+    <>
+      <ToastList toasts={toasts} />
+
+      <div className="px-5 py-8 max-w-7xl mx-auto space-y-6">
+        {/* ── Hero ──────────────────────────────────────────────────────────── */}
+        <div className="rounded-2xl border border-white/8 bg-white/[0.03] overflow-hidden">
+          {/* Cover */}
+          <div className="relative h-40 w-full">
             {prof?.cover_url ? (
               <Image src={prof.cover_url} alt="Capa" fill className="object-cover" priority />
             ) : (
-              <div className="absolute inset-0 bg-gradient-to-br from-lime-400/20 via-black/40 to-black" />
+              <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent" />
             )}
-            <div className="absolute inset-0 bg-black/45" />
+            <div className="absolute inset-0 bg-black/50" />
           </div>
 
-          <div className="p-6 -mt-10 flex flex-col md:flex-row md:items-end md:justify-between gap-5">
+          {/* Profile row */}
+          <div className="px-6 pb-6 -mt-9 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div className="flex items-end gap-4">
-              <div className="relative h-20 w-20 overflow-hidden rounded-2xl border border-white/10 bg-black/40">
+              <div className="relative h-16 w-16 overflow-hidden rounded-xl border border-white/10 bg-[#0a0a0a] shrink-0">
                 {prof?.avatar_url ? (
                   <Image src={prof.avatar_url} alt="Avatar" fill className="object-cover" />
                 ) : (
-                  <div className="h-full w-full flex items-center justify-center text-lime-300 font-extrabold text-2xl">
-                    {(profName || "M").slice(0, 1).toUpperCase()}
+                  <div className="h-full w-full flex items-center justify-center text-white font-bold text-xl">
+                    {(profName).slice(0, 1).toUpperCase()}
                   </div>
                 )}
               </div>
-
               <div>
-                <p className="text-white/60 text-sm">Professor • Motion</p>
-                <h1 className="text-3xl font-extrabold">
-                  Bem-vindo, <span className="text-lime-300">{profName}</span>
-                </h1>
-                <div className="mt-2 flex flex-wrap gap-2">
+                <p className="text-white/50 text-xs">Professor · Motion</p>
+                <h1 className="text-xl font-semibold text-white mt-0.5">{profName}</h1>
+                <div className="mt-2 flex flex-wrap gap-1.5">
                   <Pill>Alunos: {alunosCount}</Pill>
-                  <Pill>Planos atribuídos: {treinosCount}</Pill>
+                  <Pill>Planos: {treinosCount}</Pill>
                   <Pill>Concluídos: {concluidosCount}</Pill>
-                  <Pill>Pendentes: {pendingCount}</Pill>
+                  {pendingCount > 0 && (
+                    <span className="rounded-full border border-amber-400/20 bg-amber-400/10 px-3 py-1 text-amber-300 text-xs">
+                      {pendingCount} pendente{pendingCount > 1 ? "s" : ""}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
 
-            {/* Ações rápidas */}
+            {/* Quick actions */}
             <div className="flex flex-wrap gap-2">
               <Link
                 href="/professor/perfil-publico"
-                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/80 hover:bg-white/10"
+                className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-medium text-white/70 hover:bg-white/10 transition-colors"
               >
-                Meu perfil público
+                Perfil público
               </Link>
-
               <Link
                 href="/professor/biblioteca"
-                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/80 hover:bg-white/10"
+                className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-medium text-white/70 hover:bg-white/10 transition-colors"
               >
                 Biblioteca
               </Link>
-
-              <Link
-                href="/professor/community"
-                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/80 hover:bg-white/10 transition"
-              >
-                Comunidade (moderar)
-              </Link>
-
               <Link
                 href="/professor/treinos"
-                className="rounded-2xl bg-lime-400 px-4 py-2 text-sm font-extrabold text-black hover:bg-lime-300"
+                className="rounded-xl bg-white px-3 py-2 text-sm font-semibold text-black hover:bg-white/90 transition-colors"
               >
-                Criar/atribuir treino
+                Criar treino
               </Link>
-
               <button
                 onClick={copyPublicLink}
                 disabled={!publicLink}
-                className="rounded-2xl border border-white/10 bg-black/30 px-4 py-2 text-sm font-bold text-lime-300 hover:bg-white/5 disabled:opacity-40"
+                className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-medium text-white/70 hover:bg-white/10 disabled:opacity-40 transition-colors"
               >
-                Copiar link “Treinar comigo”
+                Copiar link público
               </button>
             </div>
           </div>
         </div>
 
-        {/* STATS */}
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
-          <StatCard title="Alunos" value={alunosCount} hint="Alunos vinculados ao seu perfil" />
-          <StatCard title="Planos atribuídos" value={treinosCount} hint="Treinos criados/atribuídos por você" />
-          <StatCard title="Concluídos (recentes)" value={concluidosCount} hint="Últimas rotinas concluídas (feed)" />
-          <StatCard title="Pendências PIX" value={pendingCount} hint="Aguardando sua validação manual" />
+        {/* ── Stats ─────────────────────────────────────────────────────────── */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <StatCard title="Alunos" value={alunosCount} hint="Vinculados ao seu perfil" />
+          <StatCard title="Planos atribuídos" value={treinosCount} hint="Criados por você" />
+          <StatCard title="Concluídos" value={concluidosCount} hint="Últimas rotinas (feed)" />
+          <StatCard title="Pendências PIX" value={pendingCount} hint="Aguardando validação" />
         </div>
 
-        {/* ✅ NOVO: PENDÊNCIAS */}
-        <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 overflow-hidden">
-          <div className="p-5 border-b border-white/10 flex items-center justify-between">
+        {/* ── Pendências ────────────────────────────────────────────────────── */}
+        <div className="rounded-2xl border border-white/8 bg-white/[0.03] overflow-hidden">
+          <div className="px-5 py-4 border-b border-white/8 flex items-center justify-between">
             <div>
-              <p className="font-extrabold text-white">Assinaturas pendentes (PIX manual)</p>
-              <p className="text-sm text-white/50">Quando o aluno envia comprovante, aparece aqui para você aprovar.</p>
+              <p className="font-semibold text-white text-sm">Assinaturas pendentes (PIX manual)</p>
+              <p className="text-xs text-white/40 mt-0.5">Aprovação manual após o aluno enviar comprovante.</p>
             </div>
-
             <button
-              className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/80 hover:bg-white/10"
               onClick={() => profId && loadPendencias(profId)}
               disabled={!profId || pendingBusyId !== null}
-              title="Recarregar pendências"
+              className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/60 hover:bg-white/10 disabled:opacity-40 transition-colors"
             >
-              ↻ Atualizar
+              Atualizar
             </button>
           </div>
 
           <div className="p-5 space-y-3">
             {pending.length === 0 ? (
-              <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white/70">
-                Nenhuma pendência no momento.
-                <p className="mt-2 text-white/50 text-sm">
-                  Para aparecer aqui, o aluno precisa gerar uma solicitação com status <b>pending</b> na tabela{" "}
-                  <b>aluno_assinaturas</b>.
-                </p>
-              </div>
+              <p className="text-white/40 text-sm">Nenhuma pendência no momento.</p>
             ) : (
               pending.map((p) => {
                 const alunoNome = p.aluno?.nome_completo || "Aluno";
                 const alunoTel = p.aluno?.telefone || "";
                 const alunoWa = alunoTel
-                  ? waLink(
-                      alunoTel,
-                      `Olá, ${alunoNome}! Vi seu comprovante no Motion. Vou validar e liberar seu acesso. ✅`
-                    )
+                  ? waLink(alunoTel, `Olá, ${alunoNome}! Vi seu comprovante no Motion. Vou validar e liberar seu acesso. ✅`)
                   : null;
-
                 const busy = pendingBusyId === p.id;
 
                 return (
                   <div
                     key={p.id}
-                    className="rounded-2xl border border-white/10 bg-black/30 p-4 flex flex-col md:flex-row md:items-center gap-3"
+                    className="rounded-xl border border-white/8 bg-white/[0.02] p-4 flex flex-col sm:flex-row sm:items-center gap-3"
                   >
-                    <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className="relative h-10 w-10 rounded-xl overflow-hidden border border-white/10 bg-black/40 flex-shrink-0">
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className="relative h-9 w-9 rounded-lg overflow-hidden border border-white/10 bg-[#0a0a0a] shrink-0">
                         {p.aluno?.avatar_url ? (
                           <Image src={p.aluno.avatar_url} alt="Aluno" fill className="object-cover" />
                         ) : (
-                          <div className="h-full w-full flex items-center justify-center text-lime-300 font-extrabold">
-                            {(alunoNome || "A").slice(0, 1).toUpperCase()}
+                          <div className="h-full w-full flex items-center justify-center text-white font-semibold text-sm">
+                            {(alunoNome).slice(0, 1).toUpperCase()}
                           </div>
                         )}
                       </div>
-
                       <div className="min-w-0">
-                        <p className="font-bold text-white truncate">{alunoNome}</p>
-                        <p className="text-xs text-white/50 truncate">
-                          Solicitado em {formatDate(p.created_at)} • Plano: <b>{p.duration_days} dias</b>
+                        <p className="font-medium text-white text-sm truncate">{alunoNome}</p>
+                        <p className="text-xs text-white/40 truncate">
+                          {formatDate(p.created_at)} · <span className="text-white/60">{p.duration_days} dias</span>
                         </p>
-                        {p.note ? <p className="text-xs text-white/40 truncate">Nota: {p.note}</p> : null}
                       </div>
                     </div>
 
-                    <div className="flex flex-wrap gap-2 justify-end">
-                      {alunoWa ? (
-                        <a
-                          href={alunoWa}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-lime-300 hover:bg-white/10"
-                        >
+                    <div className="flex flex-wrap gap-2">
+                      {alunoWa && (
+                        <a href={alunoWa} target="_blank" rel="noreferrer"
+                          className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/70 hover:bg-white/10 transition-colors">
                           WhatsApp
                         </a>
-                      ) : null}
-
+                      )}
                       <button
                         disabled={!profId || busy}
                         onClick={() => profId && aprovarPendencia(p, profId)}
-                        className="rounded-xl bg-lime-400 px-4 py-2 text-xs font-extrabold text-black hover:bg-lime-300 disabled:opacity-60"
+                        className="rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-black hover:bg-white/90 disabled:opacity-50 transition-colors"
                       >
-                        {busy ? "Processando..." : "Aprovar e ativar"}
+                        {busy ? "Processando…" : "Aprovar"}
                       </button>
-
                       <button
                         disabled={!profId || busy}
                         onClick={() => profId && cancelarPendencia(p, profId)}
-                        className="rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-2 text-xs font-bold text-red-200 hover:bg-red-400/15 disabled:opacity-60"
+                        className="rounded-lg border border-red-400/15 bg-red-400/8 px-3 py-1.5 text-xs font-medium text-red-300 hover:bg-red-400/12 disabled:opacity-50 transition-colors"
                       >
                         Cancelar
                       </button>
-
                       <Link
                         href={`/professor/alunos/${p.aluno_id}/financeiro`}
-                        className="rounded-xl border border-white/10 bg-black/20 px-4 py-2 text-xs font-bold text-white/80 hover:bg-white/5"
+                        className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/60 hover:bg-white/10 transition-colors"
                       >
-                        Abrir financeiro →
+                        Financeiro →
                       </Link>
                     </div>
                   </div>
@@ -580,70 +538,53 @@ export default function ProfessorDashboardPremium() {
           </div>
         </div>
 
-        {/* GRID */}
-        <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* ── Grid: Alunos + Feed ───────────────────────────────────────────── */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Alunos */}
-          <div className="lg:col-span-1 rounded-3xl border border-white/10 bg-white/5 overflow-hidden">
-            <div className="p-5 border-b border-white/10 flex items-center justify-between">
-              <p className="font-extrabold text-white">Seus alunos</p>
-              <Link href="/professor/alunos" className="text-sm font-bold text-lime-300 hover:underline">
-                Ver tudo
+          <div className="lg:col-span-1 rounded-2xl border border-white/8 bg-white/[0.03] overflow-hidden">
+            <div className="px-5 py-4 border-b border-white/8 flex items-center justify-between">
+              <p className="font-semibold text-white text-sm">Seus alunos</p>
+              <Link href="/professor/alunos" className="text-xs font-medium text-white/50 hover:text-white transition-colors">
+                Ver tudo →
               </Link>
             </div>
 
-            <div className="p-5 space-y-3">
+            <div className="p-4 space-y-2">
               {alunos.length === 0 ? (
-                <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white/70">
-                  Você ainda não tem alunos vinculados.
-                  <p className="mt-2 text-white/50 text-sm">
-                    Dica: use o link “Treinar comigo” no seu Instagram/WhatsApp.
-                  </p>
+                <div className="rounded-xl border border-white/8 bg-white/[0.02] p-4">
+                  <p className="text-white/50 text-sm">Você ainda não tem alunos vinculados.</p>
+                  <p className="mt-1 text-white/30 text-xs">Use o link público no seu Instagram/WhatsApp.</p>
                 </div>
               ) : (
                 alunos.slice(0, 6).map((a) => {
                   const wa = a.telefone
                     ? waLink(a.telefone, `Olá, ${a.nome_completo || "aluno"}! Tudo certo com seus treinos no Motion?`)
                     : null;
-
                   return (
-                    <div
-                      key={a.id}
-                      className="rounded-2xl border border-white/10 bg-black/30 p-4 flex items-center gap-3"
-                    >
-                      <div className="relative h-10 w-10 rounded-xl overflow-hidden border border-white/10 bg-black/40 flex-shrink-0">
+                    <div key={a.id} className="flex items-center gap-3 rounded-xl border border-white/8 bg-white/[0.02] p-3">
+                      <div className="relative h-9 w-9 rounded-lg overflow-hidden border border-white/10 bg-[#0a0a0a] shrink-0">
                         {a.avatar_url ? (
                           <Image src={a.avatar_url} alt="Aluno" fill className="object-cover" />
                         ) : (
-                          <div className="h-full w-full flex items-center justify-center text-lime-300 font-extrabold">
+                          <div className="h-full w-full flex items-center justify-center text-white font-semibold text-sm">
                             {(a.nome_completo || "A").slice(0, 1).toUpperCase()}
                           </div>
                         )}
                       </div>
-
                       <div className="min-w-0 flex-1">
-                        <p className="font-bold text-white truncate">{a.nome_completo || "Aluno"}</p>
-                        <p className="text-xs text-white/50 truncate">{a.telefone || "sem telefone"}</p>
+                        <p className="font-medium text-white text-sm truncate">{a.nome_completo || "Aluno"}</p>
+                        <p className="text-xs text-white/40 truncate">{a.telefone || "sem telefone"}</p>
                       </div>
-
-                      <div className="flex items-center gap-2">
-                        <Link
-                          href={`/professor/alunos/${a.id}/financeiro`}
-                          className="rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-xs font-bold text-white/80 hover:bg-white/5"
-                        >
-                          Financeiro
+                      <div className="flex gap-1.5 shrink-0">
+                        <Link href={`/professor/alunos/${a.id}/financeiro`}
+                          className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-xs text-white/60 hover:bg-white/10 transition-colors">
+                          Fin.
                         </Link>
-
-                        {wa ? (
-                          <a
-                            href={wa}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-lime-300 hover:bg-white/10"
-                          >
-                            WhatsApp
+                        {wa && (
+                          <a href={wa} target="_blank" rel="noreferrer"
+                            className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-xs text-white/60 hover:bg-white/10 transition-colors">
+                            WA
                           </a>
-                        ) : (
-                          <span className="text-xs text-white/40">—</span>
                         )}
                       </div>
                     </div>
@@ -651,43 +592,37 @@ export default function ProfessorDashboardPremium() {
                 })
               )}
 
-              <div className="pt-2">
+              <div className="pt-1">
                 <Link
                   href="/professor/treinos"
-                  className="block text-center rounded-2xl bg-lime-400 px-4 py-3 text-sm font-extrabold text-black hover:bg-lime-300"
+                  className="block text-center rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-black hover:bg-white/90 transition-colors"
                 >
-                  Criar e atribuir treino agora
+                  Criar e atribuir treino
                 </Link>
               </div>
             </div>
           </div>
 
-          {/* Feed Concluídos */}
-          <div className="lg:col-span-2 rounded-3xl border border-white/10 bg-white/5 overflow-hidden">
-            <div className="p-5 border-b border-white/10 flex items-center justify-between">
+          {/* Feed concluídos */}
+          <div className="lg:col-span-2 rounded-2xl border border-white/8 bg-white/[0.03] overflow-hidden">
+            <div className="px-5 py-4 border-b border-white/8 flex items-center justify-between">
               <div>
-                <p className="font-extrabold text-white">Últimos treinos concluídos</p>
-                <p className="text-sm text-white/50">Veja feedback e reaja rápido (nível premium Motion).</p>
+                <p className="font-semibold text-white text-sm">Últimos treinos concluídos</p>
+                <p className="text-xs text-white/40 mt-0.5">Feedbacks dos seus alunos em tempo real.</p>
               </div>
-              {publicLink ? (
-                <a
-                  href={publicLink}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/80 hover:bg-white/10"
-                >
-                  Abrir meu perfil
+              {publicLink && (
+                <a href={publicLink} target="_blank" rel="noreferrer"
+                  className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/60 hover:bg-white/10 transition-colors">
+                  Meu perfil
                 </a>
-              ) : null}
+              )}
             </div>
 
-            <div className="p-5 space-y-3">
+            <div className="p-4 space-y-3">
               {feed.length === 0 ? (
-                <div className="rounded-2xl border border-white/10 bg-black/30 p-6 text-white/70">
-                  Nenhuma rotina concluída apareceu ainda.
-                  <p className="mt-2 text-white/50 text-sm">
-                    Se isso for inesperado, confira a policy de RLS de <b>aluno_rotina_conclusoes</b>.
-                  </p>
+                <div className="rounded-xl border border-white/8 bg-white/[0.02] p-5">
+                  <p className="text-white/50 text-sm">Nenhuma rotina concluída ainda.</p>
+                  <p className="mt-1 text-white/30 text-xs">Confira a policy de RLS de <span className="font-mono">aluno_rotina_conclusoes</span> se isso for inesperado.</p>
                 </div>
               ) : (
                 feed.map((x) => {
@@ -695,58 +630,40 @@ export default function ProfessorDashboardPremium() {
                   const rotNome = x.rotina?.nome || "Rotina";
                   const treinoNome = x.treino?.nome || "Treino";
                   const when = new Date(x.concluido_em).toLocaleString("pt-BR");
-
                   const alunoWa = x.aluno?.telefone
-                    ? waLink(
-                        x.aluno.telefone,
-                        `Oi, ${alunoNome}! Vi que você concluiu "${rotNome}" (${treinoNome}) no Motion. Me conta como foi? 💪`
-                      )
+                    ? waLink(x.aluno.telefone, `Oi, ${alunoNome}! Vi que você concluiu "${rotNome}" (${treinoNome}) no Motion. Me conta como foi? 💪`)
                     : null;
 
                   return (
-                    <div key={x.id} className="rounded-2xl border border-white/10 bg-black/30 p-5">
+                    <div key={x.id} className="rounded-xl border border-white/8 bg-white/[0.02] p-4">
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <p className="text-white font-extrabold truncate">
-                            {alunoNome} <span className="text-white/50 font-bold">•</span>{" "}
-                            <span className="text-lime-300">{rotNome}</span>
+                          <p className="text-white font-medium text-sm truncate">
+                            {alunoNome} <span className="text-white/30">·</span> <span className="text-white/70">{rotNome}</span>
                           </p>
-                          <p className="text-xs text-white/50 mt-1">
-                            {treinoNome} • Concluído em {when}
-                          </p>
+                          <p className="text-xs text-white/40 mt-0.5">{treinoNome} · {when}</p>
                         </div>
-
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 shrink-0">
                           {typeof x.feedback_nota === "number" ? (
-                            <span className="rounded-full border border-lime-300/30 bg-lime-400/10 px-3 py-1 text-xs font-extrabold text-lime-300">
-                              Nota {x.feedback_nota}/5
+                            <span className="rounded-full border border-white/15 bg-white/8 px-2.5 py-1 text-xs font-medium text-white/80">
+                              {x.feedback_nota}/5
                             </span>
                           ) : (
-                            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-bold text-white/60">
-                              Sem nota
+                            <span className="rounded-full border border-white/8 px-2.5 py-1 text-xs text-white/30">
+                              sem nota
                             </span>
                           )}
-
-                          {alunoWa ? (
-                            <a
-                              href={alunoWa}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-lime-300 hover:bg-white/10"
-                            >
-                              WhatsApp
+                          {alunoWa && (
+                            <a href={alunoWa} target="_blank" rel="noreferrer"
+                              className="rounded-lg border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-white/60 hover:bg-white/10 transition-colors">
+                              WA
                             </a>
-                          ) : null}
+                          )}
                         </div>
                       </div>
-
-                      {x.feedback_texto ? (
-                        <div className="mt-3 rounded-2xl border border-white/10 bg-black/40 p-4 text-white/70 text-sm">
-                          “{x.feedback_texto}”
-                        </div>
-                      ) : (
-                        <p className="mt-3 text-sm text-white/50">
-                          Sem comentário — você pode chamar no WhatsApp e pedir um feedback rápido.
+                      {x.feedback_texto && (
+                        <p className="mt-2.5 text-xs text-white/50 italic border-l border-white/10 pl-3">
+                          "{x.feedback_texto}"
                         </p>
                       )}
                     </div>
@@ -754,41 +671,36 @@ export default function ProfessorDashboardPremium() {
                 })
               )}
 
-              <div className="pt-2 flex flex-wrap gap-2">
+              <div className="pt-1 flex flex-wrap gap-2">
                 <Link
                   href="/professor/treinos"
-                  className="rounded-2xl bg-lime-400 px-4 py-2 text-sm font-extrabold text-black hover:bg-lime-300"
+                  className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-white/90 transition-colors"
                 >
                   Atribuir novo plano
                 </Link>
-
                 <Link
                   href="/professor/perfil-publico"
-                  className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/80 hover:bg-white/10"
+                  className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/70 hover:bg-white/10 transition-colors"
                 >
                   Ajustar perfil público
                 </Link>
-
                 {publicLink ? (
                   <button
                     onClick={copyPublicLink}
-                    className="rounded-2xl border border-white/10 bg-black/30 px-4 py-2 text-sm font-bold text-lime-300 hover:bg-white/5"
+                    className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/70 hover:bg-white/10 transition-colors"
                   >
-                    Copiar link “Treinar comigo”
+                    Copiar link público
                   </button>
                 ) : (
-                  <span className="text-sm text-white/50">
-                    Configure seu <b>slug</b> no perfil público para gerar o link.
-                  </span>
+                  <span className="text-xs text-white/30 self-center">Configure um slug no perfil público.</span>
                 )}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Rodapé */}
-        <div className="mt-8 text-center text-xs text-white/40">Motion • Dashboard do Professor</div>
+        <p className="text-center text-xs text-white/20 pb-2">Motion · Dashboard do Professor</p>
       </div>
-    </main>
+    </>
   );
 }

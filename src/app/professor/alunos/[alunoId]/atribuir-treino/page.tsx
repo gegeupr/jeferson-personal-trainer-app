@@ -14,19 +14,29 @@ interface PlanoTreino {
 }
 
 interface AlunoProfile {
-    nome_completo: string | null;
+  nome_completo: string | null;
 }
 
 export default function AtribuirTreinoPage() {
   const router = useRouter();
   const params = useParams();
   const alunoId = params.alunoId as string;
-  
+
   const [planosTreino, setPlanosTreino] = useState<PlanoTreino[]>([]);
   const [alunoProfile, setAlunoProfile] = useState<AlunoProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [toasts, setToasts] = useState<{ id: number; msg: string; kind: "ok" | "err" }[]>([]);
+  const [confirmState, setConfirmState] = useState<{ msg: string; onOk: () => void } | null>(null);
+
+  function pushToast(msg: string, kind: "ok" | "err") {
+    const id = Date.now();
+    setToasts((p) => [...p, { id, msg, kind }]);
+    setTimeout(() => setToasts((p) => p.filter((t) => t.id !== id)), 3000);
+  }
+
+  function showConfirm(msg: string, onOk: () => void) { setConfirmState({ msg, onOk }); }
 
   useEffect(() => {
     async function fetchTreinos() {
@@ -34,139 +44,149 @@ export default function AtribuirTreinoPage() {
       setError(null);
 
       const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError || !user) { router.push('/login'); return; }
 
-      if (authError || !user) {
-        router.push('/login');
-        return;
-      }
-      
       const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single();
-        
+        .from('profiles').select('role').eq('id', user.id).single();
       if (profileError || profile?.role !== 'professor') {
         setError('Acesso negado.');
         setLoading(false);
         return;
       }
-      
-      // Busca o nome do aluno para exibição
+
       const { data: alunoData, error: alunoError } = await supabase
-        .from('profiles')
-        .select('nome_completo')
-        .eq('id', alunoId)
-        .single();
-      
+        .from('profiles').select('nome_completo').eq('id', alunoId).single();
       if (alunoError || !alunoData) {
-          setError('Aluno não encontrado.');
-          setLoading(false);
-          return;
+        setError('Aluno não encontrado.');
+        setLoading(false);
+        return;
       }
       setAlunoProfile(alunoData);
 
-      // Busca todos os planos de treino criados pelo professor, independentemente de estarem atribuídos
       const { data: treinosData, error: treinosError } = await supabase
         .from('treinos')
         .select('id, nome, descricao, aluno_id, tipo_treino')
         .eq('professor_id', user.id);
-      
+
       if (treinosError) {
-        console.error('Erro ao buscar treinos:', treinosError.message);
         setError('Não foi possível carregar a lista de treinos.');
       } else {
         setPlanosTreino(treinosData || []);
       }
-      
+
       setLoading(false);
     }
     fetchTreinos();
   }, [router, alunoId]);
 
-  const handleAtribuirTreino = async (treinoId: string) => {
-    if (!confirm('Tem certeza que deseja atribuir este treino a este aluno?')) return;
-
-    setIsSubmitting(true);
-    setError(null);
-
-    try {
-      const { error: updateError } = await supabase
-        .from('treinos')
-        .update({ aluno_id: alunoId })
-        .eq('id', treinoId);
-
-      if (updateError) throw updateError;
-      
-      alert('Treino atribuído com sucesso!');
-      router.push(`/professor/dashboard`); // Redireciona para o dashboard principal
-      
-    } catch (err: any) {
-      console.error('Erro ao atribuir treino:', err.message);
-      setError('Erro ao atribuir treino: ' + err.message);
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleAtribuirTreino = (treinoId: string) => {
+    showConfirm('Atribuir este treino ao aluno?', async () => {
+      setIsSubmitting(true);
+      setError(null);
+      try {
+        const { error: updateError } = await supabase
+          .from('treinos').update({ aluno_id: alunoId }).eq('id', treinoId);
+        if (updateError) throw updateError;
+        pushToast('Treino atribuído com sucesso!', 'ok');
+        setPlanosTreino((prev) => prev.map((t) => t.id === treinoId ? { ...t, aluno_id: alunoId } : t));
+      } catch (err: any) {
+        setError('Erro ao atribuir treino: ' + err.message);
+      } finally {
+        setIsSubmitting(false);
+      }
+    });
   };
+
+  const alunoNome = alunoProfile?.nome_completo || 'Aluno';
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-950 flex items-center justify-center text-lime-400 text-2xl">
-        Carregando treinos...
-      </main>
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <p className="text-white/40 text-sm">Carregando treinos…</p>
+      </div>
     );
   }
 
-  if (error) {
+  if (error && !planosTreino.length) {
     return (
-      <main className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-red-500 text-lg p-4">
-        <p>{error}</p>
-        <Link href={`/professor/dashboard`} className="mt-4 bg-lime-400 text-gray-900 py-2 px-6 rounded-full hover:bg-lime-300 transition duration-300">
-          Voltar para o dashboard
-        </Link>
-      </main>
+      <div className="p-6 max-w-lg mx-auto mt-10">
+        <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-6">
+          <p className="text-red-300 text-sm font-medium">Erro</p>
+          <p className="mt-1 text-white/60 text-sm">{error}</p>
+          <Link href="/professor/alunos" className="mt-4 inline-block rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/70 hover:bg-white/10 transition-colors">
+            ← Alunos
+          </Link>
+        </div>
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-lime-400 mb-4 text-center">
-          Atribuir Treino para {alunoProfile?.nome_completo || 'Aluno'}
-        </h1>
-        <div className="flex justify-start items-center mb-8">
-          <Link href={`/professor/dashboard`} className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">
-            &larr; Voltar
-          </Link>
+    <main className="min-h-screen bg-[#0a0a0a] text-white px-4 py-8">
+      <div className="max-w-3xl mx-auto space-y-5">
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-2 text-sm text-white/40">
+          <Link href="/professor/alunos" className="hover:text-white/70 transition-colors">Alunos</Link>
+          <span>/</span>
+          <Link href={`/professor/alunos/${alunoId}/detalhes`} className="hover:text-white/70 transition-colors">{alunoNome}</Link>
+          <span>/</span>
+          <span className="text-white/60">Atribuir treino</span>
         </div>
 
-        <section className="bg-gray-800 p-8 rounded-lg shadow-xl border-t-4 border-blue-600">
-          <h2 className="text-2xl font-bold text-white mb-6">Planos de Treino Disponíveis</h2>
-          
-          {planosTreino.length === 0 ? (
-            <p className="text-gray-400 text-center">Nenhum plano de treino disponível. Crie um na sua biblioteca.</p>
-          ) : (
-            <ul className="space-y-4">
-              {planosTreino.map(treino => (
-                <li key={treino.id} className="bg-gray-900 p-4 rounded-lg flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-                  <div className="text-left">
-                    <span className="text-lime-300 font-semibold">{treino.nome}</span>
-                    <p className="text-gray-400 text-sm">Tipo: {treino.tipo_treino || 'N/A'}</p>
-                    <p className="text-gray-400 text-sm">Status: {treino.aluno_id ? 'Já atribuído' : 'Não atribuído'}</p>
-                  </div>
-                  <button
-                    onClick={() => handleAtribuirTreino(treino.id)}
-                    className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full transition duration-300"
-                    disabled={isSubmitting || treino.aluno_id !== null}
-                  >
-                    {treino.aluno_id ? 'Treino Atribuído' : 'Atribuir'}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
+        <h1 className="text-2xl font-bold text-white">Atribuir treino</h1>
+
+        {error && (
+          <div className="rounded-xl border border-red-400/15 bg-red-400/8 px-4 py-3 text-sm text-red-300">{error}</div>
+        )}
+
+        {planosTreino.length === 0 ? (
+          <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-8 text-center">
+            <p className="text-white/40 text-sm">Nenhum plano de treino disponível. Crie um na página de Treinos.</p>
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-white/8 bg-white/[0.03] divide-y divide-white/8">
+            {planosTreino.map((treino) => (
+              <div key={treino.id} className="px-5 py-4 flex items-center justify-between gap-4">
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-white truncate">{treino.nome}</p>
+                  <p className="text-xs text-white/40 mt-0.5">
+                    {treino.tipo_treino || 'Sem tipo'} · {treino.aluno_id ? 'Atribuído' : 'Disponível'}
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleAtribuirTreino(treino.id)}
+                  disabled={isSubmitting || treino.aluno_id !== null}
+                  className="shrink-0 rounded-xl bg-white px-4 py-1.5 text-xs font-semibold text-black hover:bg-white/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                >
+                  {treino.aluno_id ? 'Atribuído' : 'Atribuir'}
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
+
+      {toasts.length > 0 && (
+        <div className="fixed bottom-24 lg:bottom-6 right-4 z-[100] flex flex-col gap-2 max-w-sm">
+          {toasts.map((t) => (
+            <div key={t.id} className={`rounded-xl px-4 py-3 text-sm font-medium shadow-xl border ${
+              t.kind === "ok" ? "bg-white text-black border-transparent" : "bg-red-500/10 text-red-200 border-red-500/20"
+            }`}>{t.msg}</div>
+          ))}
+        </div>
+      )}
+
+      {confirmState && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[200] p-4">
+          <div className="bg-[#111] border border-white/10 rounded-2xl p-6 max-w-sm w-full">
+            <p className="text-white text-sm">{confirmState.msg}</p>
+            <div className="flex gap-2 mt-5 justify-end">
+              <button onClick={() => setConfirmState(null)} className="border border-white/10 bg-white/5 px-4 py-2 rounded-xl text-sm text-white/70 hover:bg-white/10 transition-colors">Cancelar</button>
+              <button onClick={() => { confirmState.onOk(); setConfirmState(null); }} className="bg-white text-black px-4 py-2 rounded-xl text-sm font-semibold hover:bg-white/90 transition-colors">Confirmar</button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

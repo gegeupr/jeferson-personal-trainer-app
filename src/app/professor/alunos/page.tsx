@@ -20,8 +20,7 @@ type ProfileAluno = {
 type Assinatura = {
   aluno_id: string;
   status: string | null;
-  next_payment_date?: string | null;
-  last_payment_date?: string | null;
+  end_at?: string | null;
 };
 
 type UltimaConclusao = {
@@ -48,13 +47,13 @@ function buildWhatsAppLink(rawPhone: string | null, fallbackMsg: string) {
 function badgeClass(kind: "ok" | "warn" | "bad" | "neutral") {
   switch (kind) {
     case "ok":
-      return "bg-lime-400/15 text-lime-300 border border-lime-400/25";
+      return "bg-white/10 text-white/80 border border-white/15";
     case "warn":
-      return "bg-yellow-400/15 text-yellow-300 border border-yellow-400/25";
+      return "bg-amber-400/10 text-amber-300 border border-amber-400/20";
     case "bad":
-      return "bg-red-400/15 text-red-300 border border-red-400/25";
+      return "bg-red-400/10 text-red-300 border border-red-400/20";
     default:
-      return "bg-white/5 text-white/70 border border-white/10";
+      return "bg-white/5 text-white/50 border border-white/10";
   }
 }
 
@@ -169,13 +168,14 @@ export default function ProfessorAlunosCRMPage() {
         const ids = alunos.map((a) => a.id);
 
         const { data: asData } = await supabase
-          .from("assinaturas")
-          .select("aluno_id, status, next_payment_date, last_payment_date")
-          .in("aluno_id", ids);
+          .from("aluno_assinaturas")
+          .select("aluno_id, status, end_at")
+          .in("aluno_id", ids)
+          .order("created_at", { ascending: false });
 
         const asMap: Record<string, Assinatura> = {};
-        (asData || []).forEach((a: any) => {
-          asMap[a.aluno_id] = a;
+        ((asData ?? []) as Assinatura[]).forEach((a) => {
+          if (!asMap[a.aluno_id]) asMap[a.aluno_id] = a; // mais recente vence
         });
         setAssinaturas(asMap);
 
@@ -259,88 +259,56 @@ export default function ProfessorAlunosCRMPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-black text-white flex items-center justify-center">
-        <div className="text-lime-300 text-lg">Carregando Motion…</div>
-      </main>
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <p className="text-white/40 text-sm">Carregando…</p>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <main className="min-h-screen bg-black text-white flex items-center justify-center p-6">
-        <div className="max-w-xl w-full rounded-2xl border border-white/10 bg-white/5 p-6">
-          <h1 className="text-xl font-semibold text-red-300">Erro</h1>
-          <p className="mt-2 text-white/70">{error}</p>
+      <div className="p-6 max-w-lg mx-auto mt-10">
+        <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-6">
+          <p className="text-red-300 text-sm font-medium">Erro</p>
+          <p className="mt-1 text-white/60 text-sm">{error}</p>
           <div className="mt-4 flex gap-2">
             <button
               onClick={() => location.reload()}
-              className="rounded-xl bg-lime-500 px-4 py-2 text-black font-semibold hover:bg-lime-400 transition"
+              className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-white/90 transition-colors"
             >
               Recarregar
             </button>
-            <Link
-              href="/professor/dashboard"
-              className="rounded-xl border border-white/15 px-4 py-2 text-white/80 hover:bg-white/5 transition"
-            >
-              Voltar ao dashboard
-            </Link>
           </div>
         </div>
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
-      {/* TOP BAR (com botão voltar) */}
-      <div className="sticky top-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur">
-        <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link
-              href="/professor/dashboard"
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10 transition"
-            >
-              ← Voltar ao Dashboard
-            </Link>
-
-            <div className="hidden sm:block">
-              <p className="text-sm text-white/70">Motion</p>
-              <h1 className="text-lg font-semibold">Gestão de Alunos</h1>
-            </div>
-          </div>
-
-          <Link
-            href="/professor/perfil-publico"
-            className="rounded-full bg-lime-500 px-4 py-2 text-sm font-semibold text-black hover:bg-lime-400 transition"
-          >
-            Meu Perfil Público
-          </Link>
-        </div>
-      </div>
+    <main className="min-h-screen bg-[#0a0a0a] text-white">
 
       {/* Header */}
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-10 pb-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-              Meus <span className="text-lime-300">Alunos</span>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+              Meus Alunos
             </h1>
-            <p className="mt-2 text-white/60">
-              Gestão premium do Motion: encontre rápido, acione rápido, acompanhe melhor.
+            <p className="mt-1.5 text-white/40 text-sm">
+              Encontre rápido, acione rápido, acompanhe melhor.
             </p>
           </div>
 
           <div className="flex gap-2">
             <Link
               href={inviteLink}
-              className="rounded-2xl border border-white/15 bg-white/5 px-4 py-2 text-white/80 hover:bg-white/10 transition"
+              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/70 hover:bg-white/10 transition-colors"
             >
-              Link público / convite
+              Link convite
             </Link>
-
             <Link
               href="/professor/perfil-publico"
-              className="rounded-2xl bg-lime-500 px-4 py-2 text-black font-semibold hover:bg-lime-400 transition"
+              className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-white/90 transition-colors"
             >
               Ajustar perfil público
             </Link>
@@ -355,7 +323,7 @@ export default function ProfessorAlunosCRMPage() {
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Buscar por nome, email ou telefone…"
-                className="w-full rounded-2xl bg-white/5 border border-white/10 px-4 py-3 pr-10 text-white placeholder-white/30 outline-none focus:border-lime-400/40 focus:ring-2 focus:ring-lime-400/10 transition"
+                className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-2.5 pr-10 text-white placeholder-white/30 outline-none focus:border-white/25 focus:ring-1 focus:ring-white/10 transition-colors text-sm"
               />
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40">⌕</span>
             </div>
@@ -368,68 +336,35 @@ export default function ProfessorAlunosCRMPage() {
 
         {/* Quick filters */}
         <div className="mt-5 flex flex-wrap gap-2">
-          <button
-            onClick={() => setFilter("todos")}
-            className={`rounded-full px-3 py-1.5 text-sm border transition ${
-              filter === "todos"
-                ? "border-lime-400/40 bg-lime-400/10 text-lime-200"
-                : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
-            }`}
-          >
-            Todos <span className="ml-1 text-white/40">{total}</span>
-          </button>
-
-          <button
-            onClick={() => setFilter("ativos")}
-            className={`rounded-full px-3 py-1.5 text-sm border transition ${
-              filter === "ativos"
-                ? "border-lime-400/40 bg-lime-400/10 text-lime-200"
-                : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
-            }`}
-          >
-            Ativos <span className="ml-1 text-white/40">{ativosCount}</span>
-          </button>
-
-          <button
-            onClick={() => setFilter("inativos")}
-            className={`rounded-full px-3 py-1.5 text-sm border transition ${
-              filter === "inativos"
-                ? "border-lime-400/40 bg-lime-400/10 text-lime-200"
-                : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
-            }`}
-          >
-            Inativos <span className="ml-1 text-white/40">{inativosCount}</span>
-          </button>
-
-          <button
-            onClick={() => setFilter("assinatura_pendente")}
-            className={`rounded-full px-3 py-1.5 text-sm border transition ${
-              filter === "assinatura_pendente"
-                ? "border-yellow-400/40 bg-yellow-400/10 text-yellow-200"
-                : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
-            }`}
-          >
-            Assinatura pendente <span className="ml-1 text-white/40">{pendentesCount}</span>
-          </button>
-
-          <button
-            onClick={() => setFilter("sem_treino")}
-            className={`rounded-full px-3 py-1.5 text-sm border transition ${
-              filter === "sem_treino"
-                ? "border-white/25 bg-white/10 text-white"
-                : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
-            }`}
-            title="Heurística: aparece quem não tem conclusão registrada."
-          >
-            Sem treino (proxy)
-          </button>
+          {(
+            [
+              { key: "todos",               label: "Todos",                count: total },
+              { key: "ativos",              label: "Ativos",               count: ativosCount },
+              { key: "inativos",            label: "Inativos",             count: inativosCount },
+              { key: "assinatura_pendente", label: "Assin. pendente",      count: pendentesCount },
+              { key: "sem_treino",          label: "Sem treino",           count: null },
+            ] as const
+          ).map(({ key, label, count }) => (
+            <button
+              key={key}
+              onClick={() => setFilter(key)}
+              className={`rounded-full px-3 py-1.5 text-xs border transition-colors ${
+                filter === key
+                  ? "border-white/25 bg-white/10 text-white font-medium"
+                  : "border-white/10 bg-white/[0.04] text-white/50 hover:text-white/70 hover:bg-white/8"
+              }`}
+            >
+              {label}
+              {count !== null && <span className="ml-1.5 text-white/30">{count}</span>}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* List */}
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-14">
         {filtered.length === 0 ? (
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-center">
+          <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-8 text-center">
             <p className="text-white/70">Nenhum aluno encontrado com esse filtro/busca.</p>
             <p className="mt-2 text-sm text-white/40">
               Dica: use o link público para captar alunos e trazer cadastros automaticamente.
@@ -456,7 +391,7 @@ export default function ProfessorAlunosCRMPage() {
               return (
                 <div
                   key={a.id}
-                  className="rounded-3xl border border-white/10 bg-white/5 p-4 sm:p-5 hover:bg-white/7 transition"
+                  className="rounded-2xl border border-white/8 bg-white/[0.03] p-4 sm:p-5 hover:bg-white/5 transition"
                 >
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     {/* Left */}
@@ -465,7 +400,7 @@ export default function ProfessorAlunosCRMPage() {
                         {a.avatar_url ? (
                           <Image src={a.avatar_url} alt="Avatar" fill className="object-cover" />
                         ) : (
-                          <div className="h-full w-full flex items-center justify-center text-lime-300 font-extrabold">
+                          <div className="h-full w-full flex items-center justify-center text-white font-semibold">
                             {(a.nome_completo || "M").slice(0, 1).toUpperCase()}
                           </div>
                         )}
@@ -499,7 +434,7 @@ export default function ProfessorAlunosCRMPage() {
                     <div className="flex flex-wrap gap-2 sm:justify-end">
                       <Link
                         href={`/professor/alunos/${a.id}/detalhes`}
-                        className="rounded-2xl bg-lime-500 px-3 py-2 text-sm font-semibold text-black hover:bg-lime-400 transition"
+                        className="rounded-xl bg-white px-3 py-2 text-sm font-semibold text-black hover:bg-white/90 transition-colors"
                       >
                         Ver aluno
                       </Link>
@@ -537,7 +472,7 @@ export default function ProfessorAlunosCRMPage() {
                           href={wa}
                           target="_blank"
                           rel="noreferrer"
-                          className="rounded-2xl border border-lime-400/20 bg-lime-400/10 px-3 py-2 text-sm text-lime-200 hover:bg-lime-400/15 transition"
+                          className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/70 hover:bg-white/10 transition-colors"
                         >
                           WhatsApp
                         </a>

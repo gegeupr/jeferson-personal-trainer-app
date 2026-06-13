@@ -25,11 +25,24 @@ interface AlunoProfile {
   nome_completo: string | null;
 }
 
+const CAMPOS: { key: keyof Anamnese; label: string }[] = [
+  { key: "historico_saude_doencas", label: "Histórico de saúde e doenças" },
+  { key: "historico_lesoes_cirurgias", label: "Lesões e cirurgias" },
+  { key: "medicamentos_suplementos", label: "Medicamentos e suplementos" },
+  { key: "alergias", label: "Alergias" },
+  { key: "fumante_alcool", label: "Fumante / álcool" },
+  { key: "nivel_atividade_fisica_atual", label: "Nível de atividade atual" },
+  { key: "objetivos_principais", label: "Objetivos principais" },
+  { key: "restricoes_alimentares", label: "Restrições alimentares" },
+  { key: "disponibilidade_treino", label: "Disponibilidade para treinar" },
+  { key: "observacoes_gerais", label: "Observações gerais" },
+];
+
 export default function AnamneseAlunoPage() {
   const router = useRouter();
   const params = useParams();
   const alunoId = params.alunoId as string;
-  
+
   const [anamneseData, setAnamneseData] = useState<Anamnese | null>(null);
   const [alunoProfile, setAlunoProfile] = useState<AlunoProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -41,18 +54,10 @@ export default function AnamneseAlunoPage() {
       setError(null);
 
       const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError || !user) { router.push('/login'); return; }
 
-      if (authError || !user) {
-        router.push('/login');
-        return;
-      }
-      
       const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single();
-        
+        .from('profiles').select('role').eq('id', user.id).single();
       if (profileError || profile?.role !== 'professor') {
         setError('Acesso negado.');
         setLoading(false);
@@ -60,15 +65,11 @@ export default function AnamneseAlunoPage() {
       }
 
       const { data: alunoData, error: alunoError } = await supabase
-        .from('profiles')
-        .select('nome_completo')
-        .eq('id', alunoId)
-        .single();
-      
+        .from('profiles').select('nome_completo').eq('id', alunoId).single();
       if (alunoError || !alunoData) {
-          setError('Aluno não encontrado.');
-          setLoading(false);
-          return;
+        setError('Aluno não encontrado.');
+        setLoading(false);
+        return;
       }
       setAlunoProfile(alunoData);
 
@@ -79,90 +80,71 @@ export default function AnamneseAlunoPage() {
         .order('data_preenchimento', { ascending: false })
         .limit(1)
         .single();
-      
+
       if (anamneseError && anamneseError.code !== 'PGRST116') {
-        console.error('Erro ao buscar anamnese:', anamneseError.message);
         setError('Não foi possível carregar a anamnese.');
       } else if (anamnese) {
         setAnamneseData(anamnese);
       }
-      
+
       setLoading(false);
     }
     fetchAnamnese();
   }, [router, alunoId]);
 
+  const alunoNome = alunoProfile?.nome_completo || 'Aluno';
+
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-950 flex items-center justify-center text-lime-400 text-2xl">
-        Carregando anamnese...
-      </main>
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <p className="text-white/40 text-sm">Carregando anamnese…</p>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <main className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-red-500 text-lg p-4">
-        <p>{error}</p>
-        <Link href="/professor/alunos" className="mt-4 bg-lime-400 text-gray-900 py-2 px-6 rounded-full hover:bg-lime-300 transition duration-300">
-          Voltar para Alunos
-        </Link>
-      </main>
+      <div className="p-6 max-w-lg mx-auto mt-10">
+        <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-6">
+          <p className="text-red-300 text-sm font-medium">Erro</p>
+          <p className="mt-1 text-white/60 text-sm">{error}</p>
+          <Link href="/professor/alunos" className="mt-4 inline-block rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/70 hover:bg-white/10 transition-colors">
+            ← Alunos
+          </Link>
+        </div>
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-lime-400 mb-4 text-center">
-          Anamnese de {alunoProfile?.nome_completo || 'Aluno'}
-        </h1>
-        <div className="flex justify-start items-center mb-8">
-          <Link href="/professor/alunos" className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">
-            &larr; Voltar
-          </Link>
+    <main className="min-h-screen bg-[#0a0a0a] text-white px-4 py-8">
+      <div className="max-w-3xl mx-auto space-y-5">
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-2 text-sm text-white/40">
+          <Link href="/professor/alunos" className="hover:text-white/70 transition-colors">Alunos</Link>
+          <span>/</span>
+          <Link href={`/professor/alunos/${alunoId}/detalhes`} className="hover:text-white/70 transition-colors">{alunoNome}</Link>
+          <span>/</span>
+          <span className="text-white/60">Anamnese</span>
         </div>
 
+        <h1 className="text-2xl font-bold text-white">Anamnese</h1>
+
         {!anamneseData ? (
-          <div className="bg-gray-800 p-8 rounded-lg shadow-xl text-center">
-            <p className="text-gray-400">O aluno ainda não preencheu a anamnese.</p>
+          <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-8 text-center">
+            <p className="text-white/40 text-sm">O aluno ainda não preencheu a anamnese.</p>
           </div>
         ) : (
-          <div className="bg-gray-800 p-8 rounded-lg shadow-xl border-t-4 border-lime-400">
-            <h2 className="text-2xl font-bold text-white mb-6">Dados da Anamnese</h2>
-            <div className="space-y-4">
-              <p className="text-gray-300">
-                <span className="font-semibold text-lime-200">Histórico de Saúde e Doenças:</span> {anamneseData.historico_saude_doencas || 'N/A'}
-              </p>
-              <p className="text-gray-300">
-                <span className="font-semibold text-lime-200">Histórico de Lesões e Cirurgias:</span> {anamneseData.historico_lesoes_cirurgias || 'N/A'}
-              </p>
-              <p className="text-gray-300">
-                <span className="font-semibold text-lime-200">Medicamentos e Suplementos:</span> {anamneseData.medicamentos_suplementos || 'N/A'}
-              </p>
-              <p className="text-gray-300">
-                <span className="font-semibold text-lime-200">Alergias:</span> {anamneseData.alergias || 'N/A'}
-              </p>
-              <p className="text-gray-300">
-                <span className="font-semibold text-lime-200">Fumante / Consumo de Álcool:</span> {anamneseData.fumante_alcool || 'N/A'}
-              </p>
-              <p className="text-gray-300">
-                <span className="font-semibold text-lime-200">Nível de Atividade Física Atual:</span> {anamneseData.nivel_atividade_fisica_atual || 'N/A'}
-              </p>
-              <p className="text-gray-300">
-                <span className="font-semibold text-lime-200">Objetivos Principais com o Treino:</span> {anamneseData.objetivos_principais || 'N/A'}
-              </p>
-              <p className="text-gray-300">
-                <span className="font-semibold text-lime-200">Restrições Alimentares ou Dieta:</span> {anamneseData.restricoes_alimentares || 'N/A'}
-              </p>
-              <p className="text-gray-300">
-                <span className="font-semibold text-lime-200">Disponibilidade para Treinar:</span> {anamneseData.disponibilidade_treino || 'N/A'}
-              </p>
-              <p className="text-gray-300">
-                <span className="font-semibold text-lime-200">Observações Gerais:</span> {anamneseData.observacoes_gerais || 'N/A'}
-              </p>
-              <p className="text-gray-400 text-sm mt-4">
-                Última atualização: {new Date(anamneseData.data_preenchimento).toLocaleDateString()}
+          <div className="rounded-2xl border border-white/8 bg-white/[0.03] divide-y divide-white/8">
+            {CAMPOS.map(({ key, label }) => (
+              <div key={key} className="px-5 py-4">
+                <p className="text-xs font-medium text-white/50 mb-1">{label}</p>
+                <p className="text-sm text-white/80">{(anamneseData[key] as string) || '—'}</p>
+              </div>
+            ))}
+            <div className="px-5 py-4">
+              <p className="text-xs text-white/30">
+                Última atualização: {new Date(anamneseData.data_preenchimento).toLocaleDateString('pt-BR')}
               </p>
             </div>
           </div>

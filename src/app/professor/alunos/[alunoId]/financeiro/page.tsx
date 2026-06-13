@@ -335,45 +335,28 @@ export default function FinanceiroAlunoPage() {
 
   if (guardLoading || loading) {
     return (
-      <main className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
-        <div className="text-lime-300 text-lg">Carregando…</div>
-      </main>
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <p className="text-white/40 text-sm">Carregando…</p>
+      </div>
     );
   }
 
   if (!ok) return null;
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
-      {/* TOP BAR */}
-      <div className="sticky top-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur">
-        <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link
-              href="/professor/alunos"
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10 transition"
-            >
-              ← Voltar para Alunos
-            </Link>
-
-            <button
-              type="button"
-              onClick={() => load()}
-              disabled={busy}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10 transition disabled:opacity-60"
-              title="Recarregar"
-            >
-              ↻ Atualizar
-            </button>
-          </div>
-
-          <div className="text-sm text-white/70">Financeiro do aluno</div>
+    <main className="min-h-screen bg-[#0a0a0a] text-white">
+      <div className="mx-auto max-w-4xl px-4 py-8 space-y-5">
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-2 text-sm text-white/40">
+          <Link href="/professor/alunos" className="hover:text-white/70 transition-colors">Alunos</Link>
+          <span>/</span>
+          <Link href={`/professor/alunos/${alunoId}/detalhes`} className="hover:text-white/70 transition-colors">{aluno?.nome_completo || "Aluno"}</Link>
+          <span>/</span>
+          <span className="text-white/60">Financeiro</span>
         </div>
-      </div>
 
-      <div className="mx-auto max-w-6xl px-4 py-8 space-y-4">
         {/* Header aluno */}
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <p className="text-white/60 text-sm">Aluno</p>
@@ -389,7 +372,7 @@ export default function FinanceiroAlunoPage() {
                     href={waLink}
                     target="_blank"
                     rel="noreferrer"
-                    className="rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-xs text-lime-200 hover:bg-lime-400/15"
+                    className="rounded-xl border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70 hover:bg-white/10 transition-colors"
                   >
                     Chamar no WhatsApp ↗
                   </a>
@@ -401,7 +384,7 @@ export default function FinanceiroAlunoPage() {
 
             <div className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3 min-w-[220px]">
               <p className="text-xs text-white/50">Status</p>
-              <p className="text-lg font-extrabold text-lime-300">{statusLabel}</p>
+              <p className="text-lg font-extrabold text-white">{statusLabel}</p>
               {restante !== null ? (
                 <p className="text-xs text-white/50 mt-1">
                   Dias restantes: <span className="text-white">{restante}</span>
@@ -420,7 +403,7 @@ export default function FinanceiroAlunoPage() {
             <div
               className={`mt-4 rounded-2xl border px-4 py-3 text-sm ${
                 toast.type === "ok"
-                  ? "border-lime-400/20 bg-lime-400/10 text-lime-200"
+                  ? "border-white/10 bg-white/5 text-white/80"
                   : "border-red-400/20 bg-red-400/10 text-red-200"
               }`}
             >
@@ -430,7 +413,7 @@ export default function FinanceiroAlunoPage() {
         </div>
 
         {/* Card assinatura */}
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div>
               <p className="font-extrabold">Assinatura</p>
@@ -521,21 +504,21 @@ export default function FinanceiroAlunoPage() {
               <button
                 disabled={busy}
                 onClick={() => ativar(30)}
-                className="rounded-2xl bg-lime-400 px-5 py-3 text-sm font-extrabold text-black hover:bg-lime-300 disabled:opacity-60"
+                className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-black hover:bg-white/90 disabled:opacity-60"
               >
                 Ativar 30 dias
               </button>
               <button
                 disabled={busy}
                 onClick={() => ativar(90)}
-                className="rounded-2xl bg-lime-400 px-5 py-3 text-sm font-extrabold text-black hover:bg-lime-300 disabled:opacity-60"
+                className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-black hover:bg-white/90 disabled:opacity-60"
               >
                 Ativar 90 dias
               </button>
               <button
                 disabled={busy}
                 onClick={() => ativar(180)}
-                className="rounded-2xl bg-lime-400 px-5 py-3 text-sm font-extrabold text-black hover:bg-lime-300 disabled:opacity-60"
+                className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-black hover:bg-white/90 disabled:opacity-60"
               >
                 Ativar 180 dias
               </button>

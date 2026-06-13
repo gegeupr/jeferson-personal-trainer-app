@@ -10,7 +10,7 @@ const inter = Inter({
 
 /* Viewport separado (padrão Next 14+) */
 export const viewport: Viewport = {
-  themeColor: "#A3FF12",
+  themeColor: "#0a0a0a",
   width: "device-width",
   initialScale: 1,
 };

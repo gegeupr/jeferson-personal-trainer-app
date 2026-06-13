@@ -116,6 +116,33 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(target);
   }
 
+  // 4) Gate de assinatura do PROFESSOR: precisa de assinatura ativa OU trial válido.
+  //    /professor/pricing fica liberado para ele conseguir assinar (evita loop).
+  if (
+    protectedProfessor &&
+    role === "professor" &&
+    !pathname.startsWith("/professor/pricing")
+  ) {
+    const { data: assin } = await supabase
+      .from("professor_assinaturas")
+      .select("status, trial_ends_at")
+      .eq("professor_id", user.id)
+      .maybeSingle();
+
+    const agora = Date.now();
+    const trialValido =
+      assin?.status === "trial" &&
+      !!assin.trial_ends_at &&
+      new Date(assin.trial_ends_at).getTime() > agora;
+    const ativo = assin?.status === "active";
+
+    if (!ativo && !trialValido) {
+      const target = req.nextUrl.clone();
+      target.pathname = "/professor/pricing";
+      return NextResponse.redirect(target);
+    }
+  }
+
   return res;
 }
 

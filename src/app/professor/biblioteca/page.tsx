@@ -3,7 +3,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { supabase } from "@/utils/supabase-browser";
 
 interface Exercicio {
@@ -101,7 +100,7 @@ function Toast({
         className={cx(
           "rounded-2xl border p-4 shadow-[0_25px_80px_rgba(0,0,0,0.65)] backdrop-blur-md",
           "bg-black/55",
-          type === "success" && "border-lime-400/30",
+          type === "success" && "border-white/20",
           type === "error" && "border-red-400/30",
           type === "info" && "border-white/10"
         )}
@@ -111,7 +110,7 @@ function Toast({
             <p
               className={cx(
                 "text-sm font-extrabold",
-                type === "success" && "text-lime-300",
+                type === "success" && "text-white",
                 type === "error" && "text-red-200",
                 type === "info" && "text-white"
               )}
@@ -152,7 +151,7 @@ function Modal({
   return (
     <div className="fixed inset-0 z-[9998] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/70" onClick={onClose} />
-      <div className="relative w-full max-w-xl rounded-3xl border border-white/10 bg-gray-950/90 p-6 shadow-[0_25px_90px_rgba(0,0,0,0.75)] backdrop-blur-md">
+      <div className="relative w-full max-w-xl rounded-2xl border border-white/10 bg-[#111] p-6 shadow-[0_25px_90px_rgba(0,0,0,0.75)]">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-xs text-white/50">Motion • Biblioteca</p>
@@ -239,6 +238,10 @@ export default function BibliotecaExerciciosPage() {
     setToastOpen(true);
     window.setTimeout(() => setToastOpen(false), 3500);
   }
+
+  // confirm
+  const [confirmState, setConfirmState] = useState<{ msg: string; onOk: () => void } | null>(null);
+  function showConfirm(msg: string, onOk: () => void) { setConfirmState({ msg, onOk }); }
 
   // -----------------------------
   // Auth + fetch Minha
@@ -553,30 +556,28 @@ export default function BibliotecaExerciciosPage() {
     }
   };
 
-  const handleDeleteExercicio = async (exercicioId: string) => {
+  const handleDeleteExercicio = (exercicioId: string) => {
     if (!professorId) return;
+    showConfirm("Deletar este exercício? Isso pode afetar treinos que o utilizam.", async () => {
+      setIsSubmitting(true);
+      try {
+        const { error: deleteError } = await supabase
+          .from("exercicios")
+          .delete()
+          .eq("id", exercicioId)
+          .eq("professor_id", professorId);
 
-    const ok = confirm("Tem certeza que deseja deletar este exercício? Isso pode afetar treinos que o utilizam.");
-    if (!ok) return;
+        if (deleteError) {
+          fireToast("error", "Erro ao deletar", deleteError.message);
+          return;
+        }
 
-    setIsSubmitting(true);
-    try {
-      const { error: deleteError } = await supabase
-        .from("exercicios")
-        .delete()
-        .eq("id", exercicioId)
-        .eq("professor_id", professorId);
-
-      if (deleteError) {
-        fireToast("error", "Erro ao deletar", deleteError.message);
-        return;
+        setExercicios((prev) => prev.filter((ex) => ex.id !== exercicioId));
+        fireToast("success", "Deletado", "Exercício removido da sua biblioteca.");
+      } finally {
+        setIsSubmitting(false);
       }
-
-      setExercicios((prev) => prev.filter((ex) => ex.id !== exercicioId));
-      fireToast("success", "Deletado", "Exercício removido da sua biblioteca.");
-    } finally {
-      setIsSubmitting(false);
-    }
+    });
   };
 
   // -----------------------------
@@ -684,20 +685,20 @@ export default function BibliotecaExerciciosPage() {
   // -----------------------------
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-950 text-white px-4 py-10">
+      <main className="min-h-screen bg-[#0a0a0a] text-white px-4 py-10">
         <div className="mx-auto max-w-6xl">
           <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-2xl">
             <div className="h-6 w-56 rounded bg-white/10" />
             <div className="mt-3 h-4 w-80 rounded bg-white/10" />
             <div className="mt-8 grid gap-4 md:grid-cols-3">
-              <div className="h-24 rounded-3xl border border-white/10 bg-black/30" />
-              <div className="h-24 rounded-3xl border border-white/10 bg-black/30" />
-              <div className="h-24 rounded-3xl border border-white/10 bg-black/30" />
+              <div className="h-24 rounded-2xl border border-white/10 bg-black/30" />
+              <div className="h-24 rounded-2xl border border-white/10 bg-black/30" />
+              <div className="h-24 rounded-2xl border border-white/10 bg-black/30" />
             </div>
             <div className="mt-6 grid gap-3">
-              <div className="h-20 rounded-3xl border border-white/10 bg-black/30" />
-              <div className="h-20 rounded-3xl border border-white/10 bg-black/30" />
-              <div className="h-20 rounded-3xl border border-white/10 bg-black/30" />
+              <div className="h-20 rounded-2xl border border-white/10 bg-black/30" />
+              <div className="h-20 rounded-2xl border border-white/10 bg-black/30" />
+              <div className="h-20 rounded-2xl border border-white/10 bg-black/30" />
             </div>
           </div>
         </div>
@@ -709,25 +710,18 @@ export default function BibliotecaExerciciosPage() {
   // UI - Page
   // -----------------------------
   return (
-    <main className="min-h-screen bg-gray-950 text-white px-4 py-10">
+    <main className="min-h-screen bg-[#0a0a0a] text-white px-4 py-10">
       <Toast open={toastOpen} type={toastType} title={toastTitle} message={toastMsg} onClose={() => setToastOpen(false)} />
 
       <div className="mx-auto max-w-6xl">
         {/* HERO / HEADER */}
         <div className="rounded-[2rem] border border-white/10 bg-white/5 overflow-hidden shadow-2xl">
           <div className="relative">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(163,230,53,0.12),rgba(0,0,0,0.0)_55%)]" />
-            <div className="absolute inset-0 bg-gradient-to-br from-black/10 via-black/45 to-black/70" />
-
             <div className="relative p-6 md:p-8">
               <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                 <div>
-                  <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/30 px-3 py-1 text-xs text-white/70">
-                    <span className="h-2 w-2 rounded-full bg-lime-400" />
-                    Motion • Biblioteca de Exercícios
-                  </div>
-                  <h1 className="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight">
-                    Biblioteca <span className="text-lime-300">Premium</span>
+                  <h1 className="text-2xl font-bold text-white">
+                    Biblioteca
                   </h1>
                   <p className="mt-2 max-w-2xl text-sm text-white/70 leading-relaxed">
                     Use sua biblioteca própria ou copie do catálogo global premium. Você mantém liberdade total e ganha velocidade de montagem.
@@ -741,7 +735,7 @@ export default function BibliotecaExerciciosPage() {
                       className={cx(
                         "rounded-2xl px-4 py-2 text-sm font-extrabold border transition",
                         tab === "minha"
-                          ? "bg-lime-400 text-black border-lime-300/40"
+                          ? "bg-white text-black border-transparent"
                           : "bg-white/5 text-white/70 border-white/10 hover:bg-white/10"
                       )}
                     >
@@ -754,7 +748,7 @@ export default function BibliotecaExerciciosPage() {
                       className={cx(
                         "rounded-2xl px-4 py-2 text-sm font-extrabold border transition",
                         tab === "catalogo"
-                          ? "bg-lime-400 text-black border-lime-300/40"
+                          ? "bg-white text-black border-transparent"
                           : "bg-white/5 text-white/70 border-white/10 hover:bg-white/10"
                       )}
                     >
@@ -762,11 +756,11 @@ export default function BibliotecaExerciciosPage() {
                     </button>
 
                     {tab === "catalogo" ? (
-                      <span className="inline-flex items-center rounded-full border border-lime-300/20 bg-lime-400/10 px-3 py-1 text-xs font-bold text-lime-300">
+                      <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-bold text-white/60">
                         {totalCat} itens • {comVideoCat} com vídeo
                       </span>
                     ) : (
-                      <span className="inline-flex items-center rounded-full border border-lime-300/20 bg-lime-400/10 px-3 py-1 text-xs font-bold text-lime-300">
+                      <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-bold text-white/60">
                         {totalMine} itens • {comVideoMine} com vídeo
                       </span>
                     )}
@@ -774,18 +768,11 @@ export default function BibliotecaExerciciosPage() {
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  <Link
-                    href="/professor/dashboard"
-                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/80 hover:bg-white/10"
-                  >
-                    ← Voltar ao Dashboard
-                  </Link>
-
                   {tab === "minha" ? (
                     <>
                       <button
                         onClick={() => setShowAddModal(true)}
-                        className="rounded-2xl bg-lime-400 px-4 py-2 text-sm font-extrabold text-black hover:bg-lime-300 disabled:opacity-60"
+                        className="rounded-2xl bg-white px-4 py-2 text-sm font-extrabold text-black hover:bg-white/90 disabled:opacity-60"
                         disabled={isSubmitting}
                       >
                         + Novo exercício
@@ -793,7 +780,7 @@ export default function BibliotecaExerciciosPage() {
 
                       <button
                         onClick={refreshMine}
-                        className="rounded-2xl border border-white/10 bg-black/30 px-4 py-2 text-sm font-bold text-lime-300 hover:bg-white/5 disabled:opacity-60"
+                        className="rounded-2xl border border-white/10 bg-black/30 px-4 py-2 text-sm font-bold text-white/70 hover:bg-white/5 disabled:opacity-60"
                         disabled={isSubmitting}
                       >
                         Atualizar
@@ -803,7 +790,7 @@ export default function BibliotecaExerciciosPage() {
                     <>
                       <button
                         onClick={fetchCatalogo}
-                        className="rounded-2xl border border-white/10 bg-black/30 px-4 py-2 text-sm font-bold text-lime-300 hover:bg-white/5 disabled:opacity-60"
+                        className="rounded-2xl border border-white/10 bg-black/30 px-4 py-2 text-sm font-bold text-white/70 hover:bg-white/5 disabled:opacity-60"
                         disabled={isSubmitting || loadingCatalogo}
                       >
                         {loadingCatalogo ? "Atualizando..." : "Atualizar catálogo"}
@@ -811,7 +798,7 @@ export default function BibliotecaExerciciosPage() {
 
                       <button
                         onClick={importSelected}
-                        className="rounded-2xl bg-lime-400 px-4 py-2 text-sm font-extrabold text-black hover:bg-lime-300 disabled:opacity-60"
+                        className="rounded-2xl bg-white px-4 py-2 text-sm font-extrabold text-black hover:bg-white/90 disabled:opacity-60"
                         disabled={isSubmitting || selectedCount === 0}
                         title={selectedCount === 0 ? "Selecione exercícios para importar" : undefined}
                       >
@@ -824,27 +811,27 @@ export default function BibliotecaExerciciosPage() {
 
               {/* STATS */}
               <div className="mt-6 grid gap-4 md:grid-cols-3">
-                <div className="rounded-3xl border border-white/10 bg-black/30 p-5">
+                <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
                   <p className="text-xs text-white/60">{tab === "minha" ? "Total na sua biblioteca" : "Total no catálogo"}</p>
                   <p className="mt-2 text-3xl font-extrabold text-white">{tab === "minha" ? totalMine : totalCat}</p>
                   <p className="mt-2 text-xs text-white/40">{tab === "minha" ? "Seus exercícios para usar em treinos" : "Exercícios premium prontos para copiar"}</p>
                 </div>
 
-                <div className="rounded-3xl border border-white/10 bg-black/30 p-5">
+                <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
                   <p className="text-xs text-white/60">Com vídeo</p>
                   <p className="mt-2 text-3xl font-extrabold text-white">{tab === "minha" ? comVideoMine : comVideoCat}</p>
                   <p className="mt-2 text-xs text-white/40">Preview direto (YouTube)</p>
                 </div>
 
-                <div className="rounded-3xl border border-white/10 bg-black/30 p-5">
+                <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
                   <p className="text-xs text-white/60">Dica premium</p>
                   <p className="mt-2 text-sm text-white/75 leading-relaxed">
                     {tab === "minha"
                       ? "Use descrições curtas e objetivas. Seu aluno entende rápido e você reduz mensagens repetidas."
                       : "Importe do catálogo e depois personalize com seu estilo. Você ganha velocidade e mantém identidade."}
                   </p>
-                  <div className="mt-3 inline-flex rounded-full border border-lime-300/20 bg-lime-400/10 px-3 py-1 text-xs font-bold text-lime-300">
-                    UX de produto grande
+                  <div className="mt-3 inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/50">
+                    Dica
                   </div>
                 </div>
               </div>
@@ -858,7 +845,7 @@ export default function BibliotecaExerciciosPage() {
                       value={queryMine}
                       onChange={(e) => setQueryMine(e.target.value)}
                       placeholder="Digite nome ou descrição…"
-                      className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/35 outline-none focus:border-lime-300/40"
+                      className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/35 outline-none focus:border-white/25"
                     />
                   </div>
 
@@ -868,7 +855,7 @@ export default function BibliotecaExerciciosPage() {
                       className={cx(
                         "rounded-2xl border px-4 py-3 text-sm font-bold transition",
                         onlyWithVideoMine
-                          ? "border-lime-300/30 bg-lime-400/10 text-lime-300"
+                          ? "border-white/15 bg-white/8 text-white/70"
                           : "border-white/10 bg-white/5 text-white/75 hover:bg-white/10"
                       )}
                     >
@@ -903,7 +890,7 @@ export default function BibliotecaExerciciosPage() {
                         value={queryCat}
                         onChange={(e) => setQueryCat(e.target.value)}
                         placeholder="Nome, músculo, objetivo, equipamento…"
-                        className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/35 outline-none focus:border-lime-300/40"
+                        className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/35 outline-none focus:border-white/25"
                       />
                     </div>
 
@@ -913,7 +900,7 @@ export default function BibliotecaExerciciosPage() {
                         className={cx(
                           "rounded-2xl border px-4 py-3 text-sm font-bold transition",
                           onlyWithVideoCat
-                            ? "border-lime-300/30 bg-lime-400/10 text-lime-300"
+                            ? "border-white/15 bg-white/8 text-white/70"
                             : "border-white/10 bg-white/5 text-white/75 hover:bg-white/10"
                         )}
                       >
@@ -950,7 +937,7 @@ export default function BibliotecaExerciciosPage() {
                       <select
                         value={filterCategoria}
                         onChange={(e) => setFilterCategoria(e.target.value)}
-                        className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-lime-300/40"
+                        className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-white/25"
                       >
                         <option value="">Todas</option>
                         {categorias.map((x) => (
@@ -966,7 +953,7 @@ export default function BibliotecaExerciciosPage() {
                       <select
                         value={filterGrupo}
                         onChange={(e) => setFilterGrupo(e.target.value)}
-                        className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-lime-300/40"
+                        className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-white/25"
                       >
                         <option value="">Todos</option>
                         {grupos.map((x) => (
@@ -982,7 +969,7 @@ export default function BibliotecaExerciciosPage() {
                       <select
                         value={filterEquip}
                         onChange={(e) => setFilterEquip(e.target.value)}
-                        className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-lime-300/40"
+                        className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-white/25"
                       >
                         <option value="">Todos</option>
                         {equips.map((x) => (
@@ -998,7 +985,7 @@ export default function BibliotecaExerciciosPage() {
                       <select
                         value={filterNivel}
                         onChange={(e) => setFilterNivel(e.target.value)}
-                        className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-lime-300/40"
+                        className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-white/25"
                       >
                         <option value="">Todos</option>
                         {niveis.map((x) => (
@@ -1011,8 +998,8 @@ export default function BibliotecaExerciciosPage() {
                   </div>
 
                   {selectedCount > 0 ? (
-                    <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-lime-300/20 bg-lime-400/10 px-4 py-3">
-                      <p className="text-sm font-bold text-lime-200">
+                    <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3">
+                      <p className="text-sm font-semibold text-white/80">
                         {selectedCount} selecionado(s) para importar
                       </p>
                       <div className="flex flex-wrap gap-2">
@@ -1025,7 +1012,7 @@ export default function BibliotecaExerciciosPage() {
                         <button
                           onClick={importSelected}
                           disabled={isSubmitting}
-                          className="rounded-2xl bg-lime-400 px-4 py-2 text-xs font-extrabold text-black hover:bg-lime-300 disabled:opacity-60"
+                          className="rounded-2xl bg-white px-4 py-2 text-xs font-extrabold text-black hover:bg-white/90 disabled:opacity-60"
                         >
                           Importar agora
                         </button>
@@ -1052,7 +1039,7 @@ export default function BibliotecaExerciciosPage() {
                 <div className="mt-6 flex flex-col items-center justify-center gap-2 sm:flex-row">
                   <button
                     onClick={() => setShowAddModal(true)}
-                    className="rounded-full bg-lime-400 px-6 py-3 text-sm font-extrabold text-black hover:bg-lime-300"
+                    className="rounded-full bg-white px-6 py-3 text-sm font-extrabold text-black hover:bg-white/90"
                   >
                     + Criar exercício
                   </button>
@@ -1085,7 +1072,7 @@ export default function BibliotecaExerciciosPage() {
                             <p className="text-lg font-extrabold text-white truncate">{ex.nome}</p>
 
                             {yid ? (
-                              <span className="rounded-full border border-lime-300/25 bg-lime-400/10 px-3 py-1 text-xs font-bold text-lime-300">
+                              <span className="rounded-full border border-white/15 bg-white/8 px-3 py-1 text-xs font-bold text-white/70">
                                 Vídeo
                               </span>
                             ) : (
@@ -1118,7 +1105,7 @@ export default function BibliotecaExerciciosPage() {
                                 onClick={() =>
                                   setExpandedVideoMine((prev) => ({ ...prev, [ex.id]: !prev[ex.id] }))
                                 }
-                                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold text-lime-300 hover:bg-white/10"
+                                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold text-white/70 hover:bg-white/10"
                               >
                                 {isOpen ? "Ocultar preview" : "Ver preview"}
                               </button>
@@ -1146,7 +1133,7 @@ export default function BibliotecaExerciciosPage() {
                       </div>
 
                       {yid && isOpen ? (
-                        <div className="mt-4 overflow-hidden rounded-3xl border border-white/10 bg-black/40">
+                        <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-black/40">
                           <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
                             <iframe
                               className="absolute inset-0 h-full w-full"
@@ -1204,7 +1191,7 @@ export default function BibliotecaExerciciosPage() {
                       key={c.id}
                       className={cx(
                         "rounded-[1.75rem] border bg-white/5 p-5 shadow-[0_25px_80px_rgba(0,0,0,0.50)]",
-                        checked ? "border-lime-300/30" : "border-white/10"
+                        checked ? "border-white/30" : "border-white/10"
                       )}
                     >
                       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -1213,7 +1200,7 @@ export default function BibliotecaExerciciosPage() {
                             <p className="text-lg font-extrabold text-white truncate">{c.nome}</p>
 
                             {yid ? (
-                              <span className="rounded-full border border-lime-300/25 bg-lime-400/10 px-3 py-1 text-xs font-bold text-lime-300">
+                              <span className="rounded-full border border-white/15 bg-white/8 px-3 py-1 text-xs font-bold text-white/70">
                                 Vídeo
                               </span>
                             ) : (
@@ -1277,7 +1264,7 @@ export default function BibliotecaExerciciosPage() {
                                 onClick={() =>
                                   setExpandedVideoCat((prev) => ({ ...prev, [c.id]: !prev[c.id] }))
                                 }
-                                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold text-lime-300 hover:bg-white/10"
+                                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold text-white/70 hover:bg-white/10"
                               >
                                 {isOpen ? "Ocultar preview" : "Ver preview"}
                               </button>
@@ -1293,7 +1280,7 @@ export default function BibliotecaExerciciosPage() {
                               onChange={(e) =>
                                 setSelectedCatalog((prev) => ({ ...prev, [c.id]: e.target.checked }))
                               }
-                              className="h-4 w-4 accent-lime-400"
+                              className="h-4 w-4 accent-white"
                             />
                             Selecionar
                           </label>
@@ -1301,7 +1288,7 @@ export default function BibliotecaExerciciosPage() {
                           <button
                             onClick={() => addFromCatalog(c)}
                             disabled={isSubmitting}
-                            className="rounded-2xl bg-lime-400 px-4 py-2 text-sm font-extrabold text-black hover:bg-lime-300 disabled:opacity-60"
+                            className="rounded-2xl bg-white px-4 py-2 text-sm font-extrabold text-black hover:bg-white/90 disabled:opacity-60"
                           >
                             + Adicionar à minha
                           </button>
@@ -1309,7 +1296,7 @@ export default function BibliotecaExerciciosPage() {
                       </div>
 
                       {yid && isOpen ? (
-                        <div className="mt-4 overflow-hidden rounded-3xl border border-white/10 bg-black/40">
+                        <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-black/40">
                           <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
                             <iframe
                               className="absolute inset-0 h-full w-full"
@@ -1347,7 +1334,7 @@ export default function BibliotecaExerciciosPage() {
               value={novoExercicioNome}
               onChange={(e) => setNovoExercicioNome(e.target.value)}
               placeholder="Ex: Agachamento Livre"
-              className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/35 outline-none focus:border-lime-300/40"
+              className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/35 outline-none focus:border-white/25"
               required
             />
           </div>
@@ -1359,7 +1346,7 @@ export default function BibliotecaExerciciosPage() {
               onChange={(e) => setNovoExercicioDescricao(e.target.value)}
               placeholder="Ex: Mantenha coluna neutra, joelhos alinhados..."
               rows={4}
-              className="mt-1 w-full resize-none rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/35 outline-none focus:border-lime-300/40"
+              className="mt-1 w-full resize-none rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/35 outline-none focus:border-white/25"
             />
           </div>
 
@@ -1369,7 +1356,7 @@ export default function BibliotecaExerciciosPage() {
               value={novoExercicioLinkYoutube}
               onChange={(e) => setNovoExercicioLinkYoutube(e.target.value)}
               placeholder="https://www.youtube.com/watch?v=..."
-              className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/35 outline-none focus:border-lime-300/40"
+              className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/35 outline-none focus:border-white/25"
             />
             <p className="mt-2 text-xs text-white/45">
               Aceita: <span className="text-white/70">watch</span>, <span className="text-white/70">shorts</span> ou{" "}
@@ -1389,7 +1376,7 @@ export default function BibliotecaExerciciosPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="rounded-2xl bg-lime-400 px-4 py-3 text-sm font-extrabold text-black hover:bg-lime-300 disabled:opacity-60"
+              className="rounded-2xl bg-white px-4 py-3 text-sm font-extrabold text-black hover:bg-white/90 disabled:opacity-60"
             >
               {isSubmitting ? "Salvando..." : "Salvar exercício"}
             </button>
@@ -1413,7 +1400,7 @@ export default function BibliotecaExerciciosPage() {
             <input
               value={editNome}
               onChange={(e) => setEditNome(e.target.value)}
-              className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white outline-none focus:border-lime-300/40"
+              className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white outline-none focus:border-white/25"
               required
             />
           </div>
@@ -1424,7 +1411,7 @@ export default function BibliotecaExerciciosPage() {
               value={editDescricao}
               onChange={(e) => setEditDescricao(e.target.value)}
               rows={4}
-              className="mt-1 w-full resize-none rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white outline-none focus:border-lime-300/40"
+              className="mt-1 w-full resize-none rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white outline-none focus:border-white/25"
             />
           </div>
 
@@ -1433,14 +1420,14 @@ export default function BibliotecaExerciciosPage() {
             <input
               value={editLinkYoutube}
               onChange={(e) => setEditLinkYoutube(e.target.value)}
-              className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white outline-none focus:border-lime-300/40"
+              className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white outline-none focus:border-white/25"
             />
 
             {editLinkYoutube?.trim() ? (
               <p className="mt-2 text-xs text-white/45">
                 Preview:{" "}
                 {getYouTubeId(editLinkYoutube) ? (
-                  <span className="text-lime-300 font-bold">OK</span>
+                  <span className="text-white/70 font-bold">OK</span>
                 ) : (
                   <span className="text-red-200 font-bold">link não reconhecido</span>
                 )}
@@ -1462,13 +1449,25 @@ export default function BibliotecaExerciciosPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="rounded-2xl bg-lime-400 px-4 py-3 text-sm font-extrabold text-black hover:bg-lime-300 disabled:opacity-60"
+              className="rounded-2xl bg-white px-4 py-3 text-sm font-extrabold text-black hover:bg-white/90 disabled:opacity-60"
             >
               {isSubmitting ? "Atualizando..." : "Salvar alterações"}
             </button>
           </div>
         </form>
       </Modal>
+
+      {confirmState && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[9999] p-4">
+          <div className="bg-[#111] border border-white/10 rounded-2xl p-6 max-w-sm w-full">
+            <p className="text-white text-sm">{confirmState.msg}</p>
+            <div className="flex gap-2 mt-5 justify-end">
+              <button onClick={() => setConfirmState(null)} className="border border-white/10 bg-white/5 px-4 py-2 rounded-xl text-sm text-white/70 hover:bg-white/10 transition-colors">Cancelar</button>
+              <button onClick={() => { confirmState.onOk(); setConfirmState(null); }} className="bg-white text-black px-4 py-2 rounded-xl text-sm font-semibold hover:bg-white/90 transition-colors">Confirmar</button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

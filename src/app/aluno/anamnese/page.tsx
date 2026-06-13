@@ -1,15 +1,14 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { supabase } from '@/utils/supabase-browser';
-import Link from 'next/link';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/utils/supabase-browser";
+import Link from "next/link";
 
 interface AnamneseData {
   id: string;
   aluno_id: string;
-  // Assumi que data_preenchimento é uma string representando a data (timestamp)
-  data_preenchimento: string; 
+  data_preenchimento: string;
   historico_saude_doencas: string | null;
   historico_lesoes_cirurgias: string | null;
   medicamentos_suplementos: string | null;
@@ -22,351 +21,207 @@ interface AnamneseData {
   observacoes_gerais: string | null;
 }
 
+type FormData = Omit<AnamneseData, "id" | "aluno_id" | "data_preenchimento">;
+
+const inputClass = "mt-1.5 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-2.5 text-sm text-white outline-none focus:border-white/25 transition-colors";
+
 export default function MinhaAnamnesePage() {
   const router = useRouter();
   const [alunoId, setAlunoId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [okMsg, setOkMsg] = useState<string | null>(null);
   const [anamnese, setAnamnese] = useState<AnamneseData | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  // CORREÇÃO APLICADA: Incluindo 'data_preenchimento' nos campos omitidos, 
-  // pois ele será gerado automaticamente ou preenchido pelo Supabase.
-  const [formData, setFormData] = useState<Omit<AnamneseData, 'id' | 'aluno_id' | 'data_preenchimento'>>({
-    historico_saude_doencas: '',
-    historico_lesoes_cirurgias: '',
-    medicamentos_suplementos: '',
-    alergias: '',
-    fumante_alcool: '',
-    nivel_atividade_fisica_atual: '',
-    objetivos_principais: '',
-    restricoes_alimentares: '',
-    disponibilidade_treino: '',
-    observacoes_gerais: '',
+
+  const [formData, setFormData] = useState<FormData>({
+    historico_saude_doencas: "",
+    historico_lesoes_cirurgias: "",
+    medicamentos_suplementos: "",
+    alergias: "",
+    fumante_alcool: "",
+    nivel_atividade_fisica_atual: "",
+    objetivos_principais: "",
+    restricoes_alimentares: "",
+    disponibilidade_treino: "",
+    observacoes_gerais: "",
   });
 
   useEffect(() => {
-    async function checkUserAndFetchAnamnese() {
+    async function load() {
       setLoading(true);
       setError(null);
 
       const { data: { user }, error: authError } = await supabase.auth.getUser();
-
-      if (authError || !user) {
-        router.push('/login');
-        return;
-      }
+      if (authError || !user) { router.push("/login"); return; }
       setAlunoId(user.id);
-      
-      const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single();
-        
-      if (profileError || profile?.role !== 'aluno') {
-        setError('Acesso negado. Esta página é apenas para alunos.');
-        setLoading(false);
-        router.push('/dashboard');
-        return;
-      }
 
-      const { data, error: fetchError } = await supabase
-        .from('anamneses')
-        .select('*')
-        .eq('aluno_id', user.id)
-        .single();
+      const { data: profile, error: profileError } = await supabase.from("profiles").select("role").eq("id", user.id).single();
+      if (profileError || profile?.role !== "aluno") { router.push("/dashboard"); return; }
 
-      if (fetchError && fetchError.code !== 'PGRST116') {
-        console.error('Erro ao buscar anamnese:', fetchError.message);
-        setError('Não foi possível carregar sua anamnese.');
+      const { data, error: fetchError } = await supabase.from("anamneses").select("*").eq("aluno_id", user.id).single();
+
+      if (fetchError && fetchError.code !== "PGRST116") {
+        setError("Não foi possível carregar sua anamnese.");
       } else if (data) {
-        // Tipagem corrigida para lidar com a estrutura correta dos dados
-        setAnamnese(data as AnamneseData); 
+        setAnamnese(data as AnamneseData);
         setFormData({
-          historico_saude_doencas: data.historico_saude_doencas || '',
-          historico_lesoes_cirurgias: data.historico_lesoes_cirurgias || '',
-          medicamentos_suplementos: data.medicamentos_suplementos || '',
-          alergias: data.alergias || '',
-          fumante_alcool: data.fumante_alcool || '',
-          nivel_atividade_fisica_atual: data.nivel_atividade_fisica_atual || '',
-          objetivos_principais: data.objetivos_principais || '',
-          restricoes_alimentares: data.restricoes_alimentares || '',
-          disponibilidade_treino: data.disponibilidade_treino || '',
-          observacoes_gerais: data.observacoes_gerais || '',
+          historico_saude_doencas: data.historico_saude_doencas || "",
+          historico_lesoes_cirurgias: data.historico_lesoes_cirurgias || "",
+          medicamentos_suplementos: data.medicamentos_suplementos || "",
+          alergias: data.alergias || "",
+          fumante_alcool: data.fumante_alcool || "",
+          nivel_atividade_fisica_atual: data.nivel_atividade_fisica_atual || "",
+          objetivos_principais: data.objetivos_principais || "",
+          restricoes_alimentares: data.restricoes_alimentares || "",
+          disponibilidade_treino: data.disponibilidade_treino || "",
+          observacoes_gerais: data.observacoes_gerais || "",
         });
       }
       setLoading(false);
     }
-    checkUserAndFetchAnamnese();
+    load();
   }, [router]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
+    setOkMsg(null);
 
-    if (!alunoId) {
-      setError('ID do aluno não encontrado. Tente recarregar a página.');
-      setIsSubmitting(false);
-      return;
-    }
+    if (!alunoId) { setError("ID do aluno não encontrado."); setIsSubmitting(false); return; }
 
     try {
       if (anamnese) {
-        // Se houver 'created_at', o update falhará se tentar passar. 
-        // Omitimos apenas os campos que o Supabase deve gerenciar.
-        const updateData = {
-          ...formData,
-          // Não inclua data_preenchimento aqui se ele é gerado no Supabase
-        };
-        
-        const { error: updateError } = await supabase
-          .from('anamneses')
-          // Use updateData para evitar problemas de tipagem com data_preenchimento
-          .update(updateData) 
-          .eq('aluno_id', alunoId);
-
+        const { error: updateError } = await supabase.from("anamneses").update(formData).eq("aluno_id", alunoId);
         if (updateError) throw updateError;
-        // Use setError para feedback na UI, em vez de alert()
-        alert('Anamnese atualizada com sucesso!'); 
+        setOkMsg("Anamnese atualizada com sucesso!");
       } else {
-        const { error: insertError } = await supabase
-          .from('anamneses')
-          .insert({ ...formData, aluno_id: alunoId });
-
+        const { error: insertError } = await supabase.from("anamneses").insert({ ...formData, aluno_id: alunoId });
         if (insertError) throw insertError;
-        alert('Anamnese salva com sucesso!');
+        setOkMsg("Anamnese salva com sucesso!");
       }
-      
-      const { data, error: fetchErrorAfterSave } = await supabase
-        .from('anamneses')
-        .select('*')
-        .eq('aluno_id', alunoId)
-        .single();
-      if (!fetchErrorAfterSave) setAnamnese(data as AnamneseData); // Tipagem reforçada
 
-    } catch (err: unknown) { // CORREÇÃO: Usando unknown para tratamento seguro de erros
-      if (err instanceof Error) {
-        console.error('Erro ao salvar anamnese:', err.message);
-        setError('Erro ao salvar anamnese: ' + err.message);
-      } else {
-        console.error('Ocorreu um erro desconhecido ao salvar anamnese.');
-        setError('Erro ao salvar anamnese: Ocorreu um erro desconhecido.');
-      }
+      const { data } = await supabase.from("anamneses").select("*").eq("aluno_id", alunoId).single();
+      if (data) setAnamnese(data as AnamneseData);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? "Erro ao salvar: " + err.message : "Erro ao salvar anamnese.");
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-950 flex items-center justify-center text-lime-400 text-2xl">
-        Carregando anamnese...
-      </main>
-    );
-  }
-
-  if (error) {
-    return (
-      <main className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-red-500 text-lg p-4">
-        <p>{error}</p>
-        <Link href="/dashboard" className="mt-4 bg-lime-400 text-gray-900 py-2 px-6 rounded-full hover:bg-lime-300 transition duration-300">
-          Ir para Dashboard
-        </Link>
-      </main>
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <p className="text-white/40 text-sm">Carregando anamnese…</p>
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-lime-400 mb-8 text-center">Minha Anamnese</h1>
-
-        <div className="flex justify-start items-center mb-8">
-          <Link href="/dashboard" className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">
-            &larr; Voltar ao Dashboard
-          </Link>
+    <main className="min-h-screen bg-[#0a0a0a] text-white px-4 py-8 pb-16">
+      <div className="max-w-2xl mx-auto space-y-5">
+        <div className="flex items-center gap-2 text-sm text-white/40">
+          <Link href="/aluno/dashboard" className="hover:text-white/70 transition-colors">Dashboard</Link>
+          <span>/</span>
+          <span className="text-white/60">Anamnese</span>
         </div>
 
-        <section className="bg-gray-800 p-8 rounded-lg shadow-xl border-t-4 border-lime-400">
-          <h2 className="text-2xl font-bold text-white mb-6">
-            {anamnese ? 'Editar Minha Anamnese' : 'Preencher Minha Anamnese'}
-          </h2>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="historico_saude_doencas" className="block text-gray-300 text-sm font-bold mb-2">
-                Histórico de Saúde e Doenças:
-              </label>
-              <textarea
-                id="historico_saude_doencas"
-                name="historico_saude_doencas"
-                rows={3}
-                value={formData.historico_saude_doencas || ''}
-                onChange={handleInputChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200 resize-none"
-                placeholder="Ex: Diabetes, hipertensão, problemas cardíacos..."
-              ></textarea>
-            </div>
+        <div>
+          <h1 className="text-2xl font-bold text-white">{anamnese ? "Editar Anamnese" : "Preencher Anamnese"}</h1>
+          <p className="text-white/50 text-sm mt-1">Informações de saúde para seu professor personalizar seus treinos.</p>
+        </div>
 
-            <div>
-              <label htmlFor="historico_lesoes_cirurgias" className="block text-gray-300 text-sm font-bold mb-2">
-                Histórico de Lesões e Cirurgias:
-              </label>
-              <textarea
-                id="historico_lesoes_cirurgias"
-                name="historico_lesoes_cirurgias"
-                rows={3}
-                value={formData.historico_lesoes_cirurgias || ''}
-                onChange={handleInputChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200 resize-none"
-                placeholder="Ex: Cirurgia no joelho, dores lombares, tendinite no ombro..."
-              ></textarea>
-            </div>
+        {error && (
+          <div className="rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-300">{error}</div>
+        )}
+        {okMsg && (
+          <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">{okMsg}</div>
+        )}
 
-            <div>
-              <label htmlFor="medicamentos_suplementos" className="block text-gray-300 text-sm font-bold mb-2">
-                Medicamentos e Suplementos (uso contínuo):
-              </label>
-              <textarea
-                id="medicamentos_suplementos"
-                name="medicamentos_suplementos"
-                rows={3}
-                value={formData.medicamentos_suplementos || ''}
-                onChange={handleInputChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200 resize-none"
-                placeholder="Ex: Insulina, anti-inflamatórios, whey protein..."
-              ></textarea>
-            </div>
+        <form onSubmit={handleSubmit} className="rounded-2xl border border-white/8 bg-white/[0.03] p-6 space-y-5">
+          <div>
+            <label className="text-sm text-white/60">Histórico de saúde e doenças</label>
+            <textarea name="historico_saude_doencas" rows={3} value={formData.historico_saude_doencas || ""} onChange={handleChange}
+              className={inputClass + " resize-none"} placeholder="Ex: Diabetes, hipertensão, problemas cardíacos…" />
+          </div>
 
-            <div>
-              <label htmlFor="alergias" className="block text-gray-300 text-sm font-bold mb-2">
-                Alergias:
-              </label>
-              <input
-                type="text"
-                id="alergias"
-                name="alergias"
-                value={formData.alergias || ''}
-                onChange={handleInputChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
-                placeholder="Ex: Alergia a algum alimento, medicamento..."
-              />
-            </div>
+          <div>
+            <label className="text-sm text-white/60">Histórico de lesões e cirurgias</label>
+            <textarea name="historico_lesoes_cirurgias" rows={3} value={formData.historico_lesoes_cirurgias || ""} onChange={handleChange}
+              className={inputClass + " resize-none"} placeholder="Ex: Cirurgia no joelho, dores lombares, tendinite…" />
+          </div>
 
-            <div>
-              <label htmlFor="fumante_alcool" className="block text-gray-300 text-sm font-bold mb-2">
-                Fumante / Consumo de Álcool:
-              </label>
-              <select
-                id="fumante_alcool"
-                name="fumante_alcool"
-                value={formData.fumante_alcool || ''}
-                onChange={handleInputChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
-              >
-                <option value="">Selecione</option>
-                <option value="Nao Fumante / Nao Consumo">Não Fumante / Não Consumo</option>
-                <option value="Fumante / Nao Consumo">Fumante / Não Consumo</option>
-                <option value="Nao Fumante / Consumo Moderado">Não Fumante / Consumo Moderado</option>
-                <option value="Fumante / Consumo Moderado">Fumante / Consumo Moderado</option>
-                <option value="Fumante / Consumo Excessivo">Fumante / Consumo Excessivo</option>
-              </select>
-            </div>
+          <div>
+            <label className="text-sm text-white/60">Medicamentos e suplementos (uso contínuo)</label>
+            <textarea name="medicamentos_suplementos" rows={2} value={formData.medicamentos_suplementos || ""} onChange={handleChange}
+              className={inputClass + " resize-none"} placeholder="Ex: Insulina, anti-inflamatórios, whey protein…" />
+          </div>
 
-            <div>
-              <label htmlFor="nivel_atividade_fisica_atual" className="block text-gray-300 text-sm font-bold mb-2">
-                Nível de Atividade Física Atual:
-              </label>
-              <select
-                id="nivel_atividade_fisica_atual"
-                name="nivel_atividade_fisica_atual"
-                value={formData.nivel_atividade_fisica_atual || ''}
-                onChange={handleInputChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200"
-              >
-                <option value="">Selecione</option>
-                <option value="Sedentario">Sedentário</option>
-                <option value="Pouco Ativo">Pouco Ativo</option>
-                <option value="Ativo">Ativo</option>
-                <option value="Muito Ativo">Muito Ativo</option>
-              </select>
-            </div>
+          <div>
+            <label className="text-sm text-white/60">Alergias</label>
+            <input type="text" name="alergias" value={formData.alergias || ""} onChange={handleChange}
+              className={inputClass} placeholder="Ex: Alergia a algum alimento, medicamento…" />
+          </div>
 
-            <div>
-              <label htmlFor="objetivos_principais" className="block text-gray-300 text-sm font-bold mb-2">
-                Objetivos Principais com o Treino:
-              </label>
-              <textarea
-                id="objetivos_principais"
-                name="objetivos_principais"
-                rows={3}
-                value={formData.objetivos_principais || ''}
-                onChange={handleInputChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200 resize-none"
-                placeholder="Ex: Perder peso, ganhar massa muscular, melhorar condicionamento..."
-              ></textarea>
-            </div>
+          <div>
+            <label className="text-sm text-white/60">Fumante / Consumo de álcool</label>
+            <select name="fumante_alcool" value={formData.fumante_alcool || ""} onChange={handleChange} className={inputClass}>
+              <option value="">Selecione</option>
+              <option value="Nao Fumante / Nao Consumo">Não Fumante / Não Consumo</option>
+              <option value="Fumante / Nao Consumo">Fumante / Não Consumo</option>
+              <option value="Nao Fumante / Consumo Moderado">Não Fumante / Consumo Moderado</option>
+              <option value="Fumante / Consumo Moderado">Fumante / Consumo Moderado</option>
+              <option value="Fumante / Consumo Excessivo">Fumante / Consumo Excessivo</option>
+            </select>
+          </div>
 
-            <div>
-              <label htmlFor="restricoes_alimentares" className="block text-gray-300 text-sm font-bold mb-2">
-                Restrições Alimentares ou Dieta:
-              </label>
-              <textarea
-                id="restricoes_alimentares"
-                name="restricoes_alimentares"
-                rows={3}
-                value={formData.restricoes_alimentares || ''}
-                onChange={handleInputChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200 resize-none"
-                placeholder="Ex: Vegetariano, vegano, intolerância à lactose..."
-              ></textarea>
-            </div>
+          <div>
+            <label className="text-sm text-white/60">Nível de atividade física atual</label>
+            <select name="nivel_atividade_fisica_atual" value={formData.nivel_atividade_fisica_atual || ""} onChange={handleChange} className={inputClass}>
+              <option value="">Selecione</option>
+              <option value="Sedentario">Sedentário</option>
+              <option value="Pouco Ativo">Pouco Ativo</option>
+              <option value="Ativo">Ativo</option>
+              <option value="Muito Ativo">Muito Ativo</option>
+            </select>
+          </div>
 
-            <div>
-              <label htmlFor="disponibilidade_treino" className="block text-gray-300 text-sm font-bold mb-2">
-                Disponibilidade para Treinar (dias/horários):
-              </label>
-              <textarea
-                id="disponibilidade_treino"
-                name="disponibilidade_treino"
-                rows={3}
-                value={formData.disponibilidade_treino || ''}
-                onChange={handleInputChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200 resize-none"
-                placeholder="Ex: Seg, Qua, Sex - 18h às 19h; Finais de semana pela manhã..."
-              ></textarea>
-            </div>
+          <div>
+            <label className="text-sm text-white/60">Objetivos principais com o treino</label>
+            <textarea name="objetivos_principais" rows={3} value={formData.objetivos_principais || ""} onChange={handleChange}
+              className={inputClass + " resize-none"} placeholder="Ex: Perder peso, ganhar massa, melhorar condicionamento…" />
+          </div>
 
-            <div>
-              <label htmlFor="observacoes_gerais" className="block text-gray-300 text-sm font-bold mb-2">
-                Observações Gerais:
-              </label>
-              <textarea
-                id="observacoes_gerais"
-                name="observacoes_gerais"
-                rows={3}
-                value={formData.observacoes_gerais || ''}
-                onChange={handleInputChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200 resize-none"
-                placeholder="Ex: Condições médicas importantes, histórico familiar, metas de longo prazo..."
-              ></textarea>
-            </div>
+          <div>
+            <label className="text-sm text-white/60">Restrições alimentares ou dieta</label>
+            <textarea name="restricoes_alimentares" rows={2} value={formData.restricoes_alimentares || ""} onChange={handleChange}
+              className={inputClass + " resize-none"} placeholder="Ex: Vegetariano, vegano, intolerância à lactose…" />
+          </div>
 
-            <button
-              type="submit"
-              className="bg-lime-600 hover:bg-lime-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 text-lg w-full"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? 'Salvando Anamnese...' : 'Salvar Anamnese'}
-            </button>
-          </form>
-        </section>
+          <div>
+            <label className="text-sm text-white/60">Disponibilidade para treinar (dias/horários)</label>
+            <textarea name="disponibilidade_treino" rows={2} value={formData.disponibilidade_treino || ""} onChange={handleChange}
+              className={inputClass + " resize-none"} placeholder="Ex: Seg, Qua, Sex - 18h às 19h…" />
+          </div>
+
+          <div>
+            <label className="text-sm text-white/60">Observações gerais</label>
+            <textarea name="observacoes_gerais" rows={3} value={formData.observacoes_gerais || ""} onChange={handleChange}
+              className={inputClass + " resize-none"} placeholder="Condições médicas importantes, metas de longo prazo…" />
+          </div>
+
+          <button type="submit" disabled={isSubmitting}
+            className="w-full rounded-xl bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-white/90 disabled:opacity-60 transition-colors">
+            {isSubmitting ? "Salvando…" : "Salvar anamnese"}
+          </button>
+        </form>
       </div>
     </main>
   );

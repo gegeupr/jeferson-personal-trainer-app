@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/utils/supabase-browser";
@@ -68,6 +67,8 @@ export default function ProfessorCommunityModerationPage() {
 
   const [err, setErr] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [confirmState, setConfirmState] = useState<{ msg: string; onOk: () => void } | null>(null);
+  function showConfirm(msg: string, onOk: () => void) { setConfirmState({ msg, onOk }); }
 
   const mediaByPost = useMemo(() => {
     const map: Record<string, Media[]> = {};
@@ -187,52 +188,36 @@ export default function ProfessorCommunityModerationPage() {
     }
   }
 
-  async function removePost(postId: string) {
-    if (!confirm("Excluir este post? (isso remove também mídias e likes)")) return;
-
-    setBusyId(postId);
-    setErr(null);
-
-    try {
-      const { error } = await supabase.from("community_posts").delete().eq("id", postId);
-      if (error) throw error;
-      await load();
-    } catch (e: any) {
-      setErr(e?.message || "Erro ao excluir.");
-    } finally {
-      setBusyId(null);
-    }
+  function removePost(postId: string) {
+    showConfirm("Excluir este post? (remove também mídias e likes)", async () => {
+      setBusyId(postId);
+      setErr(null);
+      try {
+        const { error } = await supabase.from("community_posts").delete().eq("id", postId);
+        if (error) throw error;
+        await load();
+      } catch (e: any) {
+        setErr(e?.message || "Erro ao excluir.");
+      } finally {
+        setBusyId(null);
+      }
+    });
   }
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
-        <div className="text-lime-300 text-lg">Carregando…</div>
-      </main>
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <p className="text-white/40 text-sm">Carregando…</p>
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
-      {/* Top bar */}
-      <div className="sticky top-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur">
-        <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-          <Link
-            href="/professor/dashboard"
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10 transition"
-          >
-            ← Voltar ao Dashboard
-          </Link>
-          <div className="text-sm text-white/60">Moderação da Comunidade</div>
-        </div>
-      </div>
-
-      <div className="mx-auto max-w-6xl px-4 py-8 pb-16">
+    <main className="min-h-screen bg-[#0a0a0a] text-white">
+      <div className="mx-auto max-w-4xl px-4 py-8 pb-16">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-extrabold">
-              Comunidade <span className="text-lime-300">Motion</span>
-            </h1>
+            <h1 className="text-2xl font-bold text-white">Comunidade</h1>
             <p className="mt-2 text-sm text-white/60">
               Você controla o que aparece no seu perfil público: aprova, rejeita, exclui.
             </p>
@@ -245,7 +230,7 @@ export default function ProfessorCommunityModerationPage() {
                 onClick={() => setTab(t)}
                 className={`rounded-full px-4 py-2 text-sm border transition ${
                   tab === t
-                    ? "border-lime-400/40 bg-lime-400/10 text-lime-200"
+                    ? "border-white/20 bg-white/8 text-white"
                     : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
                 }`}
               >
@@ -263,7 +248,7 @@ export default function ProfessorCommunityModerationPage() {
 
         <div className="mt-6 grid gap-4">
           {posts.length === 0 ? (
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-center text-white/70">
+            <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-8 text-center text-white/70">
               Nada por aqui.
             </div>
           ) : (
@@ -273,14 +258,14 @@ export default function ProfessorCommunityModerationPage() {
               const busy = busyId === p.id;
 
               return (
-                <div key={p.id} className="rounded-3xl border border-white/10 bg-white/5 p-5">
+                <div key={p.id} className="rounded-2xl border border-white/8 bg-white/[0.03] p-5">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="relative h-10 w-10 rounded-2xl overflow-hidden border border-white/10 bg-black/40 shrink-0">
                         {a?.avatar_url ? (
                           <Image src={a.avatar_url} alt="Avatar" fill className="object-cover" />
                         ) : (
-                          <div className="h-full w-full flex items-center justify-center text-lime-300 font-extrabold">
+                          <div className="h-full w-full flex items-center justify-center text-white font-extrabold">
                             {(a?.nome_completo || "A").slice(0, 1).toUpperCase()}
                           </div>
                         )}
@@ -298,7 +283,7 @@ export default function ProfessorCommunityModerationPage() {
                           <button
                             disabled={busy}
                             onClick={() => setStatus(p.id, "approved")}
-                            className="rounded-2xl bg-lime-400 px-4 py-2 text-sm font-bold text-black hover:bg-lime-300 disabled:opacity-60"
+                            className="rounded-2xl bg-white px-4 py-2 text-sm font-bold text-black hover:bg-white/90 disabled:opacity-60"
                           >
                             Aprovar
                           </button>
@@ -314,7 +299,7 @@ export default function ProfessorCommunityModerationPage() {
                         <button
                           disabled={busy}
                           onClick={() => setStatus(p.id, "approved")}
-                          className="rounded-2xl bg-lime-400 px-4 py-2 text-sm font-bold text-black hover:bg-lime-300 disabled:opacity-60"
+                          className="rounded-2xl bg-white px-4 py-2 text-sm font-bold text-black hover:bg-white/90 disabled:opacity-60"
                         >
                           Aprovar
                         </button>
@@ -343,7 +328,7 @@ export default function ProfessorCommunityModerationPage() {
                       Tipo: <span className="text-white/80">{p.kind}</span>{" "}
                       {p.rating ? (
                         <>
-                          • Nota: <span className="text-lime-300 font-semibold">{p.rating}/5</span>
+                          • Nota: <span className="text-white/70 font-semibold">{p.rating}/5</span>
                         </>
                       ) : null}
                     </div>
@@ -379,6 +364,18 @@ export default function ProfessorCommunityModerationPage() {
           )}
         </div>
       </div>
+
+      {confirmState && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[200] p-4">
+          <div className="bg-[#111] border border-white/10 rounded-2xl p-6 max-w-sm w-full">
+            <p className="text-white text-sm">{confirmState.msg}</p>
+            <div className="flex gap-2 mt-5 justify-end">
+              <button onClick={() => setConfirmState(null)} className="border border-white/10 bg-white/5 px-4 py-2 rounded-xl text-sm text-white/70 hover:bg-white/10 transition-colors">Cancelar</button>
+              <button onClick={() => { confirmState.onOk(); setConfirmState(null); }} className="bg-white text-black px-4 py-2 rounded-xl text-sm font-semibold hover:bg-white/90 transition-colors">Confirmar</button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

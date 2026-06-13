@@ -268,7 +268,7 @@ export default function ProfessorPerfilPublicoPage() {
           <p className="mt-2 text-white/60">Esta página é exclusiva para professores.</p>
           <Link
             href="/dashboard"
-            className="inline-block mt-6 rounded-full bg-lime-400 px-6 py-3 text-sm font-semibold text-black hover:bg-lime-300"
+            className="inline-block mt-6 rounded-full bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-white/90"
           >
             Ir para o Dashboard
           </Link>
@@ -285,13 +285,13 @@ export default function ProfessorPerfilPublicoPage() {
           {coverUrl ? (
             <Image src={coverUrl} alt="Capa" fill className="object-cover opacity-85" priority />
           ) : (
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(163,230,53,0.18),rgba(0,0,0,0)_55%)]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent" />
           )}
           <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/45 to-black" />
         </div>
 
         <div className="mx-auto max-w-6xl px-5 -mt-16 pb-10">
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+          <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-6 backdrop-blur">
             <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center">
               {/* Avatar */}
               <div className="flex gap-4 items-center">
@@ -299,7 +299,7 @@ export default function ProfessorPerfilPublicoPage() {
                   {avatarUrl ? (
                     <Image src={avatarUrl} alt="Avatar" fill className="object-cover" />
                   ) : (
-                    <div className="h-full w-full flex items-center justify-center text-lime-300 font-bold">
+                    <div className="h-full w-full flex items-center justify-center text-white font-bold">
                       {(nome || "M").slice(0, 1).toUpperCase()}
                     </div>
                   )}
@@ -325,13 +325,6 @@ export default function ProfessorPerfilPublicoPage() {
                 <p className="mt-1 text-white/60 text-sm">Personalize sua página e compartilhe o link com seus alunos.</p>
 
                 <div className="mt-4 flex flex-wrap gap-2">
-                  <Link
-                    href="/professor/dashboard"
-                    className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold hover:bg-white/10"
-                  >
-                    ← Voltar ao Dashboard
-                  </Link>
-
                   <label className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold hover:bg-white/10 cursor-pointer">
                     {uploadingCover ? "Enviando..." : "Trocar capa"}
                     <input
@@ -347,14 +340,14 @@ export default function ProfessorPerfilPublicoPage() {
                     <>
                       <button
                         onClick={copyPublicLink}
-                        className="rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-black hover:bg-lime-300"
+                        className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-white/90"
                       >
                         Copiar link público
                       </button>
                       <Link
                         href={`/p/${profile.slug}`}
                         target="_blank"
-                        className="rounded-full border border-lime-400/30 bg-lime-400/10 px-4 py-2 text-sm font-semibold text-lime-200 hover:bg-lime-400/15"
+                        className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white/80 hover:bg-white/10"
                       >
                         Abrir página pública ↗
                       </Link>
@@ -372,7 +365,7 @@ export default function ProfessorPerfilPublicoPage() {
               <div
                 className={`mt-6 rounded-2xl border px-4 py-3 text-sm ${
                   toast.type === "ok"
-                    ? "border-lime-400/20 bg-lime-400/10 text-lime-200"
+                    ? "border-white/10 bg-white/5 text-white/80"
                     : "border-red-500/20 bg-red-500/10 text-red-200"
                 }`}
               >
@@ -387,7 +380,7 @@ export default function ProfessorPerfilPublicoPage() {
       <section className="mx-auto max-w-6xl px-5 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Editor */}
-          <div className="lg:col-span-2 rounded-3xl border border-white/10 bg-white/5 p-6">
+          <div className="lg:col-span-2 rounded-2xl border border-white/8 bg-white/[0.03] p-6">
             <h2 className="text-lg font-bold">Informações do perfil</h2>
             <p className="text-sm text-white/60 mt-1">Esses dados aparecem na sua página pública.</p>
 
@@ -397,7 +390,7 @@ export default function ProfessorPerfilPublicoPage() {
                 <input
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
-                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm outline-none focus:border-lime-400/40"
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm outline-none focus:border-white/25"
                   placeholder="Ex: Professor Jeferson"
                 />
               </div>
@@ -407,7 +400,7 @@ export default function ProfessorPerfilPublicoPage() {
                 <textarea
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
-                  className="mt-2 w-full min-h-[120px] rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm outline-none focus:border-lime-400/40"
+                  className="mt-2 w-full min-h-[120px] rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm outline-none focus:border-white/25"
                   placeholder="Escreva um resumo profissional (objetivo, método, resultados, diferencial)."
                 />
               </div>
@@ -418,7 +411,7 @@ export default function ProfessorPerfilPublicoPage() {
                   <input
                     value={cidade}
                     onChange={(e) => setCidade(e.target.value)}
-                    className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm outline-none focus:border-lime-400/40"
+                    className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm outline-none focus:border-white/25"
                     placeholder="Ex: Ponta Grossa - PR"
                   />
                 </div>
@@ -427,7 +420,7 @@ export default function ProfessorPerfilPublicoPage() {
                   <input
                     value={instagram}
                     onChange={(e) => setInstagram(e.target.value)}
-                    className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm outline-none focus:border-lime-400/40"
+                    className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm outline-none focus:border-white/25"
                     placeholder="Ex: jeferson.personal"
                   />
                   <p className="mt-2 text-xs text-white/50">
@@ -449,12 +442,12 @@ export default function ProfessorPerfilPublicoPage() {
                         addEspecialidade();
                       }
                     }}
-                    className="flex-1 rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm outline-none focus:border-lime-400/40"
+                    className="flex-1 rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm outline-none focus:border-white/25"
                     placeholder="Ex: Hipertrofia, Emagrecimento, Funcional… (Enter para adicionar)"
                   />
                   <button
                     onClick={addEspecialidade}
-                    className="rounded-2xl bg-lime-400 px-4 py-3 text-sm font-semibold text-black hover:bg-lime-300"
+                    className="rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-black hover:bg-white/90"
                     type="button"
                   >
                     Adicionar
@@ -468,11 +461,11 @@ export default function ProfessorPerfilPublicoPage() {
                         key={t}
                         type="button"
                         onClick={() => removeEspecialidade(t)}
-                        className="group inline-flex items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-xs text-lime-200 hover:bg-lime-400/15"
+                        className="group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70 hover:bg-white/10"
                         title="Clique para remover"
                       >
                         {t}
-                        <span className="text-lime-200/70 group-hover:text-lime-100">×</span>
+                        <span className="text-white/40 group-hover:text-white/70">×</span>
                       </button>
                     ))}
                   </div>
@@ -485,7 +478,7 @@ export default function ProfessorPerfilPublicoPage() {
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="rounded-2xl bg-lime-400 px-6 py-3 text-sm font-semibold text-black hover:bg-lime-300 disabled:opacity-60"
+                  className="rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-white/90 disabled:opacity-60"
                   type="button"
                 >
                   {saving ? "Salvando..." : "Salvar alterações"}
@@ -493,7 +486,7 @@ export default function ProfessorPerfilPublicoPage() {
 
                 {profile.slug ? (
                   <span className="text-xs text-white/50">
-                    Seu link: <span className="text-lime-300">/p/{profile.slug}</span>
+                    Seu link: <span className="text-white/60">/p/{profile.slug}</span>
                   </span>
                 ) : (
                   <span className="text-xs text-white/50">Salve para gerar seu link público.</span>
@@ -504,7 +497,7 @@ export default function ProfessorPerfilPublicoPage() {
 
           {/* COLUNA DIREITA */}
           <div className="space-y-6">
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+            <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-6">
               <h2 className="text-lg font-bold">Planos & Pagamentos</h2>
               <p className="text-sm text-white/60 mt-1">
                 Configure seus 3 planos (30/90/180 dias) com link de pagamento e WhatsApp.
@@ -518,7 +511,7 @@ export default function ProfessorPerfilPublicoPage() {
               <div className="mt-4 flex flex-col gap-2">
                 <Link
                   href="/professor/planos"
-                  className="inline-flex items-center justify-center rounded-2xl bg-lime-400 px-4 py-3 text-sm font-semibold text-black hover:bg-lime-300"
+                  className="inline-flex items-center justify-center rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-black hover:bg-white/90"
                 >
                   Configurar meus planos →
                 </Link>
@@ -533,7 +526,7 @@ export default function ProfessorPerfilPublicoPage() {
               </div>
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+            <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-6">
               <h2 className="text-lg font-bold">Prévia rápida</h2>
               <p className="text-sm text-white/60 mt-1">Como seu perfil vai aparecer para o aluno.</p>
 
@@ -542,7 +535,7 @@ export default function ProfessorPerfilPublicoPage() {
                   {coverUrl ? (
                     <Image src={coverUrl} alt="Capa" fill className="object-cover opacity-90" />
                   ) : (
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(163,230,53,0.18),rgba(0,0,0,0)_55%)]" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent" />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black" />
                 </div>
@@ -553,7 +546,7 @@ export default function ProfessorPerfilPublicoPage() {
                       {avatarUrl ? (
                         <Image src={avatarUrl} alt="Avatar" fill className="object-cover" />
                       ) : (
-                        <div className="h-full w-full flex items-center justify-center text-lime-300 font-bold">
+                        <div className="h-full w-full flex items-center justify-center text-white font-bold">
                           {(nome || "M").slice(0, 1).toUpperCase()}
                         </div>
                       )}
@@ -575,7 +568,7 @@ export default function ProfessorPerfilPublicoPage() {
                       {especialidades.slice(0, 6).map((t) => (
                         <span
                           key={t}
-                          className="rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-xs text-lime-200"
+                          className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/60"
                         >
                           {t}
                         </span>
@@ -588,7 +581,7 @@ export default function ProfessorPerfilPublicoPage() {
                       <Link
                         href={`/p/${profile.slug}`}
                         target="_blank"
-                        className="inline-flex w-full items-center justify-center rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-black hover:bg-lime-300"
+                        className="inline-flex w-full items-center justify-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-white/90"
                       >
                         Ver página pública ↗
                       </Link>

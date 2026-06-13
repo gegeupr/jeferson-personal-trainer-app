@@ -1,8 +1,9 @@
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
 
-export function createSupabaseServer() {
-  const cookieStore = cookies(); // ✅ sem await
+// Em Next 15 cookies() é assíncrono — por isso a função é async.
+export async function createSupabaseServer() {
+  const cookieStore = await cookies();
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -18,12 +19,11 @@ export function createSupabaseServer() {
               cookieStore.set(name, value, options);
             });
           } catch {
-            // Em Server Components, set pode falhar (somente em Route Handler / Middleware funciona)
-            // Isso é ok: o Supabase ainda funciona para leitura.
+            // Em Server Components, set pode falhar (só funciona em Route Handler / Middleware).
+            // Ok: o Supabase ainda funciona para leitura.
           }
         },
       },
     }
   );
 }
-

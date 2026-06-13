@@ -1,149 +1,172 @@
-// src/app/api/stripe/webhook/route.ts
-// @ts-nocheck // Mantém para evitar problemas de tipagem do Stripe SDK
+import { headers } from "next/headers";
+import { NextResponse } from "next/server";
+import Stripe from "stripe";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
-import { headers } from 'next/headers';
-import { NextResponse } from 'next/server';
-import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
+export const runtime = "nodejs";
+
+type ProfStatus = "trial" | "active" | "past_due" | "canceled";
+
+function mapStatus(s: string): ProfStatus | null {
+  switch (s) {
+    case "trialing":
+      return "trial";
+    case "active":
+      return "active";
+    case "past_due":
+    case "unpaid":
+    case "incomplete":
+      return "past_due";
+    case "canceled":
+    case "incomplete_expired":
+      return "canceled";
+    default:
+      return null;
+  }
+}
+
+// current_period_* mudou de lugar entre versões da API; lemos de forma defensiva.
+function periods(sub: Stripe.Subscription) {
+  const s = sub as unknown as {
+    current_period_start?: number;
+    current_period_end?: number;
+  };
+  return {
+    current_period_start: s.current_period_start
+      ? new Date(s.current_period_start * 1000).toISOString()
+      : null,
+    current_period_end: s.current_period_end
+      ? new Date(s.current_period_end * 1000).toISOString()
+      : null,
+  };
+}
+
+function customerId(
+  c: string | { id: string } | null | undefined
+): string | null {
+  if (!c) return null;
+  return typeof c === "string" ? c : c.id;
+}
+
+async function syncFromSubscription(
+  admin: SupabaseClient,
+  sub: Stripe.Subscription
+) {
+  const professorId = sub.metadata?.professor_id || null;
+  const status = mapStatus(sub.status);
+  const patch = {
+    stripe_subscription_id: sub.id,
+    stripe_customer_id: customerId(sub.customer),
+    ...(status ? { status } : {}),
+    ...periods(sub),
+  };
+  // casa por professor_id (preferido) ou pelo id da subscription
+  const q = admin.from("professor_assinaturas").update(patch);
+  if (professorId) await q.eq("professor_id", professorId);
+  else await q.eq("stripe_subscription_id", sub.id);
+}
 
 export async function POST(req: Request) {
-  // ⚠️ Inicializar Stripe e Supabase aqui dentro, não no topo do módulo
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
   const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
-  if (!stripeWebhookSecret || !stripeSecretKey) {
-    console.error('ERRO DE CONFIG: Stripe Webhook Secret ou API Key não definidos.');
-    return new NextResponse('Erro de configuração do Stripe', { status: 500 });
+  if (!stripeSecretKey || !stripeWebhookSecret) {
+    return new NextResponse("Stripe não configurado", { status: 500 });
   }
 
-  const stripe = new Stripe(stripeSecretKey, { apiVersion: '2023-10-16' });
-
-  const supabaseAdmin = createClient(
+  const stripe = new Stripe(stripeSecretKey);
+  const admin = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { persistSession: false } }
   );
 
   const body = await req.text();
-  const signature = headers().get('stripe-signature') as string;
+  const h = await headers();
+  const signature = h.get("stripe-signature") ?? "";
 
   let event: Stripe.Event;
-
   try {
     event = stripe.webhooks.constructEvent(body, signature, stripeWebhookSecret);
-  } catch (err: any) {
-    console.error(`Erro de verificação da assinatura do Webhook: ${err.message}`);
-    return new NextResponse(`Erro de Webhook: ${err.message}`, { status: 400 });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "assinatura inválida";
+    return new NextResponse(`Webhook error: ${msg}`, { status: 400 });
   }
 
   try {
     switch (event.type) {
-      case 'checkout.session.completed': {
-        const checkoutSession = event.data.object as Stripe.CheckoutSession;
-        const alunoIdFromStripe = checkoutSession.client_reference_id;
-        const stripeCheckoutSessionId = checkoutSession.id;
-        const stripeSubscriptionId = checkoutSession.subscription;
+      case "checkout.session.completed": {
+        const s = event.data.object as Stripe.Checkout.Session;
+        const professorId = s.metadata?.professor_id;
+        if (professorId && s.subscription) {
+          const sub = await stripe.subscriptions.retrieve(
+            s.subscription as string
+          );
+          await admin
+            .from("professor_assinaturas")
+            .update({
+              stripe_customer_id: customerId(s.customer),
+              stripe_subscription_id: sub.id,
+              status: mapStatus(sub.status) ?? "active",
+              ...periods(sub),
+            })
+            .eq("professor_id", professorId);
+        }
+        break;
+      }
 
-        console.log(
-          `Evento: checkout.session.completed para aluno ${alunoIdFromStripe}, session ID: ${stripeCheckoutSessionId}`
+      case "customer.subscription.created":
+      case "customer.subscription.updated": {
+        await syncFromSubscription(
+          admin,
+          event.data.object as Stripe.Subscription
         );
+        break;
+      }
 
-        if (alunoIdFromStripe && stripeCheckoutSessionId && stripeSubscriptionId) {
-          const { data: existingSub, error: fetchError } = await supabaseAdmin
-            .from('assinaturas')
-            .select('*')
-            .eq('aluno_id', alunoIdFromStripe)
-            .eq('preapproval_id_mp', stripeCheckoutSessionId)
-            .single();
+      case "customer.subscription.deleted": {
+        const sub = event.data.object as Stripe.Subscription;
+        const professorId = sub.metadata?.professor_id || null;
+        const q = admin
+          .from("professor_assinaturas")
+          .update({ status: "canceled" as ProfStatus });
+        if (professorId) await q.eq("professor_id", professorId);
+        else await q.eq("stripe_subscription_id", sub.id);
+        break;
+      }
 
-          if (fetchError && fetchError.code !== 'PGRST116') {
-            console.error('Erro ao buscar assinatura existente no Supabase:', fetchError.message);
-            return new NextResponse('Erro interno do servidor', { status: 500 });
-          }
-
-          if (existingSub) {
-            const { error: updateError } = await supabaseAdmin
-              .from('assinaturas')
-              .update({
-                status: 'active',
-                data_inicio: new Date().toISOString(),
-                preapproval_id_mp: stripeSubscriptionId as string,
-                last_payment_date: new Date().toISOString(),
-              })
-              .eq('id', existingSub.id);
-
-            if (updateError) {
-              console.error('Erro ao atualizar assinatura no Supabase:', updateError.message);
-            } else {
-              console.log(`Assinatura ativa para aluno ${alunoIdFromStripe} atualizada no Supabase.`);
-            }
-          } else {
-            console.warn(`Assinatura pendente não encontrada. Inserindo nova assinatura como ativa.`);
-            const { error: insertError } = await supabaseAdmin.from('assinaturas').insert({
-              aluno_id: alunoIdFromStripe,
-              plano_mp_id: 'plano_mensal_stripe',
-              status: 'active',
-              preapproval_id_mp: stripeSubscriptionId as string,
-              data_inicio: new Date().toISOString(),
-              last_payment_date: new Date().toISOString(),
-            });
-            if (insertError) {
-              console.error('Erro ao inserir nova assinatura ativa no Supabase:', insertError.message);
-            } else {
-              console.log(`Nova assinatura ativa para aluno ${alunoIdFromStripe} inserida no Supabase.`);
-            }
-          }
+      case "invoice.payment_failed": {
+        const inv = event.data.object as Stripe.Invoice;
+        const subId =
+          (inv as unknown as { subscription?: string | null }).subscription ??
+          null;
+        if (subId) {
+          await admin
+            .from("professor_assinaturas")
+            .update({ status: "past_due" as ProfStatus })
+            .eq("stripe_subscription_id", subId);
         }
         break;
       }
 
-      case 'customer.subscription.updated': {
-        const subscriptionUpdated = event.data.object as Stripe.Subscription;
-        console.log(`Evento: customer.subscription.updated para ${subscriptionUpdated.id}`);
-        if (subscriptionUpdated.metadata?.aluno_id) {
-          const newStatus = subscriptionUpdated.status === 'active' ? 'active' : 'inactive';
-          await supabaseAdmin
-            .from('assinaturas')
-            .update({ status: newStatus })
-            .eq('aluno_id', subscriptionUpdated.metadata.aluno_id)
-            .eq('preapproval_id_mp', subscriptionUpdated.id);
+      case "invoice.payment_succeeded": {
+        const inv = event.data.object as Stripe.Invoice;
+        const subId =
+          (inv as unknown as { subscription?: string | null }).subscription ??
+          null;
+        if (subId) {
+          const sub = await stripe.subscriptions.retrieve(subId);
+          await syncFromSubscription(admin, sub);
         }
-        break;
-      }
-
-      case 'customer.subscription.deleted': {
-        const subscriptionDeleted = event.data.object as Stripe.Subscription;
-        console.log(`Evento: customer.subscription.deleted para ${subscriptionDeleted.id}`);
-        if (subscriptionDeleted.metadata?.aluno_id) {
-          await supabaseAdmin
-            .from('assinaturas')
-            .update({ status: 'cancelled' })
-            .eq('aluno_id', subscriptionDeleted.metadata.aluno_id)
-            .eq('preapproval_id_mp', subscriptionDeleted.id);
-        }
-        break;
-      }
-
-      case 'invoice.payment_succeeded': {
-        const invoiceSucceeded = event.data.object as Stripe.Invoice;
-        console.log(`Evento: invoice.payment_succeeded para ${invoiceSucceeded.id}`);
-        // Aqui você pode atualizar last_payment_date e next_payment_date no Supabase
-        break;
-      }
-
-      case 'invoice.payment_failed': {
-        const invoiceFailed = event.data.object as Stripe.Invoice;
-        console.log(`Evento: invoice.payment_failed para ${invoiceFailed.id}`);
-        // Aqui você pode marcar a assinatura como 'past_due' ou 'unpaid'
         break;
       }
 
       default:
-        console.warn(`Tipo de evento Webhook não tratado: ${event.type}`);
+        break;
     }
-  } catch (error: any) {
-    console.error('Erro ao processar evento Webhook:', error.message || error);
-    return new NextResponse(`Erro ao processar evento: ${error.message || 'desconhecido'}`, { status: 500 });
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : "erro desconhecido";
+    return new NextResponse(`Erro ao processar evento: ${msg}`, { status: 500 });
   }
 
-  return new NextResponse('OK', { status: 200 });
+  return new NextResponse("OK", { status: 200 });
 }

@@ -30,7 +30,7 @@ async function uploadToBucket(params: {
   bucket: "avatars" | "covers";
   uid: string;
   file: File;
-  filename: string; // ex: "avatar.png"
+  filename: string;
 }) {
   const { bucket, uid, file, filename } = params;
 
@@ -39,7 +39,6 @@ async function uploadToBucket(params: {
 
   const path = `${uid}/${filename.replace(".png", `.${safeExt}`)}`;
 
-  // upsert: true (substitui)
   const { error } = await supabase.storage.from(bucket).upload(path, file, {
     upsert: true,
     contentType: file.type || `image/${safeExt}`,
@@ -49,6 +48,9 @@ async function uploadToBucket(params: {
 
   return publicUrlFrom(bucket, path);
 }
+
+const inputClass =
+  "mt-1.5 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white outline-none focus:border-white/25 transition-colors";
 
 export default function AlunoPerfilPage() {
   const router = useRouter();
@@ -103,7 +105,6 @@ export default function AlunoPerfilPage() {
         return;
       }
 
-      // Guard: só aluno
       if ((data.role || "").toLowerCase() !== "aluno") {
         router.replace("/dashboard");
         return;
@@ -112,12 +113,10 @@ export default function AlunoPerfilPage() {
       if (!mounted) return;
 
       setProfile(data as Profile);
-
       setNome(data.nome_completo || "");
       setTelefone(data.telefone || "");
       setBio((data.bio as any) || "");
       setInstagram((data.instagram as any) || "");
-
       setAvatarUrl(data.avatar_url || null);
       setCoverUrl(data.cover_url || null);
 
@@ -141,16 +140,9 @@ export default function AlunoPerfilPage() {
 
       setSaving(true);
 
-      const url = await uploadToBucket({
-        bucket: "avatars",
-        uid,
-        file,
-        filename: "avatar.png",
-      });
-
+      const url = await uploadToBucket({ bucket: "avatars", uid, file, filename: "avatar.png" });
       setAvatarUrl(url);
 
-      // salva no profiles
       const { error } = await supabase.from("profiles").update({ avatar_url: url }).eq("id", uid);
       if (error) throw error;
 
@@ -175,13 +167,7 @@ export default function AlunoPerfilPage() {
 
       setSaving(true);
 
-      const url = await uploadToBucket({
-        bucket: "covers",
-        uid,
-        file,
-        filename: "cover.png",
-      });
-
+      const url = await uploadToBucket({ bucket: "covers", uid, file, filename: "cover.png" });
       setCoverUrl(url);
 
       const { error } = await supabase.from("profiles").update({ cover_url: url }).eq("id", uid);
@@ -228,28 +214,28 @@ export default function AlunoPerfilPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
-        <div className="text-lime-300 text-lg">Carregando…</div>
-      </main>
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <p className="text-white/40 text-sm">Carregando…</p>
+      </div>
     );
   }
 
   if (err && !profile) {
     return (
-      <main className="min-h-screen bg-gray-950 text-white flex items-center justify-center p-6">
-        <div className="max-w-xl w-full rounded-3xl border border-white/10 bg-white/5 p-6">
-          <h1 className="text-xl font-semibold text-red-200">Erro</h1>
-          <p className="mt-2 text-white/70">{err}</p>
+      <main className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center p-6">
+        <div className="max-w-xl w-full rounded-2xl border border-white/8 bg-white/[0.03] p-6">
+          <h1 className="text-xl font-semibold text-red-300">Erro</h1>
+          <p className="mt-2 text-white/60">{err}</p>
           <div className="mt-4 flex gap-2">
             <button
               onClick={() => location.reload()}
-              className="rounded-2xl bg-lime-400 px-4 py-2 font-bold text-black hover:bg-lime-300 transition"
+              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white/80 hover:bg-white/10 transition-colors"
             >
               Recarregar
             </button>
             <Link
               href="/aluno/dashboard"
-              className="rounded-2xl border border-white/15 bg-white/5 px-4 py-2 text-white/80 hover:bg-white/10 transition"
+              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/60 hover:bg-white/10 transition-colors"
             >
               Voltar
             </Link>
@@ -260,55 +246,46 @@ export default function AlunoPerfilPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
-      {/* TOP BAR */}
-      <div className="sticky top-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur">
-        <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-          <Link
-            href="/aluno/dashboard"
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10 transition"
-          >
-            ← Voltar ao Dashboard
-          </Link>
-
-          <div className="text-sm text-white/70">Meu perfil (Aluno)</div>
+    <main className="min-h-screen bg-[#0a0a0a] text-white pb-16">
+      <div className="mx-auto max-w-3xl px-4 py-8 space-y-5">
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-2 text-sm text-white/40">
+          <Link href="/aluno/dashboard" className="hover:text-white/70 transition-colors">Dashboard</Link>
+          <span>/</span>
+          <span className="text-white/60">Meu Perfil</span>
         </div>
-      </div>
 
-      <div className="mx-auto max-w-6xl px-4 py-8">
         {/* HERO */}
-        <div className="rounded-3xl border border-white/10 bg-white/5 overflow-hidden shadow-2xl">
-          <div className="relative h-52 w-full bg-black/40">
+        <div className="rounded-2xl border border-white/8 bg-white/[0.03] overflow-hidden">
+          <div className="relative h-48 w-full bg-black/40">
             {coverUrl ? (
               <Image src={coverUrl} alt="Capa" fill className="object-cover opacity-90" priority />
             ) : (
-              <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/40 to-black/90" />
+              <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent" />
             )}
             <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/40 to-black/90" />
 
-            <div className="absolute left-6 bottom-[-30px] flex items-end gap-3">
-              <div className="relative h-20 w-20 rounded-2xl overflow-hidden border border-white/10 bg-black/40">
+            <div className="absolute left-6 bottom-[-28px] flex items-end gap-3">
+              <div className="relative h-16 w-16 rounded-2xl overflow-hidden border border-white/10 bg-black/40">
                 {avatarUrl ? (
                   <Image src={avatarUrl} alt="Avatar" fill className="object-cover" />
                 ) : (
-                  <div className="h-full w-full flex items-center justify-center text-lime-300 font-extrabold text-2xl">
+                  <div className="h-full w-full flex items-center justify-center text-white font-bold text-xl">
                     {initials}
                   </div>
                 )}
               </div>
 
-              <div className="pb-2">
-                <p className="text-xs text-white/60">Seu perfil</p>
-                <p className="text-lg font-bold">
-                  <span className="text-lime-300">{nome || "Aluno"}</span>
-                </p>
+              <div className="pb-1">
+                <p className="text-xs text-white/50">Seu perfil</p>
+                <p className="text-base font-bold text-white">{nome || "Aluno"}</p>
               </div>
             </div>
           </div>
 
-          <div className="pt-12 px-6 pb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="text-sm text-white/60">
-              Atualize seu avatar/capa e suas informações. Seu professor pode ver esses dados na gestão.
+          <div className="pt-10 px-6 pb-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="text-sm text-white/50">
+              Atualize seu avatar/capa e suas informações.
             </div>
 
             <div className="flex gap-2">
@@ -330,7 +307,7 @@ export default function AlunoPerfilPage() {
               <button
                 disabled={saving}
                 onClick={() => coverInputRef.current?.click()}
-                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white/80 hover:bg-white/10 disabled:opacity-50"
+                className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-white/70 hover:bg-white/10 disabled:opacity-50 transition-colors"
               >
                 Trocar capa
               </button>
@@ -338,7 +315,7 @@ export default function AlunoPerfilPage() {
               <button
                 disabled={saving}
                 onClick={() => avatarInputRef.current?.click()}
-                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white/80 hover:bg-white/10 disabled:opacity-50"
+                className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-white/70 hover:bg-white/10 disabled:opacity-50 transition-colors"
               >
                 Trocar avatar
               </button>
@@ -347,50 +324,54 @@ export default function AlunoPerfilPage() {
         </div>
 
         {/* FORM */}
-        <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 p-6">
-          <h2 className="text-xl font-bold">Dados</h2>
+        <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-6">
+          <h2 className="text-lg font-bold text-white">Dados</h2>
 
-          {err ? <p className="mt-3 text-sm text-red-200">{err}</p> : null}
-          {msg ? <p className="mt-3 text-sm text-lime-200">{msg}</p> : null}
+          {err && <p className="mt-3 text-sm text-red-300">{err}</p>}
+          {msg && (
+            <div className="mt-3 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white/80">
+              {msg}
+            </div>
+          )}
 
           <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="text-xs text-white/60">Nome completo</label>
+              <label className="text-xs text-white/50">Nome completo</label>
               <input
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
-                className="mt-2 w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-white outline-none focus:border-lime-400/40"
+                className={inputClass}
                 placeholder="Seu nome"
               />
             </div>
 
             <div>
-              <label className="text-xs text-white/60">Telefone (WhatsApp)</label>
+              <label className="text-xs text-white/50">Telefone (WhatsApp)</label>
               <input
                 value={telefone}
                 onChange={(e) => setTelefone(e.target.value)}
-                className="mt-2 w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-white outline-none focus:border-lime-400/40"
+                className={inputClass}
                 placeholder="Ex.: 42988311053"
               />
-              <p className="mt-1 text-xs text-white/40">Salvamos apenas números. Sem espaços/traços.</p>
+              <p className="mt-1 text-xs text-white/30">Salvamos apenas números. Sem espaços/traços.</p>
             </div>
 
             <div className="md:col-span-2">
-              <label className="text-xs text-white/60">Bio</label>
+              <label className="text-xs text-white/50">Bio</label>
               <textarea
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
-                className="mt-2 w-full min-h-[110px] rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-white outline-none focus:border-lime-400/40"
+                className={inputClass + " min-h-[100px] resize-none"}
                 placeholder="Fale um pouco sobre você, sua rotina, seus objetivos…"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="text-xs text-white/60">Instagram (opcional)</label>
+              <label className="text-xs text-white/50">Instagram (opcional)</label>
               <input
                 value={instagram}
                 onChange={(e) => setInstagram(e.target.value)}
-                className="mt-2 w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-white outline-none focus:border-lime-400/40"
+                className={inputClass}
                 placeholder="@seuinsta"
               />
             </div>
@@ -400,21 +381,21 @@ export default function AlunoPerfilPage() {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="rounded-2xl bg-lime-400 px-5 py-3 font-bold text-black hover:bg-lime-300 disabled:opacity-50"
+              className="rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-black hover:bg-white/90 disabled:opacity-50 transition-colors"
             >
               {saving ? "Salvando…" : "Salvar alterações"}
             </button>
 
             <Link
               href="/aluno/dashboard"
-              className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 font-semibold text-white/80 hover:bg-white/10"
+              className="rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white/70 hover:bg-white/10 transition-colors"
             >
               Cancelar
             </Link>
           </div>
         </div>
 
-        <div className="mt-8 text-center text-xs text-white/40">Motion — treino inteligente, gestão simples.</div>
+        <div className="text-center text-xs text-white/30">Motion — treino inteligente, gestão simples.</div>
       </div>
     </main>
   );
