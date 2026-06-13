@@ -25,19 +25,22 @@ function mapStatus(s: string): ProfStatus | null {
   }
 }
 
-// current_period_* mudou de lugar entre versões da API; lemos de forma defensiva.
+// current_period_* mudou de lugar entre versões da API: nas versões novas
+// (2025-06-30+) saiu do topo da subscription e foi para items.data[0].
+// Lemos do topo e caímos para o item se faltar.
 function periods(sub: Stripe.Subscription) {
-  const s = sub as unknown as {
+  const top = sub as unknown as {
     current_period_start?: number;
     current_period_end?: number;
   };
+  const item = sub.items?.data?.[0] as unknown as
+    | { current_period_start?: number; current_period_end?: number }
+    | undefined;
+  const start = top.current_period_start ?? item?.current_period_start;
+  const end = top.current_period_end ?? item?.current_period_end;
   return {
-    current_period_start: s.current_period_start
-      ? new Date(s.current_period_start * 1000).toISOString()
-      : null,
-    current_period_end: s.current_period_end
-      ? new Date(s.current_period_end * 1000).toISOString()
-      : null,
+    current_period_start: start ? new Date(start * 1000).toISOString() : null,
+    current_period_end: end ? new Date(end * 1000).toISOString() : null,
   };
 }
 

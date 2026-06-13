@@ -8,8 +8,15 @@ export const runtime = "nodejs";
 
 export async function POST() {
   const stripeKey = process.env.STRIPE_SECRET_KEY;
+  const priceId = process.env.STRIPE_PRICE_PROFESSOR;
   if (!stripeKey) {
     return NextResponse.json({ error: "Stripe não configurado." }, { status: 500 });
+  }
+  if (!priceId) {
+    return NextResponse.json(
+      { error: "Plano não configurado (STRIPE_PRICE_PROFESSOR ausente)." },
+      { status: 500 }
+    );
   }
   const stripe = new Stripe(stripeKey);
 
@@ -71,20 +78,7 @@ export async function POST() {
     mode: "subscription",
     customer: assin?.stripe_customer_id || undefined,
     customer_email: assin?.stripe_customer_id ? undefined : user.email ?? undefined,
-    line_items: [
-      {
-        price_data: {
-          currency: "brl",
-          product_data: {
-            name: "Motion — Plano Professor",
-            description: "Acesso mensal à plataforma Motion.",
-          },
-          unit_amount: 5990, // R$ 59,90
-          recurring: { interval: "month" },
-        },
-        quantity: 1,
-      },
-    ],
+    line_items: [{ price: priceId, quantity: 1 }],
     subscription_data: {
       metadata: { professor_id: user.id }, // <- webhook casa por aqui
       ...(trialEnd ? { trial_end: trialEnd } : {}),
