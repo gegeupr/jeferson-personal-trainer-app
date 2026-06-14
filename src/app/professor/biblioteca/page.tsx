@@ -933,13 +933,13 @@ export default function BibliotecaExerciciosPage() {
 
                   <div className="grid gap-3 md:grid-cols-4">
                     <div>
-                      <label className="text-xs text-white/50">Categoria</label>
+                      <label className="text-xs text-white/50">Grupo muscular</label>
                       <select
                         value={filterCategoria}
                         onChange={(e) => setFilterCategoria(e.target.value)}
                         className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-white/25"
                       >
-                        <option value="">Todas</option>
+                        <option value="">Todos</option>
                         {categorias.map((x) => (
                           <option key={x} value={x}>
                             {x}
@@ -949,7 +949,7 @@ export default function BibliotecaExerciciosPage() {
                     </div>
 
                     <div>
-                      <label className="text-xs text-white/50">Grupo muscular</label>
+                      <label className="text-xs text-white/50">Músculo primário</label>
                       <select
                         value={filterGrupo}
                         onChange={(e) => setFilterGrupo(e.target.value)}
