@@ -41,6 +41,18 @@ export type SalvarTreinoResult =
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+function extrairJSON(text: string): string | null {
+  const start = text.indexOf("{");
+  if (start === -1) return null;
+  let depth = 0;
+  for (let i = start; i < text.length; i++) {
+    if (text[i] === "{") depth++;
+    else if (text[i] === "}") depth--;
+    if (depth === 0) return text.slice(start, i + 1);
+  }
+  return null;
+}
+
 async function urlParaBase64(
   url: string
 ): Promise<{ data: string; mimeType: string } | null> {
@@ -277,19 +289,28 @@ ${catTexto}
     const response = await client.messages.create({
       model: "claude-sonnet-4-6",
       max_tokens: 4096,
+      system:
+        "Você é um personal trainer especializado em prescrição de treinos. Responda SEMPRE com JSON puro e válido, sem texto adicional, sem markdown, sem explicações. Apenas o objeto JSON.",
       messages: [{ role: "user", content }],
     });
 
     const rawText =
       response.content[0].type === "text" ? response.content[0].text : "";
 
-    // 6. Parse JSON — extrai o primeiro objeto JSON da resposta
-    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) {
+    // 6. Parse JSON — extrai o objeto JSON por contagem de chaves
+    const jsonStr = extrairJSON(rawText);
+    if (!jsonStr) {
+      console.error("[gerarTreino] resposta sem JSON:", rawText.slice(0, 300));
       return { ok: false, error: "A IA não retornou um JSON válido. Tente novamente." };
     }
 
-    const treino = JSON.parse(jsonMatch[0]) as TreinoGerado;
+    let treino: TreinoGerado;
+    try {
+      treino = JSON.parse(jsonStr) as TreinoGerado;
+    } catch (parseErr: any) {
+      console.error("[gerarTreino] JSON inválido:", jsonStr.slice(0, 300), parseErr?.message);
+      return { ok: false, error: "A IA retornou um JSON malformado. Tente novamente." };
+    }
 
     // 7. Validar IDs — remover exercícios inventados
     const bibIds = new Set(biblioteca.map((e) => e.id));
@@ -311,12 +332,7 @@ ${catTexto}
     return { ok: true, treino };
   } catch (e: any) {
     const msg: string = e?.message ?? "Erro desconhecido.";
-    if (msg.includes("JSON")) {
-      return {
-        ok: false,
-        error: "A IA retornou um formato inesperado. Tente novamente.",
-      };
-    }
+    console.error("[gerarTreino] erro geral:", msg);
     return { ok: false, error: msg };
   }
 }
