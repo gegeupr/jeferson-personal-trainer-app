@@ -327,6 +327,15 @@ export default function ProfessorAlunoDetalhesPremiumPage() {
 
         {/* AÇÕES */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {/* Card de IA em destaque */}
+          <Link
+            href={`/professor/alunos/${alunoId}/gerar-treino`}
+            className="col-span-2 sm:col-span-3 rounded-2xl border border-white/15 bg-white/[0.06] p-4 hover:bg-white/[0.09] transition-colors"
+          >
+            <p className="font-semibold text-white text-sm">✦ Gerar treino com IA</p>
+            <p className="mt-0.5 text-xs text-white/50">Gemini lê anamnese, fotos e histórico e monta um treino personalizado</p>
+          </Link>
+
           {[
             { href: `anamnese`, label: "Anamnese", desc: "Saúde e histórico" },
             { href: `arquivos`, label: "Arquivos", desc: "Exames e documentos" },
