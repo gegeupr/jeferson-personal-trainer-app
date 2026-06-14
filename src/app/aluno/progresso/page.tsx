@@ -66,6 +66,28 @@ export default function MeuProgressoPage() {
     load();
   }, [router]);
 
+  async function handleDeleteFoto(foto: ProgressoFoto) {
+    setIsSubmitting(true);
+    setError(null);
+    setOkMsg(null);
+    try {
+      const marker = "/progressphotos/";
+      const idx = foto.url.indexOf(marker);
+      if (idx !== -1) {
+        const storagePath = foto.url.slice(idx + marker.length).split("?")[0];
+        await supabase.storage.from("progressphotos").remove([storagePath]);
+      }
+      const { error: dbErr } = await supabase.from("progresso_fotos").delete().eq("id", foto.id);
+      if (dbErr) throw dbErr;
+      setFotos((prev) => prev.filter((f) => f.id !== foto.id));
+      setOkMsg("Foto excluída.");
+    } catch (err: any) {
+      setError(`Erro ao excluir: ${err?.message || "erro desconhecido"}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   async function handleUpload(e: React.FormEvent) {
     e.preventDefault();
     setError(null); setOkMsg(null);
@@ -166,11 +188,20 @@ export default function MeuProgressoPage() {
                 <div className="relative w-full h-44 overflow-hidden">
                   <ProgressPhoto src={foto.url} alt={foto.descricao || "Foto de progresso"} />
                 </div>
-                <div className="px-3 py-2.5">
-                  <p className="text-xs font-medium text-white/70">
-                    {foto.data_foto ? formatDateBR(foto.data_foto) : formatDateBR(foto.created_at)}
-                  </p>
-                  {foto.descricao && <p className="text-xs text-white/40 mt-0.5 leading-relaxed">{foto.descricao}</p>}
+                <div className="px-3 py-2.5 flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="text-xs font-medium text-white/70">
+                      {foto.data_foto ? formatDateBR(foto.data_foto) : formatDateBR(foto.created_at)}
+                    </p>
+                    {foto.descricao && <p className="text-xs text-white/40 mt-0.5 leading-relaxed">{foto.descricao}</p>}
+                  </div>
+                  <button
+                    onClick={() => handleDeleteFoto(foto)}
+                    disabled={isSubmitting}
+                    className="shrink-0 rounded-lg border border-red-400/20 bg-red-400/10 px-2 py-1 text-[10px] text-red-300 hover:bg-red-400/15 disabled:opacity-50 transition-colors"
+                  >
+                    Excluir
+                  </button>
                 </div>
               </div>
             ))}
