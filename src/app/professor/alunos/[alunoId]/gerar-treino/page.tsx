@@ -234,7 +234,7 @@ export default function GerarTreinoPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Gerar treino com IA</h1>
           <p className="mt-1 text-sm text-white/50">
-            O Gemini lê a anamnese, histórico e fotos do aluno e monta um treino usando sua biblioteca e o catálogo.
+            A IA lê a anamnese, histórico e fotos do aluno e monta um treino usando sua biblioteca e o catálogo.
           </p>
         </div>
 
@@ -326,7 +326,7 @@ export default function GerarTreinoPage() {
 
             {gerando && (
               <p className="text-center text-xs text-white/35">
-                O Gemini está analisando os dados do aluno. Pode levar alguns segundos…
+                A IA está analisando os dados do aluno. Pode levar alguns segundos…
               </p>
             )}
           </div>

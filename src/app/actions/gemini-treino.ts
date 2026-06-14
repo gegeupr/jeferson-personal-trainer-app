@@ -283,14 +283,13 @@ ${catTexto}
     const rawText =
       response.content[0].type === "text" ? response.content[0].text : "";
 
-    // 6. Parse JSON (com limpeza defensiva)
-    const cleaned = rawText
-      .replace(/^```json\s*/i, "")
-      .replace(/^```\s*/i, "")
-      .replace(/```\s*$/i, "")
-      .trim();
+    // 6. Parse JSON — extrai o primeiro objeto JSON da resposta
+    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      return { ok: false, error: "A IA não retornou um JSON válido. Tente novamente." };
+    }
 
-    const treino = JSON.parse(cleaned) as TreinoGerado;
+    const treino = JSON.parse(jsonMatch[0]) as TreinoGerado;
 
     // 7. Validar IDs — remover exercícios inventados
     const bibIds = new Set(biblioteca.map((e) => e.id));

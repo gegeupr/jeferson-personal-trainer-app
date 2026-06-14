@@ -333,7 +333,7 @@ export default function ProfessorAlunoDetalhesPremiumPage() {
             className="col-span-2 sm:col-span-3 rounded-2xl border border-white/15 bg-white/[0.06] p-4 hover:bg-white/[0.09] transition-colors"
           >
             <p className="font-semibold text-white text-sm">✦ Gerar treino com IA</p>
-            <p className="mt-0.5 text-xs text-white/50">Gemini lê anamnese, fotos e histórico e monta um treino personalizado</p>
+            <p className="mt-0.5 text-xs text-white/50">A IA lê anamnese, fotos e histórico e monta um treino personalizado</p>
           </Link>
 
           {[

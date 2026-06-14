@@ -319,7 +319,7 @@ export default function ProfessorAlunoDetalhesPremiumPage() {
         {/* Atalhos */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {[
-            { href: "gerar-treino", label: "✦ Gerar treino com IA", desc: "Gemini lê anamnese, fotos e histórico e monta um treino personalizado", highlight: true },
+            { href: "gerar-treino", label: "✦ Gerar treino com IA", desc: "A IA lê anamnese, fotos e histórico e monta um treino personalizado", highlight: true },
             { href: "anamnese", label: "Anamnese", desc: "Ver e editar informações de saúde" },
             { href: "arquivos", label: "Arquivos", desc: "Exames, PDFs e documentos" },
             { href: "atribuir-treino", label: "Atribuir treino", desc: "Montar rotina e enviar plano" },
