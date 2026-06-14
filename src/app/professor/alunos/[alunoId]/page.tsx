@@ -319,17 +319,22 @@ export default function ProfessorAlunoDetalhesPremiumPage() {
         {/* Atalhos */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {[
+            { href: "gerar-treino", label: "✦ Gerar treino com IA", desc: "Gemini lê anamnese, fotos e histórico e monta um treino personalizado", highlight: true },
             { href: "anamnese", label: "Anamnese", desc: "Ver e editar informações de saúde" },
             { href: "arquivos", label: "Arquivos", desc: "Exames, PDFs e documentos" },
             { href: "atribuir-treino", label: "Atribuir treino", desc: "Montar rotina e enviar plano" },
             { href: "progresso-aluno", label: "Progresso", desc: "Evolução e registros" },
             { href: "treinos-extras", label: "Treinos extras", desc: "Complementos e condicionamento" },
             { href: "financeiro", label: "Financeiro", desc: "Assinatura, status e datas" },
-          ].map(({ href, label, desc }) => (
+          ].map(({ href, label, desc, highlight }) => (
             <Link
               key={href}
               href={`/professor/alunos/${alunoId}/${href}`}
-              className="rounded-2xl border border-white/8 bg-white/[0.03] p-5 hover:bg-white/[0.06] transition-colors"
+              className={`rounded-2xl border p-5 transition-colors ${
+                highlight
+                  ? "border-white/15 bg-white/[0.06] hover:bg-white/[0.09]"
+                  : "border-white/8 bg-white/[0.03] hover:bg-white/[0.06]"
+              }`}
             >
               <p className="font-semibold text-white">{label}</p>
               <p className="mt-1 text-sm text-white/50">{desc}</p>
