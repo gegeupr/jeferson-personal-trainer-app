@@ -315,6 +315,7 @@ export async function salvarTreinoGerado(
         professor_id: profId,
         dificuldade: treino.nivel,
         objetivo: treino.descricao,
+        gerado_por_ia: true,
       })
       .select("id")
       .single();

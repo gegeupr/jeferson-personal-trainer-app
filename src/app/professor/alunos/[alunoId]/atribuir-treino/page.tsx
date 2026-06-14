@@ -11,6 +11,7 @@ interface PlanoTreino {
   descricao: string | null;
   aluno_id: string | null;
   tipo_treino: string | null;
+  gerado_por_ia: boolean;
 }
 
 interface AlunoProfile {
@@ -65,13 +66,13 @@ export default function AtribuirTreinoPage() {
 
       const { data: treinosData, error: treinosError } = await supabase
         .from('treinos')
-        .select('id, nome, descricao, aluno_id, tipo_treino')
+        .select('id, nome, descricao, aluno_id, tipo_treino, gerado_por_ia')
         .eq('professor_id', user.id);
 
       if (treinosError) {
         setError('Não foi possível carregar a lista de treinos.');
       } else {
-        setPlanosTreino(treinosData || []);
+        setPlanosTreino((treinosData as PlanoTreino[]) || []);
       }
 
       setLoading(false);
@@ -148,7 +149,14 @@ export default function AtribuirTreinoPage() {
             {planosTreino.map((treino) => (
               <div key={treino.id} className="px-5 py-4 flex items-center justify-between gap-4">
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-white truncate">{treino.nome}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-medium text-white truncate">{treino.nome}</p>
+                    {treino.gerado_por_ia && (
+                      <span className="shrink-0 rounded-full border border-white/15 bg-white/[0.06] px-2 py-0.5 text-[10px] font-medium text-white/60">
+                        IA
+                      </span>
+                    )}
+                  </div>
                   <p className="text-xs text-white/40 mt-0.5">
                     {treino.tipo_treino || 'Sem tipo'} · {treino.aluno_id ? 'Atribuído' : 'Disponível'}
                   </p>
