@@ -1,10 +1,7 @@
 "use server";
 
 import { supabaseAdmin } from "@/utils/supabaseAdmin";
-import {
-  GoogleGenerativeAI,
-  type Part,
-} from "@google/generative-ai";
+import Anthropic from "@anthropic-ai/sdk";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -59,6 +56,15 @@ async function urlParaBase64(
   }
 }
 
+function normalizeImageMime(
+  mime: string
+): "image/jpeg" | "image/png" | "image/gif" | "image/webp" {
+  if (mime.includes("png")) return "image/png";
+  if (mime.includes("gif")) return "image/gif";
+  if (mime.includes("webp")) return "image/webp";
+  return "image/jpeg";
+}
+
 // ─── Action: gerar treino ─────────────────────────────────────────────────────
 
 export async function gerarTreinoComIA(
@@ -67,8 +73,8 @@ export async function gerarTreinoComIA(
   config: ConfigTreino
 ): Promise<GerarTreinoResult> {
   try {
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) return { ok: false, error: "GEMINI_API_KEY não configurado." };
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    if (!apiKey) return { ok: false, error: "ANTHROPIC_API_KEY não configurado." };
 
     // 1. Buscar todos os dados em paralelo
     const [
@@ -183,10 +189,8 @@ export async function gerarTreinoComIA(
             .join("\n")
         : "Catálogo vazio.";
 
-    // 3. Montar parts do Gemini (texto + imagens)
-    const parts: Part[] = [];
-
-    const prompt = `Você é um personal trainer experiente em prescrição de treinos. Com base nos dados abaixo, monte um treino personalizado usando APENAS os exercícios fornecidos nas listas.
+    // 3. Montar o prompt
+    const promptTexto = `Você é um personal trainer experiente em prescrição de treinos. Com base nos dados abaixo, monte um treino personalizado usando APENAS os exercícios fornecidos nas listas.
 
 === DADOS DO ALUNO ===
 Nome: ${aluno?.nome_completo ?? "Aluno"}
@@ -218,47 +222,68 @@ ${catTexto}
 === FORMATO DE RETORNO ===
 {"nome":"...","descricao":"...","duracao_minutos":${config.duracao_minutos},"nivel":"${config.nivel}","exercicios":[{"fonte":"biblioteca","exercicio_id":"uuid","nome":"Nome","series":3,"repeticoes":"8-12","descanso_segundos":60,"observacao":"dica opcional"}]}`;
 
-    parts.push({ text: prompt });
+    // 4. Montar content blocks para o Claude
+    const content: Anthropic.MessageParam["content"] = [
+      { type: "text", text: promptTexto },
+    ];
 
-    // 4. Adicionar fotos de progresso (máx 4)
+    // Adicionar fotos de progresso (máx 4)
     if (fotos.length > 0) {
       const fotosConvertidas = await Promise.all(
         fotos.slice(0, 4).map((f) => urlParaBase64(f.url))
       );
       const fotasValidas = fotosConvertidas.filter(Boolean);
       if (fotasValidas.length > 0) {
-        parts.push({
+        content.push({
+          type: "text",
           text: `A seguir estão ${fotasValidas.length} foto(s) de progresso do aluno (mais recentes primeiro). Use apenas para avaliar composição corporal e postura visível.`,
         });
         for (const f of fotasValidas) {
-          parts.push({ inlineData: { mimeType: f!.mimeType, data: f!.data } });
+          content.push({
+            type: "image",
+            source: {
+              type: "base64",
+              media_type: normalizeImageMime(f!.mimeType),
+              data: f!.data,
+            },
+          });
         }
       }
     }
 
-    // 5. Adicionar PDFs de exames (máx 2)
+    // Adicionar PDFs de exames (máx 2)
     if (arquivos.length > 0) {
       const pdfsConvertidos = await Promise.all(
         arquivos.slice(0, 2).map((a) => urlParaBase64(a.url))
       );
       const pdfsValidos = pdfsConvertidos.filter(Boolean);
       if (pdfsValidos.length > 0) {
-        parts.push({ text: "Exames/documentos do aluno:" });
+        content.push({ type: "text", text: "Exames/documentos do aluno:" });
         for (const p of pdfsValidos) {
-          parts.push({
-            inlineData: { mimeType: p!.mimeType, data: p!.data },
-          });
+          content.push({
+            type: "document",
+            source: {
+              type: "base64",
+              media_type: "application/pdf",
+              data: p!.data,
+            },
+          } as any);
         }
       }
     }
 
-    // 6. Chamar Gemini 1.5 Flash
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-    const result = await model.generateContent(parts);
-    const rawText = result.response.text();
+    // 5. Chamar Claude
+    const client = new Anthropic({ apiKey });
+    const response = await client.messages.create({
+      model: "claude-sonnet-4-6",
+      max_tokens: 4096,
+      messages: [{ role: "user", content }],
+    });
 
-    // 7. Fazer parse do JSON (com limpeza defensiva)
+    const rawText =
+      response.content[0].type === "text" ? response.content[0].text : "";
+
+    // 6. Parse JSON (com limpeza defensiva)
     const cleaned = rawText
       .replace(/^```json\s*/i, "")
       .replace(/^```\s*/i, "")
@@ -267,7 +292,7 @@ ${catTexto}
 
     const treino = JSON.parse(cleaned) as TreinoGerado;
 
-    // 8. Validar IDs — remover exercícios inventados
+    // 7. Validar IDs — remover exercícios inventados
     const bibIds = new Set(biblioteca.map((e) => e.id));
     const catIds = new Set(catalogo.map((e) => e.id));
     treino.exercicios = treino.exercicios.filter((ex) => {
@@ -280,7 +305,7 @@ ${catTexto}
       return {
         ok: false,
         error:
-          "O Gemini não retornou exercícios válidos da biblioteca/catálogo. Tente novamente ou ajuste o prompt.",
+          "A IA não retornou exercícios válidos da biblioteca/catálogo. Tente novamente ou ajuste as configurações.",
       };
     }
 
@@ -290,7 +315,7 @@ ${catTexto}
     if (msg.includes("JSON")) {
       return {
         ok: false,
-        error: "O Gemini retornou um formato inesperado. Tente novamente.",
+        error: "A IA retornou um formato inesperado. Tente novamente.",
       };
     }
     return { ok: false, error: msg };
