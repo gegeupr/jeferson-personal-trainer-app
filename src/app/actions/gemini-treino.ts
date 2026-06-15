@@ -7,10 +7,11 @@ import Anthropic from "@anthropic-ai/sdk";
 
 export type ConfigTreino = {
   dias_por_semana: number;
-  foco_muscular: string;
+  tipo_divisao: string;
   duracao_minutos: number;
   nivel: "iniciante" | "intermediario" | "avancado";
   equipamentos: string;
+  observacoes?: string;
 };
 
 export type ExercicioGerado = {
@@ -23,12 +24,19 @@ export type ExercicioGerado = {
   observacao?: string;
 };
 
+export type RotinaGerada = {
+  nome: string;
+  foco: string;
+  exercicios: ExercicioGerado[];
+};
+
 export type TreinoGerado = {
   nome: string;
   descricao: string;
   duracao_minutos: number;
   nivel: string;
-  exercicios: ExercicioGerado[];
+  divisao: string;
+  rotinas: RotinaGerada[];
 };
 
 export type GerarTreinoResult =
@@ -75,6 +83,91 @@ function normalizeImageMime(
   if (mime.includes("gif")) return "image/gif";
   if (mime.includes("webp")) return "image/webp";
   return "image/jpeg";
+}
+
+// ─── Guia de periodização por dias + tipo ────────────────────────────────────
+
+function buildGuiaDivisao(dias: number, tipo: string): string {
+  const ia = tipo === "IA decide o melhor split";
+  const fullBody = tipo.toLowerCase().includes("full body");
+  const supInf = tipo.toLowerCase().includes("superior") || tipo.toLowerCase().includes("inferior");
+  const ppl = tipo.toLowerCase().includes("push") || tipo.toLowerCase().includes("pull") || tipo.toLowerCase().includes("legs");
+  const abcd = tipo.toLowerCase().includes("a/b/c/d");
+
+  if (fullBody) {
+    if (dias <= 3) {
+      return `Divisão Full Body — ${dias} dias:
+- Treino A: Full Body — ênfase Peito, Costas (compostos: supino, puxada, remada, desenvolvimento)
+- Treino B: Full Body — ênfase Pernas, Glúteos (compostos: agachamento, leg press, afundo, stiff)
+${dias === 3 ? "- Treino C: Full Body — ênfase Core, Ombros e acessórios (elevações, rotadores, abdominais)" : ""}
+Cada dia usa exercícios DIFERENTES — não repita os mesmos exercícios entre os dias.`;
+    }
+    if (dias === 4) {
+      return `Para Full Body 4x/semana, adote Divisão Superior/Inferior:
+- Treino A: Superior (Peito e Ombros — push)
+- Treino B: Inferior (Pernas anteriores: quadríceps, panturrilha)
+- Treino C: Superior (Costas e Bíceps — pull)
+- Treino D: Inferior (Pernas posteriores: isquiotibiais, glúteos)`;
+    }
+    return `Para Full Body ${dias}x/semana com aluno avançado, adote Divisão Push/Pull/Legs:
+- Treino A (Push): Peito, Ombros, Tríceps — supino, desenvolvimento, elevações, tríceps
+- Treino B (Pull): Costas, Bíceps — puxada, remada, rosca, face pull
+- Treino C (Legs): Pernas completas — agachamento, leg press, stiff, afundo, panturrilha
+${dias >= 4 ? "- Treino D (Push complementar): Peito inclinado, Ombros lateral, Tríceps close grip" : ""}
+${dias >= 5 ? "- Treino E (Pull complementar + Glúteos): Remada, puxador, rosca concentrada, hip thrust" : ""}
+${dias >= 6 ? "- Treino F (Legs complementar): Extensora, flexora, agachamento búlgaro, abdutora, panturrilha" : ""}`;
+  }
+
+  if (supInf) {
+    return `Divisão Superior/Inferior — ${dias} dias:
+- Treino A: Superior Push (Peito, Ombros, Tríceps)
+- Treino B: Inferior Quad-dominant (Quadríceps, Panturrilha)
+- Treino C: Superior Pull (Costas, Bíceps, Trapézio)
+- Treino D: Inferior Hip-dominant (Glúteos, Isquiotibiais, Panturrilha)
+${dias === 5 ? "- Treino E: Superior completo ou Core/Cardio" : ""}`;
+  }
+
+  if (ppl) {
+    return `Divisão Push/Pull/Legs — ${dias} dias:
+- Treino A (Push): Peito, Ombros anteriores/médios, Tríceps
+- Treino B (Pull): Costas, Bíceps, Ombros posteriores, Trapézio
+- Treino C (Legs): Quadríceps, Isquiotibiais, Glúteos, Panturrilha
+${dias >= 4 ? "- Treino D (Push 2): Peito inclinado, Ombros lateral, Tríceps acessórios" : ""}
+${dias >= 5 ? "- Treino E (Pull 2): Puxador, Remada, Rosca concentrada, Posterior de ombro" : ""}
+${dias >= 6 ? "- Treino F (Legs 2): Glúteo e isquio focado — hip thrust, stiff, afundo, panturrilha" : ""}`;
+  }
+
+  if (abcd || dias >= 4) {
+    if (dias === 4) {
+      return `Divisão A/B/C/D — 4 dias:
+- Treino A: Peito e Tríceps
+- Treino B: Costas e Bíceps
+- Treino C: Pernas (Quadríceps, Panturrilha)
+- Treino D: Ombros, Glúteos e Isquiotibiais`;
+    }
+    if (dias === 5) {
+      return `Divisão A/B/C/D/E — 5 dias (split bodybuilder):
+- Treino A: Peito (compostos + isoladores)
+- Treino B: Costas (largura + espessura)
+- Treino C: Pernas Posteriores — Glúteos e Isquiotibiais (stiff, cadeira, hip thrust)
+- Treino D: Pernas Anteriores — Quadríceps e Panturrilha (agachamento, leg press, extensora)
+- Treino E: Ombros e Braços (desenvolvimento, elevações, rosca, tríceps)`;
+    }
+    return `Divisão em ${dias} grupos musculares:
+Distribua: Peito / Costas / Pernas (Quad) / Pernas (Post+Glúteo) / Ombros / Braços
+Cada treino foca em 1-2 grupos musculares com alto volume.`;
+  }
+
+  if (ia) {
+    return `A IA deve escolher a MELHOR divisão para o perfil do aluno:
+- Iniciante 2-3x/semana: Full Body
+- Intermediário 3-4x/semana: Superior/Inferior ou Push/Pull/Legs
+- Avançado 4-6x/semana: Push/Pull/Legs ou Split por grupo muscular (A/B/C/D/E)
+Com ${dias} dias e nível avançado/bodybuilder: use Split por grupo muscular.`;
+  }
+
+  return `Divisão solicitada: ${tipo} — ${dias} dias de treino.
+Distribua os grupos musculares de forma inteligente entre os ${dias} dias, garantindo recuperação adequada.`;
 }
 
 // ─── Action: gerar treino ─────────────────────────────────────────────────────
@@ -196,43 +289,77 @@ export async function gerarTreinoComIA(
         ? catalogo
             .map(
               (e) =>
-                `{"fonte":"catalogo","id":"${e.id}","nome":"${e.nome}","grupo":"${e.grupo_muscular ?? ""}","equip":"${e.equipamento ?? ""}","nivel":"${e.nivel ?? ""}"}`
+                `{"fonte":"catalogo","id":"${e.id}","nome":"${e.nome}","grupo":"${e.grupo_muscular ?? ""}","equip":"${e.equipamento ?? ""}","nivel":"${e.nivel ?? ""}","cat":"${e.categoria ?? ""}"}`
             )
             .join("\n")
         : "Catálogo vazio.";
 
     // 3. Montar o prompt
-    const promptTexto = `Você é um personal trainer experiente em prescrição de treinos. Com base nos dados abaixo, monte um treino personalizado usando APENAS os exercícios fornecidos nas listas.
+    const guiaDivisao = buildGuiaDivisao(config.dias_por_semana, config.tipo_divisao);
+
+    const promptTexto = `Você é um personal trainer especializado em periodização. Sua tarefa é criar um PLANO DE TREINO PERIODIZADO com MÚLTIPLAS ROTINAS DIÁRIAS.
 
 === DADOS DO ALUNO ===
 Nome: ${aluno?.nome_completo ?? "Aluno"}
 ${anamneseTexto}
 
-=== HISTÓRICO DE TREINOS (últimos concluídos) ===
+=== HISTÓRICO DE TREINOS ===
 ${historicoTexto}
 
-=== CONFIGURAÇÕES SOLICITADAS ===
-Dias por semana: ${config.dias_por_semana}
-Foco muscular: ${config.foco_muscular}
-Duração: ${config.duracao_minutos} minutos
-Nível: ${config.nivel}
-Equipamentos disponíveis: ${config.equipamentos || "Academia completa"}
+=== SOLICITAÇÃO DO PROFESSOR ===
+Dias de treino por semana: ${config.dias_por_semana}
+Tipo de periodização/divisão: ${config.tipo_divisao}
+Duração de cada sessão: ${config.duracao_minutos} minutos
+Nível do aluno: ${config.nivel}
+Equipamentos: ${config.equipamentos || "Academia completa"}
+${config.observacoes ? `Observações: ${config.observacoes}` : ""}
 
-=== BIBLIOTECA DO PROFESSOR (prefira estes) ===
+=== GUIA DE PERIODIZAÇÃO ===
+${guiaDivisao}
+
+=== EXERCÍCIOS — BIBLIOTECA DO PROFESSOR (USE PRIMEIRO) ===
 ${bibTexto}
 
-=== CATÁLOGO GLOBAL (use como complemento) ===
+=== EXERCÍCIOS — CATÁLOGO GLOBAL (complemente se necessário) ===
 ${catTexto}
 
-=== REGRAS ===
-1. Use APENAS exercícios das listas acima, com o "id" e "fonte" exatos.
-2. Prefira a biblioteca do professor. Complemente com o catálogo se necessário.
-3. Respeite TODAS as lesões, cirurgias e restrições mencionadas.
-4. Adapte séries/repetições ao nível informado.
-5. Retorne APENAS JSON puro, sem markdown, sem texto extra, sem \`\`\`.
+=== REGRAS ABSOLUTAS ===
+1. O JSON deve ter o campo "rotinas" com um ARRAY de EXATAMENTE ${config.dias_por_semana} objetos.
+2. Cada objeto no array "rotinas" é uma SESSÃO DE TREINO DIFERENTE (dia A, dia B, dia C...).
+3. NUNCA coloque todos os exercícios em uma única rotina — distribua entre as ${config.dias_por_semana} rotinas.
+4. Cada rotina deve ter entre 6 e 12 exercícios, todos com foco muscular ESPECÍFICO daquele dia.
+5. Use APENAS IDs dos exercícios listados acima — nunca invente IDs.
+6. Prefira biblioteca do professor. Use catálogo para complementar.
+7. Respeite TODAS as restrições, lesões e limitações do aluno.
+8. Retorne SOMENTE JSON puro — sem markdown, sem texto, sem \`\`\`.
 
-=== FORMATO DE RETORNO ===
-{"nome":"...","descricao":"...","duracao_minutos":${config.duracao_minutos},"nivel":"${config.nivel}","exercicios":[{"fonte":"biblioteca","exercicio_id":"uuid","nome":"Nome","series":3,"repeticoes":"8-12","descanso_segundos":60,"observacao":"dica opcional"}]}`;
+=== FORMATO EXATO DO JSON (obrigatório) ===
+{
+  "nome": "Plano [Tipo de Divisão] — [Nome do Aluno]",
+  "descricao": "Descrição do plano e objetivos",
+  "duracao_minutos": ${config.duracao_minutos},
+  "nivel": "${config.nivel}",
+  "divisao": "Nome da divisão adotada",
+  "rotinas": [
+    {
+      "nome": "Treino A — [Grupos Musculares do Dia 1]",
+      "foco": "[Grupos musculares principais do dia 1]",
+      "exercicios": [
+        {"fonte": "catalogo", "exercicio_id": "uuid-real-da-lista", "nome": "Nome do Exercício", "series": 4, "repeticoes": "8-12", "descanso_segundos": 90, "observacao": "dica"},
+        {"fonte": "biblioteca", "exercicio_id": "uuid-real-da-lista", "nome": "Nome do Exercício", "series": 3, "repeticoes": "10", "descanso_segundos": 60, "observacao": ""}
+      ]
+    },
+    {
+      "nome": "Treino B — [Grupos Musculares do Dia 2]",
+      "foco": "[Grupos musculares principais do dia 2]",
+      "exercicios": [
+        {"fonte": "catalogo", "exercicio_id": "uuid-real-da-lista", "nome": "Outro Exercício", "series": 4, "repeticoes": "6-10", "descanso_segundos": 120, "observacao": ""}
+      ]
+    }
+  ]
+}
+
+ATENÇÃO: O exemplo acima mostra 2 rotinas, mas você DEVE criar EXATAMENTE ${config.dias_por_semana} rotinas (uma por dia de treino). Cada rotina é independente e tem exercícios próprios.`;
 
     // 4. Montar content blocks para o Claude
     const content: Anthropic.MessageParam["content"] = [
@@ -248,7 +375,7 @@ ${catTexto}
       if (fotasValidas.length > 0) {
         content.push({
           type: "text",
-          text: `A seguir estão ${fotasValidas.length} foto(s) de progresso do aluno (mais recentes primeiro). Use apenas para avaliar composição corporal e postura visível.`,
+          text: `Fotos de progresso do aluno (${fotasValidas.length} mais recentes). Use para avaliar composição corporal e postura:`,
         });
         for (const f of fotasValidas) {
           content.push({
@@ -288,16 +415,16 @@ ${catTexto}
     const client = new Anthropic({ apiKey });
     const response = await client.messages.create({
       model: "claude-sonnet-4-6",
-      max_tokens: 4096,
+      max_tokens: 8192,
       system:
-        "Você é um personal trainer especializado em prescrição de treinos. Responda SEMPRE com JSON puro e válido, sem texto adicional, sem markdown, sem explicações. Apenas o objeto JSON.",
+        "Você é um personal trainer especializado em periodização. Responda SEMPRE com JSON puro e válido, sem texto adicional, sem markdown, sem explicações. Apenas o objeto JSON conforme solicitado.",
       messages: [{ role: "user", content }],
     });
 
     const rawText =
       response.content[0].type === "text" ? response.content[0].text : "";
 
-    // 6. Parse JSON — extrai o objeto JSON por contagem de chaves
+    // 6. Parse JSON
     const jsonStr = extrairJSON(rawText);
     if (!jsonStr) {
       console.error("[gerarTreino] resposta sem JSON:", rawText.slice(0, 300));
@@ -312,20 +439,41 @@ ${catTexto}
       return { ok: false, error: "A IA retornou um JSON malformado. Tente novamente." };
     }
 
-    // 7. Validar IDs — remover exercícios inventados
+    // 7. Normalizar: suporte a formato legado (exercicios no topo) e novo (rotinas[])
+    if (!treino.rotinas && (treino as any).exercicios) {
+      treino.rotinas = [{
+        nome: treino.nome,
+        foco: "Geral",
+        exercicios: (treino as any).exercicios,
+      }];
+    }
+
+    if (!Array.isArray(treino.rotinas) || treino.rotinas.length === 0) {
+      return { ok: false, error: "A IA não gerou rotinas de treino. Tente novamente." };
+    }
+
+    // 8. Validar IDs — remover exercícios inventados em todas as rotinas
     const bibIds = new Set(biblioteca.map((e) => e.id));
     const catIds = new Set(catalogo.map((e) => e.id));
-    treino.exercicios = treino.exercicios.filter((ex) => {
-      if (ex.fonte === "biblioteca") return bibIds.has(ex.exercicio_id);
-      if (ex.fonte === "catalogo") return catIds.has(ex.exercicio_id);
-      return false;
-    });
 
-    if (treino.exercicios.length === 0) {
+    treino.rotinas = treino.rotinas.map((rotina) => ({
+      ...rotina,
+      exercicios: (rotina.exercicios || []).filter((ex) => {
+        if (ex.fonte === "biblioteca") return bibIds.has(ex.exercicio_id);
+        if (ex.fonte === "catalogo") return catIds.has(ex.exercicio_id);
+        return false;
+      }),
+    }));
+
+    const totalExercicios = treino.rotinas.reduce(
+      (sum, r) => sum + r.exercicios.length,
+      0
+    );
+
+    if (totalExercicios === 0) {
       return {
         ok: false,
-        error:
-          "A IA não retornou exercícios válidos da biblioteca/catálogo. Tente novamente ou ajuste as configurações.",
+        error: "A IA não retornou exercícios válidos da biblioteca/catálogo. Tente novamente.",
       };
     }
 
@@ -345,7 +493,7 @@ export async function salvarTreinoGerado(
   treino: TreinoGerado
 ): Promise<SalvarTreinoResult> {
   try {
-    // 1. Criar treino
+    // 1. Criar treino (plano geral)
     const { data: treinoRow, error: treinoErr } = await supabaseAdmin
       .from("treinos")
       .insert({
@@ -362,37 +510,41 @@ export async function salvarTreinoGerado(
 
     if (treinoErr || !treinoRow) throw treinoErr ?? new Error("Erro ao criar treino.");
 
-    // 2. Criar rotina
-    const { data: rotinaRow, error: rotinaErr } = await supabaseAdmin
-      .from("rotinas_diarias")
-      .insert({
-        plano_id: treinoRow.id,
-        nome: treino.nome,
-        descricao: treino.descricao,
-        aluno_id: alunoId,
-      })
-      .select("id")
-      .single();
+    // 2. Criar uma rotina_diaria por rotina gerada
+    for (const rotina of treino.rotinas) {
+      const { data: rotinaRow, error: rotinaErr } = await supabaseAdmin
+        .from("rotinas_diarias")
+        .insert({
+          plano_id: treinoRow.id,
+          nome: rotina.nome,
+          descricao: rotina.foco || null,
+          aluno_id: alunoId,
+        })
+        .select("id")
+        .single();
 
-    if (rotinaErr || !rotinaRow) throw rotinaErr ?? new Error("Erro ao criar rotina.");
+      if (rotinaErr || !rotinaRow) throw rotinaErr ?? new Error(`Erro ao criar rotina "${rotina.nome}".`);
 
-    // 3. Criar exercícios da rotina
-    const rows = treino.exercicios.map((ex, i) => ({
-      rotina_id: rotinaRow.id,
-      exercicio_id: ex.fonte === "biblioteca" ? ex.exercicio_id : null,
-      catalogo_id: ex.fonte === "catalogo" ? ex.exercicio_id : null,
-      ordem: i + 1,
-      series: ex.series,
-      repeticoes: ex.repeticoes,
-      intervalo: ex.descanso_segundos ? `${ex.descanso_segundos}s` : null,
-      observacoes: ex.observacao ?? null,
-    }));
+      // 3. Criar exercícios desta rotina
+      if (rotina.exercicios.length === 0) continue;
 
-    const { error: exErr } = await supabaseAdmin
-      .from("treino_exercicios")
-      .insert(rows);
+      const rows = rotina.exercicios.map((ex, i) => ({
+        rotina_id: rotinaRow.id,
+        exercicio_id: ex.fonte === "biblioteca" ? ex.exercicio_id : null,
+        catalogo_id: ex.fonte === "catalogo" ? ex.exercicio_id : null,
+        ordem: i + 1,
+        series: ex.series,
+        repeticoes: ex.repeticoes,
+        intervalo: ex.descanso_segundos ? `${ex.descanso_segundos}s` : null,
+        observacoes: ex.observacao ?? null,
+      }));
 
-    if (exErr) throw exErr;
+      const { error: exErr } = await supabaseAdmin
+        .from("treino_exercicios")
+        .insert(rows);
+
+      if (exErr) throw exErr;
+    }
 
     return { ok: true, treinoId: treinoRow.id };
   } catch (e: any) {
