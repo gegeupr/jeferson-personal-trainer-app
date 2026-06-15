@@ -327,11 +327,39 @@ ${catTexto}
 1. O JSON deve ter o campo "rotinas" com um ARRAY de EXATAMENTE ${config.dias_por_semana} objetos.
 2. Cada objeto no array "rotinas" é uma SESSÃO DE TREINO DIFERENTE (dia A, dia B, dia C...).
 3. NUNCA coloque todos os exercícios em uma única rotina — distribua entre as ${config.dias_por_semana} rotinas.
-4. Cada rotina deve ter entre 6 e 12 exercícios, todos com foco muscular ESPECÍFICO daquele dia.
+4. Cada rotina deve ter entre 6 e 10 exercícios DIFERENTES, todos com foco muscular ESPECÍFICO daquele dia.
 5. Use APENAS IDs dos exercícios listados acima — nunca invente IDs.
 6. Prefira biblioteca do professor. Use catálogo para complementar.
 7. Respeite TODAS as restrições, lesões e limitações do aluno.
 8. Retorne SOMENTE JSON puro — sem markdown, sem texto, sem \`\`\`.
+
+=== REGRA ANTI-REPETIÇÃO (CRÍTICA) ===
+O catálogo lista variações técnicas como exercícios separados: "Crossover Drop-Set", "Crossover Rest-Pause", "Crossover Isometria" etc.
+Estas são VARIAÇÕES DO MESMO MOVIMENTO — NÃO são exercícios diferentes.
+
+PROIBIDO em uma mesma rotina:
+- 2 ou mais variações do mesmo aparelho/movimento (ex: Crossover Polia Alta + Crossover Polia Baixa + Crossover Drop-Set = 3 crossovers = ERRADO)
+- 2 ou mais Hip Thrust (barra, máquina, rest-pause etc = todos são Hip Thrust = escolha 1)
+- 2 ou mais Cadeira Extensora (drop-set, 1½ rep, isometria etc = todas são Extensora = escolha 1)
+- 2 ou mais Leg Press (45° + drop-set + unilateral etc = todos são Leg Press = escolha 1)
+- 2 ou mais Face Pull
+
+REGRA: para cada padrão de movimento, escolha UM exercício. Se quiser usar técnica especial (drop-set, rest-pause), aplique ao exercício escolhido via "observacao".
+EXEMPLO CORRETO: {"nome": "Crossover na Polia Alta", "series": 4, "repeticoes": "10-12", "observacao": "Última série em drop-set: reduzir 20% e continuar até a falha."}
+EXEMPLO ERRADO: listar "Crossover Drop-Set" + "Crossover Rest-Pause" + "Crossover Isometria" como 3 exercícios separados.
+
+=== ESTRUTURA OBRIGATÓRIA POR ROTINA ===
+Cada rotina DEVE seguir esta sequência de padrões de movimento distintos:
+1. COMPOSTO PRINCIPAL: 1 exercício multiarticular pesado (agachamento, supino, terra, desenvolvimento, puxada, remada)
+2. COMPOSTO SECUNDÁRIO: 1 exercício multiarticular de suporte (variação de ângulo diferente do principal)
+3. ISOLADOR A: 1 exercício monoarticular para músculo principal
+4. ISOLADOR B: 1 exercício monoarticular para músculo secundário/sinérgico
+5. ISOLADOR C (opcional): 1 exercício diferente dos anteriores
+6. ISOLADOR D (opcional): 1 exercício diferente dos anteriores
+7. FINALIZADOR/PUMP: 1 exercício leve para congestão final
+8. CORE (opcional): 1 exercício abdominal/estabilização
+
+Total: 6 a 9 exercícios por rotina, TODOS com padrões de movimento distintos entre si.
 
 === FORMATO EXATO DO JSON (obrigatório) ===
 {
