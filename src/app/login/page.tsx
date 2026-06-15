@@ -411,7 +411,7 @@ function LoginInner() {
                 <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm">
                   <p className="font-semibold text-white">7 dias grátis, depois R$ 59,90/mês</p>
                   <p className="mt-0.5 text-xs text-white/55">
-                    Pagamento por cartão ao finalizar o teste. Cancele quando quiser.
+                    Inclui geração de treinos com IA, modelos reutilizáveis e alunos ilimitados. Cancele quando quiser.
                   </p>
                 </div>
               )}

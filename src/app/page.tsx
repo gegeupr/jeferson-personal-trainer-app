@@ -149,18 +149,19 @@ export default function HomePage() {
               <div className="max-w-2xl">
                 <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
                   <span className="h-2 w-2 rounded-full bg-white" />
-                  Teste grátis por 7 dias
+                  Geração de treinos com IA · Teste grátis 7 dias
                 </div>
 
                 <h1 className="mt-4 text-3xl font-extrabold leading-tight tracking-tight md:text-5xl">
-                  Gestão inteligente para{" "}
-                  <span className="text-white">personal trainers</span>
+                  Treinos personalizados com IA,{" "}
+                  <span className="text-white">entregues pelo seu nome</span>
                 </h1>
 
                 <p className="mt-3 text-sm leading-relaxed text-white/75 md:text-base">
-                  Organize alunos, treinos, biblioteca de exercícios e evolução
-                  em um só lugar — com visual premium e controle real de acesso
-                  do aluno.
+                  O Motion usa Claude, a IA da Anthropic, para montar planos de
+                  treino periodizados lendo a anamnese completa do aluno, fotos
+                  de progresso e exames médicos — tudo com a sua identidade, sem
+                  intermediários.
                 </p>
 
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row">
@@ -179,8 +180,8 @@ export default function HomePage() {
                 </div>
 
                 <div className="mt-7 grid grid-cols-3 gap-3 text-center">
-                  <Stat label="Treinos" value="Rápidos" />
-                  <Stat label="Biblioteca" value="Sua" />
+                  <Stat label="IA" value="Claude" />
+                  <Stat label="Alunos" value="Ilimitados" />
                   <Stat label="Acesso" value="Controlado" />
                 </div>
 
@@ -197,28 +198,28 @@ export default function HomePage() {
       {/* Recursos */}
       <section id="recursos" className="mx-auto max-w-6xl px-4 py-14">
         <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
-          Feito para o seu dia a dia
+          Ferramentas que economizam horas por semana
         </h2>
         <p className="mt-2 max-w-2xl text-white/70">
-          Você mantém sua metodologia, seus nomes de exercícios, seus vídeos e
-          seu relacionamento direto com o aluno.
+          Da anamnese ao treino pronto: a IA faz o trabalho pesado enquanto
+          você mantém o controle total sobre cada plano.
         </p>
 
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           <Card
-            title="Biblioteca própria"
-            desc="Cada professor cria seus exercícios com o nome da sua região e pode linkar seu vídeo do YouTube."
-            badge="Professor"
+            title="Treinos gerados por IA"
+            desc="A IA da Anthropic lê a anamnese, histórico e fotos do aluno e monta um plano completo com rotinas separadas por dia — você revisa e ajusta antes de salvar."
+            badge="Powered by Claude"
           />
           <Card
-            title="Treinos reutilizáveis"
-            desc="Monte, salve e atribua treinos para cada aluno. Rápido de ajustar, fácil de evoluir."
-            badge="Gestão"
+            title="Modelos reutilizáveis"
+            desc="Crie um treino para idoso hipertenso, gestante ou atleta de alto rendimento e atribua a quantos alunos quiser com um clique."
+            badge="Templates IA"
           />
           <Card
-            title="Acesso do aluno"
-            desc="Aluno só acessa quando estiver ativo. Você controla o status e mantém tudo organizado."
-            badge="Controle"
+            title="Controle total"
+            desc="Edite qualquer exercício do treino gerado — séries, reps, descanso, observações. Aluno só acessa quando você ativa."
+            badge="Você no comando"
           />
         </div>
       </section>
@@ -232,20 +233,20 @@ export default function HomePage() {
 
           <div className="mt-8 grid gap-4 md:grid-cols-4">
             <Step n="01" title="Crie sua conta" desc="7 dias grátis, depois R$ 59,90/mês." />
-            <Step n="02" title="Monte sua biblioteca" desc="Exercícios + vídeos." />
-            <Step n="03" title="Crie e salve treinos" desc="Rotinas e planos." />
-            <Step n="04" title="Atribua ao aluno" desc="Acesso conforme status." />
+            <Step n="02" title="Cadastre seus alunos" desc="Anamnese, histórico e fotos de progresso em um só lugar." />
+            <Step n="03" title="Gere o treino com IA" desc="Claude lê o perfil do aluno e monta o plano. Você revisa e aprova." />
+            <Step n="04" title="Atribua com um clique" desc="Aluno recebe o plano e acessa via app." />
           </div>
 
           <div className="mt-10 rounded-2xl border border-white/8 bg-white/[0.03] p-6 md:p-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-sm font-semibold text-white/80">
-                  Pagamento do aluno direto com você
+                  Você cobra do jeito que preferir
                 </p>
                 <p className="mt-1 text-white/70">
-                  Pix direto entre você e o aluno — sem intermediários. O
-                  Motion organiza o acesso e a gestão.
+                  Pix direto entre você e o aluno — sem comissão sobre os seus
+                  alunos. O Motion cuida da organização, treinos e acesso.
                 </p>
               </div>
               <Link
@@ -284,12 +285,12 @@ export default function HomePage() {
 
               <ul className="mt-6 space-y-3 text-sm text-white/70">
                 {[
+                  "Geração de treinos com IA (Claude · Anthropic)",
+                  "Treinos-modelo reutilizáveis por perfil de aluno",
                   "Alunos ilimitados",
-                  "Biblioteca própria de exercícios",
-                  "Treinos e rotinas reutilizáveis",
+                  "Anamnese, fotos de progresso e exames",
                   "Controle de acesso por aluno",
                   "Perfil público do professor",
-                  "Anamnese e histórico de progresso",
                 ].map((feature) => (
                   <li key={feature} className="flex items-center gap-2">
                     <span className="text-xs text-white">✓</span>

@@ -25,7 +25,7 @@ export default function ProfessorPricingPage() {
       <div className="max-w-md w-full rounded-2xl border border-white/8 bg-white/[0.03] p-8 text-center">
         <h1 className="text-3xl font-bold mb-2">Plano Professor</h1>
         <p className="text-white/60 mb-6">
-          Gerencie seus alunos, treinos e cobranças em um só lugar.
+          Gere treinos com IA, organize seus alunos e cresça sem limite.
         </p>
 
         <div className="mb-6">
@@ -34,9 +34,10 @@ export default function ProfessorPricingPage() {
         </div>
 
         <ul className="text-left text-white/70 space-y-2 mb-8 text-sm">
-          <li>✓ Alunos, treinos e biblioteca ilimitados</li>
-          <li>✓ Página pública e comunidade</li>
-          <li>✓ Controle de acesso dos alunos via Pix</li>
+          <li>✓ Geração de treinos com IA (powered by Claude)</li>
+          <li>✓ Modelos reutilizáveis por perfil de aluno</li>
+          <li>✓ Alunos ilimitados, biblioteca própria</li>
+          <li>✓ Controle de acesso e pagamento via Pix</li>
           <li>✓ 7 dias grátis para começar</li>
         </ul>
 

@@ -403,7 +403,7 @@ export default function ProfessorDashboard() {
                   : " — expira hoje"}
               </p>
               <p className="text-xs text-amber-200/60 mt-0.5">
-                Após o trial, R$ 59,90/mês para continuar usando o Motion.
+                Após o trial, R$ 59,90/mês — inclui IA para gerar treinos, modelos reutilizáveis e alunos ilimitados.
               </p>
             </div>
             <Link
@@ -473,7 +473,7 @@ export default function ProfessorDashboard() {
                 href="/professor/treinos"
                 className="rounded-xl bg-white px-3 py-2 text-sm font-semibold text-black hover:bg-white/90 transition-colors"
               >
-                Criar treino
+                Treinos com IA
               </Link>
               <button
                 onClick={copyPublicLink}
@@ -484,6 +484,24 @@ export default function ProfessorDashboard() {
               </button>
             </div>
           </div>
+        </div>
+
+        {/* ── Banner IA ─────────────────────────────────────────────────────── */}
+        <div className="rounded-2xl border border-white/8 bg-white/[0.03] px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-white">
+              Gere treinos completos com IA em segundos
+            </p>
+            <p className="mt-0.5 text-xs text-white/50">
+              Powered by Claude (Anthropic) — a IA lê a anamnese do aluno e monta o plano periodizado. Você revisa, ajusta e atribui.
+            </p>
+          </div>
+          <Link
+            href="/professor/treinos"
+            className="shrink-0 rounded-full bg-white px-4 py-2 text-xs font-semibold text-black hover:bg-white/90 transition-colors"
+          >
+            Experimentar agora
+          </Link>
         </div>
 
         {/* ── Stats ─────────────────────────────────────────────────────────── */}
