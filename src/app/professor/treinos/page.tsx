@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
+import Link from "next/link";
 import { supabase } from "@/utils/supabase-browser";
 
 // -------------------- Interfaces --------------------
@@ -1232,6 +1233,29 @@ export default function ProfessorTreinosPage() {
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-white py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
+        {/* ── Acesso rápido IA ─────────────────────────────────────────── */}
+        <div className="mb-7 rounded-2xl border border-white/8 bg-white/[0.03] p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">✦ Geração com IA</span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Link
+              href="/professor/treinos/gerar-modelo"
+              className="flex flex-col gap-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 hover:bg-white/8 transition-colors"
+            >
+              <span className="text-sm font-semibold text-white">Gerar modelo com IA</span>
+              <span className="text-xs text-white/40">Cria um template reutilizável baseado em perfil de aluno-tipo</span>
+            </Link>
+            <Link
+              href="/professor/treinos/modelos"
+              className="flex flex-col gap-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 hover:bg-white/8 transition-colors"
+            >
+              <span className="text-sm font-semibold text-white">Biblioteca de modelos IA</span>
+              <span className="text-xs text-white/40">Veja, edite e atribua modelos existentes a qualquer aluno</span>
+            </Link>
+          </div>
+        </div>
+
         <div className="flex items-start justify-between gap-4 mb-7">
           <div>
             <h1 className="text-2xl font-bold text-white">Planos de Treino</h1>
