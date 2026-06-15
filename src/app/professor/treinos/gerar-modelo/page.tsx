@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/utils/supabase-browser";
@@ -12,6 +12,7 @@ import {
   type RotinaGerada,
   type TreinoGerado,
 } from "@/app/actions/gemini-treino";
+import { consultarUsoIA, type UsoIA } from "@/lib/verificarLimiteIA";
 
 // ─── Preview ──────────────────────────────────────────────────────────────────
 
@@ -207,6 +208,16 @@ export default function GerarModeloPage() {
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [treino, setTreino] = useState<TreinoGerado | null>(null);
+  const [uso, setUso] = useState<UsoIA | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      const profId = data?.user?.id;
+      if (profId) consultarUsoIA(profId).then(setUso);
+    });
+  }, []);
+
+  const limiteAtingido = uso !== null && uso.geracoes_usadas >= uso.limite;
 
   const totalExercicios = treino
     ? treino.rotinas.reduce((sum, r) => sum + r.exercicios.length, 0)
@@ -224,6 +235,7 @@ export default function GerarModeloPage() {
       const result = await gerarTreinoModeloComIA(profId, config);
       if (!result.ok) { setErro(result.error); return; }
       setTreino(result.treino);
+      setUso((u) => u ? { ...u, geracoes_usadas: u.geracoes_usadas + 1 } : u);
     } finally {
       setGerando(false);
     }
@@ -268,7 +280,20 @@ export default function GerarModeloPage() {
 
         {!treino && (
           <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-6 space-y-5">
-            <h2 className="text-sm font-semibold text-white/70 uppercase tracking-wider">Configurações</h2>
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-sm font-semibold text-white/70 uppercase tracking-wider">Configurações</h2>
+              {uso && (
+                <span className={`text-xs px-2.5 py-1 rounded-full border ${
+                  limiteAtingido
+                    ? "border-red-400/30 bg-red-400/10 text-red-300"
+                    : uso.geracoes_usadas >= uso.limite * 0.8
+                    ? "border-yellow-400/30 bg-yellow-400/10 text-yellow-300"
+                    : "border-white/10 text-white/40"
+                }`}>
+                  {uso.geracoes_usadas}/{uso.limite} gerações este mês
+                </span>
+              )}
+            </div>
 
             {/* Perfil do aluno-tipo */}
             <div>
@@ -377,19 +402,32 @@ export default function GerarModeloPage() {
               <p className="rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-300">{erro}</p>
             )}
 
-            <button
-              type="button"
-              onClick={handleGerar}
-              disabled={gerando}
-              className="w-full rounded-full bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-white/90 disabled:opacity-60 transition-colors"
-            >
-              {gerando ? "Gerando modelo com IA…" : "Gerar modelo com IA"}
-            </button>
+            {limiteAtingido ? (
+              <div className="rounded-xl border border-red-400/20 bg-red-400/8 px-4 py-4 space-y-1.5">
+                <p className="text-sm font-medium text-red-300">
+                  Limite de {uso!.limite} gerações de IA atingido este mês.
+                </p>
+                <p className="text-xs text-white/50">
+                  O limite renova no dia 1º do próximo mês. Você ainda pode atribuir modelos existentes da biblioteca, criar treinos manualmente e editar os treinos dos alunos — apenas a geração nova com IA está pausada.
+                </p>
+              </div>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={handleGerar}
+                  disabled={gerando}
+                  className="w-full rounded-full bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-white/90 disabled:opacity-60 transition-colors"
+                >
+                  {gerando ? "Gerando modelo com IA…" : "Gerar modelo com IA"}
+                </button>
 
-            {gerando && (
-              <p className="text-center text-xs text-white/35">
-                A IA está montando o modelo. Pode levar alguns segundos…
-              </p>
+                {gerando && (
+                  <p className="text-center text-xs text-white/35">
+                    A IA está montando o modelo. Pode levar alguns segundos…
+                  </p>
+                )}
+              </>
             )}
           </div>
         )}

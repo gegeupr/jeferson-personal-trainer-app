@@ -2,6 +2,7 @@
 // v2 — prompt com guias de grupos musculares e regras entre dias
 import { supabaseAdmin } from "@/utils/supabaseAdmin";
 import Anthropic from "@anthropic-ai/sdk";
+import { verificarEIncrementarUsoIA } from "@/lib/verificarLimiteIA";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -336,6 +337,9 @@ export async function gerarTreinoComIA(
   try {
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) return { ok: false, error: "ANTHROPIC_API_KEY não configurado." };
+
+    const limiteCheck = await verificarEIncrementarUsoIA(profId);
+    if (!limiteCheck.ok) return { ok: false, error: limiteCheck.error };
 
     // 1. Buscar todos os dados em paralelo
     const [
@@ -700,7 +704,7 @@ ATENÇÃO: O exemplo acima mostra 2 rotinas, mas você DEVE criar EXATAMENTE ${c
     return { ok: true, treino };
   } catch (e: any) {
     const msg: string = e?.message ?? "Erro desconhecido.";
-    console.error("[gerarTreino] erro geral:", msg);
+    console.error("[gerarTreino] erro após consumir 1 geração de IA:", msg);
     return { ok: false, error: msg };
   }
 }
@@ -781,6 +785,9 @@ export async function gerarTreinoModeloComIA(
   try {
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) return { ok: false, error: "ANTHROPIC_API_KEY não configurado." };
+
+    const limiteCheck = await verificarEIncrementarUsoIA(profId);
+    if (!limiteCheck.ok) return { ok: false, error: limiteCheck.error };
 
     const [bibResult, catResult] = await Promise.all([
       supabaseAdmin
@@ -981,7 +988,7 @@ ATENÇÃO: O exemplo acima mostra 1 rotina, mas você DEVE criar EXATAMENTE ${co
     return { ok: true, treino };
   } catch (e: any) {
     const msg: string = e?.message ?? "Erro desconhecido.";
-    console.error("[gerarModelo] erro geral:", msg);
+    console.error("[gerarModelo] erro após consumir 1 geração de IA:", msg);
     return { ok: false, error: msg };
   }
 }
