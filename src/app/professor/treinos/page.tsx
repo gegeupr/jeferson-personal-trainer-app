@@ -341,6 +341,7 @@ export default function ProfessorTreinosPage() {
         `
           )
           .eq("professor_id", pId)
+          .eq("is_template", false)
           .order("created_at", { ascending: false });
 
       if (planosTreinoError) throw planosTreinoError;
