@@ -85,6 +85,31 @@ function normalizeImageMime(
   return "image/jpeg";
 }
 
+// Extrai keywords de contraindicação a partir do texto livre da anamnese
+function extrairContraindicacoesAnamnese(anamnese: Record<string, unknown> | null | undefined): string[] {
+  if (!anamnese) return [];
+  const texto = [
+    anamnese.historico_lesoes_cirurgias,
+    anamnese.historico_saude_doencas,
+    anamnese.observacoes_gerais,
+  ].filter(Boolean).join(" ").toLowerCase();
+
+  const map: Array<[RegExp, string]> = [
+    [/joelho/,                              "lesao_joelho"],
+    [/ombro/,                               "lesao_ombro"],
+    [/lombar|coluna|hérnia discal|hérnia de disco|hernia/i, "lesao_lombar"],
+    [/cotovelo|epicondil/,                  "lesao_cotovelo"],
+    [/hérnia|hernia/,                       "hernia_discal"],
+    [/tornozelo/,                           "lesao_tornozelo"],
+  ];
+
+  const resultado: string[] = [];
+  for (const [re, tag] of map) {
+    if (re.test(texto) && !resultado.includes(tag)) resultado.push(tag);
+  }
+  return resultado;
+}
+
 // ─── Guia de periodização por dias + tipo ────────────────────────────────────
 
 function buildGuiaDivisao(dias: number, tipo: string): string {
@@ -236,7 +261,7 @@ export async function gerarTreinoComIA(
 
       supabaseAdmin
         .from("exercicios_catalogo")
-        .select("id, nome, grupo_muscular, equipamento, nivel, categoria")
+        .select("id, nome, grupo_muscular, equipamento, nivel, categoria, movement_pattern, contraindicacoes, nivel_minimo")
         .order("nome")
         .limit(300),
     ]);
@@ -247,7 +272,19 @@ export async function gerarTreinoComIA(
     const arquivos = arquivosResult.data || [];
     const historico = (historicoResult.data || []) as any[];
     const biblioteca = bibResult.data || [];
-    const catalogo = catResult.data || [];
+    const catalogoBruto = catResult.data || [];
+
+    // Filtrar exercícios contraindicados com base na anamnese do aluno
+    const contraindicacoesAluno = extrairContraindicacoesAnamnese(anamnese);
+    const catalogo = contraindicacoesAluno.length === 0
+      ? catalogoBruto
+      : catalogoBruto.filter((e) => {
+          const contrEx = (e.contraindicacoes as string[] | null) ?? [];
+          return !contrEx.some((c) => contraindicacoesAluno.includes(c));
+        });
+    if (catalogoBruto.length !== catalogo.length) {
+      console.log(`[gerarTreino] ${catalogoBruto.length - catalogo.length} exercícios excluídos por restrições: ${contraindicacoesAluno.join(", ")}`);
+    }
 
     // 2. Montar textos para o prompt
     const anamneseTexto = anamnese
@@ -289,7 +326,7 @@ export async function gerarTreinoComIA(
         ? catalogo
             .map(
               (e) =>
-                `{"fonte":"catalogo","id":"${e.id}","nome":"${e.nome}","grupo":"${e.grupo_muscular ?? ""}","equip":"${e.equipamento ?? ""}","nivel":"${e.nivel ?? ""}","cat":"${e.categoria ?? ""}"}`
+                `{"fonte":"catalogo","id":"${e.id}","nome":"${e.nome}","grupo":"${e.grupo_muscular ?? ""}","equip":"${e.equipamento ?? ""}","nivel":"${(e as any).nivel_minimo ?? e.nivel ?? ""}","cat":"${e.categoria ?? ""}","pattern":"${(e as any).movement_pattern ?? ""}"}`
             )
             .join("\n")
         : "Catálogo vazio.";
