@@ -2,7 +2,7 @@
 
 import { supabaseAdmin } from "@/utils/supabaseAdmin";
 
-export const LIMITE_MENSAL_IA = 30;
+const LIMITE_MENSAL_IA = 30;
 
 export type UsoIA = { geracoes_usadas: number; limite: number };
 
