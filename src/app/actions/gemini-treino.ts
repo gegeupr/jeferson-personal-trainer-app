@@ -120,38 +120,38 @@ ${dias >= 6 ? "- Treino F (Legs complementar): Extensora, flexora, agachamento b
 
   if (supInf) {
     return `Divisão Superior/Inferior — ${dias} dias:
-- Treino A: Superior Push (Peito, Ombros, Tríceps)
-- Treino B: Inferior Quad-dominant (Quadríceps, Panturrilha)
-- Treino C: Superior Pull (Costas, Bíceps, Trapézio)
-- Treino D: Inferior Hip-dominant (Glúteos, Isquiotibiais, Panturrilha)
-${dias === 5 ? "- Treino E: Superior completo ou Core/Cardio" : ""}`;
+- Treino A: Superior Push (Peito, Ombros, Tríceps — supino, desenvolvimento, elevações, tríceps)
+- Treino B: Inferior Quad-dominant (Quadríceps, Panturrilha — agachamento, leg press, extensora, panturrilha)
+- Treino C: Superior Pull (Costas, Bíceps, Trapézio) — OBRIGATÓRIO: 1 puxada (Barra Fixa ou Puxada Frontal) + 1 remada (Remada Curvada ou Remada na Polia) + roscas reais (Rosca Direta, Alternada ou Martelo). NUNCA use Barra Fixa Supinada como biceps.
+- Treino D: Inferior Hip-dominant (Glúteos, Isquiotibiais — hip thrust, stiff, cadeira flexora, extensão de quadril)
+${dias === 5 ? "- Treino E: Superior completo (mix push+pull com exercícios DIFERENTES dos Treinos A e C)" : ""}`;
   }
 
   if (ppl) {
     return `Divisão Push/Pull/Legs — ${dias} dias:
-- Treino A (Push): Peito, Ombros anteriores/médios, Tríceps
-- Treino B (Pull): Costas, Bíceps, Ombros posteriores, Trapézio
-- Treino C (Legs): Quadríceps, Isquiotibiais, Glúteos, Panturrilha
-${dias >= 4 ? "- Treino D (Push 2): Peito inclinado, Ombros lateral, Tríceps acessórios" : ""}
-${dias >= 5 ? "- Treino E (Pull 2): Puxador, Remada, Rosca concentrada, Posterior de ombro" : ""}
-${dias >= 6 ? "- Treino F (Legs 2): Glúteo e isquio focado — hip thrust, stiff, afundo, panturrilha" : ""}`;
+- Treino A (Push): Peito, Ombros anteriores/médios, Tríceps (supino, desenvolvimento, elevações, tríceps)
+- Treino B (Pull): Costas, Bíceps, Ombros posteriores, Trapézio — OBRIGATÓRIO: 1 puxada (Barra Fixa ou Puxada Frontal) + 1 remada (Remada Curvada com Barra ou Remada na Polia) + roscas reais (Rosca Direta, Alternada ou Martelo). NUNCA Barra Fixa Supinada como bíceps.
+- Treino C (Legs): Quadríceps, Isquiotibiais, Glúteos, Panturrilha (agachamento, leg press, stiff, hip thrust, panturrilha)
+${dias >= 4 ? "- Treino D (Push 2): Peito inclinado, Ombros lateral, Tríceps acessórios — exercícios DIFERENTES do Treino A" : ""}
+${dias >= 5 ? "- Treino E (Pull 2): Puxada fechada ou neutra, Remada Cavalinho, Rosca Concentrada, Face Pull — exercícios DIFERENTES do Treino B" : ""}
+${dias >= 6 ? "- Treino F (Legs 2): Glúteo e isquio — hip thrust, stiff COM HALTERES (não barra como no C), afundo, extensão de quadril — exercícios DIFERENTES do Treino C" : ""}`;
   }
 
   if (abcd || dias >= 4) {
     if (dias === 4) {
       return `Divisão A/B/C/D — 4 dias:
-- Treino A: Peito e Tríceps
-- Treino B: Costas e Bíceps
-- Treino C: Pernas (Quadríceps, Panturrilha)
-- Treino D: Ombros, Glúteos e Isquiotibiais`;
+- Treino A: Peito e Tríceps (supino reto, supino inclinado, crucifixo, tríceps corda, tríceps testa)
+- Treino B: Costas e Bíceps — OBRIGATÓRIO: 1 puxada vertical (Barra Fixa ou Puxada Frontal) + 1 remada (Remada Curvada com Barra, Remada na Polia Baixa ou Remada Cavalinho) + roscas reais (Rosca Direta, Rosca Alternada, Rosca Martelo). NUNCA use Barra Fixa Supinada como exercício de bíceps — ela é puxada de costas.
+- Treino C: Pernas (Quadríceps, Panturrilha — agachamento, leg press, extensora, panturrilha)
+- Treino D: Ombros, Glúteos e Isquiotibiais (desenvolvimento, elevação lateral, hip thrust, stiff, cadeira flexora)`;
     }
     if (dias === 5) {
       return `Divisão A/B/C/D/E — 5 dias (split bodybuilder):
-- Treino A: Peito (compostos + isoladores)
-- Treino B: Costas (largura + espessura)
-- Treino C: Pernas Posteriores — Glúteos e Isquiotibiais (stiff, cadeira, hip thrust)
-- Treino D: Pernas Anteriores — Quadríceps e Panturrilha (agachamento, leg press, extensora)
-- Treino E: Ombros e Braços (desenvolvimento, elevações, rosca, tríceps)`;
+- Treino A: Peito (supino reto, supino inclinado, crucifixo, crossover, peck deck)
+- Treino B: Costas (largura + espessura) — OBRIGATÓRIO: 1 puxada vertical (Barra Fixa ou Puxada Frontal) + 2 remadas diferentes (ex: Remada Curvada com Barra + Remada na Polia Baixa) + pullover ou face pull. Costas com apenas Barra Fixa + Terra Romeno = ERRADO.
+- Treino C: Pernas Posteriores — Glúteos e Isquiotibiais (hip thrust, stiff, cadeira flexora, extensão de quadril)
+- Treino D: Pernas Anteriores — Quadríceps e Panturrilha (agachamento, leg press, extensora, panturrilha)
+- Treino E: Ombros e Braços (desenvolvimento, elevação lateral, rosca direta, rosca alternada, tríceps corda)`;
     }
     return `Divisão em ${dias} grupos musculares:
 Distribua: Peito / Costas / Pernas (Quad) / Pernas (Post+Glúteo) / Ombros / Braços
@@ -343,10 +343,31 @@ PROIBIDO em uma mesma rotina:
 - 2 ou mais Cadeira Extensora (drop-set, 1½ rep, isometria etc = todas são Extensora = escolha 1)
 - 2 ou mais Leg Press (45° + drop-set + unilateral etc = todos são Leg Press = escolha 1)
 - 2 ou mais Face Pull
+- Barra Fixa Pronada + Barra Fixa Supinada = mesmo padrão de puxada vertical, grip diferente = escolha 1 (pronada ou supinada, nunca as duas no mesmo dia)
+- Puxada Frontal Aberta + Puxada Frontal Fechada + Puxada Neutra = mesmo movimento = escolha 1
 
 REGRA: para cada padrão de movimento, escolha UM exercício. Se quiser usar técnica especial (drop-set, rest-pause), aplique ao exercício escolhido via "observacao".
 EXEMPLO CORRETO: {"nome": "Crossover na Polia Alta", "series": 4, "repeticoes": "10-12", "observacao": "Última série em drop-set: reduzir 20% e continuar até a falha."}
 EXEMPLO ERRADO: listar "Crossover Drop-Set" + "Crossover Rest-Pause" + "Crossover Isometria" como 3 exercícios separados.
+
+=== REGRA DE NÃO-REPETIÇÃO ENTRE DIAS (CRÍTICA) ===
+O mesmo exercício NUNCA pode aparecer em mais de 1 rotina do mesmo plano.
+
+PROIBIDO:
+- Terra Romeno no Treino B E também no Treino C = ERRADO
+- Agachamento no Treino A E também no Treino D = ERRADO
+- Hip Thrust no Treino B E também no Treino E = ERRADO
+
+CORRETO: cada exercício aparece em NO MÁXIMO 1 rotina de todo o plano.
+Se um grupo muscular treina 2x/semana, use exercícios DIFERENTES em cada dia:
+- Treino B (isquio): Terra Romeno com Barra → Treino E (isquio): Stiff com Halteres (exercícios diferentes)
+- Treino A (glúteo): Hip Thrust → Treino D (glúteo): Avanço + Extensão de Quadril no Cabo (exercícios diferentes)
+
+=== GUIA DE GRUPOS MUSCULARES ===
+COSTAS: dia de costas OBRIGATORIAMENTE tem puxada vertical (Barra Fixa ou Puxada Frontal) + pelo menos 1 remada horizontal (Remada Curvada com Barra, Remada na Polia Baixa, Remada Cavalinho, Remada Unilateral). Costas com apenas Barra Fixa + Terra Romeno e zero remadas = ERRADO GRAVE.
+BÍCEPS: use roscas reais — Rosca Direta com Barra, Rosca Alternada com Halteres, Rosca Martelo, Rosca Concentrada, Rosca Scott, Rosca 21. NUNCA use Barra Fixa Supinada como exercício de bíceps — ela é puxada vertical de costas, não rosca de bíceps.
+GLÚTEOS/ISQUIO: Terra Romeno e Stiff são exercícios distintos — se um aparece em um dia, o outro pode aparecer em outro dia. Mas o mesmo exercício (Terra Romeno) não pode aparecer 2 vezes no plano.
+OMBROS: composto = Desenvolvimento com Barra ou Halteres. Isoladores = Elevação Lateral, Elevação Frontal, Face Pull (posterior). Face Pull é ombro posterior — não coloque em dia de peito.
 
 === ESTRUTURA OBRIGATÓRIA POR ROTINA ===
 Cada rotina DEVE seguir esta sequência de padrões de movimento distintos:
