@@ -110,6 +110,136 @@ function extrairContraindicacoesAnamnese(anamnese: Record<string, unknown> | nul
   return resultado;
 }
 
+// ─── Catálogo filtrado e deduplicado por rotina ──────────────────────────────
+
+const TECNICAS_ESPECIAIS = [
+  'Drop-Set', 'Rest-Pause', 'Isometria', 'Tempo',
+  'Amplitude Parcial', 'Pausas', '1 e 1/2', 'Unilateral',
+];
+
+const EQUIP_SUFFIX = /\s+(?:com|no|na)\s+(?:Barra(?:\s+W)?|Halteres?|Halter|Máquina|Smith|Polia|Banco Romano|Kettlebell)\s*$/i;
+
+function extrairBase(nome: string): string {
+  return nome
+    .replace(/\s*\(.*$/, '')
+    .replace(/\s+\d+[°º]$/, '')
+    .replace(EQUIP_SUFFIX, '')
+    .trim();
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function dedupPorBase(exercicios: any[]): any[] {
+  const grupos = new Map<string, any[]>();
+  for (const ex of exercicios) {
+    const base = extrairBase(ex.nome as string);
+    if (!grupos.has(base)) grupos.set(base, []);
+    grupos.get(base)!.push(ex);
+  }
+  const result: any[] = [];
+  for (const grupo of grupos.values()) {
+    const limpos = grupo.filter((ex) => !TECNICAS_ESPECIAIS.some((t) => (ex.nome as string).includes(t)));
+    const candidatos = limpos.length > 0 ? limpos : grupo;
+    result.push(candidatos.reduce((a: any, b: any) => (a.nome as string).length <= (b.nome as string).length ? a : b));
+  }
+  return result;
+}
+
+type DiaFiltro = { label: string; patterns: string[]; outro_kws: string[] };
+
+const CORE_PATTERNS = new Set(['core_anti_extensao', 'core_rotacao']);
+
+const SPLIT_MAP: Record<string, DiaFiltro[]> = {
+  abcde: [
+    { label: 'Peito e Tríceps',                              patterns: ['empurrar_horizontal', 'extensao_cotovelo'],                       outro_kws: ['peitoral', 'tríceps'] },
+    { label: 'Costas e Bíceps',                              patterns: ['puxada_vertical', 'puxada_horizontal', 'flexao_cotovelo'],         outro_kws: ['costas', 'latíssimo', 'romboide', 'trapézio', 'bíceps'] },
+    { label: 'Pernas Posteriores — Glúteos e Isquio',        patterns: ['dominante_quadril'],                                              outro_kws: ['glúteo médio', 'adutor'] },
+    { label: 'Pernas Anteriores — Quadríceps e Panturrilha', patterns: ['dominante_joelho'],                                               outro_kws: ['gastrocnêmio', 'sóleo', 'panturrilha'] },
+    { label: 'Ombros e Braços',                              patterns: ['empurrar_vertical', 'flexao_cotovelo', 'extensao_cotovelo'],       outro_kws: ['ombro', 'deltoid', 'trapézio', 'bíceps', 'tríceps'] },
+  ],
+  abcd: [
+    { label: 'Peito e Tríceps',                              patterns: ['empurrar_horizontal', 'extensao_cotovelo'],                       outro_kws: ['peitoral', 'tríceps'] },
+    { label: 'Costas e Bíceps',                              patterns: ['puxada_vertical', 'puxada_horizontal', 'flexao_cotovelo'],         outro_kws: ['costas', 'latíssimo', 'romboide', 'trapézio', 'bíceps'] },
+    { label: 'Pernas — Quadríceps e Panturrilha',            patterns: ['dominante_joelho'],                                               outro_kws: ['gastrocnêmio', 'sóleo', 'panturrilha'] },
+    { label: 'Ombros, Glúteos e Isquiotibiais',              patterns: ['empurrar_vertical', 'dominante_quadril'],                         outro_kws: ['ombro', 'deltoid', 'trapézio', 'glúteo médio', 'adutor'] },
+  ],
+  ppl: [
+    { label: 'Push — Peito, Ombros e Tríceps',               patterns: ['empurrar_horizontal', 'empurrar_vertical', 'extensao_cotovelo'],  outro_kws: ['peitoral', 'ombro', 'deltoid', 'tríceps'] },
+    { label: 'Pull — Costas e Bíceps',                       patterns: ['puxada_vertical', 'puxada_horizontal', 'flexao_cotovelo'],         outro_kws: ['costas', 'latíssimo', 'romboide', 'trapézio', 'bíceps'] },
+    { label: 'Legs — Pernas completas',                      patterns: ['dominante_quadril', 'dominante_joelho'],                          outro_kws: ['gastrocnêmio', 'sóleo', 'panturrilha', 'glúteo médio', 'adutor'] },
+  ],
+  supinf: [
+    { label: 'Superior Push — Peito, Ombros e Tríceps',      patterns: ['empurrar_horizontal', 'empurrar_vertical', 'extensao_cotovelo'],  outro_kws: ['peitoral', 'ombro', 'deltoid', 'tríceps'] },
+    { label: 'Inferior — Quadríceps e Panturrilha',          patterns: ['dominante_joelho'],                                               outro_kws: ['gastrocnêmio', 'sóleo', 'panturrilha'] },
+    { label: 'Superior Pull — Costas e Bíceps',              patterns: ['puxada_vertical', 'puxada_horizontal', 'flexao_cotovelo'],         outro_kws: ['costas', 'latíssimo', 'romboide', 'trapézio', 'bíceps'] },
+    { label: 'Inferior — Glúteos e Isquiotibiais',           patterns: ['dominante_quadril'],                                              outro_kws: ['glúteo médio', 'adutor'] },
+  ],
+};
+
+function getSplitKey(dias: number, tipo: string): string | null {
+  const t = tipo.toLowerCase();
+  if (t.includes('full body') || t.includes('ia decide')) return null;
+  if (t.includes('superior') || t.includes('inferior')) return 'supinf';
+  if (t.includes('push') || t.includes('pull') || t.includes('legs')) return 'ppl';
+  if (t.includes('a/b/c/d') || dias >= 4) return dias === 5 ? 'abcde' : 'abcd';
+  return null;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function filtrarDia(catalogo: any[], filtro: DiaFiltro): any[] {
+  return catalogo.filter((e) => {
+    const pat = (e.movement_pattern ?? '') as string;
+    const grp = ((e.grupo_muscular ?? '') as string).toLowerCase();
+    if (CORE_PATTERNS.has(pat)) return false;
+    if (filtro.patterns.includes(pat)) return true;
+    if (pat === 'outro') return filtro.outro_kws.some((kw) => grp.includes(kw));
+    return false;
+  });
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function catExToJson(e: any): string {
+  return `{"fonte":"catalogo","id":"${e.id}","nome":"${e.nome}","grupo":"${e.grupo_muscular ?? ''}","equip":"${e.equipamento ?? ''}","nivel":"${e.nivel_minimo ?? e.nivel ?? ''}","cat":"${e.categoria ?? ''}","pattern":"${e.movement_pattern ?? ''}"}`;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function buildCatalogoSections(catalogo: any[], dias: number, tipo: string): string {
+  const splitKey = getSplitKey(dias, tipo);
+  const coreExs = dedupPorBase(
+    catalogo.filter((e) => CORE_PATTERNS.has((e.movement_pattern ?? '') as string))
+  ).slice(0, 8);
+  const coreTexto = coreExs.length > 0 ? coreExs.map(catExToJson).join('\n') : '(nenhum)';
+
+  if (!splitKey) {
+    const tudo = dedupPorBase(
+      catalogo.filter((e) => !CORE_PATTERNS.has((e.movement_pattern ?? '') as string))
+    );
+    return `=== CATÁLOGO — LISTA GLOBAL (use para todos os treinos) ===
+${tudo.map(catExToJson).join('\n')}
+
+--- CORE (disponível em todos os treinos) ---
+${coreTexto}`;
+  }
+
+  const filtros = SPLIT_MAP[splitKey];
+  const labels = ['A', 'B', 'C', 'D', 'E', 'F'];
+  const partes: string[] = [];
+
+  for (let i = 0; i < dias; i++) {
+    const filtro = filtros[i % filtros.length];
+    const exsDoDia = dedupPorBase(filtrarDia(catalogo, filtro));
+    partes.push(`--- Treino ${labels[i]}: ${filtro.label} (${exsDoDia.length} exercícios disponíveis) ---
+${exsDoDia.map(catExToJson).join('\n')}`);
+  }
+
+  return `=== CATÁLOGO DE EXERCÍCIOS — SEÇÕES POR TREINO ===
+REGRA CRÍTICA: use APENAS exercícios da seção do SEU treino. Para "Treino B", use SOMENTE o bloco "--- Treino B ---". Nunca use exercícios de outro bloco.
+
+${partes.join('\n\n')}
+
+--- CORE — disponível em TODOS os treinos (máx 1 por rotina) ---
+${coreTexto}`;
+}
+
 // ─── Guia de periodização por dias + tipo ────────────────────────────────────
 
 function buildGuiaDivisao(dias: number, tipo: string): string {
@@ -263,7 +393,7 @@ export async function gerarTreinoComIA(
         .from("exercicios_catalogo")
         .select("id, nome, grupo_muscular, equipamento, nivel, categoria, movement_pattern, contraindicacoes, nivel_minimo")
         .order("nome")
-        .limit(300),
+        .limit(700),
     ]);
 
     const aluno = profileResult.data;
@@ -321,15 +451,9 @@ export async function gerarTreinoComIA(
             .join("\n")
         : "Biblioteca vazia.";
 
-    const catTexto =
-      catalogo.length > 0
-        ? catalogo
-            .map(
-              (e) =>
-                `{"fonte":"catalogo","id":"${e.id}","nome":"${e.nome}","grupo":"${e.grupo_muscular ?? ""}","equip":"${e.equipamento ?? ""}","nivel":"${(e as any).nivel_minimo ?? e.nivel ?? ""}","cat":"${e.categoria ?? ""}","pattern":"${(e as any).movement_pattern ?? ""}"}`
-            )
-            .join("\n")
-        : "Catálogo vazio.";
+    const catalogoSections = catalogo.length > 0
+      ? buildCatalogoSections(catalogo, config.dias_por_semana, config.tipo_divisao)
+      : "=== CATÁLOGO VAZIO ===";
 
     // 3. Montar o prompt
     const guiaDivisao = buildGuiaDivisao(config.dias_por_semana, config.tipo_divisao);
@@ -357,8 +481,7 @@ ${guiaDivisao}
 === EXERCÍCIOS — BIBLIOTECA DO PROFESSOR (USE PRIMEIRO) ===
 ${bibTexto}
 
-=== EXERCÍCIOS — CATÁLOGO GLOBAL (complemente se necessário) ===
-${catTexto}
+${catalogoSections}
 
 === REGRAS ABSOLUTAS ===
 1. O JSON deve ter o campo "rotinas" com um ARRAY de EXATAMENTE ${config.dias_por_semana} objetos.
@@ -366,7 +489,7 @@ ${catTexto}
 3. NUNCA coloque todos os exercícios em uma única rotina — distribua entre as ${config.dias_por_semana} rotinas.
 4. Cada rotina deve ter entre 6 e 10 exercícios DIFERENTES, todos com foco muscular ESPECÍFICO daquele dia.
 5. Use APENAS IDs dos exercícios listados acima — nunca invente IDs.
-6. Prefira biblioteca do professor. Use catálogo para complementar.
+6. Prefira biblioteca do professor. Use catálogo: APENAS exercícios da seção rotulada com seu treino (ex: "Treino B" usa somente o bloco Treino B).
 7. Respeite TODAS as restrições, lesões e limitações do aluno.
 8. Retorne SOMENTE JSON puro — sem markdown, sem texto, sem \`\`\`.
 
