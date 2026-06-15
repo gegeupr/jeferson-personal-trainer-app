@@ -12,6 +12,7 @@ export type ConfigTreino = {
   nivel: "iniciante" | "intermediario" | "avancado";
   equipamentos: string;
   observacoes?: string;
+  perfil_modelo?: string;
 };
 
 export type ExercicioGerado = {
@@ -768,5 +769,396 @@ export async function salvarTreinoGerado(
     return { ok: true, treinoId: treinoRow.id };
   } catch (e: any) {
     return { ok: false, error: e?.message ?? "Erro ao salvar treino." };
+  }
+}
+
+// ─── Action: gerar treino-modelo com IA (sem dados de aluno específico) ────────
+
+export async function gerarTreinoModeloComIA(
+  profId: string,
+  config: ConfigTreino
+): Promise<GerarTreinoResult> {
+  try {
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    if (!apiKey) return { ok: false, error: "ANTHROPIC_API_KEY não configurado." };
+
+    const [bibResult, catResult] = await Promise.all([
+      supabaseAdmin
+        .from("exercicios")
+        .select("id, nome, descricao")
+        .eq("professor_id", profId)
+        .order("nome"),
+
+      supabaseAdmin
+        .from("exercicios_catalogo")
+        .select("id, nome, grupo_muscular, equipamento, nivel, categoria, movement_pattern, contraindicacoes, nivel_minimo")
+        .order("nome")
+        .limit(700),
+    ]);
+
+    const biblioteca = bibResult.data || [];
+    const catalogo = catResult.data || [];
+
+    const bibTexto =
+      biblioteca.length > 0
+        ? biblioteca
+            .map(
+              (e) =>
+                `{"fonte":"biblioteca","id":"${e.id}","nome":"${e.nome}"${e.descricao ? `,"desc":"${e.descricao.slice(0, 80)}"` : ""}}`
+            )
+            .join("\n")
+        : "Biblioteca vazia.";
+
+    const catalogoSections = catalogo.length > 0
+      ? buildCatalogoSections(catalogo, config.dias_por_semana, config.tipo_divisao)
+      : "=== CATÁLOGO VAZIO ===";
+
+    const guiaDivisao = buildGuiaDivisao(config.dias_por_semana, config.tipo_divisao);
+
+    const perfilTexto = config.perfil_modelo?.trim() || "Sem perfil especificado.";
+
+    const promptTexto = `Você é um personal trainer especializado em periodização. Sua tarefa é criar um PLANO DE TREINO MODELO (template reutilizável) com MÚLTIPLAS ROTINAS DIÁRIAS.
+
+Este é um TREINO-MODELO, não vinculado a um aluno específico. Baseie-se apenas no perfil do aluno-tipo descrito abaixo.
+
+=== PERFIL DO ALUNO-TIPO ===
+${perfilTexto}
+
+=== SOLICITAÇÃO DO PROFESSOR ===
+Dias de treino por semana: ${config.dias_por_semana}
+Tipo de periodização/divisão: ${config.tipo_divisao}
+Duração de cada sessão: ${config.duracao_minutos} minutos
+Nível do aluno: ${config.nivel}
+Equipamentos: ${config.equipamentos || "Academia completa"}
+${config.observacoes ? `Observações: ${config.observacoes}` : ""}
+
+=== GUIA DE PERIODIZAÇÃO ===
+${guiaDivisao}
+
+=== EXERCÍCIOS — BIBLIOTECA DO PROFESSOR (USE PRIMEIRO) ===
+${bibTexto}
+
+${catalogoSections}
+
+=== REGRAS ABSOLUTAS ===
+1. O JSON deve ter o campo "rotinas" com um ARRAY de EXATAMENTE ${config.dias_por_semana} objetos.
+2. Cada objeto no array "rotinas" é uma SESSÃO DE TREINO DIFERENTE (dia A, dia B, dia C...).
+3. NUNCA coloque todos os exercícios em uma única rotina — distribua entre as ${config.dias_por_semana} rotinas.
+4. Cada rotina deve ter entre 6 e 10 exercícios DIFERENTES, todos com foco muscular ESPECÍFICO daquele dia.
+5. Use APENAS IDs dos exercícios listados acima — nunca invente IDs.
+6. Prefira biblioteca do professor. Use catálogo: APENAS exercícios da seção rotulada com seu treino (ex: "Treino B" usa somente o bloco Treino B).
+7. Respeite o perfil descrito (limitações, objetivos, nível).
+8. Retorne SOMENTE JSON puro — sem markdown, sem texto, sem \`\`\`.
+
+=== REGRA ANTI-REPETIÇÃO (CRÍTICA) ===
+O catálogo lista variações técnicas como exercícios separados: "Crossover Drop-Set", "Crossover Rest-Pause", "Crossover Isometria" etc.
+Estas são VARIAÇÕES DO MESMO MOVIMENTO — NÃO são exercícios diferentes.
+
+PROIBIDO em uma mesma rotina:
+- 2 ou mais variações do mesmo aparelho/movimento (ex: Crossover Polia Alta + Crossover Polia Baixa + Crossover Drop-Set = 3 crossovers = ERRADO)
+- 2 ou mais Hip Thrust (barra, máquina, rest-pause etc = todos são Hip Thrust = escolha 1)
+- 2 ou mais Cadeira Extensora (drop-set, 1½ rep, isometria etc = todas são Extensora = escolha 1)
+- 2 ou mais Leg Press (45° + drop-set + unilateral etc = todos são Leg Press = escolha 1)
+- 2 ou mais Face Pull
+- Barra Fixa Pronada + Barra Fixa Supinada = mesmo padrão de puxada vertical, grip diferente = escolha 1
+- Puxada Frontal Aberta + Puxada Frontal Fechada + Puxada Neutra = mesmo movimento = escolha 1
+
+REGRA: para cada padrão de movimento, escolha UM exercício. Se quiser usar técnica especial (drop-set, rest-pause), aplique ao exercício escolhido via "observacao".
+
+=== REGRA DE NÃO-REPETIÇÃO ENTRE DIAS (CRÍTICA) ===
+O mesmo exercício NUNCA pode aparecer em mais de 1 rotina do mesmo plano.
+
+=== GUIA DE GRUPOS MUSCULARES ===
+COSTAS: dia de costas OBRIGATORIAMENTE tem puxada vertical (Barra Fixa ou Puxada Frontal) + pelo menos 1 remada horizontal. Costas com apenas Barra Fixa + Terra Romeno e zero remadas = ERRADO GRAVE.
+BÍCEPS: use roscas reais — Rosca Direta com Barra, Rosca Alternada com Halteres, Rosca Martelo, Rosca Concentrada, Rosca Scott, Rosca 21. NUNCA use Barra Fixa Supinada como exercício de bíceps.
+GLÚTEOS/ISQUIO: Terra Romeno e Stiff são exercícios distintos. Mas o mesmo exercício não pode aparecer 2 vezes no plano.
+OMBROS: composto = Desenvolvimento com Barra ou Halteres. Isoladores = Elevação Lateral, Elevação Frontal, Face Pull (posterior).
+
+=== ESTRUTURA OBRIGATÓRIA POR ROTINA ===
+Cada rotina DEVE seguir esta sequência de padrões de movimento distintos:
+1. COMPOSTO PRINCIPAL: 1 exercício multiarticular pesado
+2. COMPOSTO SECUNDÁRIO: 1 exercício multiarticular de suporte
+3. ISOLADOR A: 1 exercício monoarticular para músculo principal
+4. ISOLADOR B: 1 exercício monoarticular para músculo secundário/sinérgico
+5. ISOLADOR C (opcional): 1 exercício diferente dos anteriores
+6. ISOLADOR D (opcional): 1 exercício diferente dos anteriores
+7. FINALIZADOR/PUMP: 1 exercício leve para congestão final
+8. CORE (opcional): 1 exercício abdominal/estabilização
+
+Total: 6 a 9 exercícios por rotina, TODOS com padrões de movimento distintos entre si.
+
+=== FORMATO EXATO DO JSON (obrigatório) ===
+{
+  "nome": "Modelo [Tipo de Divisão] — [resumo do perfil em 3-5 palavras]",
+  "descricao": "Descrição do modelo e para qual perfil de aluno é indicado",
+  "duracao_minutos": ${config.duracao_minutos},
+  "nivel": "${config.nivel}",
+  "divisao": "Nome da divisão adotada",
+  "rotinas": [
+    {
+      "nome": "Treino A — [Grupos Musculares do Dia 1]",
+      "foco": "[Grupos musculares principais do dia 1]",
+      "exercicios": [
+        {"fonte": "catalogo", "exercicio_id": "uuid-real-da-lista", "nome": "Nome do Exercício", "series": 4, "repeticoes": "8-12", "descanso_segundos": 90, "observacao": "dica"},
+        {"fonte": "biblioteca", "exercicio_id": "uuid-real-da-lista", "nome": "Nome do Exercício", "series": 3, "repeticoes": "10", "descanso_segundos": 60, "observacao": ""}
+      ]
+    }
+  ]
+}
+
+ATENÇÃO: O exemplo acima mostra 1 rotina, mas você DEVE criar EXATAMENTE ${config.dias_por_semana} rotinas (uma por dia de treino).`;
+
+    const client = new Anthropic({ apiKey });
+    const response = await client.messages.create({
+      model: "claude-sonnet-4-6",
+      max_tokens: 8192,
+      system:
+        "Você é um personal trainer especializado em periodização. Responda SEMPRE com JSON puro e válido, sem texto adicional, sem markdown, sem explicações. Apenas o objeto JSON conforme solicitado.",
+      messages: [{ role: "user", content: promptTexto }],
+    });
+
+    const rawText =
+      response.content[0].type === "text" ? response.content[0].text : "";
+
+    const jsonStr = extrairJSON(rawText);
+    if (!jsonStr) {
+      console.error("[gerarModelo] resposta sem JSON:", rawText.slice(0, 300));
+      return { ok: false, error: "A IA não retornou um JSON válido. Tente novamente." };
+    }
+
+    let treino: TreinoGerado;
+    try {
+      treino = JSON.parse(jsonStr) as TreinoGerado;
+    } catch (parseErr: any) {
+      console.error("[gerarModelo] JSON inválido:", jsonStr.slice(0, 300), parseErr?.message);
+      return { ok: false, error: "A IA retornou um JSON malformado. Tente novamente." };
+    }
+
+    if (!treino.rotinas && (treino as any).exercicios) {
+      treino.rotinas = [{
+        nome: treino.nome,
+        foco: "Geral",
+        exercicios: (treino as any).exercicios,
+      }];
+    }
+
+    if (!Array.isArray(treino.rotinas) || treino.rotinas.length === 0) {
+      return { ok: false, error: "A IA não gerou rotinas de treino. Tente novamente." };
+    }
+
+    const bibMap = new Map(biblioteca.map((e) => [e.id, e.nome]));
+    const catMap = new Map(catalogo.map((e) => [e.id, e.nome]));
+
+    treino.rotinas = treino.rotinas.map((rotina) => ({
+      ...rotina,
+      exercicios: (rotina.exercicios || [])
+        .filter((ex) => {
+          if (ex.fonte === "biblioteca") return bibMap.has(ex.exercicio_id);
+          if (ex.fonte === "catalogo") return catMap.has(ex.exercicio_id);
+          return false;
+        })
+        .map((ex) => {
+          const nomeReal =
+            ex.fonte === "biblioteca"
+              ? bibMap.get(ex.exercicio_id)
+              : catMap.get(ex.exercicio_id);
+          return nomeReal ? { ...ex, nome: nomeReal } : ex;
+        }),
+    }));
+
+    const totalExercicios = treino.rotinas.reduce(
+      (sum, r) => sum + r.exercicios.length,
+      0
+    );
+
+    if (totalExercicios === 0) {
+      return {
+        ok: false,
+        error: "A IA não retornou exercícios válidos da biblioteca/catálogo. Tente novamente.",
+      };
+    }
+
+    return { ok: true, treino };
+  } catch (e: any) {
+    const msg: string = e?.message ?? "Erro desconhecido.";
+    console.error("[gerarModelo] erro geral:", msg);
+    return { ok: false, error: msg };
+  }
+}
+
+// ─── Action: salvar treino-modelo ─────────────────────────────────────────────
+
+export async function salvarTreinoModelo(
+  profId: string,
+  treino: TreinoGerado,
+  perfilOrigem?: string
+): Promise<SalvarTreinoResult> {
+  try {
+    const { data: treinoRow, error: treinoErr } = await supabaseAdmin
+      .from("treinos")
+      .insert({
+        nome: treino.nome,
+        descricao: treino.descricao,
+        aluno_id: null,
+        professor_id: profId,
+        dificuldade: treino.nivel,
+        objetivo: treino.descricao,
+        gerado_por_ia: true,
+        is_template: true,
+        perfil_origem: perfilOrigem ?? null,
+      })
+      .select("id")
+      .single();
+
+    if (treinoErr || !treinoRow) throw treinoErr ?? new Error("Erro ao criar modelo.");
+
+    for (const rotina of treino.rotinas) {
+      const { data: rotinaRow, error: rotinaErr } = await supabaseAdmin
+        .from("rotinas_diarias")
+        .insert({
+          plano_id: treinoRow.id,
+          nome: rotina.nome,
+          descricao: rotina.foco || null,
+          aluno_id: null,
+        })
+        .select("id")
+        .single();
+
+      if (rotinaErr || !rotinaRow) throw rotinaErr ?? new Error(`Erro ao criar rotina "${rotina.nome}".`);
+
+      if (rotina.exercicios.length === 0) continue;
+
+      const rows = rotina.exercicios.map((ex, i) => ({
+        rotina_id: rotinaRow.id,
+        exercicio_id: ex.fonte === "biblioteca" ? ex.exercicio_id : null,
+        catalogo_id: ex.fonte === "catalogo" ? ex.exercicio_id : null,
+        ordem: i + 1,
+        series: ex.series,
+        repeticoes: ex.repeticoes,
+        intervalo: ex.descanso_segundos ? `${ex.descanso_segundos}s` : null,
+        observacoes: ex.observacao ?? null,
+      }));
+
+      const { error: exErr } = await supabaseAdmin
+        .from("treino_exercicios")
+        .insert(rows);
+
+      if (exErr) throw exErr;
+    }
+
+    return { ok: true, treinoId: treinoRow.id };
+  } catch (e: any) {
+    return { ok: false, error: e?.message ?? "Erro ao salvar modelo." };
+  }
+}
+
+// ─── Action: atribuir modelo a um aluno (cópia) ───────────────────────────────
+
+export type AtribuirModeloResult =
+  | { ok: true; treinoId: string }
+  | { ok: false; error: string };
+
+export async function atribuirModeloAoAluno(
+  modeloId: string,
+  alunoId: string,
+  profId: string
+): Promise<AtribuirModeloResult> {
+  try {
+    const [modeloResult, alunoResult] = await Promise.all([
+      supabaseAdmin
+        .from("treinos")
+        .select("nome, descricao, dificuldade, objetivo")
+        .eq("id", modeloId)
+        .eq("professor_id", profId)
+        .eq("is_template", true)
+        .single(),
+
+      supabaseAdmin
+        .from("profiles")
+        .select("nome_completo")
+        .eq("id", alunoId)
+        .single(),
+    ]);
+
+    if (modeloResult.error || !modeloResult.data)
+      throw new Error("Modelo não encontrado.");
+    if (alunoResult.error || !alunoResult.data)
+      throw new Error("Aluno não encontrado.");
+
+    const modelo = modeloResult.data;
+    const nomeAluno = alunoResult.data.nome_completo || "Aluno";
+    const nomeCopia = `${modelo.nome} — ${nomeAluno}`;
+
+    const { data: novoTreino, error: treinoErr } = await supabaseAdmin
+      .from("treinos")
+      .insert({
+        nome: nomeCopia,
+        descricao: modelo.descricao,
+        aluno_id: alunoId,
+        professor_id: profId,
+        dificuldade: modelo.dificuldade,
+        objetivo: modelo.objetivo,
+        gerado_por_ia: true,
+        is_template: false,
+        template_origem_id: modeloId,
+      })
+      .select("id")
+      .single();
+
+    if (treinoErr || !novoTreino) throw treinoErr ?? new Error("Erro ao criar cópia do modelo.");
+
+    const { data: rotinas, error: rotinasErr } = await supabaseAdmin
+      .from("rotinas_diarias")
+      .select("id, nome, descricao")
+      .eq("plano_id", modeloId)
+      .order("created_at");
+
+    if (rotinasErr) throw rotinasErr;
+
+    for (const rotina of rotinas || []) {
+      const { data: novaRotina, error: novaRotinaErr } = await supabaseAdmin
+        .from("rotinas_diarias")
+        .insert({
+          plano_id: novoTreino.id,
+          nome: rotina.nome,
+          descricao: rotina.descricao,
+          aluno_id: alunoId,
+        })
+        .select("id")
+        .single();
+
+      if (novaRotinaErr || !novaRotina)
+        throw novaRotinaErr ?? new Error(`Erro ao copiar rotina "${rotina.nome}".`);
+
+      const { data: exercicios, error: exErr } = await supabaseAdmin
+        .from("treino_exercicios")
+        .select("exercicio_id, catalogo_id, ordem, series, repeticoes, intervalo, observacoes")
+        .eq("rotina_id", rotina.id)
+        .order("ordem");
+
+      if (exErr) throw exErr;
+      if (!exercicios || exercicios.length === 0) continue;
+
+      const rows = exercicios.map((ex) => ({
+        rotina_id: novaRotina.id,
+        exercicio_id: ex.exercicio_id,
+        catalogo_id: ex.catalogo_id,
+        ordem: ex.ordem,
+        series: ex.series,
+        repeticoes: ex.repeticoes,
+        intervalo: ex.intervalo,
+        observacoes: ex.observacoes,
+      }));
+
+      const { error: insertErr } = await supabaseAdmin
+        .from("treino_exercicios")
+        .insert(rows);
+
+      if (insertErr) throw insertErr;
+    }
+
+    return { ok: true, treinoId: novoTreino.id };
+  } catch (e: any) {
+    return { ok: false, error: e?.message ?? "Erro ao atribuir modelo." };
   }
 }
