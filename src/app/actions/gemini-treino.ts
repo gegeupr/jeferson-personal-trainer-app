@@ -480,17 +480,27 @@ ATENÇÃO: O exemplo acima mostra 2 rotinas, mas você DEVE criar EXATAMENTE ${c
       return { ok: false, error: "A IA não gerou rotinas de treino. Tente novamente." };
     }
 
-    // 8. Validar IDs — remover exercícios inventados em todas as rotinas
-    const bibIds = new Set(biblioteca.map((e) => e.id));
-    const catIds = new Set(catalogo.map((e) => e.id));
+    // 8. Validar IDs e corrigir nomes — a IA às vezes usa o ID certo mas o nome errado
+    // (ex: usa o ID do Agachamento mas chama de "Supino Reto")
+    // O nome real do catálogo/biblioteca sempre prevalece sobre o nome que a IA inventou.
+    const bibMap = new Map(biblioteca.map((e) => [e.id, e.nome]));
+    const catMap = new Map(catalogo.map((e) => [e.id, e.nome]));
 
     treino.rotinas = treino.rotinas.map((rotina) => ({
       ...rotina,
-      exercicios: (rotina.exercicios || []).filter((ex) => {
-        if (ex.fonte === "biblioteca") return bibIds.has(ex.exercicio_id);
-        if (ex.fonte === "catalogo") return catIds.has(ex.exercicio_id);
-        return false;
-      }),
+      exercicios: (rotina.exercicios || [])
+        .filter((ex) => {
+          if (ex.fonte === "biblioteca") return bibMap.has(ex.exercicio_id);
+          if (ex.fonte === "catalogo") return catMap.has(ex.exercicio_id);
+          return false;
+        })
+        .map((ex) => {
+          const nomeReal =
+            ex.fonte === "biblioteca"
+              ? bibMap.get(ex.exercicio_id)
+              : catMap.get(ex.exercicio_id);
+          return nomeReal ? { ...ex, nome: nomeReal } : ex;
+        }),
     }));
 
     const totalExercicios = treino.rotinas.reduce(
