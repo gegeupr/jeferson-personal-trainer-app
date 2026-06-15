@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { supabase } from '@/utils/supabase-browser';
 import Link from 'next/link';
+import { atribuirTreinoAoAluno } from '@/app/actions/treinos';
 
 interface PlanoTreino {
   id: string;
@@ -85,9 +86,12 @@ export default function AtribuirTreinoPage() {
       setIsSubmitting(true);
       setError(null);
       try {
-        const { error: updateError } = await supabase
-          .from('treinos').update({ aluno_id: alunoId }).eq('id', treinoId);
-        if (updateError) throw updateError;
+        const { data: auth } = await supabase.auth.getUser();
+        const profId = auth?.user?.id;
+        if (!profId) throw new Error('Sessão expirada. Faça login novamente.');
+
+        const result = await atribuirTreinoAoAluno(treinoId, alunoId, profId);
+        if (!result.ok) throw new Error(result.error);
         pushToast('Treino atribuído com sucesso!', 'ok');
         setPlanosTreino((prev) => prev.map((t) => t.id === treinoId ? { ...t, aluno_id: alunoId } : t));
       } catch (err: any) {

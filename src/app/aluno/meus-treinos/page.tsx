@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/utils/supabase-browser";
+import { notificarConcluidoTreino } from "@/lib/criarNotificacao";
 
 type ExercicioBase = {
   id: string;
@@ -337,6 +338,16 @@ export default function AlunoMeusTreinosPremium() {
       setModalErr(insErr.message);
       setSaving(false);
       return;
+    }
+
+    if (professor?.id) {
+      notificarConcluidoTreino({
+        alunoId,
+        profId: professor.id,
+        treinoId: treinoAtual.id,
+        nota,
+        feedbackTexto: feedback?.trim() || null,
+      }).catch(() => { /* best-effort */ });
     }
 
     setConclusoes((prev) => ({

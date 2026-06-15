@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { NotificationBell } from "@/components/NotificationBell";
 
 function IconHome() {
   return (
@@ -89,13 +90,14 @@ export default function ProfessorLayout({ children }: { children: React.ReactNod
       {/* ── Sidebar (lg+) ─────────────────────────────────────────────────── */}
       <aside className="hidden lg:flex flex-col w-[220px] shrink-0 border-r border-white/[0.06]">
         {/* Logo */}
-        <div className="flex items-center px-5 py-[18px] border-b border-white/[0.06]">
+        <div className="flex items-center justify-between px-5 py-[18px] border-b border-white/[0.06]">
           <Link href="/professor/dashboard" className="inline-flex items-center gap-2.5">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white shrink-0">
               <span className="font-black text-black text-[17px] leading-none select-none">M</span>
             </span>
             <span className="font-semibold text-white text-[14px] tracking-[-0.01em]">Motion</span>
           </Link>
+          <NotificationBell role="professor" panelClass="left-0 top-10" />
         </div>
 
         {/* Nav links */}
@@ -146,13 +148,14 @@ export default function ProfessorLayout({ children }: { children: React.ReactNod
       {/* ── Content column ────────────────────────────────────────────────── */}
       <div className="flex flex-col flex-1 min-w-0 lg:overflow-y-auto">
         {/* Mobile sticky header */}
-        <header className="lg:hidden sticky top-0 z-40 flex items-center h-14 px-4 border-b border-white/[0.06] bg-[#0a0a0a]">
+        <header className="lg:hidden sticky top-0 z-40 flex items-center justify-between h-14 px-4 border-b border-white/[0.06] bg-[#0a0a0a]">
           <Link href="/professor/dashboard" className="inline-flex items-center gap-2">
             <span className="flex h-7 w-7 items-center justify-center rounded-md bg-white shrink-0">
               <span className="font-black text-black text-[15px] leading-none select-none">M</span>
             </span>
             <span className="font-semibold text-white text-sm tracking-[-0.01em]">Motion</span>
           </Link>
+          <NotificationBell role="professor" panelClass="right-0 top-10" />
         </header>
 
         {/* Page content — extra bottom padding on mobile for fixed nav */}

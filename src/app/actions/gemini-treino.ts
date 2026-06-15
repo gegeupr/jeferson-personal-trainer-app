@@ -3,6 +3,7 @@
 import { supabaseAdmin } from "@/utils/supabaseAdmin";
 import Anthropic from "@anthropic-ai/sdk";
 import { verificarEIncrementarUsoIA } from "@/lib/verificarLimiteIA";
+import { criarNotificacao } from "@/lib/criarNotificacao";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -770,6 +771,19 @@ export async function salvarTreinoGerado(
       if (exErr) throw exErr;
     }
 
+    try {
+      const { data: prof } = await supabaseAdmin
+        .from("profiles").select("nome_completo").eq("id", profId).single();
+      await criarNotificacao({
+        destinatario_id: alunoId,
+        tipo: "treino_novo",
+        titulo: "Você tem um novo treino!",
+        mensagem: `${prof?.nome_completo || "Seu professor"} criou um novo plano de treino para você`,
+        referencia_id: treinoRow.id,
+        referencia_tipo: "treino",
+      });
+    } catch { /* notificação é best-effort */ }
+
     return { ok: true, treinoId: treinoRow.id };
   } catch (e: any) {
     return { ok: false, error: e?.message ?? "Erro ao salvar treino." };
@@ -1163,6 +1177,19 @@ export async function atribuirModeloAoAluno(
 
       if (insertErr) throw insertErr;
     }
+
+    try {
+      const { data: prof } = await supabaseAdmin
+        .from("profiles").select("nome_completo").eq("id", profId).single();
+      await criarNotificacao({
+        destinatario_id: alunoId,
+        tipo: "treino_novo",
+        titulo: "Você tem um novo treino!",
+        mensagem: `${prof?.nome_completo || "Seu professor"} criou um novo plano de treino para você`,
+        referencia_id: novoTreino.id,
+        referencia_tipo: "treino",
+      });
+    } catch { /* notificação é best-effort */ }
 
     return { ok: true, treinoId: novoTreino.id };
   } catch (e: any) {
