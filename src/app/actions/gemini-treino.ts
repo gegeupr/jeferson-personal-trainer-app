@@ -1,5 +1,5 @@
 "use server";
-
+// v2 — prompt com guias de grupos musculares e regras entre dias
 import { supabaseAdmin } from "@/utils/supabaseAdmin";
 import Anthropic from "@anthropic-ai/sdk";
 
