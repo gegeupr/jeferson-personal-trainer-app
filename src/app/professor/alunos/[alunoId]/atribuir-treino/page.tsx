@@ -193,6 +193,12 @@ export default function AtribuirTreinoPage() {
                   </p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
+                  <Link
+                    href={`/professor/alunos/${alunoId}/treino/${treino.id}`}
+                    className="rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/60 hover:bg-white/10 transition-colors"
+                  >
+                    Ver
+                  </Link>
                   <button
                     onClick={() => handleAtribuirTreino(treino.id)}
                     disabled={isSubmitting || treino.aluno_id !== null}
