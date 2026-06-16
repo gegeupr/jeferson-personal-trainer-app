@@ -278,10 +278,10 @@ function LoginInner() {
   return (
     <main className="min-h-screen bg-black flex flex-col md:flex-row">
       {/* Vídeo — topo no mobile, lateral esquerda no desktop */}
-      <div className="relative h-[35vh] shrink-0 overflow-hidden md:h-screen md:w-[55%]">
+      <div className="relative h-[35vh] shrink-0 overflow-hidden bg-black md:h-screen md:w-[55%]">
         <video
           className="absolute inset-0 h-full w-full object-contain md:object-cover"
-          src="/videos/capa-mobilepluz.mp4"
+          src="/videos/hero.mp4"
           autoPlay
           muted
           loop

@@ -119,16 +119,15 @@ export default function HomePage() {
       </header>
 
       {/* Hero — capa full-screen */}
-      <section className="relative h-[45vh] md:h-screen w-full overflow-hidden">
+      <section className="relative h-[45vh] md:h-screen w-full overflow-hidden bg-black">
         <video
           className="absolute inset-0 h-full w-full object-contain md:object-cover object-center"
-          src="/videos/capa-mobilepluz.mp4"
+          src="/videos/hero.mp4"
           autoPlay
           muted
           loop
           playsInline
           preload="auto"
-          poster="/images/capa.png"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20" />
         <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_120px_rgba(0,0,0,0.55)]" />
