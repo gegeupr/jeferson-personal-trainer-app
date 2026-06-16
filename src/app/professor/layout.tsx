@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NotificationBell } from "@/components/NotificationBell";
+import { AgendaBadge } from "@/components/AgendaBadge";
 
 function IconHome() {
   return (
@@ -69,12 +70,24 @@ function IconCreditCard() {
   );
 }
 
+function IconCalendar() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+      <line x1="16" y1="2" x2="16" y2="6"/>
+      <line x1="8" y1="2" x2="8" y2="6"/>
+      <line x1="3" y1="10" x2="21" y2="10"/>
+    </svg>
+  );
+}
+
 const NAV = [
-  { href: "/professor/dashboard",    label: "Dashboard",  icon: <IconHome /> },
-  { href: "/professor/alunos",       label: "Alunos",     icon: <IconUsers /> },
-  { href: "/professor/treinos",      label: "Treinos",    icon: <IconActivity /> },
-  { href: "/professor/biblioteca",   label: "Biblioteca", icon: <IconBook /> },
-  { href: "/professor/configuracoes",label: "Config.",    icon: <IconSettings /> },
+  { href: "/professor/dashboard",    label: "Dashboard",  icon: <IconHome />,     badge: null },
+  { href: "/professor/alunos",       label: "Alunos",     icon: <IconUsers />,    badge: null },
+  { href: "/professor/agenda",       label: "Agenda",     icon: <IconCalendar />, badge: <AgendaBadge /> },
+  { href: "/professor/treinos",      label: "Treinos",    icon: <IconActivity />, badge: null },
+  { href: "/professor/biblioteca",   label: "Biblioteca", icon: <IconBook />,     badge: null },
+  { href: "/professor/configuracoes",label: "Config.",    icon: <IconSettings />, badge: null },
 ];
 
 export default function ProfessorLayout({ children }: { children: React.ReactNode }) {
@@ -114,6 +127,7 @@ export default function ProfessorLayout({ children }: { children: React.ReactNod
             >
               {item.icon}
               {item.label}
+              {item.badge}
             </Link>
           ))}
         </nav>
@@ -174,11 +188,16 @@ export default function ProfessorLayout({ children }: { children: React.ReactNod
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl transition-colors ${
+              className={`flex flex-col items-center gap-1 px-2 py-1.5 rounded-xl transition-colors ${
                 active(item.href) ? "text-white" : "text-white/30 hover:text-white/60"
               }`}
             >
-              {item.icon}
+              <div className="relative">
+                {item.icon}
+                {item.badge && (
+                  <span className="absolute -top-1 -right-1">{item.badge}</span>
+                )}
+              </div>
               <span className="text-[9.5px] font-medium">{item.label}</span>
             </Link>
           ))}
