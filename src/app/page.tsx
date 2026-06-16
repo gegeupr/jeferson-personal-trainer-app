@@ -121,7 +121,7 @@ export default function HomePage() {
       {/* Hero — capa full-screen */}
       <section className="relative h-screen w-full overflow-hidden">
         <video
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          className="absolute inset-0 h-full w-full object-contain md:object-cover object-center"
           src="/videos/capa-mobilepluz.mp4"
           autoPlay
           muted
