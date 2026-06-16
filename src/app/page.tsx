@@ -18,7 +18,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
+    <main className="min-h-screen bg-black text-white">
       {/* Header */}
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
@@ -130,7 +130,7 @@ export default function HomePage() {
           preload="auto"
           poster="/images/capa.png"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20" />
         <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_120px_rgba(0,0,0,0.55)]" />
         <div className="relative z-10 h-full w-full pt-10 md:pt-24" />
       </section>
