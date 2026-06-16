@@ -16,8 +16,18 @@ type Notificacao = {
 };
 
 function getDestino(tipo: string, role: "professor" | "aluno"): string {
+  const tiposAgenda = [
+    "aula_agendada",
+    "pagamento_informado",
+    "aula_cancelada_aluno",
+    "aula_confirmada",
+    "aula_recusada",
+    "aula_cancelada_professor",
+  ];
+  if (tiposAgenda.includes(tipo)) {
+    return role === "professor" ? "/professor/agenda" : "/aluno/agenda";
+  }
   if (role === "aluno") return "/aluno/meus-treinos";
-  if (tipo === "novo_aluno") return "/professor/alunos";
   return "/professor/alunos";
 }
 

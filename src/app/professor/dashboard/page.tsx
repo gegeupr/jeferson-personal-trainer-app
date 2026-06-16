@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { supabase } from "@/utils/supabase-browser";
+import { buscarProximasAulasProfessor, type AgendamentoComPartes } from "@/app/actions/agenda";
 
 type ProfProfile = {
   id: string;
@@ -85,6 +86,13 @@ function formatDate(iso?: string | null) {
   return d.toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
 }
 
+function formatarAulaDataHora(iso: string): string {
+  const d = new Date(iso);
+  const dia = d.toLocaleDateString("pt-BR", { weekday: "short", day: "2-digit", month: "2-digit" });
+  const hora = d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  return `${dia}, ${hora}`;
+}
+
 function Pill({ children }: { children: React.ReactNode }) {
   return (
     <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/60 text-xs">
@@ -157,6 +165,7 @@ export default function ProfessorDashboard() {
   const [concluidosCount, setConcluidosCount] = useState(0);
 
   const [assinatura, setAssinatura] = useState<ProfAssinatura | null>(null);
+  const [proximasAulas, setProximasAulas] = useState<AgendamentoComPartes[]>([]);
 
   const [pending, setPending] = useState<PendingItem[]>([]);
   const [pendingCount, setPendingCount] = useState(0);
@@ -303,6 +312,9 @@ export default function ProfessorDashboard() {
       if (assinData) setAssinatura(assinData as ProfAssinatura);
 
       await loadPendencias(user.id);
+
+      const proximas = await buscarProximasAulasProfessor(user.id, 3);
+      if (mounted) setProximasAulas(proximas);
 
       const { data: alunosData, error: aErr } = await supabase
         .from("profiles")
@@ -510,6 +522,51 @@ export default function ProfessorDashboard() {
           <StatCard title="Planos atribuídos" value={treinosCount} hint="Criados por você" />
           <StatCard title="Concluídos" value={concluidosCount} hint="Últimas rotinas (feed)" />
           <StatCard title="Pendências PIX" value={pendingCount} hint="Aguardando validação" />
+        </div>
+
+        {/* ── Próximas aulas ────────────────────────────────────────────────── */}
+        <div className="rounded-2xl border border-white/8 bg-white/[0.03] overflow-hidden">
+          <div className="px-5 py-4 border-b border-white/8 flex items-center justify-between">
+            <div>
+              <p className="font-semibold text-white text-sm">Próximas aulas</p>
+              <p className="text-xs text-white/40 mt-0.5">Aulas confirmadas nas próximas horas.</p>
+            </div>
+            <Link href="/professor/agenda" className="text-xs font-medium text-white/50 hover:text-white transition-colors">
+              Ver agenda →
+            </Link>
+          </div>
+
+          <div className="p-4 space-y-2">
+            {proximasAulas.length === 0 ? (
+              <p className="text-white/40 text-sm py-1">Nenhuma aula confirmada no momento.</p>
+            ) : (
+              proximasAulas.map((ag) => (
+                <div key={ag.id} className="flex items-center gap-3 rounded-xl border border-white/8 bg-white/[0.02] px-4 py-3">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-white truncate">
+                      {ag.aluno?.nome_completo || "Aluno"}
+                    </p>
+                    <p className="text-xs text-white/40 mt-0.5">{formatarAulaDataHora(ag.data_hora_inicio)}</p>
+                  </div>
+                  <span className={`shrink-0 rounded-lg border px-2.5 py-1 text-[11px] font-medium ${
+                    ag.tipo === "presencial"
+                      ? "border-blue-400/25 bg-blue-400/10 text-blue-300"
+                      : "border-purple-400/25 bg-purple-400/10 text-purple-300"
+                  }`}>
+                    {ag.tipo === "presencial" ? "Presencial" : "Online"}
+                  </span>
+                </div>
+              ))
+            )}
+            <div className="pt-1">
+              <Link
+                href="/professor/agenda"
+                className="block text-center rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/70 hover:bg-white/10 transition-colors"
+              >
+                Gerenciar agenda
+              </Link>
+            </div>
+          </div>
         </div>
 
         {/* ── Pendências ────────────────────────────────────────────────────── */}

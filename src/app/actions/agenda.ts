@@ -404,3 +404,71 @@ export async function buscarPendentesConfirmacao(profId: string): Promise<Agenda
 
   return (data ?? []) as AgendamentoComPartes[];
 }
+
+export type ProfessorAgendaInfo = {
+  id: string;
+  nome_completo: string | null;
+  chave_pix: string | null;
+  tipo_chave_pix: string | null;
+  whatsapp: string | null;
+};
+
+export async function buscarAgendaAluno(alunoId: string): Promise<{
+  professor: ProfessorAgendaInfo | null;
+  disponibilidade: DisponibilidadeSlot[];
+  ocupados: string[];
+  agendamentos: AgendamentoComPartes[];
+}> {
+  const vazio = { professor: null, disponibilidade: [], ocupados: [], agendamentos: [] };
+
+  // Busca professor_id do aluno
+  const { data: perfil } = await supabaseAdmin
+    .from("profiles")
+    .select("professor_id")
+    .eq("id", alunoId)
+    .single();
+
+  const profId = perfil?.professor_id;
+  if (!profId) return vazio;
+
+  const agora = new Date().toISOString();
+  const em4Semanas = new Date(Date.now() + 28 * 24 * 60 * 60 * 1000).toISOString();
+
+  const [profResult, dispResult, ocupResult, agResult] = await Promise.all([
+    supabaseAdmin
+      .from("profiles")
+      .select("id, nome_completo, chave_pix, tipo_chave_pix, whatsapp")
+      .eq("id", profId)
+      .single(),
+
+    supabaseAdmin
+      .from("professor_disponibilidade")
+      .select("id, dia_semana, hora_inicio, hora_fim, tipo, valor, moeda, ativo")
+      .eq("professor_id", profId)
+      .eq("ativo", true)
+      .order("dia_semana")
+      .order("hora_inicio"),
+
+    supabaseAdmin
+      .from("agendamentos")
+      .select("data_hora_inicio")
+      .eq("professor_id", profId)
+      .in("status", ["aguardando_pagamento", "pagamento_informado", "confirmado"])
+      .gte("data_hora_inicio", agora)
+      .lte("data_hora_inicio", em4Semanas),
+
+    supabaseAdmin
+      .from("agendamentos")
+      .select("*, professor:profiles!professor_id(nome_completo, whatsapp)")
+      .eq("aluno_id", alunoId)
+      .gte("data_hora_inicio", agora)
+      .order("data_hora_inicio"),
+  ]);
+
+  return {
+    professor: (profResult.data as ProfessorAgendaInfo) ?? null,
+    disponibilidade: (dispResult.data ?? []) as DisponibilidadeSlot[],
+    ocupados: (ocupResult.data ?? []).map((r) => r.data_hora_inicio),
+    agendamentos: (agResult.data ?? []) as AgendamentoComPartes[],
+  };
+}
