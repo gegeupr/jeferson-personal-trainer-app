@@ -119,7 +119,7 @@ export default function HomePage() {
       </header>
 
       {/* Hero — capa full-screen */}
-      <section className="relative h-screen w-full overflow-hidden">
+      <section className="relative h-[45vh] md:h-screen w-full overflow-hidden">
         <video
           className="absolute inset-0 h-full w-full object-contain md:object-cover object-center"
           src="/videos/capa-mobilepluz.mp4"
@@ -132,11 +132,11 @@ export default function HomePage() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/10" />
         <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_120px_rgba(0,0,0,0.55)]" />
-        <div className="relative z-10 h-full w-full pt-20 md:pt-24" />
+        <div className="relative z-10 h-full w-full pt-10 md:pt-24" />
       </section>
 
       {/* Bloco de texto — entra por cima da capa ao rolar */}
-      <section className="relative z-20 -mt-24 sm:-mt-28 md:-mt-36">
+      <section className="relative z-20 -mt-12 sm:-mt-28 md:-mt-36">
         <div className="mx-auto max-w-6xl px-4">
           <div className="sticky top-16 md:top-20">
             <div className="rounded-2xl border border-white/10 bg-black/55 p-6 shadow-[0_25px_80px_rgba(0,0,0,0.65)] backdrop-blur-md md:p-8">
