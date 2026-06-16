@@ -276,7 +276,22 @@ function LoginInner() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4">
+    <main className="min-h-screen bg-[#0a0a0a] flex flex-col md:flex-row">
+      {/* Vídeo — topo no mobile, lateral esquerda no desktop */}
+      <div className="relative h-[35vh] shrink-0 overflow-hidden md:h-screen md:w-[55%]">
+        <video
+          className="absolute inset-0 h-full w-full object-contain md:object-cover"
+          src="/videos/capa-mobilepluz.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+        />
+      </div>
+
+      {/* Formulário */}
+      <div className="flex flex-1 items-center justify-center overflow-y-auto p-4 md:p-8">
       <div className="w-full max-w-sm rounded-2xl border border-white/8 bg-white/[0.03] p-8 shadow-2xl backdrop-blur">
         <div className="text-center">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-black text-2xl font-extrabold">
@@ -487,6 +502,7 @@ function LoginInner() {
             Voltar para o início
           </Link>
         </div>
+      </div>
       </div>
     </main>
   );
