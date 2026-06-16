@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { supabase } from '@/utils/supabase-browser';
 import Link from 'next/link';
 import { revisarTreinoComIA, type RevisaoTreino, type RevisaoSugestaoNome } from '@/app/actions/gemini-treino';
+import { consultarUsoIA, type UsoIA } from '@/lib/verificarLimiteIA';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -161,6 +162,7 @@ export default function VerEditarTreinoPage() {
   const [revisando,   setRevisando]   = useState(false);
   const [revisao,     setRevisao]     = useState<RevisaoTreino | null>(null);
   const [revisaoOpen, setRevisaoOpen] = useState(false);
+  const [uso,         setUso]         = useState<UsoIA | null>(null);
 
   // ── helpers ────────────────────────────────────────────────────────────────
 
@@ -261,6 +263,16 @@ export default function VerEditarTreinoPage() {
     init();
   }, [treinoId, router, fetchExercicios]);
 
+  // ── carregar uso IA ───────────────────────────────────────────────────────
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) consultarUsoIA(user.id).then(setUso);
+    });
+  }, []);
+
+  const limiteRevisaoAtingido = uso !== null && uso.revisoes_usadas >= uso.limite_revisoes;
+
   // ── lazy-load search items ─────────────────────────────────────────────────
 
   const loadSearchItems = useCallback(async () => {
@@ -351,6 +363,7 @@ export default function VerEditarTreinoPage() {
     setRevisando(false);
     if (!result.ok) { pushToast('Erro: ' + result.error, 'err'); return; }
     setRevisao(result.revisao);
+    setUso(u => u ? { ...u, revisoes_usadas: u.revisoes_usadas + 1 } : u);
   }
 
   function aplicarSugestaoNome(s: RevisaoSugestaoNome) {
@@ -521,20 +534,36 @@ export default function VerEditarTreinoPage() {
             <p className="text-xs text-white/25">
               {rotinas.length} rotina{rotinas.length !== 1 ? 's' : ''} · {totalAtivos} exercício{totalAtivos !== 1 ? 's' : ''}
             </p>
-            <button
-              onClick={handleRevisar}
-              disabled={revisando}
-              className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/60 hover:bg-white/10 hover:text-white/80 disabled:opacity-50 transition-colors"
-            >
-              {revisando ? (
-                <>
-                  <span className="h-3 w-3 rounded-full border border-white/30 border-t-white animate-spin" />
-                  Analisando…
-                </>
-              ) : (
-                <>✦ Revisar com IA</>
+            <div className="flex flex-col items-end gap-1">
+              {uso && (
+                <span className={`text-[10px] ${
+                  limiteRevisaoAtingido
+                    ? 'text-red-400'
+                    : uso.revisoes_usadas >= uso.limite_revisoes * 0.8
+                    ? 'text-yellow-400/70'
+                    : 'text-white/25'
+                }`}>
+                  Revisões: {uso.revisoes_usadas}/{uso.limite_revisoes}
+                </span>
               )}
-            </button>
+              <button
+                onClick={handleRevisar}
+                disabled={revisando || limiteRevisaoAtingido}
+                title={limiteRevisaoAtingido ? 'Limite de revisões atingido este mês' : undefined}
+                className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/60 hover:bg-white/10 hover:text-white/80 disabled:opacity-50 transition-colors"
+              >
+                {revisando ? (
+                  <>
+                    <span className="h-3 w-3 rounded-full border border-white/30 border-t-white animate-spin" />
+                    Analisando…
+                  </>
+                ) : limiteRevisaoAtingido ? (
+                  <>✦ Limite atingido</>
+                ) : (
+                  <>✦ Revisar com IA</>
+                )}
+              </button>
+            </div>
           </div>
         </div>
 

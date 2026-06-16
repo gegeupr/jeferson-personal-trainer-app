@@ -1234,6 +1234,9 @@ export async function revisarTreinoComIA(
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) return { ok: false, error: "ANTHROPIC_API_KEY não configurado." };
 
+    const limiteCheck = await verificarEIncrementarUsoIA(profId, "revisao");
+    if (!limiteCheck.ok) return { ok: false, error: limiteCheck.error };
+
     // 1. Buscar treino
     const { data: treino } = await supabaseAdmin
       .from("treinos")

@@ -217,7 +217,7 @@ export default function GerarModeloPage() {
     });
   }, []);
 
-  const limiteAtingido = uso !== null && uso.geracoes_usadas >= uso.limite;
+  const limiteAtingido = uso !== null && uso.geracoes_usadas >= uso.limite_geracoes;
 
   const totalExercicios = treino
     ? treino.rotinas.reduce((sum, r) => sum + r.exercicios.length, 0)
@@ -286,11 +286,11 @@ export default function GerarModeloPage() {
                 <span className={`text-xs px-2.5 py-1 rounded-full border ${
                   limiteAtingido
                     ? "border-red-400/30 bg-red-400/10 text-red-300"
-                    : uso.geracoes_usadas >= uso.limite * 0.8
+                    : uso.geracoes_usadas >= uso.limite_geracoes * 0.8
                     ? "border-yellow-400/30 bg-yellow-400/10 text-yellow-300"
                     : "border-white/10 text-white/40"
                 }`}>
-                  {uso.geracoes_usadas}/{uso.limite} gerações este mês
+                  Gerações: {uso.geracoes_usadas}/{uso.limite_geracoes} · Revisões: {uso.revisoes_usadas}/{uso.limite_revisoes} este mês
                 </span>
               )}
             </div>
@@ -405,7 +405,7 @@ export default function GerarModeloPage() {
             {limiteAtingido ? (
               <div className="rounded-xl border border-red-400/20 bg-red-400/8 px-4 py-4 space-y-1.5">
                 <p className="text-sm font-medium text-red-300">
-                  Limite de {uso!.limite} gerações de IA atingido este mês.
+                  Limite de {uso!.limite_geracoes} gerações de IA atingido este mês.
                 </p>
                 <p className="text-xs text-white/50">
                   O limite renova no dia 1º do próximo mês. Você ainda pode atribuir modelos existentes da biblioteca, criar treinos manualmente e editar os treinos dos alunos — apenas a geração nova com IA está pausada.
