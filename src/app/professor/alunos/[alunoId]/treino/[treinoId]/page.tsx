@@ -62,15 +62,18 @@ function SearchModal({
   items,
   loading,
   onSelect,
+  onCriarCustom,
   onClose,
 }: {
   state: ModalState & { open: true };
   items: SearchItem[];
   loading: boolean;
   onSelect: (item: SearchItem) => void;
+  onCriarCustom: (nome: string) => Promise<void>;
   onClose: () => void;
 }) {
   const [query, setQuery] = useState('');
+  const [criando, setCriando] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => { inputRef.current?.focus(); }, []);
@@ -84,6 +87,14 @@ function SearchModal({
 
   const sugeridos = !query && grupoRef ? filtered.filter(i => i.grupo.toLowerCase().includes(grupoRef)) : [];
   const resto     = sugeridos.length > 0 ? filtered.filter(i => !sugeridos.includes(i)) : filtered;
+
+  async function handleCriar() {
+    const nome = query.trim();
+    if (!nome) return;
+    setCriando(true);
+    await onCriarCustom(nome);
+    setCriando(false);
+  }
 
   return (
     <div className="fixed inset-0 bg-black/80 z-[200] flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={onClose}>
@@ -113,7 +124,23 @@ function SearchModal({
           {loading ? (
             <p className="px-4 py-8 text-sm text-white/30 text-center">Carregando exercícios…</p>
           ) : filtered.length === 0 ? (
-            <p className="px-4 py-8 text-sm text-white/30 text-center">Nenhum exercício encontrado</p>
+            <div className="px-4 py-8 flex flex-col items-center gap-3">
+              <p className="text-sm text-white/30 text-center">Nenhum exercício encontrado</p>
+              {query.trim() && (
+                <button
+                  onClick={handleCriar}
+                  disabled={criando}
+                  className="flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-colors disabled:opacity-50"
+                >
+                  {criando ? (
+                    <span className="h-3.5 w-3.5 rounded-full border border-white/30 border-t-white animate-spin" />
+                  ) : (
+                    <span className="text-base leading-none">＋</span>
+                  )}
+                  Criar &ldquo;{query.trim()}&rdquo; na minha biblioteca
+                </button>
+              )}
+            </div>
           ) : (
             <>
               {sugeridos.length > 0 && (
@@ -349,6 +376,20 @@ export default function VerEditarTreinoPage() {
 
     setDirty(true);
     setModalState({ open: false });
+  }
+
+  async function handleCriarCustom(nome: string) {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    const { data, error } = await supabase
+      .from('exercicios')
+      .insert({ professor_id: user.id, nome: nome.trim() })
+      .select('id, nome')
+      .single();
+    if (error || !data) return;
+    const novoItem: SearchItem = { id: data.id, nome: data.nome, fonte: 'biblioteca', grupo: '', equip: '' };
+    setSearchItems(prev => [novoItem, ...prev]);
+    handleSelectItem(novoItem);
   }
 
   // ── revisão IA ────────────────────────────────────────────────────────────
@@ -828,6 +869,7 @@ export default function VerEditarTreinoPage() {
           items={searchItems}
           loading={searchLoading}
           onSelect={handleSelectItem}
+          onCriarCustom={handleCriarCustom}
           onClose={() => setModalState({ open: false })}
         />
       )}
