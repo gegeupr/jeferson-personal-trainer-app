@@ -155,15 +155,15 @@ const SPLIT_MAP: Record<string, DiaFiltro[]> = {
   abcde: [
     { label: 'Peito e Tríceps',                              patterns: ['empurrar_horizontal', 'extensao_cotovelo'],                       outro_kws: ['peitoral', 'tríceps'] },
     { label: 'Costas e Bíceps',                              patterns: ['puxada_vertical', 'puxada_horizontal', 'flexao_cotovelo'],         outro_kws: ['costas', 'latíssimo', 'romboide', 'trapézio', 'bíceps'] },
-    { label: 'Pernas Posteriores — Glúteos e Isquio',        patterns: ['dominante_quadril'],                                              outro_kws: ['glúteo médio', 'adutor'] },
-    { label: 'Pernas Anteriores — Quadríceps e Panturrilha', patterns: ['dominante_joelho'],                                               outro_kws: ['gastrocnêmio', 'sóleo', 'panturrilha'] },
+    { label: 'Bumbum e Posterior',                            patterns: ['dominante_quadril'],                                              outro_kws: ['glúteo médio', 'adutor'] },
+    { label: 'Coxa e Panturrilha',                           patterns: ['dominante_joelho'],                                               outro_kws: ['gastrocnêmio', 'sóleo', 'panturrilha'] },
     { label: 'Ombros e Braços',                              patterns: ['empurrar_vertical', 'flexao_cotovelo', 'extensao_cotovelo'],       outro_kws: ['ombro', 'deltoid', 'trapézio', 'bíceps', 'tríceps'] },
   ],
   abcd: [
     { label: 'Peito e Tríceps',                              patterns: ['empurrar_horizontal', 'extensao_cotovelo'],                       outro_kws: ['peitoral', 'tríceps'] },
     { label: 'Costas e Bíceps',                              patterns: ['puxada_vertical', 'puxada_horizontal', 'flexao_cotovelo'],         outro_kws: ['costas', 'latíssimo', 'romboide', 'trapézio', 'bíceps'] },
-    { label: 'Pernas — Quadríceps e Panturrilha',            patterns: ['dominante_joelho'],                                               outro_kws: ['gastrocnêmio', 'sóleo', 'panturrilha'] },
-    { label: 'Ombros, Glúteos e Isquiotibiais',              patterns: ['empurrar_vertical', 'dominante_quadril'],                         outro_kws: ['ombro', 'deltoid', 'trapézio', 'glúteo médio', 'adutor'] },
+    { label: 'Coxa e Panturrilha',                            patterns: ['dominante_joelho'],                                               outro_kws: ['gastrocnêmio', 'sóleo', 'panturrilha'] },
+    { label: 'Ombros, Bumbum e Posterior',                   patterns: ['empurrar_vertical', 'dominante_quadril'],                         outro_kws: ['ombro', 'deltoid', 'trapézio', 'glúteo médio', 'adutor'] },
   ],
   ppl: [
     { label: 'Push — Peito, Ombros e Tríceps',               patterns: ['empurrar_horizontal', 'empurrar_vertical', 'extensao_cotovelo'],  outro_kws: ['peitoral', 'ombro', 'deltoid', 'tríceps'] },
@@ -172,9 +172,9 @@ const SPLIT_MAP: Record<string, DiaFiltro[]> = {
   ],
   supinf: [
     { label: 'Superior Push — Peito, Ombros e Tríceps',      patterns: ['empurrar_horizontal', 'empurrar_vertical', 'extensao_cotovelo'],  outro_kws: ['peitoral', 'ombro', 'deltoid', 'tríceps'] },
-    { label: 'Inferior — Quadríceps e Panturrilha',          patterns: ['dominante_joelho'],                                               outro_kws: ['gastrocnêmio', 'sóleo', 'panturrilha'] },
+    { label: 'Inferior — Coxa e Panturrilha',                 patterns: ['dominante_joelho'],                                               outro_kws: ['gastrocnêmio', 'sóleo', 'panturrilha'] },
     { label: 'Superior Pull — Costas e Bíceps',              patterns: ['puxada_vertical', 'puxada_horizontal', 'flexao_cotovelo'],         outro_kws: ['costas', 'latíssimo', 'romboide', 'trapézio', 'bíceps'] },
-    { label: 'Inferior — Glúteos e Isquiotibiais',           patterns: ['dominante_quadril'],                                              outro_kws: ['glúteo médio', 'adutor'] },
+    { label: 'Inferior — Bumbum e Posterior',                 patterns: ['dominante_quadril'],                                              outro_kws: ['glúteo médio', 'adutor'] },
   ],
 };
 
@@ -263,9 +263,9 @@ Cada dia usa exercícios DIFERENTES — não repita os mesmos exercícios entre 
     if (dias === 4) {
       return `Para Full Body 4x/semana, adote Divisão Superior/Inferior:
 - Treino A: Superior (Peito e Ombros — push)
-- Treino B: Inferior (Pernas anteriores: quadríceps, panturrilha)
+- Treino B: Coxa (coxa, panturrilha)
 - Treino C: Superior (Costas e Bíceps — pull)
-- Treino D: Inferior (Pernas posteriores: isquiotibiais, glúteos)`;
+- Treino D: Bumbum e Posterior (bumbum, parte de trás da perna)`;
     }
     return `Para Full Body ${dias}x/semana com aluno avançado, adote Divisão Push/Pull/Legs:
 - Treino A (Push): Peito, Ombros, Tríceps — supino, desenvolvimento, elevações, tríceps
@@ -279,9 +279,9 @@ ${dias >= 6 ? "- Treino F (Legs complementar): Extensora, flexora, agachamento b
   if (supInf) {
     return `Divisão Superior/Inferior — ${dias} dias:
 - Treino A: Superior Push (Peito, Ombros, Tríceps — supino, desenvolvimento, elevações, tríceps)
-- Treino B: Inferior Quad-dominant (Quadríceps, Panturrilha — agachamento, leg press, extensora, panturrilha)
+- Treino B: Coxa (coxa, panturrilha — agachamento, leg press, extensora, panturrilha)
 - Treino C: Superior Pull (Costas, Bíceps, Trapézio) — OBRIGATÓRIO: 1 puxada (Barra Fixa ou Puxada Frontal) + 1 remada (Remada Curvada ou Remada na Polia) + roscas reais (Rosca Direta, Alternada ou Martelo). NUNCA use Barra Fixa Supinada como biceps.
-- Treino D: Inferior Hip-dominant (Glúteos, Isquiotibiais — hip thrust, stiff, cadeira flexora, extensão de quadril)
+- Treino D: Bumbum e Posterior (bumbum, parte de trás da perna — hip thrust, stiff, cadeira flexora, extensão de quadril)
 ${dias === 5 ? "- Treino E: Superior completo (mix push+pull com exercícios DIFERENTES dos Treinos A e C)" : ""}`;
   }
 
@@ -289,10 +289,10 @@ ${dias === 5 ? "- Treino E: Superior completo (mix push+pull com exercícios DIF
     return `Divisão Push/Pull/Legs — ${dias} dias:
 - Treino A (Push): Peito, Ombros anteriores/médios, Tríceps (supino, desenvolvimento, elevações, tríceps)
 - Treino B (Pull): Costas, Bíceps, Ombros posteriores, Trapézio — OBRIGATÓRIO: 1 puxada (Barra Fixa ou Puxada Frontal) + 1 remada (Remada Curvada com Barra ou Remada na Polia) + roscas reais (Rosca Direta, Alternada ou Martelo). NUNCA Barra Fixa Supinada como bíceps.
-- Treino C (Legs): Quadríceps, Isquiotibiais, Glúteos, Panturrilha (agachamento, leg press, stiff, hip thrust, panturrilha)
+- Treino C (Legs): coxa, posterior, bumbum, panturrilha (agachamento, leg press, stiff, hip thrust, panturrilha)
 ${dias >= 4 ? "- Treino D (Push 2): Peito inclinado, Ombros lateral, Tríceps acessórios — exercícios DIFERENTES do Treino A" : ""}
 ${dias >= 5 ? "- Treino E (Pull 2): Puxada fechada ou neutra, Remada Cavalinho, Rosca Concentrada, Face Pull — exercícios DIFERENTES do Treino B" : ""}
-${dias >= 6 ? "- Treino F (Legs 2): Glúteo e isquio — hip thrust, stiff COM HALTERES (não barra como no C), afundo, extensão de quadril — exercícios DIFERENTES do Treino C" : ""}`;
+${dias >= 6 ? "- Treino F (Legs 2): Bumbum e Posterior — hip thrust, stiff COM HALTERES (não barra como no C), afundo, extensão de quadril — exercícios DIFERENTES do Treino C" : ""}`;
   }
 
   if (abcd || dias >= 4) {
@@ -300,15 +300,15 @@ ${dias >= 6 ? "- Treino F (Legs 2): Glúteo e isquio — hip thrust, stiff COM H
       return `Divisão A/B/C/D — 4 dias:
 - Treino A: Peito e Tríceps (supino reto, supino inclinado, crucifixo, tríceps corda, tríceps testa)
 - Treino B: Costas e Bíceps — OBRIGATÓRIO: 1 puxada vertical (Barra Fixa ou Puxada Frontal) + 1 remada (Remada Curvada com Barra, Remada na Polia Baixa ou Remada Cavalinho) + roscas reais (Rosca Direta, Rosca Alternada, Rosca Martelo). NUNCA use Barra Fixa Supinada como exercício de bíceps — ela é puxada de costas.
-- Treino C: Pernas (Quadríceps, Panturrilha — agachamento, leg press, extensora, panturrilha)
-- Treino D: Ombros, Glúteos e Isquiotibiais (desenvolvimento, elevação lateral, hip thrust, stiff, cadeira flexora)`;
+- Treino C: Coxa e Panturrilha (coxa, panturrilha — agachamento, leg press, extensora, panturrilha)
+- Treino D: Ombros, Bumbum e Posterior (desenvolvimento, elevação lateral, hip thrust, stiff, cadeira flexora)`;
     }
     if (dias === 5) {
       return `Divisão A/B/C/D/E — 5 dias (split bodybuilder):
 - Treino A: Peito (supino reto, supino inclinado, crucifixo, crossover, peck deck)
 - Treino B: Costas (largura + espessura) — OBRIGATÓRIO: 1 puxada vertical (Barra Fixa ou Puxada Frontal) + 2 remadas diferentes (ex: Remada Curvada com Barra + Remada na Polia Baixa) + pullover ou face pull. Costas com apenas Barra Fixa + Terra Romeno = ERRADO.
-- Treino C: Pernas Posteriores — Glúteos e Isquiotibiais (hip thrust, stiff, cadeira flexora, extensão de quadril)
-- Treino D: Pernas Anteriores — Quadríceps e Panturrilha (agachamento, leg press, extensora, panturrilha)
+- Treino C: Bumbum e Posterior (hip thrust, stiff, cadeira flexora, extensão de quadril)
+- Treino D: Coxa e Panturrilha (agachamento, leg press, extensora, panturrilha)
 - Treino E: Ombros e Braços (desenvolvimento, elevação lateral, rosca direta, rosca alternada, tríceps corda)`;
     }
     return `Divisão em ${dias} grupos musculares:
@@ -498,6 +498,7 @@ ${catalogoSections}
 6. Prefira biblioteca do professor. Use catálogo: APENAS exercícios da seção rotulada com seu treino (ex: "Treino B" usa somente o bloco Treino B).
 7. Respeite TODAS as restrições, lesões e limitações do aluno.
 8. Retorne SOMENTE JSON puro — sem markdown, sem texto, sem \`\`\`.
+9. Use linguagem simples e acessível para leigos nos campos "nome" e "foco" de cada rotina. Exemplos: "coxa" (não "quadríceps"), "posterior" ou "parte de trás da perna" (não "isquiotibiais"), "bumbum" (não "glúteo médio" ou "glúteo máximo"), "ombros" (não "deltoides"), "peito" (não "peitoral maior"), "bíceps" (não "bíceps braquial").
 
 === REGRA ANTI-REPETIÇÃO (CRÍTICA) ===
 O catálogo lista variações técnicas como exercícios separados: "Crossover Drop-Set", "Crossover Rest-Pause", "Crossover Isometria" etc.
@@ -870,6 +871,7 @@ ${catalogoSections}
 6. Prefira biblioteca do professor. Use catálogo: APENAS exercícios da seção rotulada com seu treino (ex: "Treino B" usa somente o bloco Treino B).
 7. Respeite o perfil descrito (limitações, objetivos, nível).
 8. Retorne SOMENTE JSON puro — sem markdown, sem texto, sem \`\`\`.
+9. Use linguagem simples e acessível para leigos nos campos "nome" e "foco" de cada rotina. Exemplos: "coxa" (não "quadríceps"), "posterior" ou "parte de trás da perna" (não "isquiotibiais"), "bumbum" (não "glúteo médio" ou "glúteo máximo"), "ombros" (não "deltoides"), "peito" (não "peitoral maior"), "bíceps" (não "bíceps braquial").
 
 === REGRA ANTI-REPETIÇÃO (CRÍTICA) ===
 O catálogo lista variações técnicas como exercícios separados: "Crossover Drop-Set", "Crossover Rest-Pause", "Crossover Isometria" etc.

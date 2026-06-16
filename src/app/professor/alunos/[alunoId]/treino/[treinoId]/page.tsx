@@ -359,6 +359,14 @@ export default function VerEditarTreinoPage() {
         .eq('id', treinoId);
       if (tErr) throw tErr;
 
+      // 1b. nomes das rotinas
+      for (const rotina of rotinas) {
+        await supabase
+          .from('rotinas_diarias')
+          .update({ nome: rotina.nome })
+          .eq('id', rotina.id);
+      }
+
       // 2. update existentes (inclusive trocados)
       for (const ex of exercicios.filter(e => !e.removido && !e.novo)) {
         const { error: exErr } = await supabase
@@ -490,8 +498,15 @@ export default function VerEditarTreinoPage() {
                   <span className="text-xs font-bold text-white/60">{letra}</span>
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-white truncate">{rotina.nome}</p>
-                  {rotina.descricao && <p className="text-xs text-white/35 truncate">{rotina.descricao}</p>}
+                  <input
+                    value={rotina.nome}
+                    onChange={e => {
+                      setRotinas(prev => prev.map(r => r.id === rotina.id ? { ...r, nome: e.target.value } : r));
+                      setDirty(true);
+                    }}
+                    className="w-full bg-transparent text-sm font-medium text-white outline-none border-b border-transparent hover:border-white/10 focus:border-white/30 transition-colors pb-0.5"
+                  />
+                  {rotina.descricao && <p className="text-xs text-white/35 truncate mt-0.5">{rotina.descricao}</p>}
                 </div>
                 <span className="shrink-0 text-xs text-white/25">{exsRotina.length} ex.</span>
               </div>
