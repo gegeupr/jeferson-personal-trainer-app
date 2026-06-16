@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { supabase } from '@/utils/supabase-browser';
 import Link from 'next/link';
+import { revisarTreinoComIA, type RevisaoTreino, type RevisaoSugestaoNome } from '@/app/actions/gemini-treino';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -156,6 +157,10 @@ export default function VerEditarTreinoPage() {
   const [searchItems,  setSearchItems]  = useState<SearchItem[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const searchLoaded = useRef(false);
+
+  const [revisando,   setRevisando]   = useState(false);
+  const [revisao,     setRevisao]     = useState<RevisaoTreino | null>(null);
+  const [revisaoOpen, setRevisaoOpen] = useState(false);
 
   // ── helpers ────────────────────────────────────────────────────────────────
 
@@ -334,6 +339,39 @@ export default function VerEditarTreinoPage() {
     setModalState({ open: false });
   }
 
+  // ── revisão IA ────────────────────────────────────────────────────────────
+
+  async function handleRevisar() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    setRevisando(true);
+    setRevisaoOpen(true);
+    setRevisao(null);
+    const result = await revisarTreinoComIA(treinoId, user.id);
+    setRevisando(false);
+    if (!result.ok) { pushToast('Erro: ' + result.error, 'err'); return; }
+    setRevisao(result.revisao);
+  }
+
+  function aplicarSugestaoNome(s: RevisaoSugestaoNome) {
+    setRotinas(prev => prev.map(r => r.id === s.rotina_id ? { ...r, nome: s.nome_sugerido } : r));
+    setDirty(true);
+    setRevisao(prev => prev ? {
+      ...prev,
+      sugestoes_nomes: prev.sugestoes_nomes.filter(x => x.rotina_id !== s.rotina_id),
+    } : prev);
+  }
+
+  function aplicarTodasSugestoes() {
+    if (!revisao) return;
+    setRotinas(prev => prev.map(r => {
+      const s = revisao.sugestoes_nomes.find(x => x.rotina_id === r.id);
+      return s ? { ...r, nome: s.nome_sugerido } : r;
+    }));
+    setDirty(true);
+    setRevisao(prev => prev ? { ...prev, sugestoes_nomes: [] } : prev);
+  }
+
   // ── exercise mutations ─────────────────────────────────────────────────────
 
   function updateExercicio(teId: string, patch: Partial<ExercicioEdit>) {
@@ -479,10 +517,144 @@ export default function VerEditarTreinoPage() {
               className="mt-1 w-full bg-transparent border-b border-white/10 pb-1 text-sm text-white/60 outline-none focus:border-white/30 transition-colors resize-none"
             />
           </div>
-          <p className="text-xs text-white/25">
-            {rotinas.length} rotina{rotinas.length !== 1 ? 's' : ''} · {totalAtivos} exercício{totalAtivos !== 1 ? 's' : ''}
-          </p>
+          <div className="flex items-center justify-between gap-3 pt-1">
+            <p className="text-xs text-white/25">
+              {rotinas.length} rotina{rotinas.length !== 1 ? 's' : ''} · {totalAtivos} exercício{totalAtivos !== 1 ? 's' : ''}
+            </p>
+            <button
+              onClick={handleRevisar}
+              disabled={revisando}
+              className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/60 hover:bg-white/10 hover:text-white/80 disabled:opacity-50 transition-colors"
+            >
+              {revisando ? (
+                <>
+                  <span className="h-3 w-3 rounded-full border border-white/30 border-t-white animate-spin" />
+                  Analisando…
+                </>
+              ) : (
+                <>✦ Revisar com IA</>
+              )}
+            </button>
+          </div>
         </div>
+
+        {/* Painel de revisão IA */}
+        {revisaoOpen && (
+          <div className="rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden">
+            <div className="px-5 py-4 border-b border-white/8 flex items-center justify-between">
+              <p className="text-sm font-semibold text-white">Revisão com IA</p>
+              <button onClick={() => setRevisaoOpen(false)} className="text-white/30 hover:text-white/60 transition-colors text-xl leading-none">×</button>
+            </div>
+
+            {revisando && !revisao && (
+              <div className="px-5 py-10 text-center">
+                <p className="text-white/40 text-sm">Analisando o treino…</p>
+                <p className="text-white/25 text-xs mt-1">Pode levar alguns segundos</p>
+              </div>
+            )}
+
+            {revisao && (
+              <div className="p-5 space-y-5">
+
+                {/* Nota + resumo */}
+                <div className="flex items-start gap-4">
+                  <div className={`shrink-0 w-16 h-16 rounded-2xl flex flex-col items-center justify-center border ${
+                    revisao.nota >= 8 ? 'border-emerald-400/25 bg-emerald-400/10' :
+                    revisao.nota >= 6 ? 'border-amber-400/25 bg-amber-400/10' :
+                    'border-red-400/25 bg-red-400/10'
+                  }`}>
+                    <span className={`text-2xl font-bold leading-none ${
+                      revisao.nota >= 8 ? 'text-emerald-300' :
+                      revisao.nota >= 6 ? 'text-amber-300' : 'text-red-300'
+                    }`}>{revisao.nota}</span>
+                    <span className="text-[10px] text-white/30 mt-0.5">/ 10</span>
+                  </div>
+                  <p className="text-sm text-white/70 leading-relaxed pt-1">{revisao.resumo}</p>
+                </div>
+
+                {/* Erros */}
+                {revisao.erros.length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-xs font-semibold text-white/40 uppercase tracking-wide">Problemas encontrados</p>
+                    {revisao.erros.map((e, i) => (
+                      <div key={i} className={`rounded-xl border px-4 py-3 flex items-start gap-3 ${
+                        e.gravidade === 'grave'    ? 'border-red-400/20 bg-red-400/[0.07]' :
+                        e.gravidade === 'moderado' ? 'border-amber-400/20 bg-amber-400/[0.07]' :
+                                                     'border-white/8 bg-white/[0.02]'
+                      }`}>
+                        <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                          e.gravidade === 'grave'    ? 'bg-red-400/20 text-red-300' :
+                          e.gravidade === 'moderado' ? 'bg-amber-400/20 text-amber-300' :
+                                                       'bg-white/10 text-white/40'
+                        }`}>{e.gravidade}</span>
+                        <div className="min-w-0">
+                          <p className="text-xs font-semibold text-white">{e.rotina}</p>
+                          <p className="text-xs text-white/55 mt-0.5 leading-relaxed">{e.descricao}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Sugestões de nomes */}
+                {revisao.sugestoes_nomes.length > 0 && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs font-semibold text-white/40 uppercase tracking-wide">Sugestões de nomes</p>
+                      <button
+                        onClick={aplicarTodasSugestoes}
+                        className="text-[11px] text-white/50 hover:text-white/80 transition-colors underline underline-offset-2"
+                      >
+                        Aplicar todas
+                      </button>
+                    </div>
+                    {revisao.sugestoes_nomes.map((s) => (
+                      <div key={s.rotina_id} className="rounded-xl border border-white/8 bg-white/[0.02] px-4 py-3 flex items-center justify-between gap-3">
+                        <div className="min-w-0 flex-1">
+                          <p className="text-xs text-white/40 line-through truncate">{s.nome_atual}</p>
+                          <p className="text-sm font-medium text-white truncate">{s.nome_sugerido}</p>
+                        </div>
+                        <button
+                          onClick={() => aplicarSugestaoNome(s)}
+                          className="shrink-0 rounded-xl bg-white px-3 py-1.5 text-xs font-semibold text-black hover:bg-white/90 transition-colors"
+                        >
+                          Aplicar
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Pontos positivos */}
+                {revisao.pontos_positivos.length > 0 && (
+                  <div className="space-y-1.5">
+                    <p className="text-xs font-semibold text-white/40 uppercase tracking-wide">Pontos positivos</p>
+                    {revisao.pontos_positivos.map((p, i) => (
+                      <div key={i} className="flex items-start gap-2">
+                        <span className="text-emerald-400 mt-0.5 shrink-0 text-xs">✓</span>
+                        <p className="text-xs text-white/60 leading-relaxed">{p}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Recomendações */}
+                {revisao.recomendacoes.length > 0 && (
+                  <div className="space-y-1.5">
+                    <p className="text-xs font-semibold text-white/40 uppercase tracking-wide">Recomendações</p>
+                    {revisao.recomendacoes.map((r, i) => (
+                      <div key={i} className="flex items-start gap-2">
+                        <span className="text-white/30 mt-0.5 shrink-0 text-xs">→</span>
+                        <p className="text-xs text-white/55 leading-relaxed">{r}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Rotinas */}
         {rotinas.map(rotina => {

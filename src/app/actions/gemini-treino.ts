@@ -1198,3 +1198,160 @@ export async function atribuirModeloAoAluno(
     return { ok: false, error: e?.message ?? "Erro ao atribuir modelo." };
   }
 }
+
+// ─── Action: revisar treino com IA ────────────────────────────────────────────
+
+export type RevisaoErro = {
+  rotina: string;
+  descricao: string;
+  gravidade: "grave" | "moderado" | "leve";
+};
+
+export type RevisaoSugestaoNome = {
+  rotina_id: string;
+  nome_atual: string;
+  nome_sugerido: string;
+};
+
+export type RevisaoTreino = {
+  nota: number;
+  resumo: string;
+  pontos_positivos: string[];
+  erros: RevisaoErro[];
+  sugestoes_nomes: RevisaoSugestaoNome[];
+  recomendacoes: string[];
+};
+
+export type RevisarTreinoResult =
+  | { ok: true; revisao: RevisaoTreino }
+  | { ok: false; error: string };
+
+export async function revisarTreinoComIA(
+  treinoId: string,
+  profId: string
+): Promise<RevisarTreinoResult> {
+  try {
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    if (!apiKey) return { ok: false, error: "ANTHROPIC_API_KEY não configurado." };
+
+    // 1. Buscar treino
+    const { data: treino } = await supabaseAdmin
+      .from("treinos")
+      .select("id, nome, descricao")
+      .eq("id", treinoId)
+      .eq("professor_id", profId)
+      .single();
+
+    if (!treino) return { ok: false, error: "Treino não encontrado." };
+
+    // 2. Buscar rotinas
+    const { data: rotinas } = await supabaseAdmin
+      .from("rotinas_diarias")
+      .select("id, nome, descricao")
+      .eq("plano_id", treinoId)
+      .order("nome");
+
+    if (!rotinas || rotinas.length === 0)
+      return { ok: false, error: "Nenhuma rotina encontrada." };
+
+    // 3. Buscar exercícios com nomes resolvidos
+    const rotinaIds = rotinas.map((r) => r.id);
+    const { data: exerciciosRaw } = await supabaseAdmin
+      .from("treino_exercicios")
+      .select("rotina_id, ordem, series, repeticoes, intervalo, observacoes, exercicio_id, catalogo_id")
+      .in("rotina_id", rotinaIds)
+      .order("ordem");
+
+    const catIds = (exerciciosRaw || []).filter((e) => e.catalogo_id).map((e) => e.catalogo_id as string);
+    const bibIds = (exerciciosRaw || []).filter((e) => e.exercicio_id).map((e) => e.exercicio_id as string);
+
+    const [catRes, bibRes] = await Promise.all([
+      catIds.length > 0
+        ? supabaseAdmin.from("exercicios_catalogo").select("id, nome, grupo_muscular, movement_pattern").in("id", catIds)
+        : Promise.resolve({ data: [] }),
+      bibIds.length > 0
+        ? supabaseAdmin.from("exercicios").select("id, nome").in("id", bibIds)
+        : Promise.resolve({ data: [] }),
+    ]);
+
+    const catMap = new Map(
+      ((catRes.data || []) as any[]).map((e) => [e.id, { nome: e.nome as string, grupo: (e.grupo_muscular || "") as string, pattern: (e.movement_pattern || "") as string }])
+    );
+    const bibMap = new Map(((bibRes.data || []) as any[]).map((e) => [e.id, e.nome as string]));
+
+    // 4. Montar estrutura legível para o prompt
+    const estrutura = rotinas
+      .map((rotina) => {
+        const exs = (exerciciosRaw || [])
+          .filter((e) => e.rotina_id === rotina.id)
+          .map((e) => {
+            const info = e.catalogo_id ? catMap.get(e.catalogo_id) : null;
+            const nome = info?.nome || (e.exercicio_id ? bibMap.get(e.exercicio_id) : null) || "Exercício";
+            const grupo = info?.grupo ? ` [${info.grupo}]` : "";
+            return `  ${e.ordem}. ${nome}${grupo} — ${e.series}x${e.repeticoes}${e.intervalo ? `, descanso: ${e.intervalo}` : ""}${e.observacoes ? `, obs: ${e.observacoes}` : ""}`;
+          });
+        return `## ${rotina.nome}${rotina.descricao ? `\nFoco: ${rotina.descricao}` : ""}\n${exs.join("\n") || "  (sem exercícios)"}`;
+      })
+      .join("\n\n");
+
+    // 5. Prompt de revisão
+    const prompt = `Você é um personal trainer especializado em análise e revisão crítica de treinos. Analise o plano abaixo com rigor técnico.
+
+=== PLANO DE TREINO ===
+Nome: ${treino.nome}
+${treino.descricao ? `Descrição: ${treino.descricao}` : ""}
+
+${estrutura}
+
+=== O QUE VERIFICAR ===
+- Equilíbrio entre grupos musculares e volume por dia
+- Repetição do mesmo exercício em dias diferentes (ERRO GRAVE)
+- 2 ou mais variações do mesmo movimento na mesma rotina (ex: 2 tipos de crossover, 2 leg press — ERRO GRAVE)
+- Dia de costas sem puxada vertical + remada horizontal (ERRO GRAVE)
+- Barra Fixa Supinada usada como exercício de bíceps (ERRO GRAVE)
+- Ordens de exercícios inadequadas (ex: isolador antes de composto)
+- Nomes de rotinas com termos técnicos que um leigo não entende
+- Grupos musculares não treinados ou desequilíbrios agonista/antagonista
+
+=== SUGESTÕES DE NOMES ===
+Indique APENAS rotinas cujo nome tem termos técnicos para substituir por linguagem de leigo.
+Exemplos: "quadríceps" → "coxa", "isquiotibiais" → "posterior" ou "parte de trás da perna", "glúteos" → "bumbum", "deltoides" → "ombros", "peitoral" → "peito", "bíceps braquial" → "bíceps".
+
+IDs exatos das rotinas (use estes IDs no campo rotina_id):
+${rotinas.map((r) => `- "${r.id}" → "${r.nome}"`).join("\n")}
+
+=== RETORNE ESTE JSON EXATO ===
+{
+  "nota": 8,
+  "resumo": "1-2 frases sobre o plano geral",
+  "pontos_positivos": ["ponto 1", "ponto 2"],
+  "erros": [
+    { "rotina": "Treino B", "descricao": "descrição clara do erro", "gravidade": "grave" }
+  ],
+  "sugestoes_nomes": [
+    { "rotina_id": "uuid-exato", "nome_atual": "nome atual", "nome_sugerido": "nome em linguagem simples" }
+  ],
+  "recomendacoes": ["recomendação 1", "recomendação 2"]
+}
+
+Retorne SOMENTE o JSON, sem texto adicional.`;
+
+    // 6. Chamar Claude
+    const client = new Anthropic({ apiKey });
+    const response = await client.messages.create({
+      model: "claude-sonnet-4-6",
+      max_tokens: 2048,
+      system: "Você é um personal trainer especializado. Responda SEMPRE com JSON puro e válido, sem texto adicional, sem markdown.",
+      messages: [{ role: "user", content: prompt }],
+    });
+
+    const rawText = response.content[0].type === "text" ? response.content[0].text : "";
+    const jsonStr = extrairJSON(rawText);
+    if (!jsonStr) return { ok: false, error: "A IA não retornou um JSON válido." };
+
+    const revisao = JSON.parse(jsonStr) as RevisaoTreino;
+    return { ok: true, revisao };
+  } catch (e: any) {
+    return { ok: false, error: e?.message ?? "Erro ao revisar treino." };
+  }
+}
