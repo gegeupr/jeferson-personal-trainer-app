@@ -131,8 +131,8 @@ function LoginInner() {
     }
   }
 
-  async function handleResetPassword(e: React.FormEvent) {
-    e.preventDefault();
+  async function handleResetPassword(e?: React.FormEvent) {
+    e?.preventDefault();
 
     if (isCooldownActive) {
       setResetErr(
@@ -294,10 +294,10 @@ function LoginInner() {
       <div className="flex flex-1 items-center justify-center overflow-y-auto p-4 md:p-8">
       <div className="w-full max-w-sm rounded-2xl border border-white/8 bg-white/[0.03] p-8 shadow-2xl backdrop-blur">
         <div className="text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-black text-2xl font-extrabold">
+          <div className="mx-auto hidden md:flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-black text-2xl font-extrabold">
             M
           </div>
-          <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white">
+          <h1 className={`mt-4 text-3xl font-extrabold tracking-tight text-white${isLoginView ? ' hidden md:block' : ''}`}>
             {isLoginView ? "Entrar" : "Criar conta"}
           </h1>
 
@@ -323,7 +323,7 @@ function LoginInner() {
 
         {/* Card recuperação de senha (só no login) */}
         {isLoginView && (
-          <div className="mt-4">
+          <div className="mt-4 hidden md:block">
             <button
               type="button"
               onClick={() => {
@@ -468,6 +468,45 @@ function LoginInner() {
             className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-2.5 text-sm text-white outline-none focus:border-white/25 transition-colors"
             required
           />
+
+          {/* Esqueci minha senha — mobile only */}
+          {isLoginView && (
+            <div className="md:hidden -mt-1">
+              <button
+                type="button"
+                onClick={() => { setShowReset(v => !v); setResetErr(null); setResetMsg(null); setResetEmail(email); }}
+                className="text-xs text-white/45 hover:text-white/70 transition"
+              >
+                {showReset ? "Fechar recuperação" : "Esqueci minha senha"}
+              </button>
+              {showReset && (
+                <div className="mt-3 rounded-2xl border border-white/10 bg-black/30 p-4 space-y-3">
+                  {resetErr && (
+                    <p className="rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-300">{resetErr}</p>
+                  )}
+                  {resetMsg && (
+                    <p className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">{resetMsg}</p>
+                  )}
+                  <p className="text-xs text-white/60">Informe seu e-mail para receber o link de recuperação.</p>
+                  <input
+                    type="email"
+                    placeholder="Seu e-mail"
+                    value={resetEmail}
+                    onChange={e => setResetEmail(e.target.value)}
+                    className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-2.5 text-sm text-white outline-none focus:border-white/25 transition-colors"
+                  />
+                  <button
+                    type="button"
+                    disabled={resetLoading || isCooldownActive}
+                    onClick={() => handleResetPassword()}
+                    className="w-full rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-black hover:bg-white/90 disabled:opacity-60"
+                  >
+                    {resetLoading ? "Enviando..." : isCooldownActive ? `Aguarde ${formatMMSS(cooldownLeftSeconds)}` : "Enviar link de recuperação"}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
           <button
             type="submit"
