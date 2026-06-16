@@ -1343,16 +1343,27 @@ Retorne SOMENTE o JSON, sem texto adicional.`;
     const client = new Anthropic({ apiKey });
     const response = await client.messages.create({
       model: "claude-sonnet-4-6",
-      max_tokens: 2048,
-      system: "Você é um personal trainer especializado. Responda SEMPRE com JSON puro e válido, sem texto adicional, sem markdown.",
+      max_tokens: 4096,
+      system: "Você é um personal trainer especializado. Responda SEMPRE com JSON puro e válido, sem texto adicional, sem markdown, sem blocos de código.",
       messages: [{ role: "user", content: prompt }],
     });
 
     const rawText = response.content[0].type === "text" ? response.content[0].text : "";
-    const jsonStr = extrairJSON(rawText);
-    if (!jsonStr) return { ok: false, error: "A IA não retornou um JSON válido." };
+    // Remove possíveis blocos markdown antes de extrair
+    const cleanText = rawText.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/, "").trim();
+    const jsonStr = extrairJSON(cleanText);
+    if (!jsonStr) {
+      console.error("[revisarTreinoComIA] JSON não encontrado. stop_reason:", response.stop_reason, "raw:", rawText.slice(0, 400));
+      return { ok: false, error: "A IA não retornou um JSON válido. Tente novamente." };
+    }
 
-    const revisao = JSON.parse(jsonStr) as RevisaoTreino;
+    let revisao: RevisaoTreino;
+    try {
+      revisao = JSON.parse(jsonStr) as RevisaoTreino;
+    } catch {
+      console.error("[revisarTreinoComIA] JSON inválido após extração:", jsonStr.slice(0, 400));
+      return { ok: false, error: "Resposta da IA com formato inválido. Tente novamente." };
+    }
     return { ok: true, revisao };
   } catch (e: any) {
     return { ok: false, error: e?.message ?? "Erro ao revisar treino." };
