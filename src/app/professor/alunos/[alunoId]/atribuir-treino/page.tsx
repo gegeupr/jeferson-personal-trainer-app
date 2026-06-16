@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { supabase } from '@/utils/supabase-browser';
 import Link from 'next/link';
-import { atribuirTreinoAoAluno } from '@/app/actions/treinos';
+import { atribuirTreinoAoAluno, duplicarTreinoParaAluno } from '@/app/actions/treinos';
 
 interface PlanoTreino {
   id: string;
@@ -122,6 +122,41 @@ export default function AtribuirTreinoPage() {
     });
   };
 
+  const handleDuplicarTreino = (treino: PlanoTreino) => {
+    showConfirm(
+      `Criar uma cópia de "${treino.nome}" para ${alunoProfile?.nome_completo || 'este aluno'}? O original permanece intacto.`,
+      async () => {
+        setIsSubmitting(true);
+        setError(null);
+        try {
+          const { data: auth } = await supabase.auth.getUser();
+          const profId = auth?.user?.id;
+          if (!profId) throw new Error('Sessão expirada. Faça login novamente.');
+
+          const result = await duplicarTreinoParaAluno(treino.id, alunoId, profId);
+          if (!result.ok) throw new Error(result.error);
+
+          setPlanosTreino((prev) => [
+            ...prev,
+            {
+              id: result.novoTreinoId,
+              nome: result.nome,
+              descricao: treino.descricao,
+              aluno_id: alunoId,
+              tipo_treino: treino.tipo_treino,
+              gerado_por_ia: treino.gerado_por_ia,
+            },
+          ]);
+          pushToast(`Cópia criada: "${result.nome}"`, 'ok');
+        } catch (err: any) {
+          setError('Erro ao duplicar treino: ' + err.message);
+        } finally {
+          setIsSubmitting(false);
+        }
+      }
+    );
+  };
+
   const alunoNome = alunoProfile?.nome_completo || 'Aluno';
 
   if (loading) {
@@ -200,13 +235,21 @@ export default function AtribuirTreinoPage() {
                     >
                       Desatribuir
                     </button>
+                  ) : treino.aluno_id !== null ? (
+                    <button
+                      onClick={() => handleDuplicarTreino(treino)}
+                      disabled={isSubmitting}
+                      className="rounded-xl border border-white/15 bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-white/70 hover:bg-white/10 disabled:opacity-40 transition-colors"
+                    >
+                      Duplicar para este aluno
+                    </button>
                   ) : (
                     <button
                       onClick={() => handleAtribuirTreino(treino.id)}
-                      disabled={isSubmitting || treino.aluno_id !== null}
-                      className="rounded-xl bg-white px-4 py-1.5 text-xs font-semibold text-black hover:bg-white/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      disabled={isSubmitting}
+                      className="rounded-xl bg-white px-4 py-1.5 text-xs font-semibold text-black hover:bg-white/90 disabled:opacity-40 transition-colors"
                     >
-                      {treino.aluno_id ? 'Atribuído a outro' : 'Atribuir'}
+                      Atribuir
                     </button>
                   )}
                 </div>
