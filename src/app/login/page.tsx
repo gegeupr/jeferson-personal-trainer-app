@@ -276,7 +276,7 @@ function LoginInner() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] flex flex-col md:flex-row">
+    <main className="min-h-screen bg-black flex flex-col md:flex-row">
       {/* Vídeo — topo no mobile, lateral esquerda no desktop */}
       <div className="relative h-[35vh] shrink-0 overflow-hidden md:h-screen md:w-[55%]">
         <video
@@ -288,11 +288,13 @@ function LoginInner() {
           playsInline
           preload="auto"
         />
+        {/* Fade lateral — desktop only */}
+        <div className="pointer-events-none absolute inset-y-0 right-0 hidden md:block w-1/4 bg-gradient-to-r from-transparent to-black" />
       </div>
 
       {/* Formulário */}
       <div className="flex flex-1 items-center justify-center overflow-y-auto p-4 md:p-8">
-      <div className="w-full max-w-sm rounded-2xl border border-white/8 bg-white/[0.03] p-8 shadow-2xl backdrop-blur">
+      <div className="w-full max-w-sm rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8 shadow-2xl backdrop-blur">
         <div className="text-center">
           <div className="mx-auto hidden md:flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-black text-2xl font-extrabold">
             M
