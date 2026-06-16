@@ -102,31 +102,20 @@ export default function AtribuirTreinoPage() {
     });
   };
 
-  const handleDeleteTreino = (treino: PlanoTreino) => {
-    showConfirm(`Excluir o treino "${treino.nome}"? Esta ação não pode ser desfeita.`, async () => {
+  const handleDesatribuirTreino = (treino: PlanoTreino) => {
+    showConfirm(`Remover "${treino.nome}" deste aluno? O treino continua na sua biblioteca.`, async () => {
       setIsSubmitting(true);
       setError(null);
       try {
-        const { data: rotinas } = await supabase
-          .from('rotinas_diarias')
-          .select('id')
-          .eq('plano_id', treino.id);
-
-        const rotinaIds = (rotinas || []).map((r) => r.id);
-
-        if (rotinaIds.length > 0) {
-          await supabase.from('treino_exercicios').delete().in('rotina_id', rotinaIds);
-        }
-
-        await supabase.from('rotinas_diarias').delete().eq('plano_id', treino.id);
-
-        const { error: delErr } = await supabase.from('treinos').delete().eq('id', treino.id);
-        if (delErr) throw delErr;
-
-        setPlanosTreino((prev) => prev.filter((t) => t.id !== treino.id));
-        pushToast('Treino excluído.', 'ok');
+        const { error: updErr } = await supabase
+          .from('treinos')
+          .update({ aluno_id: null })
+          .eq('id', treino.id);
+        if (updErr) throw updErr;
+        setPlanosTreino((prev) => prev.map((t) => t.id === treino.id ? { ...t, aluno_id: null } : t));
+        pushToast('Treino removido do aluno.', 'ok');
       } catch (err: any) {
-        setError('Erro ao excluir treino: ' + err.message);
+        setError('Erro ao desatribuir treino: ' + err.message);
       } finally {
         setIsSubmitting(false);
       }
@@ -203,20 +192,23 @@ export default function AtribuirTreinoPage() {
                   >
                     Ver
                   </Link>
-                  <button
-                    onClick={() => handleAtribuirTreino(treino.id)}
-                    disabled={isSubmitting || treino.aluno_id !== null}
-                    className="rounded-xl bg-white px-4 py-1.5 text-xs font-semibold text-black hover:bg-white/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                  >
-                    {treino.aluno_id ? 'Atribuído' : 'Atribuir'}
-                  </button>
-                  <button
-                    onClick={() => handleDeleteTreino(treino)}
-                    disabled={isSubmitting}
-                    className="rounded-xl border border-red-400/20 bg-red-400/10 px-3 py-1.5 text-xs font-medium text-red-300 hover:bg-red-400/15 disabled:opacity-40 transition-colors"
-                  >
-                    Excluir
-                  </button>
+                  {treino.aluno_id === alunoId ? (
+                    <button
+                      onClick={() => handleDesatribuirTreino(treino)}
+                      disabled={isSubmitting}
+                      className="rounded-xl border border-white/15 bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-white/50 hover:bg-white/10 disabled:opacity-40 transition-colors"
+                    >
+                      Desatribuir
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleAtribuirTreino(treino.id)}
+                      disabled={isSubmitting || treino.aluno_id !== null}
+                      className="rounded-xl bg-white px-4 py-1.5 text-xs font-semibold text-black hover:bg-white/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    >
+                      {treino.aluno_id ? 'Atribuído a outro' : 'Atribuir'}
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
