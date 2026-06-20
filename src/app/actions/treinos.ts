@@ -1,7 +1,15 @@
 "use server";
 
 import { supabaseAdmin } from "@/utils/supabaseAdmin";
+import { createSupabaseServer } from "@/utils/supabase-server";
 import { criarNotificacao } from "@/lib/criarNotificacao";
+
+async function assertUserId(expectedId: string): Promise<true | { ok: false; error: string }> {
+  const supabase = await createSupabaseServer();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user || user.id !== expectedId) return { ok: false, error: "Não autorizado." };
+  return true;
+}
 
 export type AtribuirTreinoResult =
   | { ok: true }
@@ -12,6 +20,9 @@ export async function atribuirTreinoAoAluno(
   alunoId: string,
   profId: string
 ): Promise<AtribuirTreinoResult> {
+  const auth = await assertUserId(profId);
+  if (auth !== true) return auth;
+
   const { error: updErr } = await supabaseAdmin
     .from("treinos")
     .update({ aluno_id: alunoId })
@@ -46,6 +57,9 @@ export async function duplicarTreinoParaAluno(
   alunoId: string,
   profId: string
 ): Promise<DuplicarTreinoResult> {
+  const auth = await assertUserId(profId);
+  if (auth !== true) return auth;
+
   try {
     const [origemResult, alunoResult] = await Promise.all([
       supabaseAdmin

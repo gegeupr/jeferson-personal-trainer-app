@@ -1,9 +1,17 @@
 "use server";
 // v2 — prompt com guias de grupos musculares e regras entre dias
 import { supabaseAdmin } from "@/utils/supabaseAdmin";
+import { createSupabaseServer } from "@/utils/supabase-server";
 import Anthropic from "@anthropic-ai/sdk";
 import { verificarEIncrementarUsoIA } from "@/lib/verificarLimiteIA";
 import { criarNotificacao } from "@/lib/criarNotificacao";
+
+async function assertUserId(expectedId: string): Promise<true | { ok: false; error: string }> {
+  const supabase = await createSupabaseServer();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user || user.id !== expectedId) return { ok: false, error: "Não autorizado." };
+  return true;
+}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -335,6 +343,9 @@ export async function gerarTreinoComIA(
   profId: string,
   config: ConfigTreino
 ): Promise<GerarTreinoResult> {
+  const auth = await assertUserId(profId);
+  if (auth !== true) return auth;
+
   try {
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) return { ok: false, error: "ANTHROPIC_API_KEY não configurado." };
@@ -797,6 +808,9 @@ export async function gerarTreinoModeloComIA(
   profId: string,
   config: ConfigTreino
 ): Promise<GerarTreinoResult> {
+  const auth = await assertUserId(profId);
+  if (auth !== true) return auth;
+
   try {
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) return { ok: false, error: "ANTHROPIC_API_KEY não configurado." };
@@ -1230,6 +1244,9 @@ export async function revisarTreinoComIA(
   treinoId: string,
   profId: string
 ): Promise<RevisarTreinoResult> {
+  const auth = await assertUserId(profId);
+  if (auth !== true) return auth;
+
   try {
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) return { ok: false, error: "ANTHROPIC_API_KEY não configurado." };
