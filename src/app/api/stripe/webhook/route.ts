@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { Resend } from "resend";
 
 export const runtime = "nodejs";
 
@@ -147,6 +148,61 @@ export async function POST(req: Request) {
             .from("professor_assinaturas")
             .update({ status: "past_due" as ProfStatus })
             .eq("stripe_subscription_id", subId);
+
+          // Notificar professor por email (best-effort)
+          try {
+            const resendKey = process.env.RESEND_API_KEY;
+            if (resendKey) {
+              const { data: assinData } = await admin
+                .from("professor_assinaturas")
+                .select("professor_id")
+                .eq("stripe_subscription_id", subId)
+                .maybeSingle();
+
+              if (assinData?.professor_id) {
+                const { data: userData } = await admin.auth.admin.getUserById(
+                  assinData.professor_id
+                );
+                const email = userData?.user?.email;
+                const { data: profileData } = await admin
+                  .from("profiles")
+                  .select("nome_completo")
+                  .eq("id", assinData.professor_id)
+                  .maybeSingle();
+
+                if (email) {
+                  const resend = new Resend(resendKey);
+                  const siteUrl =
+                    process.env.NEXT_PUBLIC_SITE_URL ||
+                    "https://www.motionpersonal.com.br";
+                  const nome = profileData?.nome_completo || "Professor";
+
+                  await resend.emails.send({
+                    from: "Motion <noreply@motionpersonal.com.br>",
+                    to: email,
+                    subject: "⚠️ Pagamento não processado — Motion",
+                    html: `
+                      <div style="font-family:sans-serif;max-width:480px;margin:0 auto;background:#0a0a0a;color:#fff;padding:32px;border-radius:12px">
+                        <h2 style="margin:0 0 8px">⚠️ Não conseguimos processar seu pagamento</h2>
+                        <p style="color:#aaa;margin:0 0 24px">Olá, ${nome}.</p>
+                        <p>Houve uma falha ao cobrar sua assinatura do <strong>Plano Professor — R$ 59,90/mês</strong>.</p>
+                        <p style="color:#aaa">Isso pode ter acontecido por saldo insuficiente, cartão expirado ou bloqueio do banco.</p>
+                        <p style="color:#f87171;font-weight:600;margin-top:16px">Seu acesso à plataforma foi suspenso até a regularização.</p>
+                        <hr style="border-color:#333;margin:24px 0"/>
+                        <p>Para reativar sua conta, acesse a plataforma e atualize seu método de pagamento:</p>
+                        <a href="${siteUrl}/professor/pricing" style="display:inline-block;margin-top:12px;background:#fff;color:#000;padding:10px 20px;border-radius:8px;font-weight:700;text-decoration:none">
+                          Regularizar pagamento
+                        </a>
+                        <p style="color:#555;font-size:12px;margin-top:24px">Motion · Sistema para Personal Trainers</p>
+                      </div>
+                    `,
+                  });
+                }
+              }
+            }
+          } catch {
+            // email é best-effort
+          }
         }
         break;
       }
