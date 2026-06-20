@@ -47,3 +47,11 @@ next-env.d.ts
 .mcp.json
 
 .vercel
+
+# Supabase temp
+supabase/.temp/
+
+# Logs e arquivos temporários do sistema
+*.log
+ANALISE_COMPLETA_MOTION.md
+C\357\200\272*
