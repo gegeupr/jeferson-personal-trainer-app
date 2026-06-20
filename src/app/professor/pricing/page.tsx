@@ -56,13 +56,38 @@ export default function ProfessorPricingPage() {
     }
   }
 
+  const isActive = status === "active";
   const isPastDue = status === "past_due";
 
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center px-4 py-16">
       <div className="max-w-md w-full rounded-2xl border border-white/8 bg-white/[0.03] p-8 text-center">
 
-        {isPastDue ? (
+        {isActive ? (
+          /* ── ASSINATURA ATIVA ── */
+          <>
+            <div className="mb-6">
+              <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 text-white/70 text-sm font-medium px-4 py-2 rounded-full mb-4">
+                <span className="w-2 h-2 rounded-full bg-green-400 shrink-0" />
+                Assinatura ativa
+              </div>
+              <h1 className="text-2xl font-bold mb-2">Plano Professor</h1>
+              <p className="text-white/60 text-sm leading-relaxed">
+                Gerencie sua assinatura, atualize o método de pagamento ou cancele quando quiser pelo painel seguro do Stripe.
+              </p>
+            </div>
+
+            <div className="bg-white/[0.03] border border-white/8 rounded-xl p-4 mb-6 text-left text-sm text-white/60 space-y-2">
+              <p className="font-medium text-white/80">No painel você pode:</p>
+              <ul className="mt-1 space-y-1 list-disc list-inside">
+                <li>Cancelar ou pausar a assinatura</li>
+                <li>Atualizar cartão de crédito</li>
+                <li>Baixar faturas e recibos</li>
+              </ul>
+            </div>
+          </>
+        ) : isPastDue ? (
+          /* ── PAGAMENTO FALHOU ── */
           <>
             <div className="mb-6">
               <div className="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium px-4 py-2 rounded-full mb-4">
@@ -85,6 +110,7 @@ export default function ProfessorPricingPage() {
             </div>
           </>
         ) : (
+          /* ── NOVO / TRIAL EXPIRADO ── */
           <>
             <h1 className="text-3xl font-bold mb-2">Plano Professor</h1>
             <p className="text-white/60 mb-6">
@@ -113,13 +139,13 @@ export default function ProfessorPricingPage() {
         )}
 
         {!loadingStatus && (
-          isPastDue ? (
+          isActive || isPastDue ? (
             <button
               onClick={abrirPortal}
               disabled={loading}
               className="w-full bg-white hover:bg-white/90 disabled:opacity-60 text-black font-bold py-3 rounded-xl transition"
             >
-              {loading ? "Redirecionando…" : "Atualizar método de pagamento"}
+              {loading ? "Redirecionando…" : isActive ? "Gerenciar assinatura" : "Atualizar método de pagamento"}
             </button>
           ) : (
             <button
