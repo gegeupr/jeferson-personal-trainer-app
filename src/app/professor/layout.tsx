@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { NotificationBell } from "@/components/NotificationBell";
 import { AgendaBadge } from "@/components/AgendaBadge";
+import { supabase } from "@/utils/supabase-browser";
 
 function IconHome() {
   return (
@@ -92,6 +94,33 @@ const NAV = [
 
 export default function ProfessorLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  // Guard client-side: se assinatura não ativa/trial, força pricing
+  useEffect(() => {
+    if (pathname.startsWith("/professor/pricing")) return;
+    (async () => {
+      const { data: auth } = await supabase.auth.getUser();
+      if (!auth.user) return;
+      const { data: assin } = await supabase
+        .from("professor_assinaturas")
+        .select("status, trial_ends_at")
+        .eq("professor_id", auth.user.id)
+        .maybeSingle();
+      const agora = Date.now();
+      const trialValido =
+        assin?.status === "trial" &&
+        !!assin.trial_ends_at &&
+        new Date(assin.trial_ends_at).getTime() > agora;
+      const ativo = assin?.status === "active";
+      if (!ativo && !trialValido) router.replace("/professor/pricing");
+    })();
+  }, [pathname, router]);
+
+  // Na página de pricing não renderiza sidebar (professor está bloqueado)
+  if (pathname.startsWith("/professor/pricing")) {
+    return <>{children}</>;
+  }
 
   function active(href: string) {
     if (href === "/professor/dashboard") return pathname === href;
