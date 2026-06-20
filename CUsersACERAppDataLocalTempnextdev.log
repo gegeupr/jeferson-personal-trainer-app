@@ -1,0 +1,28 @@
+
+> site-personal-trainer@0.1.0 dev
+> next dev --turbopack
+
+   ▲ Next.js 15.5.9 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://54.232.189.113:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ○ Compiling middleware ...
+ ✓ Compiled middleware in 3.7s
+ ✓ Ready in 11.1s
+ ○ Compiling / ...
+ ✓ Compiled / in 11.2s
+ GET / 200 in 12250ms
+ ⚠ The "images.domains" configuration is deprecated. Please use "images.remotePatterns" configuration instead.
+ GET / 200 in 769ms
+ GET / 200 in 368ms
+ GET / 200 in 1153ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\ACER\MeusProjetos\personal\site-personal-trainer\.next\server\app\page\app-build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\ACER\\MeusProjetos\\personal\\site-personal-trainer\\.next\\server\\app\\page\\app-build-manifest.json'
+}
+ ○ Compiling /_error ...
+[?25h
