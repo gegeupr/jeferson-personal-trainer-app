@@ -44,17 +44,10 @@ export default function HomePage() {
               </span>
             </Link>
 
-            {/* Desktop nav */}
             <nav className="hidden items-center gap-6 text-sm text-white/70 md:flex">
-              <a href="#como-funciona" className="hover:text-white">
-                Como funciona
-              </a>
-              <a href="#recursos" className="hover:text-white">
-                Recursos
-              </a>
-              <a href="#precos" className="hover:text-white">
-                Preços
-              </a>
+              <a href="#recursos" className="hover:text-white">Recursos</a>
+              <a href="#como-funciona" className="hover:text-white">Como funciona</a>
+              <a href="#precos" className="hover:text-white">Preços</a>
             </nav>
 
             <div className="flex items-center gap-2">
@@ -75,50 +68,27 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Mobile dropdown */}
-          {mobileMenuOpen ? (
+          {mobileMenuOpen && (
             <div className="md:hidden">
               <div className="mx-auto max-w-6xl px-4 pb-4">
                 <div className="rounded-2xl border border-white/10 bg-black/60 p-3 backdrop-blur">
                   <div className="flex flex-col gap-2 text-sm text-white/80">
-                    <a
-                      href="#como-funciona"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="rounded-xl px-3 py-2 hover:bg-white/10"
-                    >
-                      Como funciona
-                    </a>
-                    <a
-                      href="#recursos"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="rounded-xl px-3 py-2 hover:bg-white/10"
-                    >
-                      Recursos
-                    </a>
-                    <a
-                      href="#precos"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="rounded-xl px-3 py-2 hover:bg-white/10"
-                    >
-                      Preços
-                    </a>
+                    <a href="#recursos" onClick={() => setMobileMenuOpen(false)} className="rounded-xl px-3 py-2 hover:bg-white/10">Recursos</a>
+                    <a href="#como-funciona" onClick={() => setMobileMenuOpen(false)} className="rounded-xl px-3 py-2 hover:bg-white/10">Como funciona</a>
+                    <a href="#precos" onClick={() => setMobileMenuOpen(false)} className="rounded-xl px-3 py-2 hover:bg-white/10">Preços</a>
                     <div className="my-2 h-px w-full bg-white/10" />
-                    <Link
-                      href="/login"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="rounded-xl bg-white/5 px-3 py-2 font-semibold hover:bg-white/10"
-                    >
+                    <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="rounded-xl bg-white/5 px-3 py-2 font-semibold hover:bg-white/10">
                       Entrar
                     </Link>
                   </div>
                 </div>
               </div>
             </div>
-          ) : null}
+          )}
         </div>
       </header>
 
-      {/* Hero — capa full-screen */}
+      {/* Hero */}
       <section className="relative h-[45vh] md:h-screen w-full overflow-hidden bg-black">
         <video
           className="absolute inset-0 h-full w-full object-contain md:object-cover object-center"
@@ -134,7 +104,7 @@ export default function HomePage() {
         <div className="relative z-10 h-full w-full pt-10 md:pt-24" />
       </section>
 
-      {/* Bloco de texto — entra por cima da capa ao rolar */}
+      {/* Bloco de texto hero */}
       <section className="relative z-20 -mt-12 sm:-mt-28 md:-mt-36">
         <div className="mx-auto max-w-6xl px-4">
           <div className="sticky top-16 md:top-20">
@@ -142,19 +112,19 @@ export default function HomePage() {
               <div className="max-w-2xl">
                 <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
                   <span className="h-2 w-2 rounded-full bg-white" />
-                  Geração de treinos com IA · Teste grátis 7 dias
+                  Gestão completa para personal trainers · 7 dias grátis
                 </div>
 
                 <h1 className="mt-4 text-3xl font-extrabold leading-tight tracking-tight md:text-5xl">
-                  Treinos personalizados com IA,{" "}
-                  <span className="text-white">entregues pelo seu nome</span>
+                  O que seu aluno conquista{" "}
+                  <span className="text-white">depende do que você decide hoje.</span>
                 </h1>
 
                 <p className="mt-3 text-sm leading-relaxed text-white/75 md:text-base">
-                  O Motion usa Claude, a IA da Anthropic, para montar planos de
-                  treino periodizados lendo a anamnese completa do aluno, fotos
-                  de progresso e exames médicos — tudo com a sua identidade, sem
-                  intermediários.
+                  Motion reúne anamnese, exames médicos, fotos de progresso e histórico
+                  de evolução para que você tome a decisão mais acertada de periodização —
+                  com a agilidade da IA mais avançada do mercado ao seu lado.
+                  Não é a IA que prescreve. É você, com todas as informações.
                 </p>
 
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row">
@@ -173,9 +143,9 @@ export default function HomePage() {
                 </div>
 
                 <div className="mt-7 grid grid-cols-3 gap-3 text-center">
-                  <Stat label="IA" value="Claude" />
+                  <Stat label="Decisão" value="Baseada em dados" />
                   <Stat label="Alunos" value="Ilimitados" />
-                  <Stat label="Acesso" value="Controlado" />
+                  <Stat label="Dados" value="Protegidos" />
                 </div>
 
                 <p className="mt-5 text-xs text-white/45">
@@ -191,28 +161,43 @@ export default function HomePage() {
       {/* Recursos */}
       <section id="recursos" className="mx-auto max-w-6xl px-4 py-14">
         <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
-          Ferramentas que economizam horas por semana
+          Tudo que você precisa para entregar resultado
         </h2>
         <p className="mt-2 max-w-2xl text-white/70">
-          Da anamnese ao treino pronto: a IA faz o trabalho pesado enquanto
-          você mantém o controle total sobre cada plano.
+          Do primeiro atendimento ao acompanhamento da evolução — o Motion centraliza
+          cada ferramenta que um personal trainer profissional precisa.
         </p>
 
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           <Card
-            title="Treinos gerados por IA"
-            desc="A IA da Anthropic lê a anamnese, histórico e fotos do aluno e monta um plano completo com rotinas separadas por dia — você revisa e ajusta antes de salvar."
-            badge="Powered by Claude"
+            badge="Análise completa"
+            title="Prescrição baseada em dados"
+            desc="A IA lê anamnese, exames médicos e fotos do aluno e sugere a periodização ideal para o objetivo dele. Você analisa, ajusta e bate o martelo — com a segurança de quem decidiu com todas as informações na mão."
           />
           <Card
-            title="Modelos reutilizáveis"
-            desc="Crie um treino para idoso hipertenso, gestante ou atleta de alto rendimento e atribua a quantos alunos quiser com um clique."
-            badge="Templates IA"
+            badge="Catálogo completo"
+            title="Biblioteca de exercícios"
+            desc="Acesso a uma biblioteca rica de exercícios categorizados por grupo muscular, equipamento e nível. Monte treinos precisos ou deixe a IA sugerir — e adicione exercícios personalizados quando precisar."
           />
           <Card
-            title="Controle total"
-            desc="Edite qualquer exercício do treino gerado — séries, reps, descanso, observações. Aluno só acessa quando você ativa."
-            badge="Você no comando"
+            badge="Controle total"
+            title="Alunos, agenda e financeiro"
+            desc="Gerencie todos os seus alunos, organize sua agenda de atendimentos e acompanhe os pagamentos em um só lugar. Menos tempo em planilha, mais tempo com quem importa."
+          />
+          <Card
+            badge="Sua marca"
+            title="Sua página de vendas"
+            desc="Cada professor recebe uma página pública personalizada com seu perfil, serviços e avaliações reais dos alunos. Compartilhe o link e conquiste novos clientes sem depender de redes sociais."
+          />
+          <Card
+            badge="Dados protegidos"
+            title="Privacidade e segurança"
+            desc="Fotos, exames e dados de saúde dos seus alunos ficam protegidos com segurança de nível bancário. Você controla exatamente o que cada aluno acessa — nenhuma informação sensível exposta."
+          />
+          <Card
+            badge="Sem taxas"
+            title="Pix direto, sem comissão"
+            desc="Você define seu preço e recebe direto do aluno via Pix — sem intermediário, sem porcentagem, sem taxa sobre o que é seu. O Motion cobra apenas a mensalidade fixa do professor."
           />
         </div>
       </section>
@@ -223,23 +208,43 @@ export default function HomePage() {
           <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
             Como funciona
           </h2>
+          <p className="mt-2 max-w-2xl text-white/70">
+            Do cadastro do aluno à entrega do treino — um fluxo simples que respeita
+            o seu tempo e a sua metodologia.
+          </p>
 
           <div className="mt-8 grid gap-4 md:grid-cols-4">
-            <Step n="01" title="Crie sua conta" desc="7 dias grátis, depois R$ 59,90/mês." />
-            <Step n="02" title="Cadastre seus alunos" desc="Anamnese, histórico e fotos de progresso em um só lugar." />
-            <Step n="03" title="Gere o treino com IA" desc="Claude lê o perfil do aluno e monta o plano. Você revisa e aprova." />
-            <Step n="04" title="Atribua com um clique" desc="Aluno recebe o plano e acessa via app." />
+            <Step
+              n="01"
+              title="Perfil completo do aluno"
+              desc="Cadastre anamnese, histórico, exames médicos e fotos de progresso. Tudo em um único perfil."
+            />
+            <Step
+              n="02"
+              title="IA analisa cada dado"
+              desc="A inteligência artificial lê o perfil completo e sugere a periodização mais adequada ao objetivo do aluno."
+            />
+            <Step
+              n="03"
+              title="Você decide e aprova"
+              desc="Revisa, ajusta exercícios, séries e cargas — e libera o treino quando estiver perfeito. A decisão é sempre sua."
+            />
+            <Step
+              n="04"
+              title="Acompanhe a evolução"
+              desc="Aluno acessa o treino pelo app, você acompanha a progressão, organiza a agenda e controla os recebimentos."
+            />
           </div>
 
           <div className="mt-10 rounded-2xl border border-white/8 bg-white/[0.03] p-6 md:p-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-sm font-semibold text-white/80">
-                  Você cobra do jeito que preferir
+                  Seu negócio, do seu jeito
                 </p>
                 <p className="mt-1 text-white/70">
-                  Pix direto entre você e o aluno — sem comissão sobre os seus
-                  alunos. O Motion cuida da organização, treinos e acesso.
+                  Defina seus preços, receba via Pix sem taxa e controle o acesso
+                  de cada aluno. O Motion cuida da organização — você cuida dos resultados.
                 </p>
               </div>
               <Link
@@ -260,7 +265,7 @@ export default function HomePage() {
             Simples. Sem surpresas.
           </h2>
           <p className="mt-2 text-white/70">
-            Um plano para você começar hoje e escalar no seu ritmo.
+            Um plano completo para você começar hoje e crescer sem limite.
           </p>
 
           <div className="mt-8 flex flex-col gap-8 md:flex-row md:items-start">
@@ -278,15 +283,18 @@ export default function HomePage() {
 
               <ul className="mt-6 space-y-3 text-sm text-white/70">
                 {[
-                  "Geração de treinos com IA (Claude · Anthropic)",
-                  "Treinos-modelo reutilizáveis por perfil de aluno",
+                  "Periodização com análise de anamnese, exames e fotos",
+                  "IA mais avançada do mercado (Claude · Anthropic)",
+                  "Biblioteca completa de exercícios",
                   "Alunos ilimitados",
-                  "Anamnese, fotos de progresso e exames",
+                  "Agenda e controle financeiro integrados",
+                  "Página de vendas personalizada com avaliações",
                   "Controle de acesso por aluno",
-                  "Perfil público do professor",
+                  "Pix direto sem taxas ou comissões",
+                  "Dados protegidos com segurança e privacidade",
                 ].map((feature) => (
-                  <li key={feature} className="flex items-center gap-2">
-                    <span className="text-xs text-white">✓</span>
+                  <li key={feature} className="flex items-start gap-2">
+                    <span className="mt-0.5 text-xs text-white shrink-0">✓</span>
                     {feature}
                   </li>
                 ))}
@@ -303,19 +311,27 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="flex max-w-xs flex-col gap-4 pt-2 text-sm text-white/60 md:pt-6">
-              <p className="font-medium text-white/80">
-                O aluno paga direto com você
-              </p>
-              <p>
-                Você define o valor e recebe via Pix. O Motion cuida da
-                organização, treinos e acesso — sem comissão sobre os seus
-                alunos.
-              </p>
-              <p>
-                Você tem controle total: ativa, pausa ou remove o acesso do
-                aluno quando quiser.
-              </p>
+            <div className="flex max-w-xs flex-col gap-5 pt-2 text-sm text-white/60 md:pt-6">
+              <div>
+                <p className="font-medium text-white/80">Você recebe. Sem intermediário.</p>
+                <p className="mt-1">
+                  Defina o valor que quiser, receba via Pix diretamente do aluno.
+                  Nenhuma comissão sobre o que é seu.
+                </p>
+              </div>
+              <div>
+                <p className="font-medium text-white/80">Sua metodologia, preservada.</p>
+                <p className="mt-1">
+                  A IA sugere, você decide. Edite qualquer exercício, série ou carga
+                  antes de liberar para o aluno.
+                </p>
+              </div>
+              <div>
+                <p className="font-medium text-white/80">Controle total do acesso.</p>
+                <p className="mt-1">
+                  Ative, pause ou remova o acesso de qualquer aluno quando quiser.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -334,19 +350,13 @@ export default function HomePage() {
             />
             <p className="text-sm text-white/70">
               © {new Date().getFullYear()}{" "}
-              <span className="uppercase tracking-[0.22em] text-white">
-                MOTION
-              </span>
+              <span className="uppercase tracking-[0.22em] text-white">MOTION</span>
               . Todos os direitos reservados.
             </p>
           </div>
           <div className="flex gap-4 text-sm text-white/60">
-            <Link href="/termos" className="hover:text-white">
-              Termos
-            </Link>
-            <Link href="/privacidade" className="hover:text-white">
-              Privacidade
-            </Link>
+            <Link href="/termos" className="hover:text-white">Termos</Link>
+            <Link href="/privacidade" className="hover:text-white">Privacidade</Link>
           </div>
         </div>
       </footer>
@@ -363,15 +373,7 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function Card({
-  title,
-  desc,
-  badge,
-}: {
-  title: string;
-  desc: string;
-  badge: string;
-}) {
+function Card({ title, desc, badge }: { title: string; desc: string; badge: string }) {
   return (
     <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-6">
       <div className="inline-flex items-center rounded-full border border-white/10 bg-black/40 px-3 py-1 text-xs text-white/70">
