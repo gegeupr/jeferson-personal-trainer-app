@@ -202,6 +202,13 @@ function LoginInner() {
         if (!user) throw new Error("Falha ao autenticar. Tente novamente.");
 
         await tryLinkAlunoToProfessorIfNeeded();
+
+        const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+        if (aal?.nextLevel === "aal2" && aal.currentLevel !== "aal2") {
+          router.push("/login/mfa");
+          return;
+        }
+
         router.push("/dashboard");
         return;
       }

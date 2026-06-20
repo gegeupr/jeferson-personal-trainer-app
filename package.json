@@ -19,6 +19,7 @@
     "next-cloudinary": "^6.16.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "resend": "^6.14.0",
     "stripe": "^18.3.0"
   },
   "devDependencies": {
