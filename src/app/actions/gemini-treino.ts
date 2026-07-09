@@ -641,7 +641,7 @@ ATENÇÃO: O exemplo acima mostra 2 rotinas, mas você DEVE criar EXATAMENTE ${c
     // 5. Chamar Claude
     const client = new Anthropic({ apiKey });
     const response = await client.messages.create({
-      model: "claude-sonnet-4-6",
+      model: "claude-sonnet-5",
       max_tokens: 8192,
       system:
         "Você é um personal trainer especializado em periodização. Responda SEMPRE com JSON puro e válido, sem texto adicional, sem markdown, sem explicações. Apenas o objeto JSON conforme solicitado.",
@@ -947,7 +947,7 @@ ATENÇÃO: O exemplo acima mostra 1 rotina, mas você DEVE criar EXATAMENTE ${co
 
     const client = new Anthropic({ apiKey });
     const response = await client.messages.create({
-      model: "claude-sonnet-4-6",
+      model: "claude-sonnet-5",
       max_tokens: 8192,
       system:
         "Você é um personal trainer especializado em periodização. Responda SEMPRE com JSON puro e válido, sem texto adicional, sem markdown, sem explicações. Apenas o objeto JSON conforme solicitado.",
@@ -1359,7 +1359,7 @@ Retorne SOMENTE o JSON, sem texto adicional.`;
     // 6. Chamar Claude
     const client = new Anthropic({ apiKey });
     const response = await client.messages.create({
-      model: "claude-sonnet-4-6",
+      model: "claude-sonnet-5",
       max_tokens: 4096,
       system: "Você é um personal trainer especializado. Responda SEMPRE com JSON puro e válido, sem texto adicional, sem markdown, sem blocos de código.",
       messages: [{ role: "user", content: prompt }],
