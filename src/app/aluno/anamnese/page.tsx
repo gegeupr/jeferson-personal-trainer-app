@@ -9,6 +9,9 @@ interface AnamneseData {
   id: string;
   aluno_id: string;
   data_preenchimento: string;
+  peso_kg: number | null;
+  altura_cm: number | null;
+  condicoes_saude: string[] | null;
   historico_saude_doencas: string | null;
   historico_lesoes_cirurgias: string | null;
   medicamentos_suplementos: string | null;
@@ -25,6 +28,21 @@ type FormData = Omit<AnamneseData, "id" | "aluno_id" | "data_preenchimento">;
 
 const inputClass = "mt-1.5 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-2.5 text-sm text-white outline-none focus:border-white/25 transition-colors";
 
+const CONDICOES_SAUDE: { value: string; label: string }[] = [
+  { value: "lesao_joelho", label: "Lesão no joelho" },
+  { value: "lesao_ombro", label: "Lesão no ombro" },
+  { value: "lesao_lombar", label: "Lesão lombar / hérnia de disco" },
+  { value: "lesao_cotovelo", label: "Lesão no cotovelo" },
+  { value: "lesao_punho", label: "Lesão no punho" },
+  { value: "lesao_tornozelo", label: "Lesão no tornozelo" },
+  { value: "lesao_quadril", label: "Lesão no quadril" },
+  { value: "hipertensao", label: "Hipertensão" },
+  { value: "diabetes", label: "Diabetes" },
+  { value: "cardiopatia", label: "Problema cardíaco" },
+  { value: "gravidez", label: "Gestante" },
+  { value: "asma", label: "Asma / problema respiratório" },
+];
+
 export default function MinhaAnamnesePage() {
   const router = useRouter();
   const [alunoId, setAlunoId] = useState<string | null>(null);
@@ -35,6 +53,9 @@ export default function MinhaAnamnesePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState<FormData>({
+    peso_kg: null,
+    altura_cm: null,
+    condicoes_saude: [],
     historico_saude_doencas: "",
     historico_lesoes_cirurgias: "",
     medicamentos_suplementos: "",
@@ -66,6 +87,9 @@ export default function MinhaAnamnesePage() {
       } else if (data) {
         setAnamnese(data as AnamneseData);
         setFormData({
+          peso_kg: data.peso_kg ?? null,
+          altura_cm: data.altura_cm ?? null,
+          condicoes_saude: data.condicoes_saude || [],
           historico_saude_doencas: data.historico_saude_doencas || "",
           historico_lesoes_cirurgias: data.historico_lesoes_cirurgias || "",
           medicamentos_suplementos: data.medicamentos_suplementos || "",
@@ -87,6 +111,22 @@ export default function MinhaAnamnesePage() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
+
+  function handleNumberChange(name: "peso_kg" | "altura_cm", value: string) {
+    setFormData((prev) => ({ ...prev, [name]: value === "" ? null : Number(value) }));
+  }
+
+  function toggleCondicao(value: string) {
+    setFormData((prev) => {
+      const atual = prev.condicoes_saude || [];
+      const novo = atual.includes(value) ? atual.filter((c) => c !== value) : [...atual, value];
+      return { ...prev, condicoes_saude: novo };
+    });
+  }
+
+  const imc = formData.peso_kg && formData.altura_cm
+    ? (formData.peso_kg / ((formData.altura_cm / 100) ** 2)).toFixed(1)
+    : null;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -146,16 +186,56 @@ export default function MinhaAnamnesePage() {
         )}
 
         <form onSubmit={handleSubmit} className="rounded-2xl border border-white/8 bg-white/[0.03] p-6 space-y-5">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-sm text-white/60">Peso (kg)</label>
+              <input type="number" step="0.1" min="0" value={formData.peso_kg ?? ""} onChange={(e) => handleNumberChange("peso_kg", e.target.value)}
+                className={inputClass} placeholder="Ex: 72.5" />
+            </div>
+            <div>
+              <label className="text-sm text-white/60">Altura (cm)</label>
+              <input type="number" step="1" min="0" value={formData.altura_cm ?? ""} onChange={(e) => handleNumberChange("altura_cm", e.target.value)}
+                className={inputClass} placeholder="Ex: 175" />
+            </div>
+          </div>
+          {imc && (
+            <p className="text-xs text-white/40 -mt-3">IMC calculado: <span className="text-white/70 font-medium">{imc}</span></p>
+          )}
+
           <div>
-            <label className="text-sm text-white/60">Histórico de saúde e doenças</label>
-            <textarea name="historico_saude_doencas" rows={3} value={formData.historico_saude_doencas || ""} onChange={handleChange}
-              className={inputClass + " resize-none"} placeholder="Ex: Diabetes, hipertensão, problemas cardíacos…" />
+            <label className="text-sm text-white/60">Condições de saúde (marque as que se aplicam)</label>
+            <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {CONDICOES_SAUDE.map((c) => {
+                const marcado = (formData.condicoes_saude || []).includes(c.value);
+                return (
+                  <button
+                    key={c.value}
+                    type="button"
+                    onClick={() => toggleCondicao(c.value)}
+                    className={`rounded-xl border px-3 py-2 text-xs font-medium text-left transition-colors ${
+                      marcado
+                        ? "border-white/25 bg-white/10 text-white"
+                        : "border-white/10 bg-black/40 text-white/50 hover:bg-white/5"
+                    }`}
+                  >
+                    {marcado ? "✓ " : ""}{c.label}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-[11px] text-white/35 mt-1.5">Isso ajuda a IA a evitar exercícios contraindicados automaticamente.</p>
           </div>
 
           <div>
-            <label className="text-sm text-white/60">Histórico de lesões e cirurgias</label>
+            <label className="text-sm text-white/60">Histórico de saúde e doenças (detalhe, se necessário)</label>
+            <textarea name="historico_saude_doencas" rows={3} value={formData.historico_saude_doencas || ""} onChange={handleChange}
+              className={inputClass + " resize-none"} placeholder="Ex: Diabetes controlada com medicação desde 2020…" />
+          </div>
+
+          <div>
+            <label className="text-sm text-white/60">Histórico de lesões e cirurgias (detalhe, se necessário)</label>
             <textarea name="historico_lesoes_cirurgias" rows={3} value={formData.historico_lesoes_cirurgias || ""} onChange={handleChange}
-              className={inputClass + " resize-none"} placeholder="Ex: Cirurgia no joelho, dores lombares, tendinite…" />
+              className={inputClass + " resize-none"} placeholder="Ex: Cirurgia no joelho direito em 2022, ainda sinto desconforto em agachamento profundo…" />
           </div>
 
           <div>

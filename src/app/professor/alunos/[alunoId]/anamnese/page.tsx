@@ -9,6 +9,9 @@ interface Anamnese {
   id: string;
   aluno_id: string;
   data_preenchimento: string;
+  peso_kg: number | null;
+  altura_cm: number | null;
+  condicoes_saude: string[] | null;
   historico_saude_doencas: string | null;
   historico_lesoes_cirurgias: string | null;
   medicamentos_suplementos: string | null;
@@ -20,6 +23,21 @@ interface Anamnese {
   disponibilidade_treino: string | null;
   observacoes_gerais: string | null;
 }
+
+const LABEL_CONDICAO: Record<string, string> = {
+  lesao_joelho: "Lesão no joelho",
+  lesao_ombro: "Lesão no ombro",
+  lesao_lombar: "Lesão lombar / hérnia de disco",
+  lesao_cotovelo: "Lesão no cotovelo",
+  lesao_punho: "Lesão no punho",
+  lesao_tornozelo: "Lesão no tornozelo",
+  lesao_quadril: "Lesão no quadril",
+  hipertensao: "Hipertensão",
+  diabetes: "Diabetes",
+  cardiopatia: "Problema cardíaco",
+  gravidez: "Gestante",
+  asma: "Asma / problema respiratório",
+};
 
 interface AlunoProfile {
   nome_completo: string | null;
@@ -136,6 +154,38 @@ export default function AnamneseAlunoPage() {
           </div>
         ) : (
           <div className="rounded-2xl border border-white/8 bg-white/[0.03] divide-y divide-white/8">
+            <div className="px-5 py-4 grid grid-cols-3 gap-4">
+              <div>
+                <p className="text-xs font-medium text-white/50 mb-1">Peso</p>
+                <p className="text-sm text-white/80">{anamneseData.peso_kg ? `${anamneseData.peso_kg} kg` : "—"}</p>
+              </div>
+              <div>
+                <p className="text-xs font-medium text-white/50 mb-1">Altura</p>
+                <p className="text-sm text-white/80">{anamneseData.altura_cm ? `${anamneseData.altura_cm} cm` : "—"}</p>
+              </div>
+              <div>
+                <p className="text-xs font-medium text-white/50 mb-1">IMC</p>
+                <p className="text-sm text-white/80">
+                  {anamneseData.peso_kg && anamneseData.altura_cm
+                    ? (anamneseData.peso_kg / ((anamneseData.altura_cm / 100) ** 2)).toFixed(1)
+                    : "—"}
+                </p>
+              </div>
+            </div>
+            <div className="px-5 py-4">
+              <p className="text-xs font-medium text-white/50 mb-2">Condições de saúde</p>
+              {anamneseData.condicoes_saude && anamneseData.condicoes_saude.length > 0 ? (
+                <div className="flex flex-wrap gap-1.5">
+                  {anamneseData.condicoes_saude.map((c) => (
+                    <span key={c} className="rounded-full border border-red-400/20 bg-red-400/10 px-2.5 py-1 text-xs text-red-300">
+                      {LABEL_CONDICAO[c] || c}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-white/40">Nenhuma condição marcada</p>
+              )}
+            </div>
             {CAMPOS.map(({ key, label }) => (
               <div key={key} className="px-5 py-4">
                 <p className="text-xs font-medium text-white/50 mb-1">{label}</p>

@@ -134,6 +134,13 @@ function normalizeImageMime(
 // Extrai keywords de contraindicação a partir do texto livre da anamnese
 function extrairContraindicacoesAnamnese(anamnese: Record<string, unknown> | null | undefined): string[] {
   if (!anamnese) return [];
+
+  // Sinal estruturado (checkboxes) é mais confiável que regex em texto livre —
+  // usa como base e complementa com o que o texto livre mencionar a mais.
+  const estruturado = Array.isArray(anamnese.condicoes_saude)
+    ? (anamnese.condicoes_saude as string[])
+    : [];
+
   const texto = [
     anamnese.historico_lesoes_cirurgias,
     anamnese.historico_saude_doencas,
@@ -147,9 +154,11 @@ function extrairContraindicacoesAnamnese(anamnese: Record<string, unknown> | nul
     [/cotovelo|epicondil/,                  "lesao_cotovelo"],
     [/hérnia|hernia/,                       "hernia_discal"],
     [/tornozelo/,                           "lesao_tornozelo"],
+    [/punho/,                               "lesao_punho"],
+    [/quadril/,                             "lesao_quadril"],
   ];
 
-  const resultado: string[] = [];
+  const resultado: string[] = [...estruturado];
   for (const [re, tag] of map) {
     if (re.test(texto) && !resultado.includes(tag)) resultado.push(tag);
   }
@@ -464,7 +473,7 @@ export async function gerarTreinoComIA(
       supabaseAdmin
         .from("anamneses")
         .select(
-          "objetivos_principais, nivel_atividade_fisica_atual, disponibilidade_treino, historico_saude_doencas, historico_lesoes_cirurgias, medicamentos_suplementos, restricoes_alimentares, alergias, observacoes_gerais"
+          "peso_kg, altura_cm, condicoes_saude, objetivos_principais, nivel_atividade_fisica_atual, disponibilidade_treino, historico_saude_doencas, historico_lesoes_cirurgias, medicamentos_suplementos, restricoes_alimentares, alergias, observacoes_gerais"
         )
         .eq("aluno_id", alunoId)
         .maybeSingle(),
@@ -532,8 +541,19 @@ export async function gerarTreinoComIA(
     }
 
     // 2. Montar textos para o prompt
+    const pesoKg = anamnese?.peso_kg as number | null | undefined;
+    const alturaCm = anamnese?.altura_cm as number | null | undefined;
+    const imc = pesoKg && alturaCm ? pesoKg / ((alturaCm / 100) ** 2) : null;
+    const condicoesSaude = Array.isArray(anamnese?.condicoes_saude)
+      ? (anamnese!.condicoes_saude as string[])
+      : [];
+
     const anamneseTexto = anamnese
       ? [
+          `Peso: ${pesoKg ? `${pesoKg} kg` : "Não informado"}`,
+          `Altura: ${alturaCm ? `${alturaCm} cm` : "Não informado"}`,
+          `IMC: ${imc ? imc.toFixed(1) : "Não calculável"}`,
+          `Condições de saúde marcadas: ${condicoesSaude.length > 0 ? condicoesSaude.join(", ") : "Nenhuma"}`,
           `Objetivos: ${anamnese.objetivos_principais || "Não informado"}`,
           `Nível atual: ${anamnese.nivel_atividade_fisica_atual || "Não informado"}`,
           `Disponibilidade: ${anamnese.disponibilidade_treino || "Não informado"}`,
