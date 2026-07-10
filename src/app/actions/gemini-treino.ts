@@ -189,56 +189,89 @@ function dedupPorBase(exercicios: any[]): any[] {
   return result;
 }
 
-type DiaFiltro = { label: string; patterns: string[]; outro_kws: string[] };
+type DiaFiltro = { label: string; categorias: string[] };
 
-const CORE_PATTERNS = new Set(['core_anti_extensao', 'core_rotacao']);
+// Normaliza QUALQUER grupo_muscular (granular antigo tipo "Peitoral maior",
+// ou amplo novo tipo "Peito") pra uma das categorias fixas abaixo. Isso é
+// mais confiável que depender de movement_pattern, que só está preenchido
+// pros ~640 exercícios curados originalmente — os ~2100 vindos do GIF usam
+// só grupo_muscular.
+function categoriaAmpla(grupoMuscular: string | null | undefined): string {
+  const g = (grupoMuscular ?? '').toLowerCase();
+  if (g.includes('peitoral') || g === 'peito') return 'Peito';
+  if (g.includes('dorsal') || g.includes('romboide') || g.includes('trapézio') || g.includes('lombar') || g.includes('eretor') || g === 'costas') return 'Costas';
+  if (g.includes('deltoide') || g === 'ombro' || g === 'ombros') return 'Ombro';
+  // "tríceps braquial" contém "braquial" — checar tríceps ANTES do bíceps
+  // pra não cair na categoria errada.
+  if (g.includes('tríceps')) return 'Tríceps';
+  if (g.includes('bíceps') || g.includes('braquial')) return 'Bíceps';
+  if (g.includes('glúteo')) return 'Glúteos';
+  if (g.includes('gastrocnêmio') || g.includes('sóleo') || g === 'panturrilha') return 'Panturrilha';
+  if (g.includes('quadríceps') || g.includes('posterior de coxa') || g.includes('adutor') || g === 'pernas') return 'Pernas';
+  if (g.includes('core') || g.includes('oblíquo') || g.includes('abdominal') || g.includes('abdome') || g === 'abdômen') return 'Abdômen';
+  if (g.includes('cardiorrespirat') || g === 'cardio') return 'Cardio';
+  if (g === 'mobilidade' || g === 'alongamento') return 'Mobilidade';
+  if (g === 'funcional') return 'Funcional';
+  return 'Outro';
+}
+
+const CORE_CATEGORIA = 'Abdômen';
 
 const SPLIT_MAP: Record<string, DiaFiltro[]> = {
   abcde: [
-    { label: 'Peito e Tríceps',                              patterns: ['empurrar_horizontal', 'extensao_cotovelo'],                       outro_kws: ['peitoral', 'tríceps'] },
-    { label: 'Costas e Bíceps',                              patterns: ['puxada_vertical', 'puxada_horizontal', 'flexao_cotovelo'],         outro_kws: ['costas', 'latíssimo', 'romboide', 'trapézio', 'bíceps'] },
-    { label: 'Bumbum e Posterior',                            patterns: ['dominante_quadril'],                                              outro_kws: ['glúteo médio', 'adutor'] },
-    { label: 'Coxa e Panturrilha',                           patterns: ['dominante_joelho'],                                               outro_kws: ['gastrocnêmio', 'sóleo', 'panturrilha'] },
-    { label: 'Ombros e Braços',                              patterns: ['empurrar_vertical', 'flexao_cotovelo', 'extensao_cotovelo'],       outro_kws: ['ombro', 'deltoid', 'trapézio', 'bíceps', 'tríceps'] },
+    { label: 'Peito e Tríceps',            categorias: ['Peito', 'Tríceps'] },
+    { label: 'Costas e Bíceps',            categorias: ['Costas', 'Bíceps'] },
+    { label: 'Bumbum e Posterior',         categorias: ['Glúteos'] },
+    { label: 'Coxa e Panturrilha',         categorias: ['Pernas', 'Panturrilha'] },
+    { label: 'Ombros e Braços',            categorias: ['Ombro', 'Bíceps', 'Tríceps'] },
   ],
   abcd: [
-    { label: 'Peito e Tríceps',                              patterns: ['empurrar_horizontal', 'extensao_cotovelo'],                       outro_kws: ['peitoral', 'tríceps'] },
-    { label: 'Costas e Bíceps',                              patterns: ['puxada_vertical', 'puxada_horizontal', 'flexao_cotovelo'],         outro_kws: ['costas', 'latíssimo', 'romboide', 'trapézio', 'bíceps'] },
-    { label: 'Coxa e Panturrilha',                            patterns: ['dominante_joelho'],                                               outro_kws: ['gastrocnêmio', 'sóleo', 'panturrilha'] },
-    { label: 'Ombros, Bumbum e Posterior',                   patterns: ['empurrar_vertical', 'dominante_quadril'],                         outro_kws: ['ombro', 'deltoid', 'trapézio', 'glúteo médio', 'adutor'] },
+    { label: 'Peito e Tríceps',            categorias: ['Peito', 'Tríceps'] },
+    { label: 'Costas e Bíceps',            categorias: ['Costas', 'Bíceps'] },
+    { label: 'Coxa e Panturrilha',         categorias: ['Pernas', 'Panturrilha'] },
+    { label: 'Ombros, Bumbum e Posterior', categorias: ['Ombro', 'Glúteos'] },
   ],
   ppl: [
-    { label: 'Push — Peito, Ombros e Tríceps',               patterns: ['empurrar_horizontal', 'empurrar_vertical', 'extensao_cotovelo'],  outro_kws: ['peitoral', 'ombro', 'deltoid', 'tríceps'] },
-    { label: 'Pull — Costas e Bíceps',                       patterns: ['puxada_vertical', 'puxada_horizontal', 'flexao_cotovelo'],         outro_kws: ['costas', 'latíssimo', 'romboide', 'trapézio', 'bíceps'] },
-    { label: 'Legs — Pernas completas',                      patterns: ['dominante_quadril', 'dominante_joelho'],                          outro_kws: ['gastrocnêmio', 'sóleo', 'panturrilha', 'glúteo médio', 'adutor'] },
+    { label: 'Push — Peito, Ombros e Tríceps', categorias: ['Peito', 'Ombro', 'Tríceps'] },
+    { label: 'Pull — Costas e Bíceps',         categorias: ['Costas', 'Bíceps'] },
+    { label: 'Legs — Pernas completas',        categorias: ['Pernas', 'Glúteos', 'Panturrilha'] },
   ],
   supinf: [
-    { label: 'Superior Push — Peito, Ombros e Tríceps',      patterns: ['empurrar_horizontal', 'empurrar_vertical', 'extensao_cotovelo'],  outro_kws: ['peitoral', 'ombro', 'deltoid', 'tríceps'] },
-    { label: 'Inferior — Coxa e Panturrilha',                 patterns: ['dominante_joelho'],                                               outro_kws: ['gastrocnêmio', 'sóleo', 'panturrilha'] },
-    { label: 'Superior Pull — Costas e Bíceps',              patterns: ['puxada_vertical', 'puxada_horizontal', 'flexao_cotovelo'],         outro_kws: ['costas', 'latíssimo', 'romboide', 'trapézio', 'bíceps'] },
-    { label: 'Inferior — Bumbum e Posterior',                 patterns: ['dominante_quadril'],                                              outro_kws: ['glúteo médio', 'adutor'] },
+    { label: 'Superior Push — Peito, Ombros e Tríceps', categorias: ['Peito', 'Ombro', 'Tríceps'] },
+    { label: 'Inferior — Coxa e Panturrilha',           categorias: ['Pernas', 'Panturrilha'] },
+    { label: 'Superior Pull — Costas e Bíceps',         categorias: ['Costas', 'Bíceps'] },
+    { label: 'Inferior — Bumbum e Posterior',           categorias: ['Glúteos'] },
   ],
 };
 
 function getSplitKey(dias: number, tipo: string): string | null {
   const t = tipo.toLowerCase();
-  if (t.includes('full body') || t.includes('ia decide')) return null;
+  if (t.includes('full body')) return null; // full body usa amostra de todas categorias por dia
   if (t.includes('superior') || t.includes('inferior')) return 'supinf';
   if (t.includes('push') || t.includes('pull') || t.includes('legs')) return 'ppl';
-  if (t.includes('a/b/c/d') || dias >= 4) return dias === 5 ? 'abcde' : 'abcd';
-  return null;
+  if (t.includes('a/b/c/d')) return dias === 5 ? 'abcde' : 'abcd';
+  // "IA decide o melhor split" (ou qualquer texto não reconhecido) —
+  // resolve pra um split concreto pelo número de dias, nunca cai no
+  // caminho "sem filtro" (que despejava o catálogo inteiro no prompt).
+  if (dias <= 2) return 'supinf';
+  if (dias === 3) return 'ppl';
+  return dias === 5 ? 'abcde' : 'abcd';
 }
+
+const MAX_POR_CATEGORIA_DIA = 25;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function filtrarDia(catalogo: any[], filtro: DiaFiltro): any[] {
-  return catalogo.filter((e) => {
-    const pat = (e.movement_pattern ?? '') as string;
-    const grp = ((e.grupo_muscular ?? '') as string).toLowerCase();
-    if (CORE_PATTERNS.has(pat)) return false;
-    if (filtro.patterns.includes(pat)) return true;
-    if (pat === 'outro') return filtro.outro_kws.some((kw) => grp.includes(kw));
-    return false;
-  });
+  const porCategoria = new Map<string, any[]>();
+  for (const e of catalogo) {
+    const cat = categoriaAmpla(e.grupo_muscular);
+    if (cat === CORE_CATEGORIA || !filtro.categorias.includes(cat)) continue;
+    if (!porCategoria.has(cat)) porCategoria.set(cat, []);
+    porCategoria.get(cat)!.push(e);
+  }
+  const result: any[] = [];
+  for (const exs of porCategoria.values()) result.push(...exs.slice(0, MAX_POR_CATEGORIA_DIA));
+  return result;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -250,27 +283,25 @@ function catExToJson(e: any): string {
 function buildCatalogoSections(catalogo: any[], dias: number, tipo: string): string {
   const splitKey = getSplitKey(dias, tipo);
   const coreExs = dedupPorBase(
-    catalogo.filter((e) => CORE_PATTERNS.has((e.movement_pattern ?? '') as string))
+    catalogo.filter((e) => categoriaAmpla(e.grupo_muscular) === CORE_CATEGORIA)
   ).slice(0, 8);
   const coreTexto = coreExs.length > 0 ? coreExs.map(catExToJson).join('\n') : '(nenhum)';
 
   if (!splitKey) {
+    // Só chega aqui pra "Full Body" de verdade — precisa de uma amostra de
+    // TODAS as categorias em cada dia, mas sem despejar o catálogo inteiro.
     const todosDeduplicados = dedupPorBase(
-      catalogo.filter((e) => !CORE_PATTERNS.has((e.movement_pattern ?? '') as string))
+      catalogo.filter((e) => categoriaAmpla(e.grupo_muscular) !== CORE_CATEGORIA)
     );
-    // Prompt sem split (ex.: "IA decide o melhor split") não filtra por dia,
-    // então despeja tudo de uma vez — com o catálogo grande isso estoura o
-    // orçamento de tokens da IA. Limita com amostra equilibrada por grupo
-    // muscular em vez de cortar em ordem alfabética (perderia grupos inteiros).
-    const MAX_POR_GRUPO = 35;
-    const porGrupo = new Map<string, any[]>();
+    const MAX_POR_CATEGORIA = 15;
+    const porCategoria = new Map<string, any[]>();
     for (const ex of todosDeduplicados) {
-      const grupo = (ex.grupo_muscular ?? 'outro') as string;
-      if (!porGrupo.has(grupo)) porGrupo.set(grupo, []);
-      porGrupo.get(grupo)!.push(ex);
+      const cat = categoriaAmpla(ex.grupo_muscular);
+      if (!porCategoria.has(cat)) porCategoria.set(cat, []);
+      porCategoria.get(cat)!.push(ex);
     }
     const tudo: any[] = [];
-    for (const exs of porGrupo.values()) tudo.push(...exs.slice(0, MAX_POR_GRUPO));
+    for (const exs of porCategoria.values()) tudo.push(...exs.slice(0, MAX_POR_CATEGORIA));
 
     return `=== CATÁLOGO — LISTA GLOBAL (use para todos os treinos) ===
 ${tudo.map(catExToJson).join('\n')}
