@@ -22,8 +22,16 @@ async function logIADebug(params: {
   promptChars?: number;
   respostaRaw: string;
   erro: string;
+  blockTypes?: string[];
+  usage?: { input_tokens?: number; output_tokens?: number } | null;
 }) {
   try {
+    const erroCompleto = [
+      params.erro,
+      params.blockTypes ? `blocks=${JSON.stringify(params.blockTypes)}` : null,
+      params.usage ? `usage=${JSON.stringify(params.usage)}` : null,
+    ].filter(Boolean).join(" | ");
+
     await supabaseAdmin.from("ia_debug_logs").insert({
       funcao: params.funcao,
       professor_id: params.profId,
@@ -31,7 +39,7 @@ async function logIADebug(params: {
       prompt_chars: params.promptChars ?? null,
       resposta_chars: params.respostaRaw.length,
       resposta_raw: params.respostaRaw.slice(0, 20000),
-      erro: params.erro,
+      erro: erroCompleto,
     });
   } catch {
     // logging é best-effort
@@ -247,9 +255,23 @@ function buildCatalogoSections(catalogo: any[], dias: number, tipo: string): str
   const coreTexto = coreExs.length > 0 ? coreExs.map(catExToJson).join('\n') : '(nenhum)';
 
   if (!splitKey) {
-    const tudo = dedupPorBase(
+    const todosDeduplicados = dedupPorBase(
       catalogo.filter((e) => !CORE_PATTERNS.has((e.movement_pattern ?? '') as string))
     );
+    // Prompt sem split (ex.: "IA decide o melhor split") não filtra por dia,
+    // então despeja tudo de uma vez — com o catálogo grande isso estoura o
+    // orçamento de tokens da IA. Limita com amostra equilibrada por grupo
+    // muscular em vez de cortar em ordem alfabética (perderia grupos inteiros).
+    const MAX_POR_GRUPO = 35;
+    const porGrupo = new Map<string, any[]>();
+    for (const ex of todosDeduplicados) {
+      const grupo = (ex.grupo_muscular ?? 'outro') as string;
+      if (!porGrupo.has(grupo)) porGrupo.set(grupo, []);
+      porGrupo.get(grupo)!.push(ex);
+    }
+    const tudo: any[] = [];
+    for (const exs of porGrupo.values()) tudo.push(...exs.slice(0, MAX_POR_GRUPO));
+
     return `=== CATÁLOGO — LISTA GLOBAL (use para todos os treinos) ===
 ${tudo.map(catExToJson).join('\n')}
 
@@ -674,20 +696,29 @@ ATENÇÃO: O exemplo acima mostra 2 rotinas, mas você DEVE criar EXATAMENTE ${c
       messages: [{ role: "user", content }],
     });
 
-    const rawText =
-      response.content[0].type === "text" ? response.content[0].text : "";
+    const rawText = response.content
+      .filter((b): b is Anthropic.TextBlock => b.type === "text")
+      .map((b) => b.text)
+      .join("");
+    const blockTypes = response.content.map((b) => b.type);
+    const promptCharsReal = content.reduce(
+      (acc, b: any) => acc + (b?.type === "text" ? (b.text?.length ?? 0) : 0),
+      0
+    );
 
     // 6. Parse JSON
     const jsonStr = extrairJSON(rawText);
     if (!jsonStr) {
-      console.error("[gerarTreino] resposta sem JSON. stop_reason:", response.stop_reason, "raw:", rawText.slice(0, 300));
+      console.error("[gerarTreino] resposta sem JSON. stop_reason:", response.stop_reason, "blocks:", blockTypes, "raw:", rawText.slice(0, 300));
       await logIADebug({
         funcao: "gerarTreinoComIA",
         profId,
         stopReason: response.stop_reason,
-        promptChars: content.length,
+        promptChars: promptCharsReal,
         respostaRaw: rawText,
         erro: "sem_json",
+        blockTypes,
+        usage: response.usage,
       });
       return { ok: false, error: "A IA não retornou um JSON válido. Tente novamente." };
     }
@@ -701,8 +732,10 @@ ATENÇÃO: O exemplo acima mostra 2 rotinas, mas você DEVE criar EXATAMENTE ${c
         funcao: "gerarTreinoComIA",
         profId,
         stopReason: response.stop_reason,
-        promptChars: content.length,
+        promptChars: promptCharsReal,
         respostaRaw: rawText,
+        blockTypes,
+        usage: response.usage,
         erro: `parse_error: ${parseErr?.message}`,
       });
       return { ok: false, error: "A IA retornou um JSON malformado. Tente novamente." };
@@ -996,18 +1029,23 @@ ATENÇÃO: O exemplo acima mostra 1 rotina, mas você DEVE criar EXATAMENTE ${co
       messages: [{ role: "user", content: promptTexto }],
     });
 
-    const rawText =
-      response.content[0].type === "text" ? response.content[0].text : "";
+    const rawText = response.content
+      .filter((b): b is Anthropic.TextBlock => b.type === "text")
+      .map((b) => b.text)
+      .join("");
+    const blockTypesModelo = response.content.map((b) => b.type);
 
     const jsonStr = extrairJSON(rawText);
     if (!jsonStr) {
-      console.error("[gerarModelo] resposta sem JSON. stop_reason:", response.stop_reason, "raw:", rawText.slice(0, 300));
+      console.error("[gerarModelo] resposta sem JSON. stop_reason:", response.stop_reason, "blocks:", blockTypesModelo, "raw:", rawText.slice(0, 300));
       await logIADebug({
         funcao: "gerarTreinoModeloComIA",
         profId,
         stopReason: response.stop_reason,
         promptChars: promptTexto.length,
         respostaRaw: rawText,
+        blockTypes: blockTypesModelo,
+        usage: response.usage,
         erro: "sem_json",
       });
       return { ok: false, error: "A IA não retornou um JSON válido. Tente novamente." };
