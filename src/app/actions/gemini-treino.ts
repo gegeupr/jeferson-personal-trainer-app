@@ -411,7 +411,7 @@ export async function gerarTreinoComIA(
         .from("exercicios_catalogo")
         .select("id, nome, grupo_muscular, equipamento, nivel, categoria, movement_pattern, contraindicacoes, nivel_minimo")
         .order("nome")
-        .limit(700),
+        .limit(3000),
     ]);
 
     const aluno = profileResult.data;
@@ -643,7 +643,7 @@ ATENÇÃO: O exemplo acima mostra 2 rotinas, mas você DEVE criar EXATAMENTE ${c
     const client = new Anthropic({ apiKey });
     const response = await client.messages.create({
       model: "claude-sonnet-5",
-      max_tokens: 8192,
+      max_tokens: 16000,
       system:
         "Você é um personal trainer especializado em periodização. Responda SEMPRE com JSON puro e válido, sem texto adicional, sem markdown, sem explicações. Apenas o objeto JSON conforme solicitado.",
       messages: [{ role: "user", content }],
@@ -830,7 +830,7 @@ export async function gerarTreinoModeloComIA(
         .from("exercicios_catalogo")
         .select("id, nome, grupo_muscular, equipamento, nivel, categoria, movement_pattern, contraindicacoes, nivel_minimo")
         .order("nome")
-        .limit(700),
+        .limit(3000),
     ]);
 
     const biblioteca = bibResult.data || [];
@@ -949,7 +949,7 @@ ATENÇÃO: O exemplo acima mostra 1 rotina, mas você DEVE criar EXATAMENTE ${co
     const client = new Anthropic({ apiKey });
     const response = await client.messages.create({
       model: "claude-sonnet-5",
-      max_tokens: 8192,
+      max_tokens: 16000,
       system:
         "Você é um personal trainer especializado em periodização. Responda SEMPRE com JSON puro e válido, sem texto adicional, sem markdown, sem explicações. Apenas o objeto JSON conforme solicitado.",
       messages: [{ role: "user", content: promptTexto }],
