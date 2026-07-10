@@ -10,8 +10,10 @@ import {
   type ConfigTreino,
   type ExercicioGerado,
   type RotinaGerada,
+  type RotinaConfig,
   type TreinoGerado,
 } from "@/app/actions/gemini-treino";
+import { getDiasResolvidos, type DiaResolvido } from "@/lib/splitDias";
 import { consultarUsoIA, type UsoIA } from "@/lib/verificarLimiteIA";
 import {
   listarGifs,
@@ -272,6 +274,43 @@ const DIVISOES = [
   { value: "Condicionamento / Funcional", label: "Condicionamento / Funcional" },
 ];
 
+// ─── Wizard passo 2: personalização por rotina ────────────────────────────────
+
+const EQUIPAMENTO_OPTIONS = [
+  "Halteres", "Barra", "Máquina", "Cabo/Polia", "Peso corporal", "Elásticos", "Kettlebell",
+];
+
+const FOCO_POR_CATEGORIA: Record<string, string[]> = {
+  Peito: ["Peito superior", "Peito inferior"],
+  Costas: ["Largura (puxadas)", "Espessura (remadas)"],
+  Ombro: ["Deltoide anterior", "Deltoide lateral", "Deltoide posterior"],
+  Pernas: ["Quadríceps", "Posterior de coxa"],
+  Glúteos: ["Glúteo médio", "Glúteo máximo"],
+  Bíceps: ["Bíceps"],
+  Tríceps: ["Tríceps"],
+  Panturrilha: ["Panturrilha"],
+  Abdômen: ["Core/abdômen"],
+};
+
+const FOCO_GENERICO = ["Compostos (mais carga)", "Isolados (mais volume)"];
+
+function focoOpcoesParaDia(dia: DiaResolvido): string[] {
+  const opcoes = new Set<string>();
+  for (const cat of dia.categorias) {
+    (FOCO_POR_CATEGORIA[cat] ?? []).forEach((o) => opcoes.add(o));
+  }
+  FOCO_GENERICO.forEach((o) => opcoes.add(o));
+  return Array.from(opcoes);
+}
+
+function toggleEquipamento(atual: string | undefined, item: string): string {
+  const lista = (atual ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+  const idx = lista.indexOf(item);
+  if (idx === -1) lista.push(item);
+  else lista.splice(idx, 1);
+  return lista.join(", ");
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function GerarTreinoPage() {
@@ -286,7 +325,19 @@ export default function GerarTreinoPage() {
     nivel: "intermediario",
     equipamentos: "Academia completa",
     observacoes: "",
+    rotinas_config: [],
   });
+  const [wizardStep, setWizardStep] = useState<1 | 2>(1);
+
+  const diasResolvidos = getDiasResolvidos(config.dias_por_semana, config.tipo_divisao);
+
+  function updateRotinaConfig(i: number, patch: Partial<RotinaConfig>) {
+    setConfig((prev) => {
+      const atual = [...(prev.rotinas_config ?? [])];
+      atual[i] = { ...atual[i], ...patch };
+      return { ...prev, rotinas_config: atual };
+    });
+  }
 
   const [gerando, setGerando] = useState(false);
   const [salvando, setSalvando] = useState(false);
@@ -476,13 +527,19 @@ export default function GerarTreinoPage() {
           </p>
         </div>
 
-        {/* Formulário de configuração */}
+        {/* Formulário de configuração — wizard 2 passos */}
         {!treino && (
           <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-6 space-y-5">
             <div className="flex items-center justify-between gap-3">
-              <h2 className="text-sm font-semibold text-white/70 uppercase tracking-wider">
-                Configurações do plano
-              </h2>
+              <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-1.5">
+                  <span className={`h-1.5 w-6 rounded-full transition-colors ${wizardStep >= 1 ? "bg-white" : "bg-white/15"}`} />
+                  <span className={`h-1.5 w-6 rounded-full transition-colors ${wizardStep >= 2 ? "bg-white" : "bg-white/15"}`} />
+                </div>
+                <h2 className="text-sm font-semibold text-white/70 uppercase tracking-wider">
+                  {wizardStep === 1 ? "1. Configuração geral" : "2. Personalize cada rotina"}
+                </h2>
+              </div>
               {uso && (
                 <span className={`text-xs px-2.5 py-1 rounded-full border ${
                   limiteAtingido
@@ -496,6 +553,7 @@ export default function GerarTreinoPage() {
               )}
             </div>
 
+            {wizardStep === 1 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-xs text-white/50 uppercase tracking-wide">Dias por semana</label>
@@ -559,7 +617,9 @@ export default function GerarTreinoPage() {
                 />
               </div>
             </div>
+            )}
 
+            {wizardStep === 1 && (
             <div>
               <label className="text-xs text-white/50 uppercase tracking-wide">Observações adicionais (opcional)</label>
               <textarea
@@ -570,6 +630,85 @@ export default function GerarTreinoPage() {
                 className="mt-1.5 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-2.5 text-sm text-white outline-none focus:border-white/25 transition-colors resize-none"
               />
             </div>
+            )}
+
+            {wizardStep === 2 && (
+            <div className="space-y-3">
+              <p className="text-xs text-white/40">
+                Ajuste equipamento, foco e observações específicas de cada treino. Tudo é opcional — o que ficar em branco usa as configurações gerais.
+              </p>
+              {diasResolvidos.map((dia, i) => {
+                const rc = config.rotinas_config?.[i];
+                const equipSelecionado = (rc?.equipamento ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+                const focoOpcoes = focoOpcoesParaDia(dia);
+                return (
+                  <div key={i} className="rounded-xl border border-white/8 bg-black/20 p-4 space-y-3">
+                    <div className="flex items-center gap-2.5">
+                      <span className="shrink-0 rounded-lg border border-white/12 bg-white/[0.06] px-2 py-0.5 text-xs font-semibold text-white/70">
+                        {dia.letra}
+                      </span>
+                      <p className="text-sm font-medium text-white/85">{dia.label}</p>
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] text-white/35 uppercase tracking-wide">Equipamento (opcional)</label>
+                      <div className="mt-1.5 flex flex-wrap gap-1.5">
+                        {EQUIPAMENTO_OPTIONS.map((eq) => {
+                          const ativo = equipSelecionado.includes(eq);
+                          return (
+                            <button
+                              key={eq}
+                              type="button"
+                              onClick={() => updateRotinaConfig(i, { equipamento: toggleEquipamento(rc?.equipamento, eq) })}
+                              className={`rounded-full border px-2.5 py-1 text-xs transition-colors ${
+                                ativo
+                                  ? "border-white/40 bg-white/15 text-white"
+                                  : "border-white/10 text-white/45 hover:border-white/25"
+                              }`}
+                            >
+                              {eq}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {focoOpcoes.length > 0 && (
+                      <div>
+                        <label className="text-[10px] text-white/35 uppercase tracking-wide">Foco (opcional)</label>
+                        <div className="mt-1.5 flex flex-wrap gap-1.5">
+                          {focoOpcoes.map((f) => {
+                            const ativo = rc?.foco === f;
+                            return (
+                              <button
+                                key={f}
+                                type="button"
+                                onClick={() => updateRotinaConfig(i, { foco: ativo ? "" : f })}
+                                className={`rounded-full border px-2.5 py-1 text-xs transition-colors ${
+                                  ativo
+                                    ? "border-white/40 bg-white/15 text-white"
+                                    : "border-white/10 text-white/45 hover:border-white/25"
+                                }`}
+                              >
+                                {f}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    <input
+                      value={rc?.observacoes ?? ""}
+                      onChange={(e) => updateRotinaConfig(i, { observacoes: e.target.value })}
+                      placeholder="Observação específica deste treino (opcional)"
+                      className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-1.5 text-sm text-white/80 outline-none focus:border-white/25 transition-colors"
+                    />
+                  </div>
+                );
+              })}
+            </div>
+            )}
 
             {erro && (
               <p className="rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-300">
@@ -586,16 +725,34 @@ export default function GerarTreinoPage() {
                   O limite renova no dia 1º do próximo mês. Você ainda pode atribuir modelos existentes da biblioteca, criar treinos manualmente e editar os treinos dos alunos — apenas a geração nova com IA está pausada.
                 </p>
               </div>
+            ) : wizardStep === 1 ? (
+              <button
+                type="button"
+                onClick={() => setWizardStep(2)}
+                className="w-full rounded-full bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-white/90 transition-colors"
+              >
+                Próximo: personalizar rotinas →
+              </button>
             ) : (
               <>
-                <button
-                  type="button"
-                  onClick={handleGerar}
-                  disabled={gerando}
-                  className="w-full rounded-full bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-white/90 disabled:opacity-60 transition-colors"
-                >
-                  {gerando ? "Gerando plano de treino com IA…" : "Gerar plano de treino com IA"}
-                </button>
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setWizardStep(1)}
+                    disabled={gerando}
+                    className="rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white/80 hover:border-white/30 disabled:opacity-50 transition-colors"
+                  >
+                    ← Voltar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleGerar}
+                    disabled={gerando}
+                    className="flex-1 rounded-full bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-white/90 disabled:opacity-60 transition-colors"
+                  >
+                    {gerando ? "Gerando plano de treino com IA…" : "Gerar plano de treino com IA"}
+                  </button>
+                </div>
 
                 {gerando && (
                   <p className="text-center text-xs text-white/35">
@@ -616,7 +773,7 @@ export default function GerarTreinoPage() {
               </h2>
               <button
                 type="button"
-                onClick={() => { setTreino(null); setErro(null); }}
+                onClick={() => { setTreino(null); setErro(null); setWizardStep(2); }}
                 className="text-xs text-white/40 hover:text-white/70 transition-colors"
               >
                 ← Voltar ao formulário

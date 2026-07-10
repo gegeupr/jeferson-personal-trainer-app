@@ -5,6 +5,7 @@ import { createSupabaseServer } from "@/utils/supabase-server";
 import Anthropic from "@anthropic-ai/sdk";
 import { verificarEIncrementarUsoIA } from "@/lib/verificarLimiteIA";
 import { criarNotificacao } from "@/lib/criarNotificacao";
+import { SPLIT_MAP, getSplitKey, type DiaFiltro } from "@/lib/splitDias";
 
 async function assertUserId(expectedId: string): Promise<true | { ok: false; error: string }> {
   const supabase = await createSupabaseServer();
@@ -48,6 +49,17 @@ async function logIADebug(params: {
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
+// Configuração específica de uma rotina (dia) — preenchida no wizard passo 2,
+// indexada 0..dias_por_semana-1 na mesma ordem dos dias resolvidos por
+// getDiasResolvidos(). Todos os campos são hints de texto pro prompt, não
+// filtros programáticos — mesma filosofia do `equipamentos`/`nivel` globais.
+export type RotinaConfig = {
+  equipamento?: string;
+  foco?: string;
+  nivel?: "iniciante" | "intermediario" | "avancado";
+  observacoes?: string;
+};
+
 export type ConfigTreino = {
   dias_por_semana: number;
   tipo_divisao: string;
@@ -56,6 +68,7 @@ export type ConfigTreino = {
   equipamentos: string;
   observacoes?: string;
   perfil_modelo?: string;
+  rotinas_config?: RotinaConfig[];
 };
 
 export type ExercicioGerado = {
@@ -199,8 +212,6 @@ function dedupPorBase(exercicios: any[]): any[] {
   return result;
 }
 
-type DiaFiltro = { label: string; categorias: string[] };
-
 // Normaliza QUALQUER grupo_muscular (granular antigo tipo "Peitoral maior",
 // ou amplo novo tipo "Peito") pra uma das categorias fixas abaixo. Isso é
 // mais confiável que depender de movement_pattern, que só está preenchido
@@ -226,47 +237,6 @@ function categoriaAmpla(grupoMuscular: string | null | undefined): string {
 }
 
 const CORE_CATEGORIA = 'Abdômen';
-
-const SPLIT_MAP: Record<string, DiaFiltro[]> = {
-  abcde: [
-    { label: 'Peito e Tríceps',            categorias: ['Peito', 'Tríceps'] },
-    { label: 'Costas e Bíceps',            categorias: ['Costas', 'Bíceps'] },
-    { label: 'Bumbum e Posterior',         categorias: ['Glúteos'] },
-    { label: 'Coxa e Panturrilha',         categorias: ['Pernas', 'Panturrilha'] },
-    { label: 'Ombros e Braços',            categorias: ['Ombro', 'Bíceps', 'Tríceps'] },
-  ],
-  abcd: [
-    { label: 'Peito e Tríceps',            categorias: ['Peito', 'Tríceps'] },
-    { label: 'Costas e Bíceps',            categorias: ['Costas', 'Bíceps'] },
-    { label: 'Coxa e Panturrilha',         categorias: ['Pernas', 'Panturrilha'] },
-    { label: 'Ombros, Bumbum e Posterior', categorias: ['Ombro', 'Glúteos'] },
-  ],
-  ppl: [
-    { label: 'Push — Peito, Ombros e Tríceps', categorias: ['Peito', 'Ombro', 'Tríceps'] },
-    { label: 'Pull — Costas e Bíceps',         categorias: ['Costas', 'Bíceps'] },
-    { label: 'Legs — Pernas completas',        categorias: ['Pernas', 'Glúteos', 'Panturrilha'] },
-  ],
-  supinf: [
-    { label: 'Superior Push — Peito, Ombros e Tríceps', categorias: ['Peito', 'Ombro', 'Tríceps'] },
-    { label: 'Inferior — Coxa e Panturrilha',           categorias: ['Pernas', 'Panturrilha'] },
-    { label: 'Superior Pull — Costas e Bíceps',         categorias: ['Costas', 'Bíceps'] },
-    { label: 'Inferior — Bumbum e Posterior',           categorias: ['Glúteos'] },
-  ],
-};
-
-function getSplitKey(dias: number, tipo: string): string | null {
-  const t = tipo.toLowerCase();
-  if (t.includes('full body')) return null; // full body usa amostra de todas categorias por dia
-  if (t.includes('superior') || t.includes('inferior')) return 'supinf';
-  if (t.includes('push') || t.includes('pull') || t.includes('legs')) return 'ppl';
-  if (t.includes('a/b/c/d')) return dias === 5 ? 'abcde' : 'abcd';
-  // "IA decide o melhor split" (ou qualquer texto não reconhecido) —
-  // resolve pra um split concreto pelo número de dias, nunca cai no
-  // caminho "sem filtro" (que despejava o catálogo inteiro no prompt).
-  if (dias <= 2) return 'supinf';
-  if (dias === 3) return 'ppl';
-  return dias === 5 ? 'abcde' : 'abcd';
-}
 
 const MAX_POR_CATEGORIA_DIA = 25;
 
@@ -301,8 +271,22 @@ function catExToJson(e: any): string {
   return `{"fonte":"catalogo","id":"${e.id}","nome":"${e.nome}","grupo":"${e.grupo_muscular ?? ''}","equip":"${e.equipamento ?? ''}","nivel":"${e.nivel_minimo ?? e.nivel ?? ''}","cat":"${e.categoria ?? ''}","pattern":"${e.movement_pattern ?? ''}"}`;
 }
 
+// Monta a linha de preferências específicas de um dia (wizard passo 2) pra
+// injetar dentro da seção daquele treino no prompt — vazio se o professor
+// não personalizou nada pra esse dia.
+function formatRotinaConfig(rc: RotinaConfig | undefined): string {
+  if (!rc) return '';
+  const partes: string[] = [];
+  if (rc.equipamento) partes.push(`equipamento: ${rc.equipamento}`);
+  if (rc.foco) partes.push(`foco: ${rc.foco}`);
+  if (rc.nivel) partes.push(`nível: ${rc.nivel}`);
+  if (rc.observacoes) partes.push(`obs: ${rc.observacoes}`);
+  if (partes.length === 0) return '';
+  return `\n[Preferências do professor pra este treino — ${partes.join('; ')}]`;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildCatalogoSections(catalogo: any[], dias: number, tipo: string): string {
+function buildCatalogoSections(catalogo: any[], dias: number, tipo: string, rotinasConfig?: RotinaConfig[]): string {
   const splitKey = getSplitKey(dias, tipo);
   const coreExs = embaralhar(dedupPorBase(
     catalogo.filter((e) => categoriaAmpla(e.grupo_muscular) === CORE_CATEGORIA)
@@ -325,11 +309,18 @@ function buildCatalogoSections(catalogo: any[], dias: number, tipo: string): str
     const tudo: any[] = [];
     for (const exs of porCategoria.values()) tudo.push(...embaralhar(exs).slice(0, MAX_POR_CATEGORIA));
 
+    const labelsFullBody = ['A', 'B', 'C', 'D', 'E', 'F'];
+    const prefsPorDia = Array.from({ length: dias }, (_, i) => {
+      const linha = formatRotinaConfig(rotinasConfig?.[i]);
+      return linha ? `Treino ${labelsFullBody[i]}:${linha}` : null;
+    }).filter(Boolean);
+
     return `=== CATÁLOGO — LISTA GLOBAL (use para todos os treinos) ===
 ${tudo.map(catExToJson).join('\n')}
 
 --- CORE (disponível em todos os treinos) ---
-${coreTexto}`;
+${coreTexto}
+${prefsPorDia.length > 0 ? `\n--- PREFERÊNCIAS DO PROFESSOR POR DIA ---\n${prefsPorDia.join('\n')}` : ''}`;
   }
 
   const filtros = SPLIT_MAP[splitKey];
@@ -339,7 +330,7 @@ ${coreTexto}`;
   for (let i = 0; i < dias; i++) {
     const filtro = filtros[i % filtros.length];
     const exsDoDia = dedupPorBase(filtrarDia(catalogo, filtro));
-    partes.push(`--- Treino ${labels[i]}: ${filtro.label} (${exsDoDia.length} exercícios disponíveis) ---
+    partes.push(`--- Treino ${labels[i]}: ${filtro.label} (${exsDoDia.length} exercícios disponíveis) ---${formatRotinaConfig(rotinasConfig?.[i])}
 ${exsDoDia.map(catExToJson).join('\n')}`);
   }
 
@@ -601,7 +592,7 @@ export async function gerarTreinoComIA(
         : "Biblioteca vazia.";
 
     const catalogoSections = catalogo.length > 0
-      ? buildCatalogoSections(catalogo, config.dias_por_semana, config.tipo_divisao)
+      ? buildCatalogoSections(catalogo, config.dias_por_semana, config.tipo_divisao, config.rotinas_config)
       : "=== CATÁLOGO VAZIO ===";
 
     // 3. Montar o prompt
@@ -1027,7 +1018,7 @@ export async function gerarTreinoModeloComIA(
         : "Biblioteca vazia.";
 
     const catalogoSections = catalogo.length > 0
-      ? buildCatalogoSections(catalogo, config.dias_por_semana, config.tipo_divisao)
+      ? buildCatalogoSections(catalogo, config.dias_por_semana, config.tipo_divisao, config.rotinas_config)
       : "=== CATÁLOGO VAZIO ===";
 
     const guiaDivisao = buildGuiaDivisao(config.dias_por_semana, config.tipo_divisao);
