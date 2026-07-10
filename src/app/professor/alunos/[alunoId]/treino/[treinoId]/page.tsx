@@ -24,11 +24,12 @@ type ExercicioEdit = {
   catalogo_id: string | null;
   fonte: 'catalogo' | 'biblioteca';
   grupo_muscular: string;
+  gif_id: string | null;
 };
 
 type RotinaInfo    = { id: string; nome: string; descricao: string };
 type TreinoMeta    = { id: string; nome: string; descricao: string; gerado_por_ia: boolean };
-type SearchItem    = { id: string; nome: string; fonte: 'catalogo' | 'biblioteca'; grupo: string; equip: string };
+type SearchItem    = { id: string; nome: string; fonte: 'catalogo' | 'biblioteca'; grupo: string; equip: string; gif_id: string | null };
 type ModalState    =
   | { open: false }
   | { open: true; mode: 'replace'; teId: string; grupoRef: string }
@@ -186,6 +187,8 @@ export default function VerEditarTreinoPage() {
   const [searchLoading, setSearchLoading] = useState(false);
   const searchLoaded = useRef(false);
 
+  const [expandedGif, setExpandedGif] = useState<Record<string, boolean>>({});
+
   const [revisando,   setRevisando]   = useState(false);
   const [revisao,     setRevisao]     = useState<RevisaoTreino | null>(null);
   const [revisaoOpen, setRevisaoOpen] = useState(false);
@@ -215,24 +218,25 @@ export default function VerEditarTreinoPage() {
 
     const [catRes, bibRes] = await Promise.all([
       catIds.length > 0
-        ? supabase.from('exercicios_catalogo').select('id, nome, grupo_muscular').in('id', catIds)
+        ? supabase.from('exercicios_catalogo').select('id, nome, grupo_muscular, gif_id').in('id', catIds)
         : Promise.resolve({ data: [] }),
       bibIds.length > 0
-        ? supabase.from('exercicios').select('id, nome').in('id', bibIds)
+        ? supabase.from('exercicios').select('id, nome, gif_id').in('id', bibIds)
         : Promise.resolve({ data: [] }),
     ]);
 
-    const catMap = new Map((catRes.data || []).map((e: any) => [e.id, { nome: e.nome as string, grupo: (e.grupo_muscular || '') as string }]));
-    const bibMap = new Map((bibRes.data || []).map((e: any) => [e.id, e.nome as string]));
+    const catMap = new Map((catRes.data || []).map((e: any) => [e.id, { nome: e.nome as string, grupo: (e.grupo_muscular || '') as string, gif_id: e.gif_id as string | null }]));
+    const bibMap = new Map((bibRes.data || []).map((e: any) => [e.id, { nome: e.nome as string, gif_id: e.gif_id as string | null }]));
 
     setExercicios((exData || []).map((e: any) => {
       const isCat  = !!e.catalogo_id;
       const catInfo = isCat ? catMap.get(e.catalogo_id) : null;
+      const bibInfo = !isCat ? bibMap.get(e.exercicio_id) : null;
       return {
         te_id:         e.id,
         rotina_id:     e.rotina_id,
         ordem:         e.ordem,
-        nome:          catInfo?.nome || bibMap.get(e.exercicio_id) || 'Exercício desconhecido',
+        nome:          catInfo?.nome || bibInfo?.nome || 'Exercício desconhecido',
         series:        e.series    ?? 3,
         repeticoes:    e.repeticoes ?? '10',
         intervalo:     e.intervalo  ?? '',
@@ -243,6 +247,7 @@ export default function VerEditarTreinoPage() {
         catalogo_id:   e.catalogo_id   || null,
         fonte:         isCat ? 'catalogo' : 'biblioteca',
         grupo_muscular: catInfo?.grupo || '',
+        gif_id:        catInfo?.gif_id || bibInfo?.gif_id || null,
       } satisfies ExercicioEdit;
     }));
   }, []);
@@ -310,19 +315,19 @@ export default function VerEditarTreinoPage() {
     const { data: { user } } = await supabase.auth.getUser();
 
     const [catRes, bibRes] = await Promise.all([
-      supabase.from('exercicios_catalogo').select('id, nome, grupo_muscular, equipamento').order('nome').limit(700),
+      supabase.from('exercicios_catalogo').select('id, nome, grupo_muscular, equipamento, gif_id').order('nome').limit(700),
       user
-        ? supabase.from('exercicios').select('id, nome').eq('professor_id', user.id).order('nome')
+        ? supabase.from('exercicios').select('id, nome, gif_id').eq('professor_id', user.id).order('nome')
         : Promise.resolve({ data: [] }),
     ]);
 
     setSearchItems([
       ...(bibRes.data || []).map((e: any) => ({
-        id: e.id, nome: e.nome, fonte: 'biblioteca' as const, grupo: '', equip: '',
+        id: e.id, nome: e.nome, fonte: 'biblioteca' as const, grupo: '', equip: '', gif_id: e.gif_id || null,
       })),
       ...(catRes.data || []).map((e: any) => ({
         id: e.id, nome: e.nome, fonte: 'catalogo' as const,
-        grupo: e.grupo_muscular || '', equip: e.equipamento || '',
+        grupo: e.grupo_muscular || '', equip: e.equipamento || '', gif_id: e.gif_id || null,
       })),
     ]);
     setSearchLoading(false);
@@ -350,7 +355,8 @@ export default function VerEditarTreinoPage() {
           ? { ...ex, nome: item.nome, fonte: item.fonte,
               exercicio_id: item.fonte === 'biblioteca' ? item.id : null,
               catalogo_id:  item.fonte === 'catalogo'   ? item.id : null,
-              grupo_muscular: item.grupo }
+              grupo_muscular: item.grupo,
+              gif_id: item.gif_id }
           : ex
       ));
     } else {
@@ -371,6 +377,7 @@ export default function VerEditarTreinoPage() {
         catalogo_id:   item.fonte === 'catalogo'   ? item.id : null,
         fonte:         item.fonte,
         grupo_muscular: item.grupo,
+        gif_id:        item.gif_id,
       }]);
     }
 
@@ -387,7 +394,7 @@ export default function VerEditarTreinoPage() {
       .select('id, nome')
       .single();
     if (error || !data) return;
-    const novoItem: SearchItem = { id: data.id, nome: data.nome, fonte: 'biblioteca', grupo: '', equip: '' };
+    const novoItem: SearchItem = { id: data.id, nome: data.nome, fonte: 'biblioteca', grupo: '', equip: '', gif_id: null };
     setSearchItems(prev => [novoItem, ...prev]);
     handleSelectItem(novoItem);
   }
@@ -768,6 +775,16 @@ export default function VerEditarTreinoPage() {
                       {ex.novo && (
                         <span className="shrink-0 rounded-full border border-white/15 bg-white/[0.04] px-1.5 py-0.5 text-[9px] text-white/40 uppercase tracking-wide">novo</span>
                       )}
+                      {/* Ver GIF */}
+                      {ex.gif_id && (
+                        <button
+                          onClick={() => setExpandedGif(prev => ({ ...prev, [ex.te_id]: !prev[ex.te_id] }))}
+                          title="Ver demonstração"
+                          className="shrink-0 rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-xs text-white/40 hover:text-white/70 hover:bg-white/8 transition-colors"
+                        >
+                          ▶
+                        </button>
+                      )}
                       {/* Trocar */}
                       <button
                         onClick={() => openReplaceModal(ex.te_id)}
@@ -783,6 +800,16 @@ export default function VerEditarTreinoPage() {
                         className="shrink-0 text-white/20 hover:text-red-400 transition-colors text-xl leading-none"
                       >×</button>
                     </div>
+
+                    {ex.gif_id && expandedGif[ex.te_id] ? (
+                      <div className="max-w-[200px] overflow-hidden rounded-xl border border-white/10 bg-black/40">
+                        <img
+                          src={`/api/exercicio-gif/${ex.gif_id}`}
+                          alt={`Demonstração — ${ex.nome}`}
+                          className="w-full"
+                        />
+                      </div>
+                    ) : null}
 
                     {/* Campos */}
                     <div className="grid grid-cols-3 gap-2">

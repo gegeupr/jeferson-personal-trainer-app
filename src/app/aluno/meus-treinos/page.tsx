@@ -11,6 +11,7 @@ type ExercicioBase = {
   nome: string;
   descricao: string | null;
   link_youtube: string | null;
+  gif_id: string | null;
 };
 
 type TreinoExercicio = {
@@ -129,6 +130,7 @@ export default function AlunoMeusTreinosPremium() {
 
   const [expandedTreinoId, setExpandedTreinoId] = useState<string | null>(null);
   const [expandedRotinaId, setExpandedRotinaId] = useState<string | null>(null);
+  const [expandedGif, setExpandedGif] = useState<Record<string, boolean>>({});
 
   const [modalOpen, setModalOpen] = useState(false);
   const [nota, setNota] = useState<number>(5);
@@ -223,13 +225,15 @@ export default function AlunoMeusTreinosPremium() {
                 id,
                 nome,
                 descricao,
-                link_youtube
+                link_youtube,
+                gif_id
               ),
               exercicios_catalogo (
                 id,
                 nome,
                 descricao,
-                link_youtube
+                link_youtube,
+                gif_id
               )
             )
           )
@@ -703,15 +707,39 @@ export default function AlunoMeusTreinosPremium() {
                                                   <p className="mt-1.5 text-sm text-white/50">{e.observacoes}</p>
                                                 ) : null}
 
-                                                {ex?.link_youtube ? (
-                                                  <a
-                                                    href={ex.link_youtube}
-                                                    target="_blank"
-                                                    rel="noreferrer"
-                                                    className="inline-flex mt-3 text-sm font-semibold text-white/60 hover:text-white hover:underline transition-colors"
-                                                  >
-                                                    Ver vídeo no YouTube ↗
-                                                  </a>
+                                                <div className="mt-3 flex flex-wrap gap-3">
+                                                  {ex?.link_youtube ? (
+                                                    <a
+                                                      href={ex.link_youtube}
+                                                      target="_blank"
+                                                      rel="noreferrer"
+                                                      className="text-sm font-semibold text-white/60 hover:text-white hover:underline transition-colors"
+                                                    >
+                                                      Ver vídeo no YouTube ↗
+                                                    </a>
+                                                  ) : null}
+
+                                                  {ex?.gif_id ? (
+                                                    <button
+                                                      type="button"
+                                                      onClick={() =>
+                                                        setExpandedGif((prev) => ({ ...prev, [e.id]: !prev[e.id] }))
+                                                      }
+                                                      className="text-sm font-semibold text-white/60 hover:text-white hover:underline transition-colors"
+                                                    >
+                                                      {expandedGif[e.id] ? "Ocultar demonstração" : "Ver demonstração"}
+                                                    </button>
+                                                  ) : null}
+                                                </div>
+
+                                                {ex?.gif_id && expandedGif[e.id] ? (
+                                                  <div className="mt-3 max-w-xs overflow-hidden rounded-xl border border-white/10 bg-black/40">
+                                                    <img
+                                                      src={`/api/exercicio-gif/${ex.gif_id}`}
+                                                      alt={`Demonstração — ${ex.nome}`}
+                                                      className="w-full"
+                                                    />
+                                                  </div>
                                                 ) : null}
                                               </div>
                                             );
