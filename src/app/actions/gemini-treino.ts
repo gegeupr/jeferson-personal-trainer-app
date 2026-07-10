@@ -13,6 +13,31 @@ async function assertUserId(expectedId: string): Promise<true | { ok: false; err
   return true;
 }
 
+// Log temporário para diagnosticar falhas de parse da IA sem depender dos
+// logs do Vercel (não temos acesso direto). Remover depois de estabilizar.
+async function logIADebug(params: {
+  funcao: string;
+  profId: string;
+  stopReason?: string | null;
+  promptChars?: number;
+  respostaRaw: string;
+  erro: string;
+}) {
+  try {
+    await supabaseAdmin.from("ia_debug_logs").insert({
+      funcao: params.funcao,
+      professor_id: params.profId,
+      stop_reason: params.stopReason ?? null,
+      prompt_chars: params.promptChars ?? null,
+      resposta_chars: params.respostaRaw.length,
+      resposta_raw: params.respostaRaw.slice(0, 20000),
+      erro: params.erro,
+    });
+  } catch {
+    // logging é best-effort
+  }
+}
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type ConfigTreino = {
@@ -655,7 +680,15 @@ ATENÇÃO: O exemplo acima mostra 2 rotinas, mas você DEVE criar EXATAMENTE ${c
     // 6. Parse JSON
     const jsonStr = extrairJSON(rawText);
     if (!jsonStr) {
-      console.error("[gerarTreino] resposta sem JSON:", rawText.slice(0, 300));
+      console.error("[gerarTreino] resposta sem JSON. stop_reason:", response.stop_reason, "raw:", rawText.slice(0, 300));
+      await logIADebug({
+        funcao: "gerarTreinoComIA",
+        profId,
+        stopReason: response.stop_reason,
+        promptChars: content.length,
+        respostaRaw: rawText,
+        erro: "sem_json",
+      });
       return { ok: false, error: "A IA não retornou um JSON válido. Tente novamente." };
     }
 
@@ -664,6 +697,14 @@ ATENÇÃO: O exemplo acima mostra 2 rotinas, mas você DEVE criar EXATAMENTE ${c
       treino = JSON.parse(jsonStr) as TreinoGerado;
     } catch (parseErr: any) {
       console.error("[gerarTreino] JSON inválido:", jsonStr.slice(0, 300), parseErr?.message);
+      await logIADebug({
+        funcao: "gerarTreinoComIA",
+        profId,
+        stopReason: response.stop_reason,
+        promptChars: content.length,
+        respostaRaw: rawText,
+        erro: `parse_error: ${parseErr?.message}`,
+      });
       return { ok: false, error: "A IA retornou um JSON malformado. Tente novamente." };
     }
 
@@ -960,7 +1001,15 @@ ATENÇÃO: O exemplo acima mostra 1 rotina, mas você DEVE criar EXATAMENTE ${co
 
     const jsonStr = extrairJSON(rawText);
     if (!jsonStr) {
-      console.error("[gerarModelo] resposta sem JSON:", rawText.slice(0, 300));
+      console.error("[gerarModelo] resposta sem JSON. stop_reason:", response.stop_reason, "raw:", rawText.slice(0, 300));
+      await logIADebug({
+        funcao: "gerarTreinoModeloComIA",
+        profId,
+        stopReason: response.stop_reason,
+        promptChars: promptTexto.length,
+        respostaRaw: rawText,
+        erro: "sem_json",
+      });
       return { ok: false, error: "A IA não retornou um JSON válido. Tente novamente." };
     }
 
@@ -969,6 +1018,14 @@ ATENÇÃO: O exemplo acima mostra 1 rotina, mas você DEVE criar EXATAMENTE ${co
       treino = JSON.parse(jsonStr) as TreinoGerado;
     } catch (parseErr: any) {
       console.error("[gerarModelo] JSON inválido:", jsonStr.slice(0, 300), parseErr?.message);
+      await logIADebug({
+        funcao: "gerarTreinoModeloComIA",
+        profId,
+        stopReason: response.stop_reason,
+        promptChars: promptTexto.length,
+        respostaRaw: rawText,
+        erro: `parse_error: ${parseErr?.message}`,
+      });
       return { ok: false, error: "A IA retornou um JSON malformado. Tente novamente." };
     }
 
