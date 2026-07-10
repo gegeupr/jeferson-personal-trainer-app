@@ -1,5 +1,241 @@
 [
   {
+    "arquivo": "Abdominal (Mãos Acima da Cabeça).gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal 1 4.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal 3 4.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Acima da Cabeça com Peso (na Bola de Estabilidade).gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Ajoelhado no Cabo.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Bicicleta com Elástico.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Canivete com Elástico.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Canivete.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal com Adução (Virilha).gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal com Chute.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Abdominal com Elevação de Pernas Sentado na Máquina.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal com Empurrão com Elástico.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal com Flexão Lateral no Cabo (Bosu).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Abdominal com Peso.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal com Press de Barra.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal com Rotação Ajoelhado com Elástico.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal com Rotação em Pé com Elástico.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal com Toque no Joelho.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Completo (v.2).gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Completo Assistido.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Completo Braços Acima da Cabeça.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Completo com Braços Estendidos.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Completo com Braços no Peito.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Completo com Joelhos Flexionados.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Completo Declinado com Peso.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Completo Declinado.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Completo Inclinado com Rotação.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Completo na Bola de Estabilidade (Mãos Atrás da Cabeça).gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Cruzado.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Abdominal Curl-Up.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Declinado.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal em Pé com Elástico.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal em Pé no Cabo (com Corda).gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal em Pé no Cabo.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Invertido com Rolo.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Invertido no Cabo.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Invertido Recolhido no Cabo.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Invertido Suspenso.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Invertido.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Janda.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Lateral no Cabo.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Lateral Sentado (na Parede).gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Meio Prisioneiro.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Meio.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal na Bola de Estabilidade (Braços Estendidos).gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal na Bola de Estabilidade.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Negativo.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal no Chão.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Oblíquo (v.2).gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Oblíquo no Chão.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Recolhido.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Sapo.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Sentado na Máquina (Apoio no Peito).gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Sentado na Máquina (v.2).gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Sentado na Máquina (v.3).gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Sentado no Cabo.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal Suspenso com Extensão.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal V Alternado com Elástico.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Abdominal V com Elástico.gif",
+    "categoria": "Abdômen"
+  },
+  {
     "arquivo": "Abdução de Quadril com Faixa.gif",
     "categoria": "Glúteos"
   },
@@ -20,12 +256,32 @@
     "categoria": "Glúteos"
   },
   {
+    "arquivo": "Abdução de Quadril Pernas Retas.gif",
+    "categoria": "Glúteos"
+  },
+  {
     "arquivo": "Abdução de Quadril Sentado com Faixa Elástica.gif",
     "categoria": "Glúteos"
   },
   {
+    "arquivo": "Abraço de Joelhos no Peito.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Abraço na Bola de Estabilidade.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "adução de pernas (alongamento do adutor maior).gif",
     "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Adução de Quadril Deitado de Lado.gif",
+    "categoria": "Glúteos"
+  },
+  {
+    "arquivo": "Adução de Quadril no Cabo.gif",
+    "categoria": "Glúteos"
   },
   {
     "arquivo": "Adução do Quadril Lateral com Alavanca.gif",
@@ -34,6 +290,22 @@
   {
     "arquivo": "Afundo Alternado com Salto.gif",
     "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Afundo Caminhando com Joelhos Altos.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Afundo Caminhando.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Afundo com Alongamento e Peso.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Afundo com Balanço e Peso.gif",
+    "categoria": "Pernas"
   },
   {
     "arquivo": "Afundo com Barra.gif",
@@ -49,6 +321,30 @@
   },
   {
     "arquivo": "Afundo com landmine.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Afundo com Passagem de Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Afundo com Rosca e Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Afundo com Rotação.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Afundo com Salto.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Afundo com Subida no Step e Halteres.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Afundo Contralateral com Halteres.gif",
     "categoria": "Pernas"
   },
   {
@@ -72,11 +368,55 @@
     "categoria": "Pernas"
   },
   {
+    "arquivo": "Afundo para Frente.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Afundo para Trás com Barra (v.2).gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Afundo para Trás com Barra.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Afundo para Trás com Halteres.gif",
+    "categoria": "Pernas"
+  },
+  {
     "arquivo": "Afundo Profundo.gif",
     "categoria": "Pernas"
   },
   {
+    "arquivo": "Afundo Sprint no Smith.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Afundo.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Aberto com Barra.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Ajoelhado com Barra.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Apoiado com Halteres.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Barra Alta com Barra.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Barra Baixa com Barra.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Barra Baixa no Smith.gif",
     "categoria": "Pernas"
   },
   {
@@ -84,11 +424,23 @@
     "categoria": "Pernas"
   },
   {
+    "arquivo": "Agachamento Búlgaro (v.2).gif",
+    "categoria": "Pernas"
+  },
+  {
     "arquivo": "Agachamento Búlgaro Calistenia.gif",
     "categoria": "Pernas"
   },
   {
+    "arquivo": "Agachamento Búlgaro com Barra (v.3).gif",
+    "categoria": "Pernas"
+  },
+  {
     "arquivo": "Agachamento Búlgaro com Barra.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Búlgaro com Elástico.gif",
     "categoria": "Pernas"
   },
   {
@@ -100,7 +452,39 @@
     "categoria": "Pernas"
   },
   {
+    "arquivo": "Agachamento Búlgaro com Subida no Step e Halteres.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Búlgaro Lateral com Barra (v.2).gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Búlgaro Lateral com Barra.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Búlgaro no Smith.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Búlgaro Suspenso.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Búlgaro Unilateral com Elástico.gif",
+    "categoria": "Pernas"
+  },
+  {
     "arquivo": "Agachamento Camarão.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento com Alcance Acima da Cabeça e Rotação.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento com Alcance Acima da Cabeça.gif",
     "categoria": "Pernas"
   },
   {
@@ -128,6 +512,10 @@
     "categoria": "Pernas"
   },
   {
+    "arquivo": "Agachamento com Elástico.gif",
+    "categoria": "Pernas"
+  },
+  {
     "arquivo": "Agachamento com Faixa Elástica em Afundo.gif",
     "categoria": "Pernas"
   },
@@ -144,6 +532,10 @@
     "categoria": "Pernas"
   },
   {
+    "arquivo": "Agachamento com Halteres.gif",
+    "categoria": "Pernas"
+  },
+  {
     "arquivo": "Agachamento com Joelho Elevado.gif",
     "categoria": "Pernas"
   },
@@ -152,11 +544,31 @@
     "categoria": "Funcional"
   },
   {
-    "arquivo": "Agachamento com salto ajoelhado.gif",
+    "arquivo": "Agachamento com Peso.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento com Salto (v.2).gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Agachamento com Salto Ajoelhado.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Agachamento com Salto e Afundo para Trás com Barra.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Agachamento com Salto e Barra.gif",
     "categoria": "Funcional"
   },
   {
     "arquivo": "Agachamento com salto e halteres.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Agachamento com Salto em Profundidade (Peso Corporal).gif",
     "categoria": "Funcional"
   },
   {
@@ -176,8 +588,36 @@
     "categoria": "Pernas"
   },
   {
+    "arquivo": "Agachamento Completo com Barra (Visão Lateral).gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Completo com Barra (Visão Traseira).gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Completo com Barra.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Completo no Smith.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Cossaco com Peso.gif",
+    "categoria": "Pernas"
+  },
+  {
     "arquivo": "Agachamento Cossaco.gif",
     "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Curtsey.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Deitado no Sled.gif",
+    "categoria": "Funcional"
   },
   {
     "arquivo": "Agachamento Dividido Profundo.gif",
@@ -192,11 +632,19 @@
     "categoria": "Pernas"
   },
   {
+    "arquivo": "Agachamento Frankenstein.gif",
+    "categoria": "Pernas"
+  },
+  {
     "arquivo": "Agachamento Frontal com Barra no Banco.gif",
     "categoria": "Pernas"
   },
   {
     "arquivo": "Agachamento Frontal com Barra no Smith.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Frontal com Barra.gif",
     "categoria": "Pernas"
   },
   {
@@ -212,6 +660,22 @@
     "categoria": "Pernas"
   },
   {
+    "arquivo": "Agachamento Frontal no Banco com Barra.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Frontal no Peito com Barra.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Frontal no Smith (Pegada de Clean).gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Agachamento Frontal Pegada de Clean com Barra.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Agachamento Frontal.gif",
     "categoria": "Pernas"
   },
@@ -224,19 +688,51 @@
     "categoria": "Pernas"
   },
   {
+    "arquivo": "Agachamento Goblet com Halteres.gif",
+    "categoria": "Pernas"
+  },
+  {
     "arquivo": "Agachamento Goblet com Kettlebell e Faixa Elástica.gif",
     "categoria": "Funcional"
   },
   {
-    "arquivo": "Agachamento hack com barra.gif",
+    "arquivo": "Agachamento Goblet com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Agachamento Hack com Barra.gif",
     "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Hack Fechado no Sled.gif",
+    "categoria": "Funcional"
   },
   {
     "arquivo": "Agachamento Hack Invertido.gif",
     "categoria": "Pernas"
   },
   {
+    "arquivo": "Agachamento Hack no Sled.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Agachamento Hack no Smith.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Jefferson com Barra.gif",
+    "categoria": "Pernas"
+  },
+  {
     "arquivo": "Agachamento Jefferson.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Jerk.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento na Cadeira no Smith.gif",
     "categoria": "Pernas"
   },
   {
@@ -252,7 +748,19 @@
     "categoria": "Pernas"
   },
   {
+    "arquivo": "Agachamento no Banco com Barra.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento no Banco com Halteres.gif",
+    "categoria": "Pernas"
+  },
+  {
     "arquivo": "Agachamento no Banco com Peso Corporal.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento no Bosu.gif",
     "categoria": "Pernas"
   },
   {
@@ -288,7 +796,31 @@
     "categoria": "Pernas"
   },
   {
+    "arquivo": "Agachamento Pistola Unilateral.gif",
+    "categoria": "Pernas"
+  },
+  {
     "arquivo": "Agachamento pistola.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Pliométrico com Halteres.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Agachamento Potty com Apoio.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Potty.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Pés Fechados com Barra.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Rápido com Barra.gif",
     "categoria": "Pernas"
   },
   {
@@ -296,7 +828,27 @@
     "categoria": "Pernas"
   },
   {
+    "arquivo": "Agachamento Sissy com Peso.gif",
+    "categoria": "Pernas"
+  },
+  {
     "arquivo": "Agachamento Sissy.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Sumô no Smith.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Unilateral (v.2).gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Unilateral com Barra.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Agachamento Unilateral com Halteres.gif",
     "categoria": "Pernas"
   },
   {
@@ -309,6 +861,14 @@
   },
   {
     "arquivo": "Agachamento unilateral cruzado.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Agachamento Zercher com Barra.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Agachamento Zercher Completo com Barra.gif",
     "categoria": "Funcional"
   },
   {
@@ -336,6 +896,10 @@
     "categoria": "Mobilidade"
   },
   {
+    "arquivo": "Alongamento Cruz de Ferro.gif",
+    "categoria": "Mobilidade"
+  },
+  {
     "arquivo": "Alongamento da Esfinge.gif",
     "categoria": "Mobilidade"
   },
@@ -356,7 +920,55 @@
     "categoria": "Mobilidade"
   },
   {
+    "arquivo": "Alongamento de Adutor Deitado de Lado Assistido.gif",
+    "categoria": "Mobilidade"
+  },
+  {
     "arquivo": "Alongamento de Adutores com Pernas Afastadas em Pé.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Coluna.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Costas com Rolo.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Costas Superior.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Deltoide Posterior.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Dorsal Ajoelhado.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Dorsal Deitado de Lado na Bola de Estabilidade.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Dorsal na Bola de Estabilidade.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Flexor de Quadril na Bola de Estabilidade.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Glúteo Deitado Assistido.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Glúteo e Piriforme Deitado Assistido.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Glúteo Sentado.gif",
     "categoria": "Mobilidade"
   },
   {
@@ -372,6 +984,10 @@
     "categoria": "Mobilidade"
   },
   {
+    "arquivo": "Alongamento de Joelho em Círculos.gif",
+    "categoria": "Mobilidade"
+  },
+  {
     "arquivo": "Alongamento de ombro com o braço cruzado.gif",
     "categoria": "Mobilidade"
   },
@@ -384,11 +1000,19 @@
     "categoria": "Mobilidade"
   },
   {
+    "arquivo": "Alongamento de Panturrilha com Empurrão na Parede.gif",
+    "categoria": "Mobilidade"
+  },
+  {
     "arquivo": "Alongamento de panturrilha com uma perna esticada.gif",
     "categoria": "Mobilidade"
   },
   {
     "arquivo": "Alongamento de panturrilha com uma perna.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Panturrilha Deitado Assistido.gif",
     "categoria": "Mobilidade"
   },
   {
@@ -400,11 +1024,75 @@
     "categoria": "Mobilidade"
   },
   {
-    "arquivo": "Alongamento de panturrilha na parede.gif",
+    "arquivo": "Alongamento de Panturrilha em Pé.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Panturrilha na Parede.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Panturrilha Sentado.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Peito Atrás da Cabeça.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Peito com Bola de Estabilidade.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Peito e Ombro Anterior.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Peito nas Costas.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Peitoral Sentado Assistido com Bola de Estabilidade.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Perna Estendida na Cadeira.gif",
     "categoria": "Mobilidade"
   },
   {
     "arquivo": "Alongamento de Pernas Duplo.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Pescoço com Empurrão Lateral.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Piriforme Sentado.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Posterior de Coxa Assistido (Decúbito Ventral).gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Posterior de Coxa com Perna Elevada.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Posterior de Coxa e Panturrilha em Pé com Faixa.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Posterior de Coxa Sentado na Bola de Estabilidade.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Posterior de Coxa.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Punho com Puxada Lateral.gif",
     "categoria": "Mobilidade"
   },
   {
@@ -416,7 +1104,23 @@
     "categoria": "Mobilidade"
   },
   {
+    "arquivo": "Alongamento de Quadril com Rolo.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Quadril e Dorsal com Rolo.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Quadríceps (v.2).gif",
+    "categoria": "Mobilidade"
+  },
+  {
     "arquivo": "Alongamento de Quadríceps ajoelhado.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Quadríceps Deitado de Lado.gif",
     "categoria": "Mobilidade"
   },
   {
@@ -424,7 +1128,19 @@
     "categoria": "Mobilidade"
   },
   {
+    "arquivo": "Alongamento de Quadríceps Prono Assistido.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Reto Femoral Prono Assistido.gif",
+    "categoria": "Mobilidade"
+  },
+  {
     "arquivo": "Alongamento de rotação da coluna em pé.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Tríceps Acima da Cabeça.gif",
     "categoria": "Mobilidade"
   },
   {
@@ -432,7 +1148,27 @@
     "categoria": "Mobilidade"
   },
   {
+    "arquivo": "Alongamento de Tríceps Sentado na Bola de Estabilidade.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento de Tríceps.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento Deitado de Lado no Chão.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento Dinâmico de Peito.gif",
+    "categoria": "Mobilidade"
+  },
+  {
     "arquivo": "Alongamento Dinâmico do Peitoral.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento do Corredor.gif",
     "categoria": "Mobilidade"
   },
   {
@@ -488,7 +1224,7 @@
     "categoria": "Mobilidade"
   },
   {
-    "arquivo": "Alongamento do tibial posterior.gif",
+    "arquivo": "Alongamento do Tibial Posterior.gif",
     "categoria": "Mobilidade"
   },
   {
@@ -517,6 +1253,10 @@
   },
   {
     "arquivo": "Alongamento dos Extensores dos Dedos dos Pés.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento dos Fibulares.gif",
     "categoria": "Mobilidade"
   },
   {
@@ -564,11 +1304,39 @@
     "categoria": "Mobilidade"
   },
   {
+    "arquivo": "Alongamento Intermediário de Flexor de Quadril e Quadríceps.gif",
+    "categoria": "Mobilidade"
+  },
+  {
     "arquivo": "Alongamento Lateral da Parte Interna da Coxa.gif",
     "categoria": "Mobilidade"
   },
   {
+    "arquivo": "Alongamento Lateral de Dorsal com Rolo.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento Lateral de Pescoço.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento Lateral em Pé.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento Lombar na Bola de Estabilidade (Pirâmide).gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento Lombar Sentado.gif",
+    "categoria": "Mobilidade"
+  },
+  {
     "arquivo": "Alongamento na parede do canto.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento O Melhor do Mundo.gif",
     "categoria": "Mobilidade"
   },
   {
@@ -584,7 +1352,15 @@
     "categoria": "Mobilidade"
   },
   {
+    "arquivo": "Alongamento Sapo com Balanço.gif",
+    "categoria": "Mobilidade"
+  },
+  {
     "arquivo": "Alongamento Sentado para a Panturrilha com Perna Esticada.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Alongamento Unilateral na Parede.gif",
     "categoria": "Mobilidade"
   },
   {
@@ -604,6 +1380,18 @@
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Apertar de Mão em Pé com Peso.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Around the World em Pé com Halteres.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Arqueiro em Pé.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Arranco com Barra.gif",
     "categoria": "Funcional"
   },
@@ -620,11 +1408,31 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Arranco Duplo com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Arranco e Levantamento com Kettlebell.gif",
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Arranco Unilateral com Barra.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Arranco Unilateral com Halteres.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Arranco Unilateral com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Arranque e Arremesso com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Arremesso Acima da Cabeça com Medicine Ball.gif",
     "categoria": "Funcional"
   },
   {
@@ -644,7 +1452,19 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Arremesso de Peito Supino com Medicine Ball.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Arremesso e Pressão com Barra.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Arremesso no Chão Acima da Cabeça com Medicine Ball.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Arremesso Unilateral com Medicine Ball.gif",
     "categoria": "Funcional"
   },
   {
@@ -696,6 +1516,18 @@
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Balanço com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Balanço de Braços na Barra com Joelhos Flexionados.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Balanço de Braços na Barra com Pernas Retas.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Balanços com Kettlebell.gif",
     "categoria": "Funcional"
   },
@@ -712,11 +1544,31 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Barra Fixa Aberta Atrás da Nuca.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa Arqueiro.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa Assistida com Elástico.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Barra fixa Assistida com Faixa Elástica.gif",
     "categoria": "Costas"
   },
   {
+    "arquivo": "Barra Fixa Assistida em Pé.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Barra Fixa Assistida.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa Atrás da Nuca.gif",
     "categoria": "Costas"
   },
   {
@@ -756,7 +1608,7 @@
     "categoria": "Costas"
   },
   {
-    "arquivo": "Barra fixa com peso.gif",
+    "arquivo": "Barra Fixa com Peso.gif",
     "categoria": "Costas"
   },
   {
@@ -768,24 +1620,128 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Barra Fixa de Lado a Lado.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa em L.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa Escapular.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa Fechada para Bíceps.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Barra Fixa Gorila.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa no Banco.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa no Esterno (Gironda).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa para Bíceps.gif",
+    "categoria": "Bíceps"
+  },
+  {
     "arquivo": "Barra Fixa para o Braquial.gif",
     "categoria": "Costas"
   },
   {
-    "arquivo": "Barra fixa pegada invertida.gif",
+    "arquivo": "Barra Fixa Paralela Pegada Fechada Assistida.gif",
     "categoria": "Costas"
   },
   {
-    "arquivo": "Barra fixa.gif",
+    "arquivo": "Barra Fixa Pegada Aberta.gif",
     "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa Pegada de Ombro.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa Pegada Invertida.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa Pegada Mista.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa Pegada Neutra.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa Puxada Rocky.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa Supinada Assistida em Pé.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa Supinada Assistida na Máquina.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa Supinada Pegada Fechada com Peso (Estação de Mergulho).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Barra Fixa Supinada Pegada Fechada Paralela.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa Supinada Pegada Fechada.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa Supinada Unilateral.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa Supinada.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa Unilateral com Peso.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Barra Fixa.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Bicicleta Ergométrica (v.3).gif",
+    "categoria": "Cardio"
   },
   {
     "arquivo": "Bicicleta Ergométrica Reclinada.gif",
     "categoria": "Cardio"
   },
   {
+    "arquivo": "Bicicleta no Ar.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Bike de Braços.gif",
+    "categoria": "Cardio"
+  },
+  {
     "arquivo": "Bike.gif",
     "categoria": "Cardio"
+  },
+  {
+    "arquivo": "Body-Up.gif",
+    "categoria": "Não classificado"
   },
   {
     "arquivo": "Bola na parede.gif",
@@ -796,7 +1752,15 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Bom Dia com Barra.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Bom Dia com Faixa Elástica de Resistência.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Bom Dia Joelhos Flexionados no Smith.gif",
     "categoria": "Costas"
   },
   {
@@ -804,8 +1768,24 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Bom Dia Pernas Retas com Barra.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Bom Dia Sentado com Barra.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Bom Dia Sentado na Máquina.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Bom dia.gif",
     "categoria": "Costas"
+  },
+  {
+    "arquivo": "Bottoms-Up.gif",
+    "categoria": "Não classificado"
   },
   {
     "arquivo": "Boxe jab.gif",
@@ -816,7 +1796,15 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Burpee com Halteres.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Burpee Jack.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Burpee.gif",
     "categoria": "Funcional"
   },
   {
@@ -824,11 +1812,31 @@
     "categoria": "Funcional"
   },
   {
-    "arquivo": "Cadeira extensora.gif",
+    "arquivo": "Báscula Pélvica em Pé.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Báscula Pélvica para Ponte.gif",
+    "categoria": "Glúteos"
+  },
+  {
+    "arquivo": "Báscula Pélvica.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Cadeira Abdutora.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Cadeira Adutora.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Cadeira Extensora.gif",
     "categoria": "Pernas"
   },
   {
-    "arquivo": "Cadeira flexora.gif",
+    "arquivo": "Cadeira Flexora.gif",
     "categoria": "Pernas"
   },
   {
@@ -836,7 +1844,27 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Caminhada do Fazendeiro.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Caminhada do Monstro.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Caminhada em Esteira Inclinada.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Caminhada Lateral com Faixa de Resistência.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Caminhada na Bicicleta Ergométrica.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Caminhada na Escada Rolante (Stepmill).gif",
     "categoria": "Funcional"
   },
   {
@@ -848,7 +1876,15 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Caminhada no Elíptico.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Caminhada Rápida.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Caminhada Unilateral com Halter Acima da Cabeça.gif",
     "categoria": "Funcional"
   },
   {
@@ -864,8 +1900,16 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Casulo (Cocoon).gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Catavento corporal.gif",
     "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Chute de Nadador (v.2).gif",
+    "categoria": "Funcional"
   },
   {
     "arquivo": "Chute em Gancho.gif",
@@ -877,6 +1921,38 @@
   },
   {
     "arquivo": "Chutes até o Glúteo.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Clean Alternado com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Clean and Jerk Unilateral com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Clean and Press com Barra.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Clean Bilateral com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Clean Bottoms Up a partir da Posição Suspensa com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Clean com Halteres.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Clean Suspenso Alternado Duplo com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Clean Suspenso com Kettlebell.gif",
     "categoria": "Funcional"
   },
   {
@@ -892,7 +1968,15 @@
     "categoria": "Abdômen"
   },
   {
-    "arquivo": "Corda de batalha.gif",
+    "arquivo": "Contração Isométrica de Peito.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Corda de Batalha.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Corrida (Equipamento).gif",
     "categoria": "Funcional"
   },
   {
@@ -904,7 +1988,15 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Corrida com Passada Curta.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Corrida com Passos Rápidos.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Corrida com Roda.gif",
     "categoria": "Funcional"
   },
   {
@@ -917,6 +2009,10 @@
   },
   {
     "arquivo": "Corrida de Sprint com Assistência de Faixa Elástica.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Corrida Estacionária Rápida (v.2).gif",
     "categoria": "Funcional"
   },
   {
@@ -940,6 +2036,14 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Cotovelo ao Joelho Deitado.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Cotovelo ao Joelho.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Cross over polia Alta.gif",
     "categoria": "Peito"
   },
@@ -956,7 +2060,19 @@
     "categoria": "Peito"
   },
   {
+    "arquivo": "Crossover em Pé no Cabo.gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Crossover na Alavanca.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crossover no Cabo (Variação).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crossover para Peito Superior no Cabo.gif",
     "categoria": "Peito"
   },
   {
@@ -964,7 +2080,23 @@
     "categoria": "Peito"
   },
   {
+    "arquivo": "Crucifixo Alto com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo Baixo no Cabo.gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Crucifixo com Cabo Declinado.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo com Halteres (na Bola de Estabilidade).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo com Halteres Apoiado em Uma Perna (na Bola de Estabilidade).gif",
     "categoria": "Peito"
   },
   {
@@ -976,7 +2108,7 @@
     "categoria": "Peito"
   },
   {
-    "arquivo": "Crucifixo com halteres.gif",
+    "arquivo": "Crucifixo com Halteres.gif",
     "categoria": "Peito"
   },
   {
@@ -984,7 +2116,47 @@
     "categoria": "Peito"
   },
   {
+    "arquivo": "Crucifixo Declinado com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo Declinado com Rotação e Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo Declinado no Cabo.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo Declinado Unilateral com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo Declinado Unilateral no Cabo.gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Crucifixo Deitado com Cabo.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo Deitado no Cabo.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo em Pé no Cabo.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo Inclinado com Halteres (na Bola de Estabilidade).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo Inclinado com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo Inclinado com Rotação e Halteres.gif",
     "categoria": "Peito"
   },
   {
@@ -992,11 +2164,79 @@
     "categoria": "Peito"
   },
   {
+    "arquivo": "Crucifixo Inclinado no Cabo (na Bola de Estabilidade).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo Inclinado no Cabo.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo Inclinado Unilateral com Halteres (na Bola de Estabilidade).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo Inclinado Unilateral com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo Inclinado Unilateral no Cabo (na Bola de Estabilidade).gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Crucifixo inverso unilateral com cabo.gif",
     "categoria": "Peito"
   },
   {
+    "arquivo": "Crucifixo Invertido Alto Cruzado em Pé no Cabo.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Crucifixo Invertido com Elástico.gif",
+    "categoria": "Ombro"
+  },
+  {
     "arquivo": "Crucifixo invertido com gymstick para deltoides posterior.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Crucifixo Invertido com Halteres (2).gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Crucifixo Invertido com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Crucifixo Invertido com Rotação e Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Crucifixo Invertido Cruzado no Cabo.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Crucifixo Invertido Supino no Cabo.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Crucifixo Invertido Unilateral com Apoio e Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Crucifixo Médio no Cabo.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo no Chão (com Barra).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo Unilateral com Halteres (na Bola de Estabilidade) (v.2).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo Unilateral com Halteres (na Bola de Estabilidade).gif",
     "categoria": "Peito"
   },
   {
@@ -1004,11 +2244,23 @@
     "categoria": "Peito"
   },
   {
-    "arquivo": "Cruz de ferro com halteres.gif",
+    "arquivo": "Crucifixo Unilateral no Banco com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Crucifixo Unilateral no Cabo (na Bola de Estabilidade).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Cruz de Ferro com Halteres.gif",
     "categoria": "Não classificado"
   },
   {
     "arquivo": "Cruzado de Direita.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Cruzado de Esquerda (Boxe).gif",
     "categoria": "Funcional"
   },
   {
@@ -1024,7 +2276,19 @@
     "categoria": "Ombro"
   },
   {
+    "arquivo": "Círculos de Punho.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Círculos de Tornozelo.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Cópia de Abdominal de Rã com Bola de Exercícios.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Dead Bug.gif",
     "categoria": "Abdômen"
   },
   {
@@ -1032,11 +2296,35 @@
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Desenvolvimento Alternado em Pé com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Alternado no Cabo.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Alternado Sentado com Halteres (v.2).gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Alternado Sentado com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
     "arquivo": "Desenvolvimento Arnold (metade).gif",
     "categoria": "Ombro"
   },
   {
-    "arquivo": "Desenvolvimento Arnold com kettlebell.gif",
+    "arquivo": "Desenvolvimento Arnold com Halteres (v.2).gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Arnold com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Arnold com Kettlebell.gif",
     "categoria": "Funcional"
   },
   {
@@ -1045,6 +2333,26 @@
   },
   {
     "arquivo": "Desenvolvimento Arnold.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Atrás da Nuca em Pé.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Atrás da Nuca no Smith.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento com Elástico.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento com Rotação com Elástico.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Cubano com Halteres (v.2).gif",
     "categoria": "Ombro"
   },
   {
@@ -1144,12 +2452,32 @@
     "categoria": "Ombro"
   },
   {
+    "arquivo": "Desenvolvimento em Pé com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento em W com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
     "arquivo": "Desenvolvimento lateral com gymstick.gif",
     "categoria": "Ombro"
   },
   {
     "arquivo": "Desenvolvimento militar atrás da cabeça com gymstick.gif",
     "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Militar Atrás da Nuca em Pé no Smith.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Militar Bilateral com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Desenvolvimento Militar Bilateral Sentado com Kettlebell.gif",
+    "categoria": "Funcional"
   },
   {
     "arquivo": "Desenvolvimento militar com barra no chão ajoelhado.gif",
@@ -1176,7 +2504,103 @@
     "categoria": "Ombro"
   },
   {
+    "arquivo": "Desenvolvimento Militar em Pé no Smith.gif",
+    "categoria": "Ombro"
+  },
+  {
     "arquivo": "Desenvolvimento militar inclinado com barra presa no chão.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Militar na Máquina.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Militar Pegada Aberta em Pé com Barra.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Militar Pegada Fechada em Pé com Barra.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Militar Sentado Atrás da Nuca com Barra.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Militar Unilateral Lateral com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Desenvolvimento na Máquina (v.2).gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento na Máquina (v.3).gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento na Máquina.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento no Cabo.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento no Smith.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Pegada Neutra em Pé com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Scott com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Desenvolvimento Sentado com Barra.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Sentado com Faixa Elástica.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Sentado com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Sentado com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Desenvolvimento Sentado no Banco com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Sentado no Smith.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Sentado Pegada Paralela com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Unilateral com Halteres (v.2).gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Unilateral com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Unilateral na Máquina.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Desenvolvimento Unilateral Pegada Neutra em Pé com Halteres.gif",
     "categoria": "Ombro"
   },
   {
@@ -1186,6 +2610,10 @@
   {
     "arquivo": "Deslize de parede do serrátil com rolo de espuma.gif",
     "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Deslize Unilateral na Plataforma.gif",
+    "categoria": "Não classificado"
   },
   {
     "arquivo": "Dips de escápula.gif",
@@ -1212,6 +2640,22 @@
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Elevador (Ginástica).gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Elevação Alternada de Braços na Bola de Estabilidade.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Elevação Alternada em Pé com Halteres.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Elevação Circular com Peso.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Elevação com Barra em Degrau.gif",
     "categoria": "Não classificado"
   },
@@ -1220,23 +2664,111 @@
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Elevação com Halteres.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Elevação da Perna em Pé com Faixa Elástica de Resistência.gif",
     "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Elevação de Cotovelo - Flexão Invertida.gif",
+    "categoria": "Peito"
   },
   {
     "arquivo": "Elevação de Deltoide em Y com Halteres Inclinado.gif",
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Elevação de Deltoide Posterior com Barra.gif",
+    "categoria": "Ombro"
+  },
+  {
     "arquivo": "Elevação de Deltoide Posterior com Halteres Inclinado.gif",
-    "categoria": "Não classificado"
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação de Deltoide Posterior com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação de Deltoide Posterior Deitado no Chão com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação de Glúteos.gif",
+    "categoria": "Glúteos"
   },
   {
     "arquivo": "Elevação de Joelho com Halteres.gif",
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Elevação de Joelhos na Barra Assistida com Impulso.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Elevação de Joelhos na Barra Assistida.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Elevação de Joelhos na Parede.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Elevação de Joelhos Oblíqua na Barra Fixa.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Elevação de Ombro Inclinada com Barra.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Elevação de Ombro Inclinada com Halteres.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Elevação de Ombro Inclinada no Smith.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Bilateral com Elástico (v.2).gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Burro (Donkey).gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Burro com Peso.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Burro na Máquina.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Burro Unilateral.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha com Balanço em Pé com Barra.gif",
+    "categoria": "Panturrilha"
+  },
+  {
     "arquivo": "Elevação de Panturrilha com Barra em Pé.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha com Bola na Parede (Bola de Tênis entre os Joelhos).gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha com Bola na Parede (Bola de Tênis entre os Tornozelos).gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha com Bola na Parede.gif",
     "categoria": "Panturrilha"
   },
   {
@@ -1252,6 +2784,38 @@
     "categoria": "Panturrilha"
   },
   {
+    "arquivo": "Elevação de Panturrilha em Pé (na Escada).gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha em Pé (Peso Corporal).gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha em Pé com Barra (2).gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha em Pé com Barra.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha em Pé com Halteres.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha em Pé na Máquina.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha em Pé no Cabo.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha em Pé no Smith.gif",
+    "categoria": "Panturrilha"
+  },
+  {
     "arquivo": "Elevação de panturrilha em pé.gif",
     "categoria": "Panturrilha"
   },
@@ -1260,7 +2824,31 @@
     "categoria": "Panturrilha"
   },
   {
+    "arquivo": "Elevação de Panturrilha Inclinada para Frente no Sled.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Invertida no Smith (v.2).gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Invertida no Smith.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Invertida Unilateral com Elástico.gif",
+    "categoria": "Panturrilha"
+  },
+  {
     "arquivo": "Elevação de Panturrilha na Máquina.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha no Chão com Barra.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha no Hack.gif",
     "categoria": "Panturrilha"
   },
   {
@@ -1280,11 +2868,71 @@
     "categoria": "Panturrilha"
   },
   {
+    "arquivo": "Elevação de Panturrilha Sentado com Barra (v.2).gif",
+    "categoria": "Panturrilha"
+  },
+  {
     "arquivo": "Elevação de Panturrilha Sentado com Barra.gif",
     "categoria": "Panturrilha"
   },
   {
+    "arquivo": "Elevação de Panturrilha Sentado com Halteres.gif",
+    "categoria": "Panturrilha"
+  },
+  {
     "arquivo": "Elevação de Panturrilha Sentado com Peso.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Sentado na Máquina.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Sentado no Leg Press.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Unilateral (sobre Haltere).gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Unilateral com Elástico.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Unilateral com Halteres.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Unilateral em Pé no Cabo.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Unilateral no Chão no Smith.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Unilateral no Chão.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Unilateral no Hack.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Unilateral Sentado com Halteres (Palma para Cima).gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Unilateral Sentado com Halteres (Pegada Martelo).gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Unilateral Sentado com Halteres.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Panturrilha Unilateral Sentado no Smith.gif",
     "categoria": "Panturrilha"
   },
   {
@@ -1294,6 +2942,14 @@
   {
     "arquivo": "Elevação de Panturrilhas.gif",
     "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Elevação de Perna Alternada Sentado com Barra (v.2).gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Elevação de Perna Alternada Sentado com Barra.gif",
+    "categoria": "Abdômen"
   },
   {
     "arquivo": "Elevação de Perna em Pé com Alavanca.gif",
@@ -1308,7 +2964,27 @@
     "categoria": "Bíceps"
   },
   {
+    "arquivo": "Elevação de Pernas com Rotação (v.2).gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Elevação de Pernas com Rotação.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Elevação de Pernas Deitado Assistida com Impulso Lateral.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Elevação de Pernas Deitado Assistida com Impulso.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Elevação de Pernas deitado de Lado.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Elevação de Pernas Deitado no Banco Reto.gif",
     "categoria": "Abdômen"
   },
   {
@@ -1316,11 +2992,91 @@
     "categoria": "Abdômen"
   },
   {
+    "arquivo": "Elevação de Pernas na Barra Fixa.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Elevação de Pernas Prona na Bola de Estabilidade.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Elevação de Pernas Retas Deitado com Elástico.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Elevação de Pernas Retas na Barra Fixa.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Elevação de Pernas Retas na Cadeira Romana.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Elevação de Pernas Sentado.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Elevação de Pernas Vertical (nas Paralelas).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Elevação de Ponta dos Pés no Smith.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Elevação de Quadril (Joelhos Flexionados).gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Elevação de Quadril Ajoelhado com Faixa Elástica.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Elevação de Quadril com Banda de Resistência de Joelhos.gif",
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Elevação de Quadril com Elástico.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Elevação de Quadril com Pernas Retas na Barra Fixa.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Elevação de Quadril com Peso Corporal.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Elevação de Quadril com Rotação e Pernas Retas na Barra Fixa.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Elevação de Quadril com Rotação.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Elevação de Quadril Deitado com Barra.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Elevação de Quadril e Pernas Deitado.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Elevação de Quadril e Pernas na Barra Fixa com Peso.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Elevação de Quadril e Pernas na Barra Fixa.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Elevação de Quadril Inclinada (Pernas Retas).gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Elevação de Quadril no Smith.gif",
     "categoria": "Não classificado"
   },
   {
@@ -1328,7 +3084,39 @@
     "categoria": "Ombro"
   },
   {
+    "arquivo": "Elevação em Pé no Cabo.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Elevação em T Inclinada com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação em V na Barra Fixa.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Elevação em Y com Elástico.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação em Y Inclinada com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Frontal Acima da Cabeça em Pé com Barra.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Frontal Acima da Cabeça em Pé com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
     "arquivo": "Elevação Frontal Alternada Com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Frontal Alternada Sentado com Halteres.gif",
     "categoria": "Ombro"
   },
   {
@@ -1340,6 +3128,10 @@
     "categoria": "Ombro"
   },
   {
+    "arquivo": "Elevação Frontal com Barra.gif",
+    "categoria": "Ombro"
+  },
+  {
     "arquivo": "elevação frontal com cabo duplo no cross.gif",
     "categoria": "Ombro"
   },
@@ -1348,16 +3140,56 @@
     "categoria": "Ombro"
   },
   {
+    "arquivo": "Elevação Frontal com Elástico.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Frontal com Halteres (v.2).gif",
+    "categoria": "Ombro"
+  },
+  {
     "arquivo": "Elevação frontal com halteres sentado.gif",
     "categoria": "Ombro"
   },
   {
-    "arquivo": "Elevação frontal com halteres.gif",
+    "arquivo": "Elevação Frontal com Halteres.gif",
     "categoria": "Ombro"
   },
   {
-    "arquivo": "Elevação frontal lateral com elástico.gif",
+    "arquivo": "Elevação Frontal com Peso.gif",
     "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Frontal de Ombro no Cabo.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Frontal e Pullover com Barra.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Frontal Lateral com Elástico.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Frontal no Cabo (v.2).gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Frontal no Cabo.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Frontal Sentado com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Glúteo-Femoral (GHR).gif",
+    "categoria": "Glúteos"
+  },
+  {
+    "arquivo": "Elevação Inclinada com Halteres.gif",
+    "categoria": "Não classificado"
   },
   {
     "arquivo": "Elevação lateral alternada com halteres.gif",
@@ -1381,6 +3213,10 @@
   },
   {
     "arquivo": "Elevação lateral com halteres sentado.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Lateral com Halteres.gif",
     "categoria": "Ombro"
   },
   {
@@ -1428,11 +3264,67 @@
     "categoria": "Ombro"
   },
   {
-    "arquivo": "Elevação lateral na máquina.gif",
+    "arquivo": "Elevação Lateral Full Can com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Lateral na Máquina.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Lateral no Cabo.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Lateral no Landmine.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Lateral para Frontal com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Lateral Posterior com Apoio de Cabeça e Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Lateral Posterior com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Lateral Posterior Deitado com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Lateral Posterior Inclinada com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Lateral Posterior Sentado no Cabo.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Lateral Posterior Unilateral Deitado com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Lateral Sentado Braços Flexionados com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Lateral Sentado com Halteres (v.2).gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Lateral Sentado com Halteres.gif",
     "categoria": "Ombro"
   },
   {
     "arquivo": "Elevação lateral tronco inclinado.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Lateral Unilateral com Apoio e Halteres.gif",
     "categoria": "Ombro"
   },
   {
@@ -1444,11 +3336,23 @@
     "categoria": "Ombro"
   },
   {
-    "arquivo": "Elevação lateral unilateral com halteres.gif",
+    "arquivo": "Elevação Lateral Unilateral com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Lateral Unilateral Inclinada com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Elevação Lateral Unilateral no Cabo.gif",
     "categoria": "Ombro"
   },
   {
     "arquivo": "Elevação Posterior unilateral com halteres em Decúbito Prono.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Elevação Posterior Unilateral Deitado com Halteres.gif",
     "categoria": "Não classificado"
   },
   {
@@ -1488,6 +3392,10 @@
     "categoria": "Panturrilha"
   },
   {
+    "arquivo": "Elevação Unilateral Deitado de Lado com Halteres.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Elevações de ombros na paralela.gif",
     "categoria": "Não classificado"
   },
@@ -1496,7 +3404,39 @@
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Elíptico.gif",
+    "categoria": "Cardio"
+  },
+  {
+    "arquivo": "Empurrar e Puxar (Peso Corporal).gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Empurrar para Correr.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Empurrão de Peito com Medicine Ball (Apoio de 3 Pontos).gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Empurrão de Peito com Medicine Ball (Múltiplas Repetições).gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Empurrão de Peito com Medicine Ball (Repetição Única).gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Empurrão de Peito com Medicine Ball e Corrida.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Encolhimento Acima da Cabeça.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Encolhimento com Barra.gif",
     "categoria": "Ombro"
   },
   {
@@ -1504,7 +3444,15 @@
     "categoria": "Ombro"
   },
   {
+    "arquivo": "Encolhimento com Elástico.gif",
+    "categoria": "Ombro"
+  },
+  {
     "arquivo": "Encolhimento com Halteres em Declive.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Encolhimento com Halteres.gif",
     "categoria": "Ombro"
   },
   {
@@ -1520,11 +3468,43 @@
     "categoria": "Ombro"
   },
   {
+    "arquivo": "Encolhimento Declinado com Halteres (v.2).gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Encolhimento Declinado com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Encolhimento Inclinado com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
     "arquivo": "Encolhimento Inclinado Pronado.gif",
     "categoria": "Ombro"
   },
   {
-    "arquivo": "Encolhimento na máquina.gif",
+    "arquivo": "Encolhimento na Máquina.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Encolhimento no Cabo.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Encolhimento no Smith (v.2).gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Encolhimento no Smith.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Encolhimento sem Pegada na Máquina (v.2).gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Encolhimento sem Pegada na Máquina.gif",
     "categoria": "Ombro"
   },
   {
@@ -1532,8 +3512,24 @@
     "categoria": "Ombro"
   },
   {
+    "arquivo": "Ergômetro de Esqui.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Escalada em Corda.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Escalador (Mountain Climber).gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Escalador de Montanha.gif",
     "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Esquiador com Barra.gif",
+    "categoria": "Funcional"
   },
   {
     "arquivo": "Esquiador com gymstick.gif",
@@ -1572,7 +3568,43 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Extensão Alternada Deitado com Halteres.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Extensão Bilateral Inclinada com Halteres.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Extensão Concentrada com Cabo no Joelho.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Extensão Concentrada no Cabo (Apoiado no Joelho).gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Extensão de Costas com Braços Estendidos na Bola de Estabilidade.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Extensão de Costas com Joelhos Fora do Chão na Bola de Estabilidade.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Extensão de Costas com Mãos Atrás da Cabeça na Bola de Estabilidade.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Extensão de Costas com Rotação na Bola de Estabilidade.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Extensão de Costas na Bola de Estabilidade.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Extensão de Costas na Máquina.gif",
     "categoria": "Não classificado"
   },
   {
@@ -1582,6 +3614,10 @@
   {
     "arquivo": "Extensão de ombro com faixa.gif",
     "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Extensão de Perna com Faixa Elástica.gif",
+    "categoria": "Pernas"
   },
   {
     "arquivo": "Extensão de Perna em Pé com Faixa de Resistência.gif",
@@ -1612,7 +3648,19 @@
     "categoria": "Glúteos"
   },
   {
+    "arquivo": "Extensão de Quadril Curvado com Elástico.gif",
+    "categoria": "Glúteos"
+  },
+  {
     "arquivo": "Extensão de Quadril em Pé com Alavanca.gif",
+    "categoria": "Glúteos"
+  },
+  {
+    "arquivo": "Extensão de Quadril em Pé no Cabo.gif",
+    "categoria": "Glúteos"
+  },
+  {
+    "arquivo": "Extensão de Quadril na Máquina (v.2).gif",
     "categoria": "Glúteos"
   },
   {
@@ -1624,11 +3672,51 @@
     "categoria": "Tríceps"
   },
   {
+    "arquivo": "Extensão de Tríceps Acima da Cabeça em Pé com Barra.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Acima da Cabeça na Polia Alta (com Corda).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Acima da Cabeça na Polia Alta.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Acima da Cabeça no Cabo (com Corda).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Ajoelhado (Peso Corporal).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Ajoelhado no Cabo.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Alternada no Cabo.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Bilateral Curvado em Pé com Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps com Afundo à Frente e Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
     "arquivo": "Extensão de tríceps com barra atrás da cabeça.gif",
     "categoria": "Tríceps"
   },
   {
     "arquivo": "Extensão de tríceps com barra em pé.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps com Barra Olímpica.gif",
     "categoria": "Tríceps"
   },
   {
@@ -1692,11 +3780,79 @@
     "categoria": "Tríceps"
   },
   {
+    "arquivo": "Extensão de Tríceps Curvado Sentado com Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Declinada com Barra W.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Declinada com Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Deitado Atrás da Cabeça com Barra.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Deitado Atrás da Cabeça Pegada Fechada com Barra W.gif",
+    "categoria": "Tríceps"
+  },
+  {
     "arquivo": "Extensão de Tríceps deitado com Barra W Pegada Fechada atrás da Cabeça.gif",
     "categoria": "Tríceps"
   },
   {
+    "arquivo": "Extensão de Tríceps Deitado com Barra.gif",
+    "categoria": "Tríceps"
+  },
+  {
     "arquivo": "Extensão de Tríceps deitado com Corda.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Deitado com Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Deitado no Cabo (v.2).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Deitado no Chão com Corda.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Deitado Pegada Fechada com Barra.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps em Pé Assistida (com Toalha).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps em Pé com Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Inclinada com Barra W.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Inclinada com Corda no Cabo.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Inclinada com Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Inclinada no Cabo.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Inclinada no Smith.gif",
     "categoria": "Tríceps"
   },
   {
@@ -1708,7 +3864,15 @@
     "categoria": "Tríceps"
   },
   {
+    "arquivo": "Extensão de Tríceps Lateral com Elástico.gif",
+    "categoria": "Tríceps"
+  },
+  {
     "arquivo": "Extensão de tríceps na máquina pegada neutra.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps na Máquina.gif",
     "categoria": "Tríceps"
   },
   {
@@ -1720,12 +3884,76 @@
     "categoria": "Tríceps"
   },
   {
+    "arquivo": "Extensão de Tríceps Pegada Pronada com Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Sentado Acima da Cabeça com Barra.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Sentado Atrás da Nuca Pegada Fechada com Barra.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Sentado com Barra W.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Sentado com Halteres (v.2).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Sentado com Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Supino na Bola de Estabilidade.gif",
+    "categoria": "Tríceps"
+  },
+  {
     "arquivo": "Extensão de Tríceps Testa Declinado Fechado.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Unilateral Acima da Cabeça Pegada Invertida em Pé no Cabo.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Unilateral Acima da Cabeça Pegada Invertida Sentado com Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Unilateral com Halteres (no Banco).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Unilateral Curvado em Pé com Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Unilateral Deitado Pronada com Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Unilateral Deitado Supinada com Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão de Tríceps Unilateral em Pé no Cabo.gif",
     "categoria": "Tríceps"
   },
   {
     "arquivo": "Extensão de tríceps.gif",
     "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Extensão Deitado com Barra.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Extensão Deitado Sobre o Rosto com Halteres.gif",
+    "categoria": "Não classificado"
   },
   {
     "arquivo": "Extensão Lombar com Peso.gif",
@@ -1736,8 +3964,64 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Extensão Posterior no Cabo.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Extensão Sentado no Banco com Halteres.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Extensão Unilateral Deitado com Halteres.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Extensão Unilateral em Pé com Halteres.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Face Pull.gif",
     "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Flexora Ajoelhado na Máquina.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Flexora Deitado com Halteres.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Flexora Diagonal Unilateral na Bola de Estabilidade.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Flexora Invertida (Apoio no Banco).gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Flexora Invertida (na Máquina de Cabo).gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Flexora Invertida Assistida no Cabo.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Flexora Invertida Autoassistida (no Chão).gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Flexora Invertida Autoassistida (v.2).gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Flexora Invertida Autoassistida.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Flexora Unilateral em Pé.gif",
+    "categoria": "Pernas"
   },
   {
     "arquivo": "Flexão cobra.gif",
@@ -1780,6 +4064,22 @@
     "categoria": "Peito"
   },
   {
+    "arquivo": "Flexão de Braço (Bosu).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Ajoelhado.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Aranha.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Arqueiro.gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Flexão de braço com adução da escapula.gif",
     "categoria": "Peito"
   },
@@ -1804,7 +4104,47 @@
     "categoria": "Peito"
   },
   {
+    "arquivo": "Flexão de Braço com Chute de Perna para Dentro.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Flexão de Braço com Chute de Perna para Fora.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Flexão de Braço com Medicine Ball.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Flexão de Braço com Palma.gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Flexão de braço com palmas.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço com Queda e Peso.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço com Queda.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço com Toque no Ombro.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço com Toque no Peito.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Declinada.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Diamante.gif",
     "categoria": "Peito"
   },
   {
@@ -1812,7 +4152,155 @@
     "categoria": "Peito"
   },
   {
+    "arquivo": "Flexão de Braço em Relógio.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Escapular.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Fechada na Bola de Estabilidade.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Hindu Modificada.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Inclinada (na Caixa).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Inclinada com Salto em Profundidade.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Flexão de Braço Inclinada Pegada Fechada.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Inclinada Pegada Invertida.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Inclinada.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Lateral.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Modificada nos Antebraços.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Mãos Afastadas.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço na Bola de Estabilidade (v.2).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço na Bola de Estabilidade.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço na Parada de Mãos.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço na Parede (v.2).gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Flexão de Braço na Parede com Pegada Fechada.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço na Parede.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço no Bosu.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço nos Antebraços.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço para Prancha Lateral.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Pegada Fechada (Joelhos no Chão).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Pegada Fechada com Elástico.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Pegada Fechada com Medicine Ball.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Flexão de Braço Pegada Fechada no Haltere.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Pegada Fechada.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Pike na Bola de Estabilidade.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Pike para Cobra.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Planche Completo.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Pliométrica com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Flexão de Braço Pliométrica.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Plus.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Profunda.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Superman.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Suspensa.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Unilateral com Elevação.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço Unilateral.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão de Braço.gif",
     "categoria": "Peito"
   },
   {
@@ -1924,6 +4412,10 @@
     "categoria": "Peito"
   },
   {
+    "arquivo": "Flexão Escapular Inclinada.gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Flexão hindu modificada.gif",
     "categoria": "Peito"
   },
@@ -1933,6 +4425,30 @@
   },
   {
     "arquivo": "Flexão Invertida.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão Lateral 45°.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão Lateral com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão Lateral com Peso (na Bola de Estabilidade).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão Lateral de Tronco com Barra (v.2).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão Lateral no Cabo.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Flexão Lombar.gif",
     "categoria": "Peito"
   },
   {
@@ -1968,7 +4484,43 @@
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Fortalecedor de Mão na Máquina.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Francês com Barra W (na Bola de Estabilidade).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Francês em Pé com Barra W.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Francês Unilateral com Halteres (na Bola de Estabilidade).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Front Lever com Repetições.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Front Lever.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Gancho de Direita.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Giro 360.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Giro de Judô no Cabo.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Giro de Pneu.gif",
     "categoria": "Não classificado"
   },
   {
@@ -2024,6 +4576,14 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Hiperextensão (no Banco).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Hiperextensão com Peso (na Bola de Estabilidade).gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Hiperextensão com Torção.gif",
     "categoria": "Costas"
   },
@@ -2032,7 +4592,19 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Hiperextensão Invertida (na Bola de Estabilidade).gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Hiperextensão Invertida de Sapo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Hiperextensão Invertida na Máquina.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Hiperextensão Invertida no Banco Reto.gif",
     "categoria": "Costas"
   },
   {
@@ -2060,12 +4632,24 @@
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Inclinação Lateral Unilateral no Cabo.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Inclinação Lateral.gif",
     "categoria": "Não classificado"
   },
   {
     "arquivo": "Inclinação Pélvica.gif",
     "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Jerk Duplo com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Jerk Unilateral com Kettlebell.gif",
+    "categoria": "Funcional"
   },
   {
     "arquivo": "Joelho Alternado no Peito.gif",
@@ -2084,12 +4668,48 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "L-Sit no Chão.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Lagartinha (Inchworm).gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Lagartinha (v.2).gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Landmine 180°.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Lançamento de Bola Medicinal deitado.gif",
     "categoria": "Não classificado"
   },
   {
     "arquivo": "Lançamento de bola medicinal.gif",
     "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Leg Press 45° (Visão Lateral).gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Leg Press 45° (Visão Traseira).gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Leg Press 45° Pernas Abertas.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Leg Press 45° Unilateral.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Leg Press 45°.gif",
+    "categoria": "Pernas"
   },
   {
     "arquivo": "Leg press 90 no smith.gif",
@@ -2100,7 +4720,19 @@
     "categoria": "Pernas"
   },
   {
+    "arquivo": "Leg Press Alternado na Máquina.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Leg Press Horizontal Unilateral na Máquina.gif",
+    "categoria": "Pernas"
+  },
+  {
     "arquivo": "Leg Press Horizontal.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Leg Press no Smith.gif",
     "categoria": "Pernas"
   },
   {
@@ -2184,6 +4816,10 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Levantamento Terra com Barra.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Levantamento Terra com Halteres.gif",
     "categoria": "Costas"
   },
@@ -2192,11 +4828,47 @@
     "categoria": "Funcional"
   },
   {
-    "arquivo": "Levantamento terra romeno com halteres.gif",
+    "arquivo": "Levantamento Terra Lateral Unilateral com Barra.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Levantamento Terra na Máquina.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Levantamento Terra no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Levantamento Terra no Smith.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Levantamento Terra Pernas Retas com Barra.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Levantamento Terra Pernas Retas com Elástico.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Levantamento Terra Pernas Retas com Halteres.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Levantamento Terra Romeno com Barra.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Levantamento Terra Romeno com Halteres.gif",
     "categoria": "Costas"
   },
   {
     "arquivo": "Levantamento Terra Romeno.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Levantamento Terra Sumô com Barra.gif",
     "categoria": "Costas"
   },
   {
@@ -2205,6 +4877,18 @@
   },
   {
     "arquivo": "Levantamento Terra Sumô.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Levantamento Terra Unilateral com Apoio no Step e Halteres.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Levantamento Terra Unilateral com Barra.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Levantamento Terra Unilateral com Halteres.gif",
     "categoria": "Costas"
   },
   {
@@ -2220,7 +4904,31 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Levantamento Turco com Kettlebell (Estilo Agachamento).gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Levantamento Turco.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Limpador de Para-brisa Isométrico.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Maltese Aberto.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Maltese Completo.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Marcha Sentado (na Parede).gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Marreta (Sledge Hammer).gif",
     "categoria": "Funcional"
   },
   {
@@ -2232,7 +4940,23 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Meio Agachamento com Salto.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Meio Agachamento.gif",
+    "categoria": "Pernas"
+  },
+  {
     "arquivo": "Mergulho Coreano.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho de Peito (na Estação de Mergulho).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho de Peito Assistido (Ajoelhado).gif",
     "categoria": "Tríceps"
   },
   {
@@ -2240,15 +4964,115 @@
     "categoria": "Tríceps"
   },
   {
+    "arquivo": "Mergulho de Peito na Barra Reta.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho de Peito Pegada Aberta Assistido (Ajoelhado).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho de Peito Pegada Aberta nas Paralelas Altas.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho de Peito.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho de Tríceps (Entre Bancos).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho de Tríceps (Pernas no Banco).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho de Tríceps Assistido (Ajoelhado).gif",
+    "categoria": "Tríceps"
+  },
+  {
     "arquivo": "Mergulho de tríceps com alavanca.gif",
     "categoria": "Tríceps"
   },
   {
-    "arquivo": "Mergulho de tríceps.gif",
+    "arquivo": "Mergulho de Tríceps com Peso nas Paralelas Altas.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho de Tríceps com Peso.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho de Tríceps no Chão.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho de Tríceps Pegada Pronada na Máquina.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho de Tríceps.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho em Argolas.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho entre Três Bancos com Peso.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho entre Três Bancos.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho Escapular.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho Impossível.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho Invertido.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho na Barra Reta com Peso.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho na Bola de Estabilidade.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho no Banco (Joelhos Flexionados).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho no Banco (Pés no Chão).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho no Banco com Peso.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho nos Cotovelos.gif",
     "categoria": "Tríceps"
   },
   {
     "arquivo": "Mergulho reverso.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho Sentado na Máquina.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Mergulho Unilateral.gif",
     "categoria": "Tríceps"
   },
   {
@@ -2260,11 +5084,15 @@
     "categoria": "Tríceps"
   },
   {
+    "arquivo": "Mesa Flexora Bilateral para Unilateral.gif",
+    "categoria": "Pernas"
+  },
+  {
     "arquivo": "Mesa Flexora Unilateral.gif",
     "categoria": "Pernas"
   },
   {
-    "arquivo": "Mesa flexora.gif",
+    "arquivo": "Mesa Flexora.gif",
     "categoria": "Pernas"
   },
   {
@@ -2276,15 +5104,43 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Moinho de Vento Avançado com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Moinho de vento com haltere.gif",
     "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Moinho de Vento com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Moinho de Vento Duplo com Kettlebell.gif",
+    "categoria": "Funcional"
   },
   {
     "arquivo": "Muscle Snatch.gif",
     "categoria": "Funcional"
   },
   {
-    "arquivo": "Muscle up.gif",
+    "arquivo": "Muscle Up (na Barra Vertical).gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Muscle Up com Impulso (Kipping).gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Muscle Up com Peso (na Barra).gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Muscle Up com Peso.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Muscle Up.gif",
     "categoria": "Funcional"
   },
   {
@@ -2336,12 +5192,60 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Otis Up.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Pallof Press Horizontal com Elástico.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Pallof Press Vertical com Elástico.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Panturrilha Deitado no Sled.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Panturrilha em Pé no Smith.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Panturrilha em Pé.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Panturrilha na Máquina.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Panturrilha no Leg Press 45°.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Panturrilha no Leg Press.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Panturrilha Rotativa na Máquina.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Panturrilha Sentado na Máquina.gif",
+    "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Panturrilha Unilateral no Leg Press.gif",
     "categoria": "Panturrilha"
   },
   {
     "arquivo": "Panturrilhas em Pé.gif",
     "categoria": "Panturrilha"
+  },
+  {
+    "arquivo": "Parada de Mãos.gif",
+    "categoria": "Não classificado"
   },
   {
     "arquivo": "Paralela.gif",
@@ -2364,8 +5268,20 @@
     "categoria": "Tríceps"
   },
   {
+    "arquivo": "Passada Ajoelhado com Balanço e Peso.gif",
+    "categoria": "Pernas"
+  },
+  {
+    "arquivo": "Passada Posterior com Alcance Acima da Cabeça.gif",
+    "categoria": "Pernas"
+  },
+  {
     "arquivo": "Passagem de Bola Medicinal de Peito em Pé.gif",
     "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Passe de Peito com Medicine Ball.gif",
+    "categoria": "Funcional"
   },
   {
     "arquivo": "Passo de Esqui.gif",
@@ -2380,7 +5296,19 @@
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Passo para Frente e para Trás.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Patinador.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Peck Deck (Crucifixo na Máquina).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Pernas Pirata com Kettlebell.gif",
     "categoria": "Funcional"
   },
   {
@@ -2388,8 +5316,24 @@
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Planche Aberto.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Planche com Flexão de Braço.gif",
     "categoria": "Peito"
+  },
+  {
+    "arquivo": "Planche Completo.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Planche Inclinado.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Planche Sapo.gif",
+    "categoria": "Não classificado"
   },
   {
     "arquivo": "Planche.gif",
@@ -2404,7 +5348,15 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Polichinelo.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Polichinelos.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Ponte com Escalador Cruzado.gif",
     "categoria": "Funcional"
   },
   {
@@ -2416,6 +5368,26 @@
     "categoria": "Glúteos"
   },
   {
+    "arquivo": "Ponte de Glúteo Baixa no Chão.gif",
+    "categoria": "Glúteos"
+  },
+  {
+    "arquivo": "Ponte de Glúteo Bipodal no Banco com Barra.gif",
+    "categoria": "Glúteos"
+  },
+  {
+    "arquivo": "Ponte de Glúteo Bipodal no Banco.gif",
+    "categoria": "Glúteos"
+  },
+  {
+    "arquivo": "Ponte de Glúteo com Barra.gif",
+    "categoria": "Glúteos"
+  },
+  {
+    "arquivo": "Ponte de Glúteo com Marcha.gif",
+    "categoria": "Glúteos"
+  },
+  {
     "arquivo": "Ponte de Glúteos com Barra.gif",
     "categoria": "Glúteos"
   },
@@ -2424,7 +5396,19 @@
     "categoria": "Glúteos"
   },
   {
+    "arquivo": "Ponte Declinada Posterior.gif",
+    "categoria": "Glúteos"
+  },
+  {
     "arquivo": "Ponte em Unilateral.gif",
+    "categoria": "Glúteos"
+  },
+  {
+    "arquivo": "Ponte Lateral com Abdução de Quadril.gif",
+    "categoria": "Glúteos"
+  },
+  {
+    "arquivo": "Ponte Unilateral com Perna Estendida.gif",
     "categoria": "Glúteos"
   },
   {
@@ -2436,7 +5420,15 @@
     "categoria": "Glúteos"
   },
   {
+    "arquivo": "Postura da Borboleta (Yoga).gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Postura da Cobra - Alongamento Abdominal.gif",
+    "categoria": "Mobilidade"
+  },
+  {
+    "arquivo": "Postura da Esfinge.gif",
     "categoria": "Mobilidade"
   },
   {
@@ -2464,7 +5456,15 @@
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Postura do Cão Olhando para Cima.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Postura do sapo.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Postura Reclinada do Dedão do Pé com Corda.gif",
     "categoria": "Não classificado"
   },
   {
@@ -2472,7 +5472,95 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Prancha Ajoelhado com Toque no Ombro.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Prancha com Ponto de Força.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Prancha de Equilíbrio.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Prancha Frontal com Peso.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Prancha Frontal com Rotação.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Prancha Invertida com Elevação de Perna.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Prancha Lateral (v.2).gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Prancha Lateral com Adução de Quadril.gif",
+    "categoria": "Glúteos"
+  },
+  {
+    "arquivo": "Prancha Lateral com Crucifixo Invertido e Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Prancha Lateral Inclinada (Peso Corporal).gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Press Alternado com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Press Alternado no Chão com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Press Bradford em Pé com Barra.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Press Bradford Sentado com Barra.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Press Curvado com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Press de Cotovelo Deitado com Halteres.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Press de Tríceps.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Press Gangorra com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Press Lateral Alternado com Halteres.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Press Unilateral Amplitude Estendida no Chão com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Pressão Unilateral Assistida por Alavanca.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Pronação Deitado com Halteres.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Pronação Deitado no Chão com Halteres.gif",
     "categoria": "Não classificado"
   },
   {
@@ -2484,8 +5572,32 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Pull Through com Elástico.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Pull Through no Cabo (com Corda).gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Pull Through Sumô com Halteres.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Pull Up.gif",
     "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Pulldown Braço Reto no Cabo (com Corda).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Pulldown Braço Reto no Cabo (v.2).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Pulldown Braço Reto no Cabo.gif",
+    "categoria": "Costas"
   },
   {
     "arquivo": "Pulldown com corda.gif",
@@ -2496,11 +5608,27 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Pulldown Inclinado no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Pulldown Unilateral no Cabo.gif",
     "categoria": "Costas"
   },
   {
+    "arquivo": "Pullover Braço Reto com Halteres.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Pullover Circular com Halteres.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Pullover com barra no banco declinado.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Pullover com Barra para Press.gif",
     "categoria": "Costas"
   },
   {
@@ -2512,6 +5640,14 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Pullover com Braços Flexionados e Barra W.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Pullover com Braços Flexionados e Barra.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Pullover com cabo sentado.gif",
     "categoria": "Costas"
   },
@@ -2520,7 +5656,19 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Pullover com Extensão de Quadril e Halteres (na Bola de Estabilidade).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Pullover com Extensão Deitado no Cabo (com Corda).gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Pullover com haltere.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Pullover com Halteres (na Bola de Estabilidade).gif",
     "categoria": "Costas"
   },
   {
@@ -2528,11 +5676,39 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Pullover com Halteres.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Pullover de braço reto com halteres (joelhos a 90 graus).gif",
     "categoria": "Costas"
   },
   {
+    "arquivo": "Pullover Declinado com Barra.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Pullover Declinado com Braços Flexionados e Barra.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Pullover Declinado Pegada Aberta com Barra.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Pullover Deitado com Halteres (na Bola de Estabilidade).gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Pullover na Máquina de Alavanca.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Pullover na Máquina.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Pullover Unilateral com Halteres (na Bola de Estabilidade).gif",
     "categoria": "Costas"
   },
   {
@@ -2546,6 +5722,18 @@
   {
     "arquivo": "Pulos de Joelho Elevado.gif",
     "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Push Press com Halteres.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Push Press Duplo com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Push Press Unilateral com Kettlebell.gif",
+    "categoria": "Funcional"
   },
   {
     "arquivo": "Puxada ajoelhada com banda de resistência.gif",
@@ -2580,11 +5768,19 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Puxada Alta Sumô com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Puxada alta unilateral alta ajoelhada.gif",
     "categoria": "Costas"
   },
   {
     "arquivo": "Puxada Alta.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada Atrás da Nuca Pegada Aberta no Cabo.gif",
     "categoria": "Costas"
   },
   {
@@ -2596,12 +5792,24 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Puxada com Pegada Dupla Paralela.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada com Rotação no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Puxada com Um Braço com Cabo.gif",
     "categoria": "Costas"
   },
   {
     "arquivo": "Puxada com Um Braço com Peso Adicional.gif",
     "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada de Arranco.gif",
+    "categoria": "Funcional"
   },
   {
     "arquivo": "Puxada De Cabo Ajoelhada.gif",
@@ -2612,7 +5820,19 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Puxada de Pernas no Banco Reto.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada Dorsal Amplitude Completa no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Puxada em Pé com Torção no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada em Pé no Cabo (com Corda).gif",
     "categoria": "Costas"
   },
   {
@@ -2624,7 +5844,47 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Puxada Frontal na Máquina.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Puxada isométrica.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada Lateral Aberta Unilateral na Máquina.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada Lateral Alternada.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada Lateral com Barra no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada Lateral Cruzada no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada Lateral no Cabo (Barra V).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada Lateral no Cabo (com Corda).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada Lateral Pegada Invertida na Máquina.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada na Bola de Estabilidade.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada na Máquina Pegada Invertida.gif",
     "categoria": "Costas"
   },
   {
@@ -2632,7 +5892,47 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Puxada no Cabo (Barra Pro Lat).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Puxada para o Rosto de Joelhos.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada Pegada Fechada com Elástico.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada Pegada Fechada Costas Fixas com Elástico.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada Pegada Supinada com Elástico.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada Pegada Supinada Costas Fixas com Elástico.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada Pegada Supinada no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada Posterior no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada Unilateral Ajoelhado com Elástico.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Puxada Unilateral no Cabo.gif",
     "categoria": "Costas"
   },
   {
@@ -2644,11 +5944,19 @@
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Quadril Lateral (nas Paralelas).gif",
+    "categoria": "Tríceps"
+  },
+  {
     "arquivo": "Quadrúpede com elevação de braço e perna contralateral.gif",
     "categoria": "Não classificado"
   },
   {
     "arquivo": "Quatro Apoios.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rack Pull com Barra.gif",
     "categoria": "Não classificado"
   },
   {
@@ -2660,11 +5968,31 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Remada Agachado (Peso Corporal).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Agachado com Toalha (Peso Corporal).gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Remada Alta (1).gif",
     "categoria": "Costas"
   },
   {
+    "arquivo": "Remada Alta com Barra (v.2).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Alta com Barra (v.3).gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Remada Alta Com Barra W.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Alta com Barra.gif",
     "categoria": "Costas"
   },
   {
@@ -2676,12 +6004,100 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Remada Alta com Halteres (Visão Traseira).gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Remada alta com halteres unilateral.gif",
     "categoria": "Costas"
   },
   {
-    "arquivo": "Remada com banda de resistência curvada para deltoides posterior.gif",
+    "arquivo": "Remada Alta com Halteres.gif",
     "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Alta Lateral Unilateral na Máquina.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Alta na Máquina.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Alta no Cabo (Ajoelhado).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Alta no Cabo (v.2).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Alta no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Alta no Smith.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Alta Pegada Aberta com Barra.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Alta Sentada no Cabo (Barra V).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Alta Sentada Pegada Invertida Costas Retas no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Alta Unilateral com Halteres.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Alta Unilateral Costas Retas no Cabo (Ajoelhado).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Alternada com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Remada Baixa Sentada no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Baixa Unilateral em Pé com Elástico.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Bilateral com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Remada Cavalinho (T-Bar) na Máquina.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Cavalinho Invertida na Máquina.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Cavalinho Pegada Invertida na Máquina.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada com Agachamento e Elástico.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada com Agachamento no Cabo (com Corda).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada com banda de resistência curvada para deltoides posterior.gif",
+    "categoria": "Ombro"
   },
   {
     "arquivo": "Remada com barra curvada para trás.gif",
@@ -2708,6 +6124,14 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Remada com Rotação de Punho no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada com Rotação em Pé no Cabo (Barra V).gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Remada cruzada no cross.gif",
     "categoria": "Costas"
   },
@@ -2724,7 +6148,7 @@
     "categoria": "Costas"
   },
   {
-    "arquivo": "Remada curvada com halteres.gif",
+    "arquivo": "Remada Curvada com Halteres.gif",
     "categoria": "Costas"
   },
   {
@@ -2736,6 +6160,10 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Remada Curvada com Rotação de Punho e Halteres.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Remada Curvada em T.gif",
     "categoria": "Costas"
   },
@@ -2744,19 +6172,75 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Remada Curvada na Máquina (Barra V).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Curvada na Máquina.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Remada Curvada no Smith.gif",
     "categoria": "Costas"
   },
   {
-    "arquivo": "Remada de deltoide posterior sentado com haltere.gif",
+    "arquivo": "Remada Curvada Pegada Invertida com Barra W.gif",
     "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Curvada Pegada Invertida com Barra.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Curvada Pegada Invertida no Smith.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Curvada Unilateral com Barra.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Curvada Unilateral com Halteres.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Curvada Unilateral na Máquina.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Curvada Unilateral no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada de deltoide posterior sentado com haltere.gif",
+    "categoria": "Ombro"
   },
   {
     "arquivo": "Remada de espingarda.gif",
     "categoria": "Costas"
   },
   {
+    "arquivo": "Remada Deitado com Barra Curva.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada em Pé (Peso Corporal).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada em Pé com Toalha (Peso Corporal).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada em Pé no Cabo (Barra V).gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Remada em Y com cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Fechada no Smith.gif",
     "categoria": "Costas"
   },
   {
@@ -2772,7 +6256,23 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Remada Inclinada Bilateral Pegada Invertida com Halteres.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Inclinada com Barra.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Remada Inclinada com Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Inclinada com Extensão e Corda no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Inclinada com Halteres.gif",
     "categoria": "Costas"
   },
   {
@@ -2788,7 +6288,27 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Remada Inclinada no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Inclinada Pegada Invertida com Barra.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Inclinada Unilateral Pegada Invertida com Halteres.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Remada inversa com cabos deitado.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Invertida (v.2).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Invertida com Alças.gif",
     "categoria": "Costas"
   },
   {
@@ -2804,7 +6324,15 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Remada Invertida Joelhos Flexionados.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Remada Invertida na Mesa.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Invertida no Banco.gif",
     "categoria": "Costas"
   },
   {
@@ -2812,11 +6340,71 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Remada Kayak Thibaudeau no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Remada lateral com halteres sentado.gif",
     "categoria": "Costas"
   },
   {
+    "arquivo": "Remada para Deltoide Posterior Ajoelhado no Cabo (com Corda).gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Remada para Deltoide Posterior com Barra.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Remada para Deltoide Posterior com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Remada para Deltoide Posterior Deitado com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Remada para Deltoide Posterior em Pé com Elástico.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Remada para Deltoide Posterior em Pé no Cabo (com Corda).gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Remada para Deltoide Posterior no Cabo (com Alças).gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Remada para Deltoide Posterior no Cabo (com Corda).gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Remada para Deltoide Posterior no Smith.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Remada Pegada Fechada em Pé (Peso Corporal).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Pegada Invertida com Halteres.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Pendlay com Barra.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Renegada Alternada com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Remada Renegada com Halteres.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Sentada Alternada Pegada Fechada na Máquina.gif",
     "categoria": "Costas"
   },
   {
@@ -2832,7 +6420,35 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Remada Sentada com Corda no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Remada sentada com faixa.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Sentada com Rotação Unilateral com Elástico.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Sentada Costas Retas com Faixa Elástica.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Sentada Costas Retas no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Sentada Cruzada com Corda no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Sentada Declinada Pegada Aberta no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Sentada Elevada com Corda no Cabo.gif",
     "categoria": "Costas"
   },
   {
@@ -2840,7 +6456,31 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Remada Sentada no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Sentada no Chão Pegada Aberta no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Sentada Pegada Aberta no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Sentada Pegada Fechada na Máquina.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Sentada Unilateral Alternada no Cabo.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Remada sentado com cabo pegada fechada.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Suspensa.gif",
     "categoria": "Costas"
   },
   {
@@ -2870,6 +6510,62 @@
   {
     "arquivo": "Remada unilateral com gymstick.gif",
     "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Unilateral com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Remada Unilateral com Toalha.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Unilateral em Pé (Peso Corporal).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Unilateral em Pé com Toalha (Peso Corporal).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Unilateral na Máquina.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Unilateral no Smith.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Unilateral Pegada Fechada em Pé (Peso Corporal).gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Remada Vertical Pegada Invertida na Máquina.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Roda Abdominal a partir do Banco com Barra.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Roda Abdominal Assistida com Elástico.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Roda Abdominal com Barra.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Roda Abdominal em Pé com Barra.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Roda Abdominal em Pé.gif",
+    "categoria": "Abdômen"
+  },
+  {
+    "arquivo": "Roda Abdominal.gif",
+    "categoria": "Abdômen"
   },
   {
     "arquivo": "Rolagem de espuma para isquiotibiais.gif",
@@ -2920,11 +6616,87 @@
     "categoria": "Mobilidade"
   },
   {
-    "arquivo": "Rosca alternada com barra.gif",
+    "arquivo": "Rolo de Punho (Wrist Roller).gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rolo Sentado Flexor Depressor Retrator de Ombro.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rolo Sentado Unilateral Flexor Depressor Retrator de Ombro.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rosca Aberta Deitado com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Acima da Cabeça no Cabo (na Bola de Estabilidade).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Acima da Cabeça no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Acima da Cabeça Sentado no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Agachado no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Ajoelhado na Bola de Estabilidade.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Alta com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Alternada com Barra.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Alternada com Elástico.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Alternada com Halteres (com Arm Blaster).gif",
     "categoria": "Bíceps"
   },
   {
     "arquivo": "Rosca alternada com halteres sentado.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Alternada com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Alternada com Perna Elevada na Bola de Estabilidade.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Alternada Sentado na Bola de Estabilidade.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Aranha com Barra W (v.2).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Aranha com Barra W.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Aranha Invertida com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Aranha Invertida Unilateral com Halteres.gif",
     "categoria": "Bíceps"
   },
   {
@@ -2933,6 +6705,10 @@
   },
   {
     "arquivo": "Rosca Bilateral com Cabo em Banco Inclinado.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Bilateral no Banco Inclinado com Cabo.gif",
     "categoria": "Bíceps"
   },
   {
@@ -2964,6 +6740,14 @@
     "categoria": "Bíceps"
   },
   {
+    "arquivo": "Rosca Bíceps na Máquina.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Bíceps no Smith.gif",
+    "categoria": "Bíceps"
+  },
+  {
     "arquivo": "Rosca bíceps sentado.gif",
     "categoria": "Bíceps"
   },
@@ -2980,7 +6764,31 @@
     "categoria": "Bíceps"
   },
   {
-    "arquivo": "Rosca com barra.gif",
+    "arquivo": "Rosca com Abdominal V no Bosu.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca com Afundo e Movimento de Boliche.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca com Agachamento e Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca com Barra (com Arm Blaster).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca com Barra W (com Arm Blaster).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca com Barra W.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca com Barra.gif",
     "categoria": "Bíceps"
   },
   {
@@ -2988,11 +6796,15 @@
     "categoria": "Bíceps"
   },
   {
+    "arquivo": "Rosca com Halteres (com Arm Blaster).gif",
+    "categoria": "Bíceps"
+  },
+  {
     "arquivo": "Rosca com halteres no colete scott.gif",
     "categoria": "Bíceps"
   },
   {
-    "arquivo": "Rosca com halteres.gif",
+    "arquivo": "Rosca com Halteres.gif",
     "categoria": "Bíceps"
   },
   {
@@ -3000,7 +6812,23 @@
     "categoria": "Bíceps"
   },
   {
+    "arquivo": "Rosca com Puxada no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Concentrada com Apoio na Perna.gif",
+    "categoria": "Bíceps"
+  },
+  {
     "arquivo": "Rosca concentrada com cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Concentrada com Elástico.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Concentrada com Halteres.gif",
     "categoria": "Bíceps"
   },
   {
@@ -3012,7 +6840,43 @@
     "categoria": "Bíceps"
   },
   {
+    "arquivo": "Rosca Concentrada em Pé com Barra.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Concentrada em Pé com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Concentrada no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Concentrada Pegada Fechada Sentado com Barra W.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Concentrada Pegada Invertida Sentado com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Concentrada Sentado Pegada Fechada com Barra.gif",
+    "categoria": "Bíceps"
+  },
+  {
     "arquivo": "Rosca concentrada unilateral com cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Concentrada Unilateral com Halteres (na Bola de Estabilidade).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Concentrada Unilateral em Pé com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Concentrada Unilateral Sentado no Cabo.gif",
     "categoria": "Bíceps"
   },
   {
@@ -3044,11 +6908,91 @@
     "categoria": "Bíceps"
   },
   {
+    "arquivo": "Rosca de Dedos.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho com Barra (v.2).gif",
+    "categoria": "Bíceps"
+  },
+  {
     "arquivo": "Rosca de Punho com Barra Atrás das Costas.gif",
     "categoria": "Bíceps"
   },
   {
-    "arquivo": "Rosca de punho com barra.gif",
+    "arquivo": "Rosca de Punho com Barra.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho com Elástico.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Invertida com Barra (v.2).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Invertida com Barra.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Invertida com Elástico.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Invertida com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Invertida em Pé com Barra.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Invertida em Pé no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Invertida em Pé no Smith.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Invertida no Banco com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Invertida no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Invertida Unilateral com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Invertida Unilateral no Banco com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Neutra no Banco com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Neutra Sentado com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Neutra Unilateral no Banco com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Neutra Unilateral Sentado com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho no Banco com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho no Cabo.gif",
     "categoria": "Bíceps"
   },
   {
@@ -3056,7 +7000,43 @@
     "categoria": "Bíceps"
   },
   {
+    "arquivo": "Rosca de Punho Pronada no Banco com Barra.gif",
+    "categoria": "Bíceps"
+  },
+  {
     "arquivo": "Rosca de Punho Reversa com Barra.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Sentado no Smith.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Supinada no Banco com Barra.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Supinada Sentado com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Unilateral com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca de Punho Unilateral no Banco com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Deitado de Lado (Peso Corporal).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Deitado no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Deitado Pegada Fechada no Cabo.gif",
     "categoria": "Bíceps"
   },
   {
@@ -3084,6 +7064,66 @@
     "categoria": "Bíceps"
   },
   {
+    "arquivo": "Rosca Drag com Barra.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Drag no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca em Postura de Cegonha.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca em Pé com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca em Pé com Peso.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Garçom com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Inclinada com Halteres (2).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Inclinada com Halteres (v.2).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Inclinada com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Inclinada Interna com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Inclinada Prona com Barra.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Inclinada Prona com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Interna em Pé com Halteres (v.2).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Interna em Pé no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Interna Sentado com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
     "arquivo": "Rosca inversa com barra W.gif",
     "categoria": "Bíceps"
   },
@@ -3093,6 +7133,46 @@
   },
   {
     "arquivo": "Rosca Inversa com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Invertida com Barra.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Invertida com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Invertida em Pé com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Invertida no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Invertida Unilateral em Pé com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Invertida Unilateral no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo Alternada e Desenvolvimento em Pé com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo Alternada Sentado com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo Alternada Sentado na Bola de Estabilidade.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo com Barra Olímpica.gif",
     "categoria": "Bíceps"
   },
   {
@@ -3112,7 +7192,67 @@
     "categoria": "Bíceps"
   },
   {
+    "arquivo": "Rosca Martelo com Halteres (com Arm Blaster).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo com Halteres (v.2).gif",
+    "categoria": "Bíceps"
+  },
+  {
     "arquivo": "Rosca martelo com halteres no banco scott.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo Cruzada com Halteres (v.2).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo Cruzada com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo Inclinada com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo Inclinada Prona com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo na Bola de Estabilidade.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo no Cabo (com Corda).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo Prona Unilateral com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo Scott Alternada com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo Scott com Corda no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo Scott com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo Scott Unilateral com Corda no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo Scott Unilateral com Halteres.gif",
     "categoria": "Bíceps"
   },
   {
@@ -3120,7 +7260,23 @@
     "categoria": "Bíceps"
   },
   {
+    "arquivo": "Rosca Martelo Sentado com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo Unilateral em Pé com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Martelo Unilateral Sentado com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
     "arquivo": "Rosca martelo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca na Bola de Estabilidade com Perna Elevada.gif",
     "categoria": "Bíceps"
   },
   {
@@ -3128,7 +7284,55 @@
     "categoria": "Bíceps"
   },
   {
+    "arquivo": "Rosca para Desenvolvimento Sentado com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Pegada Aberta em Pé com Barra (2).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Pegada Aberta em Pé com Barra W.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Pegada Aberta em Pé com Barra.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Pegada Fechada com Barra W.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Pegada Fechada em Pé com Barra.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Pegada Fechada no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Pegada Invertida com Barra W.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Pegada Invertida com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Pegada Invertida em Pé com Barra.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Prona Unilateral com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
     "arquivo": "Rosca pronada no banco inclinado.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Scott Alternada com Halteres.gif",
     "categoria": "Bíceps"
   },
   {
@@ -3144,15 +7348,115 @@
     "categoria": "Bíceps"
   },
   {
+    "arquivo": "Rosca Scott com Barra.gif",
+    "categoria": "Bíceps"
+  },
+  {
     "arquivo": "Rosca Scott com Halteres Martelo no Banco.gif",
     "categoria": "Bíceps"
   },
   {
-    "arquivo": "Rosca scott com halteres.gif",
+    "arquivo": "Rosca Scott com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Scott Deitado com Barra.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Scott em Pé com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Scott Invertida com Barra.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Scott Invertida com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Scott Invertida no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Scott Invertida Unilateral com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Scott Invertida Unilateral no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Scott na Máquina (v.2).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Scott na Máquina.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Scott no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Scott Pegada Fechada com Barra W.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Scott Pegada Invertida com Barra W.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Scott Pegada Invertida na Máquina.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Scott Pegada Martelo na Máquina.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Scott Sentado com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Scott sobre a Bola de Estabilidade.gif",
     "categoria": "Bíceps"
   },
   {
     "arquivo": "Rosca scott unilateral com halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Scott Unilateral no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Sentado com Barra W.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Sentado com Faixa Elástica.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Sentado com Halteres (na Bola de Estabilidade).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Sentado com Halteres (v.2).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Sentado com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Sentado com Peso (na Bola de Estabilidade).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Sentado no Cabo.gif",
     "categoria": "Bíceps"
   },
   {
@@ -3164,7 +7468,59 @@
     "categoria": "Bíceps"
   },
   {
+    "arquivo": "Rosca Supino Deitado com Halteres (v.2).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Supino Deitado com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Unilateral Acima da Cabeça com Elástico.gif",
+    "categoria": "Bíceps"
+  },
+  {
     "arquivo": "Rosca Unilateral com Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Unilateral em Pé com Halteres (sobre Banco Inclinado).gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Unilateral em Pé com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Unilateral em Pé sobre Banco Inclinado com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Unilateral no Cabo.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Unilateral Sentado na Bola de Estabilidade com Perna Elevada.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Unilateral Sentado na Bola de Estabilidade.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Zottman com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Zottman Scott com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Zottman Scott em Pé com Halteres.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Rosca Zottman Scott Unilateral com Halteres.gif",
     "categoria": "Bíceps"
   },
   {
@@ -3172,11 +7528,43 @@
     "categoria": "Bíceps"
   },
   {
+    "arquivo": "Rotação Ajoelhado na Máquina.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Rotação da coluna torácica de joelhos.gif",
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Rotação de Coluna.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Rotação de Pé e Tornozelo.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rotação de Quadril Prona Unilateral na Bola de Estabilidade.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rotação de Tronco com Haltere (Spell Caster).gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rotação de Tronco em Pé com Barra.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rotação de Tronco no Cabo.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rotação de Tronco Sentado com Barra.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rotação Deitado Joelhos Flexionados.gif",
     "categoria": "Não classificado"
   },
   {
@@ -3212,6 +7600,18 @@
     "categoria": "Ombro"
   },
   {
+    "arquivo": "Rotação Externa de Ombro Deitado com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Rotação Externa de Ombro em Pé com Halteres.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Rotação Externa de Ombro em Pé no Cabo.gif",
+    "categoria": "Ombro"
+  },
+  {
     "arquivo": "Rotação Externa De Quadril Com Faixa Elástica.gif",
     "categoria": "Ombro"
   },
@@ -3240,6 +7640,18 @@
     "categoria": "Ombro"
   },
   {
+    "arquivo": "Rotação Interna de Ombro Sentado no Cabo.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Rotação Interna de Quadril Deitado com Elástico.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Rotação Interna de Quadril Sentado com Elástico.gif",
+    "categoria": "Ombro"
+  },
+  {
     "arquivo": "Rotação interna do ombro sentada com cabo.gif",
     "categoria": "Ombro"
   },
@@ -3252,7 +7664,55 @@
     "categoria": "Ombro"
   },
   {
+    "arquivo": "Rotação no Cabo (Cima-Baixo).gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Rotação para trás de joelhos.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rotação Prona na Bola de Estabilidade.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rotação Russa Assistida.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rotação Russa com Peso (Pernas Elevadas).gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rotação Russa com Peso (v.2).gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rotação Russa com Peso.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rotação Russa no Cabo (na Bola de Estabilidade).gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rotação Russa.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rotação Sentado com Elástico.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rotação Sentado com Peso (na Bola de Estabilidade).gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rotação Sentado no Cabo.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Rotação Unilateral Sentado com Halteres.gif",
     "categoria": "Não classificado"
   },
   {
@@ -3261,6 +7721,10 @@
   },
   {
     "arquivo": "Salto com Joelhos Flexionados.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Salto do Caixote com Estabilização Unilateral.gif",
     "categoria": "Funcional"
   },
   {
@@ -3280,6 +7744,10 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Salto Estrela.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Salto na Caixa para Agachamento Pistola.gif",
     "categoria": "Funcional"
   },
@@ -3292,6 +7760,10 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Salto para Frente.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Salto para Trás.gif",
     "categoria": "Funcional"
   },
@@ -3300,7 +7772,15 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Saltos com Pernas Afastadas.gif",
+    "categoria": "Funcional"
+  },
+  {
     "arquivo": "Saltos de afastamento.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Saltos de Patinador.gif",
     "categoria": "Funcional"
   },
   {
@@ -3316,7 +7796,23 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Saltos Tesoura.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Sequência de Postura Sentada Ângulo Aberto.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Serra Corporal com Rolo.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Serrote.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Skin the Cat.gif",
     "categoria": "Não classificado"
   },
   {
@@ -3332,6 +7828,14 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Sprints.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Stalder Press.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Step com elástico.gif",
     "categoria": "Não classificado"
   },
@@ -3344,7 +7848,19 @@
     "categoria": "Costas"
   },
   {
+    "arquivo": "Stiff com Elástico.gif",
+    "categoria": "Costas"
+  },
+  {
     "arquivo": "Stiff com Halter.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Stiff com Halteres.gif",
+    "categoria": "Costas"
+  },
+  {
+    "arquivo": "Stiff Costas Retas com Elástico.gif",
     "categoria": "Costas"
   },
   {
@@ -3360,7 +7876,23 @@
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Subida no Step com Barra.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Subida no Step com Elevação de Joelhos.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Subida no Step com Elástico.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Subida no Step com Equilíbrio Unilateral e Rosca.gif",
+    "categoria": "Bíceps"
+  },
+  {
+    "arquivo": "Subida no Step com Halteres.gif",
     "categoria": "Não classificado"
   },
   {
@@ -3368,7 +7900,31 @@
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Supinação Deitado com Halteres.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Supinação Deitado no Chão com Halteres.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Supino Aberto com Barra.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Aberto no Smith.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Aberto Pegada Invertida com Barra.gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Supino Alternado com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Anti-Gravidade com Barra W.gif",
     "categoria": "Peito"
   },
   {
@@ -3388,11 +7944,23 @@
     "categoria": "Peito"
   },
   {
+    "arquivo": "Supino com Barra.gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Supino com cabo sentado.gif",
     "categoria": "Peito"
   },
   {
+    "arquivo": "Supino com Elástico.gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Supino com haltere pegada fechada.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino com Halteres (na Bola de Estabilidade).gif",
     "categoria": "Peito"
   },
   {
@@ -3428,6 +7996,18 @@
     "categoria": "Peito"
   },
   {
+    "arquivo": "Supino com Pinos e Barra.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino com Rotação e Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino com Rotação Unilateral com Elástico.gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Supino declinada com alavanca.gif",
     "categoria": "Peito"
   },
@@ -3436,7 +8016,23 @@
     "categoria": "Peito"
   },
   {
+    "arquivo": "Supino Declinado Aberto no Smith.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Declinado com Barra.gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Supino Declinado com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Declinado Fechado no Smith.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Declinado Fechado Pegada Invertida no Smith.gif",
     "categoria": "Peito"
   },
   {
@@ -3444,7 +8040,51 @@
     "categoria": "Peito"
   },
   {
+    "arquivo": "Supino Declinado na Máquina.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Declinado no Cabo.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Declinado no Smith.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Declinado Pegada Aberta com Barra.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Declinado Pegada Fechada para o Rosto com Barra W.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Declinado Pegada Fechada para Testa com Barra.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Supino Declinado Pegada Invertida com Barra.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Declinado Pegada Invertida no Smith.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Declinado Pegada Martelo com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Supino declinado pegada martelo.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Declinado Unilateral com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Declinado Unilateral no Cabo.gif",
     "categoria": "Peito"
   },
   {
@@ -3452,7 +8092,43 @@
     "categoria": "Peito"
   },
   {
+    "arquivo": "Supino Declinado Unilateral Pegada Martelo com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Deitado Pegada Martelo com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Supino em Pé com Faixa Elástica.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino em Pé na Máquina.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Fechado com Barra W.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Fechado com Barra.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Fechado com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Fechado Deitado com Barra.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Fechado no Smith.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Fechado Pegada Invertida com Barra.gif",
     "categoria": "Peito"
   },
   {
@@ -3460,11 +8136,27 @@
     "categoria": "Peito"
   },
   {
-    "arquivo": "Supino inclinado com barra.gif",
+    "arquivo": "Supino Guilhotina com Barra.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado Alternado com Halteres (2).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado Alternado com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado com Barra.gif",
     "categoria": "Peito"
   },
   {
     "arquivo": "Supino inclinado com cabo.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado com Halteres (na Bola de Estabilidade).gif",
     "categoria": "Peito"
   },
   {
@@ -3488,7 +8180,15 @@
     "categoria": "Peito"
   },
   {
+    "arquivo": "Supino Inclinado Fechado com Barra.gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Supino Inclinado na Alavanca.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado na Máquina (v.2).gif",
     "categoria": "Peito"
   },
   {
@@ -3496,7 +8196,71 @@
     "categoria": "Peito"
   },
   {
-    "arquivo": "Supino inclinado na máquina.gif",
+    "arquivo": "Supino Inclinado na Máquina.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado no Cabo.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado no Smith.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado Pegada Invertida com Barra (2).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado Pegada Invertida com Barra.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado Pegada Invertida no Smith.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado Pegada Martelo com Halteres (na Bola de Estabilidade).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado Pegada Martelo com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado Pegada Neutra com Halteres (2).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado Pegada Neutra com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado Unilateral com Halteres (na Bola de Estabilidade).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado Unilateral com Halteres (v.2).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado Unilateral com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado Unilateral no Cabo (na Bola de Estabilidade).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado Unilateral no Cabo.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado Unilateral Pegada Martelo com Halteres (na Bola de Estabilidade).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Inclinado Unilateral Pegada Martelo com Halteres.gif",
     "categoria": "Peito"
   },
   {
@@ -3508,6 +8272,18 @@
     "categoria": "Peito"
   },
   {
+    "arquivo": "Supino JM com Barra W.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino JM com Barra.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino na Máquina (v.2).gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Supino na Máquina para Miolo do Peitoral.gif",
     "categoria": "Peito"
   },
@@ -3516,7 +8292,7 @@
     "categoria": "Peito"
   },
   {
-    "arquivo": "Supino na máquina.gif",
+    "arquivo": "Supino na Máquina.gif",
     "categoria": "Peito"
   },
   {
@@ -3524,11 +8300,43 @@
     "categoria": "Peito"
   },
   {
+    "arquivo": "Supino no Cabo (na Bola de Estabilidade).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino no Cabo.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino no Chão Unilateral com Barra.gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Supino no smith com o triângulo.gif",
     "categoria": "Peito"
   },
   {
+    "arquivo": "Supino no Smith.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Pegada Fechada com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Pegada Invertida com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Pegada Invertida no Smith.gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Supino pegada martelo.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Pegada Neutra com Halteres.gif",
     "categoria": "Peito"
   },
   {
@@ -3544,7 +8352,19 @@
     "categoria": "Peito"
   },
   {
+    "arquivo": "Supino Sentado com Faixa Elástica.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Sentado no Cabo.gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Supino unilateral com Alavanca.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Unilateral com Halteres (na Bola de Estabilidade).gif",
     "categoria": "Peito"
   },
   {
@@ -3552,11 +8372,39 @@
     "categoria": "Peito"
   },
   {
+    "arquivo": "Supino Unilateral Deitado com Halteres (v.2).gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Unilateral Deitado com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Unilateral no Cabo (na Bola de Estabilidade).gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Supino Unilateral no Cabo.gif",
     "categoria": "Peito"
   },
   {
+    "arquivo": "Supino Unilateral no Chão com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Supino Unilateral Pegada Invertida com Halteres.gif",
+    "categoria": "Peito"
+  },
+  {
+    "arquivo": "Supino Unilateral Pegada Martelo com Halteres (na Bola de Estabilidade).gif",
+    "categoria": "Peito"
+  },
+  {
     "arquivo": "Suspensão Passiva.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Svend Press com Peso.gif",
     "categoria": "Não classificado"
   },
   {
@@ -3576,11 +8424,63 @@
     "categoria": "Funcional"
   },
   {
+    "arquivo": "Tate Press com Halteres.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Tesoura de Braços.gif",
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Tesoura de Pernas.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Thruster com Barra.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Thruster com Kettlebell.gif",
+    "categoria": "Funcional"
+  },
+  {
+    "arquivo": "Toque Alternado no Calcanhar.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Toque com Dois Dedos no Pé.gif",
+    "categoria": "Não classificado"
+  },
+  {
     "arquivo": "Toque Lateral dos Dedos dos Pés em Pé.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Toque no Ombro.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Toque no Pé Básico.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Toque no Pé Circular Braços Afastados.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Toque no Pé Circular Mãos Entrelaçadas Invertidas.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Toque no Pé Circular Mãos Entrelaçadas.gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Toque no Pé com Rotação (Caranguejo).gif",
+    "categoria": "Não classificado"
+  },
+  {
+    "arquivo": "Toque no Pé de Lado a Lado.gif",
     "categoria": "Não classificado"
   },
   {
@@ -3608,11 +8508,51 @@
     "categoria": "Não classificado"
   },
   {
+    "arquivo": "Tríceps Coice Alternado Curvado Sentado com Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Tríceps Coice Alternado em Pé com Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Tríceps Coice Bilateral no Cabo.gif",
+    "categoria": "Tríceps"
+  },
+  {
     "arquivo": "Tríceps Coice com Cabo.gif",
     "categoria": "Tríceps"
   },
   {
     "arquivo": "Tríceps Coice com Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Tríceps Coice em Postura de Cegonha.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Tríceps Coice em Pé com Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Tríceps Coice na Bola de Estabilidade.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Tríceps Coice no Cabo.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Tríceps Coice Sentado com Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Tríceps Coice Unilateral com Halteres.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Tríceps Coice Unilateral Sentado com Halteres.gif",
     "categoria": "Tríceps"
   },
   {
@@ -3672,7 +8612,35 @@
     "categoria": "Tríceps"
   },
   {
+    "arquivo": "Tríceps Pulley no Cabo (Barra V).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Tríceps Pulley no Cabo (Barra V, com Arm Blaster).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Tríceps Pulley no Cabo (com Corda).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Tríceps Pulley no Cabo.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Tríceps Pulley Pegada Invertida no Cabo (Barra SZ, com Arm Blaster).gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Tríceps Pulley Pegada Invertida no Cabo.gif",
+    "categoria": "Tríceps"
+  },
+  {
     "arquivo": "Tríceps pulley pegada invertida.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Tríceps Pulley Unilateral no Cabo.gif",
     "categoria": "Tríceps"
   },
   {
@@ -3692,8 +8660,20 @@
     "categoria": "Tríceps"
   },
   {
+    "arquivo": "Tríceps Testa Deitado com Barra.gif",
+    "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "Tríceps Testa Pegada Invertida com Barra.gif",
+    "categoria": "Tríceps"
+  },
+  {
     "arquivo": "Tríceps testa pegada neutra com halteres.gif",
     "categoria": "Tríceps"
+  },
+  {
+    "arquivo": "V-Sit no Chão.gif",
+    "categoria": "Não classificado"
   },
   {
     "arquivo": "V-Up com Bola de Estabilidade.gif",
@@ -3709,15 +8689,23 @@
   },
   {
     "arquivo": "Voador de Deltoides Posterior com Cabo.gif",
-    "categoria": "Peito"
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Voador Invertido Sentado na Máquina (Pegada Paralela).gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Voador Invertido Sentado na Máquina.gif",
+    "categoria": "Ombro"
   },
   {
     "arquivo": "Voador invertido.gif",
-    "categoria": "Peito"
+    "categoria": "Ombro"
   },
   {
     "arquivo": "Voador na Máquina para Deltoides Posteriores.gif",
-    "categoria": "Peito"
+    "categoria": "Ombro"
   },
   {
     "arquivo": "Voador na Máquina.gif",
@@ -3729,6 +8717,10 @@
   },
   {
     "arquivo": "Voador para deltoides posterior com cabo.gif",
+    "categoria": "Ombro"
+  },
+  {
+    "arquivo": "Voador Sentado na Máquina.gif",
     "categoria": "Peito"
   },
   {

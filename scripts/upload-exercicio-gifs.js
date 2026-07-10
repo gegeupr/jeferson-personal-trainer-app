@@ -50,7 +50,7 @@ async function main() {
 
   const { data: existentes } = await supabase
     .from("exercicio_gifs")
-    .select("nome_arquivo");
+    .select("nome_arquivo, storage_path");
   const jaExistem = new Set((existentes ?? []).map((e) => e.nome_arquivo));
 
   const arquivos = fs
@@ -60,7 +60,7 @@ async function main() {
   let enviados = 0;
   let pulados = 0;
   let erros = 0;
-  const slugsUsados = new Set();
+  const slugsUsados = new Set((existentes ?? []).map((e) => e.storage_path));
 
   for (const arquivo of arquivos) {
     if (jaExistem.has(arquivo)) {
