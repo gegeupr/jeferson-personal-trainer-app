@@ -13,6 +13,13 @@ import {
   type TreinoGerado,
 } from "@/app/actions/gemini-treino";
 import { consultarUsoIA, type UsoIA } from "@/lib/verificarLimiteIA";
+import {
+  listarGifs,
+  atribuirGifCatalogo,
+  atribuirGifCustom,
+  type ExercicioGifItem,
+} from "@/app/actions/exercicio-gifs";
+import { GRUPOS_MUSCULARES_GIF } from "@/lib/gruposMuscularesGif";
 
 // ─── Preview component ────────────────────────────────────────────────────────
 
@@ -21,11 +28,13 @@ function ExercicioCard({
   index,
   onUpdate,
   onRemove,
+  onEscolherGif,
 }: {
   ex: ExercicioGerado;
   index: number;
   onUpdate: (patch: Partial<ExercicioGerado>) => void;
   onRemove: () => void;
+  onEscolherGif: () => void;
 }) {
   return (
     <div className="rounded-xl border border-white/8 bg-black/20 p-4 space-y-3">
@@ -50,6 +59,14 @@ function ExercicioCard({
           </span>
           <button
             type="button"
+            onClick={onEscolherGif}
+            className="text-[10px] px-2 py-0.5 rounded-full border border-white/10 text-white/40 hover:text-white/70 hover:bg-white/5 transition-colors"
+            title="Escolher/trocar GIF de demonstração"
+          >
+            {ex.gif_id ? "trocar gif" : "+ gif"}
+          </button>
+          <button
+            type="button"
             onClick={onRemove}
             className="text-white/20 hover:text-red-300 transition-colors text-sm"
             title="Remover exercício"
@@ -58,6 +75,16 @@ function ExercicioCard({
           </button>
         </div>
       </div>
+
+      {ex.gif_id && (
+        <div className="max-w-[160px] overflow-hidden rounded-lg border border-white/10 bg-black/40">
+          <img
+            src={`/api/exercicio-gif/${ex.gif_id}`}
+            alt={`Demonstração — ${ex.nome}`}
+            className="w-full"
+          />
+        </div>
+      )}
 
       <div className="grid grid-cols-3 gap-2">
         <div>
@@ -100,9 +127,11 @@ function ExercicioCard({
 function TreinoIAPreview({
   treino,
   onChange,
+  onEscolherGif,
 }: {
   treino: TreinoGerado;
   onChange: (t: TreinoGerado) => void;
+  onEscolherGif: (ri: number, ei: number, ex: ExercicioGerado) => void;
 }) {
   function updateRotina(ri: number, patch: Partial<RotinaGerada>) {
     const rotinas = treino.rotinas.map((r, i) => (i === ri ? { ...r, ...patch } : r));
@@ -200,6 +229,7 @@ function TreinoIAPreview({
                   index={ei}
                   onUpdate={(patch) => updateExercicio(ri, ei, patch)}
                   onRemove={() => removeExercicio(ri, ei)}
+                  onEscolherGif={() => onEscolherGif(ri, ei, ex)}
                 />
               ))
             )}
@@ -243,13 +273,119 @@ export default function GerarTreinoPage() {
   const [erro, setErro] = useState<string | null>(null);
   const [treino, setTreino] = useState<TreinoGerado | null>(null);
   const [uso, setUso] = useState<UsoIA | null>(null);
+  const [profId, setProfId] = useState<string | null>(null);
+
+  // ── Seletor de GIF ────────────────────────────────────────────────────────
+  const [gifPickerTarget, setGifPickerTarget] = useState<{
+    ri: number;
+    ei: number;
+    fonte: "biblioteca" | "catalogo";
+    exercicioId: string;
+    nome: string;
+  } | null>(null);
+  const [gifResultados, setGifResultados] = useState<ExercicioGifItem[]>([]);
+  const [gifBusca, setGifBusca] = useState("");
+  const [gifFiltroGrupo, setGifFiltroGrupo] = useState("");
+  const [gifLoading, setGifLoading] = useState(false);
+  const [gifSalvando, setGifSalvando] = useState(false);
+
+  async function buscarGifsNoPicker(busca: string, grupo: string) {
+    setGifLoading(true);
+    const result = await listarGifs(busca, grupo);
+    setGifLoading(false);
+    if (result.ok) setGifResultados(result.gifs);
+  }
+
+  function abrirSeletorGif(ri: number, ei: number, ex: ExercicioGerado) {
+    setGifPickerTarget({ ri, ei, fonte: ex.fonte, exercicioId: ex.exercicio_id, nome: ex.nome });
+    setGifBusca("");
+    setGifFiltroGrupo("");
+    setGifResultados([]);
+    buscarGifsNoPicker("", "");
+  }
+
+  async function selecionarGif(gifId: string | null) {
+    if (!gifPickerTarget || !profId) return;
+    setGifSalvando(true);
+
+    const result =
+      gifPickerTarget.fonte === "catalogo"
+        ? await atribuirGifCatalogo(gifPickerTarget.exercicioId, gifId)
+        : await atribuirGifCustom(gifPickerTarget.exercicioId, gifId, profId);
+
+    setGifSalvando(false);
+
+    if (!result.ok) return;
+
+    const { ri, ei } = gifPickerTarget;
+    setTreino((prev) => {
+      if (!prev) return prev;
+      const rotinas = prev.rotinas.map((r, i) => {
+        if (i !== ri) return r;
+        return {
+          ...r,
+          exercicios: r.exercicios.map((e, j) => (j === ei ? { ...e, gif_id: gifId } : e)),
+        };
+      });
+      return { ...prev, rotinas };
+    });
+
+    setGifPickerTarget(null);
+  }
+
+  useEffect(() => {
+    if (!gifPickerTarget) return;
+    const t = setTimeout(() => buscarGifsNoPicker(gifBusca, gifFiltroGrupo), 300);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gifBusca, gifFiltroGrupo, gifPickerTarget]);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
-      const profId = data?.user?.id;
-      if (profId) consultarUsoIA(profId).then(setUso);
+      const id = data?.user?.id;
+      if (id) {
+        setProfId(id);
+        consultarUsoIA(id).then(setUso);
+      }
     });
   }, []);
+
+  // Busca gif_id já vinculado a cada exercício sugerido pela IA, pra já
+  // mostrar a demonstração no preview sem precisar escolher manualmente.
+  async function enriquecerComGifIds(t: TreinoGerado): Promise<TreinoGerado> {
+    const catIds = new Set<string>();
+    const bibIds = new Set<string>();
+    for (const r of t.rotinas) {
+      for (const ex of r.exercicios) {
+        if (ex.fonte === "catalogo") catIds.add(ex.exercicio_id);
+        else bibIds.add(ex.exercicio_id);
+      }
+    }
+
+    const [catRes, bibRes] = await Promise.all([
+      catIds.size > 0
+        ? supabase.from("exercicios_catalogo").select("id, gif_id").in("id", Array.from(catIds))
+        : Promise.resolve({ data: [] as { id: string; gif_id: string | null }[] }),
+      bibIds.size > 0
+        ? supabase.from("exercicios").select("id, gif_id").in("id", Array.from(bibIds))
+        : Promise.resolve({ data: [] as { id: string; gif_id: string | null }[] }),
+    ]);
+
+    const gifPorId = new Map<string, string | null>();
+    (catRes.data || []).forEach((e: any) => gifPorId.set(e.id, e.gif_id));
+    (bibRes.data || []).forEach((e: any) => gifPorId.set(e.id, e.gif_id));
+
+    return {
+      ...t,
+      rotinas: t.rotinas.map((r) => ({
+        ...r,
+        exercicios: r.exercicios.map((ex) => ({
+          ...ex,
+          gif_id: gifPorId.get(ex.exercicio_id) ?? null,
+        })),
+      })),
+    };
+  }
 
   const limiteAtingido = uso !== null && uso.geracoes_usadas >= uso.limite_geracoes;
 
@@ -264,12 +400,14 @@ export default function GerarTreinoPage() {
 
     try {
       const { data: auth } = await supabase.auth.getUser();
-      const profId = auth?.user?.id;
-      if (!profId) { setErro("Sessão expirada. Faça login novamente."); return; }
+      const authProfId = auth?.user?.id;
+      if (!authProfId) { setErro("Sessão expirada. Faça login novamente."); return; }
 
-      const result = await gerarTreinoComIA(alunoId, profId, config);
+      const result = await gerarTreinoComIA(alunoId, authProfId, config);
       if (!result.ok) { setErro(result.error); return; }
-      setTreino(result.treino);
+
+      const treinoComGifs = await enriquecerComGifIds(result.treino);
+      setTreino(treinoComGifs);
       setUso((u) => u ? { ...u, geracoes_usadas: u.geracoes_usadas + 1 } : u);
     } finally {
       setGerando(false);
@@ -283,10 +421,10 @@ export default function GerarTreinoPage() {
 
     try {
       const { data: auth } = await supabase.auth.getUser();
-      const profId = auth?.user?.id;
-      if (!profId) { setErro("Sessão expirada. Faça login novamente."); return; }
+      const authProfId = auth?.user?.id;
+      if (!authProfId) { setErro("Sessão expirada. Faça login novamente."); return; }
 
-      const result = await salvarTreinoGerado(alunoId, profId, treino);
+      const result = await salvarTreinoGerado(alunoId, authProfId, treino);
       if (!result.ok) { setErro(result.error); return; }
 
       router.push(`/professor/alunos/${alunoId}/atribuir-treino`);
@@ -471,7 +609,7 @@ export default function GerarTreinoPage() {
               </p>
             )}
 
-            <TreinoIAPreview treino={treino} onChange={setTreino} />
+            <TreinoIAPreview treino={treino} onChange={setTreino} onEscolherGif={abrirSeletorGif} />
 
             <div className="flex gap-3 pt-2">
               <button
@@ -496,6 +634,92 @@ export default function GerarTreinoPage() {
           </div>
         )}
       </div>
+
+      {/* Seletor de GIF */}
+      {gifPickerTarget && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/70" onClick={() => setGifPickerTarget(null)} />
+          <div className="relative w-full max-w-xl max-h-[85vh] flex flex-col rounded-2xl border border-white/10 bg-[#111] shadow-2xl overflow-hidden">
+            <div className="px-6 pt-5 pb-3 border-b border-white/8 shrink-0">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs text-white/50">Escolher vídeo de demonstração</p>
+                  <p className="mt-0.5 text-sm font-semibold text-white">{gifPickerTarget.nome}</p>
+                </div>
+                <button
+                  onClick={() => setGifPickerTarget(null)}
+                  className="rounded-xl border border-white/10 bg-white/5 px-3 py-1 text-white/60 hover:bg-white/10 transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                <input
+                  value={gifBusca}
+                  onChange={(e) => setGifBusca(e.target.value)}
+                  placeholder="Buscar por nome…"
+                  className="w-full rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-sm text-white placeholder:text-white/35 outline-none focus:border-white/25"
+                />
+                <select
+                  value={gifFiltroGrupo}
+                  onChange={(e) => setGifFiltroGrupo(e.target.value)}
+                  className="w-full rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-white/25 appearance-none"
+                >
+                  <option value="">Todos os grupos musculares</option>
+                  {GRUPOS_MUSCULARES_GIF.map((g) => (
+                    <option key={g} value={g}>{g}</option>
+                  ))}
+                </select>
+              </div>
+
+              {(() => {
+                const ex = treino?.rotinas[gifPickerTarget.ri]?.exercicios[gifPickerTarget.ei];
+                return ex?.gif_id ? (
+                  <button
+                    type="button"
+                    onClick={() => selecionarGif(null)}
+                    disabled={gifSalvando}
+                    className="mt-3 text-xs font-semibold text-red-300 hover:text-red-200 disabled:opacity-60"
+                  >
+                    Remover vídeo atual
+                  </button>
+                ) : null;
+              })()}
+            </div>
+
+            <div className="overflow-y-auto flex-1 p-4">
+              {gifLoading ? (
+                <p className="py-8 text-center text-sm text-white/50">Buscando…</p>
+              ) : gifResultados.length === 0 ? (
+                <p className="py-8 text-center text-sm text-white/50">Nenhum vídeo encontrado.</p>
+              ) : (
+                <div className="grid gap-3 sm:grid-cols-3">
+                  {gifResultados.map((g) => (
+                    <button
+                      key={g.id}
+                      type="button"
+                      onClick={() => selecionarGif(g.id)}
+                      disabled={gifSalvando}
+                      className="rounded-xl border border-white/10 bg-black/30 p-2 text-left hover:border-white/25 disabled:opacity-60"
+                    >
+                      <img
+                        src={`/api/exercicio-gif/${g.id}`}
+                        alt={g.nome_arquivo}
+                        className="w-full rounded-lg"
+                        loading="lazy"
+                      />
+                      <p className="mt-1.5 text-[11px] font-medium text-white/80 truncate">
+                        {g.nome_arquivo.replace(/\.gif$/i, "")}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

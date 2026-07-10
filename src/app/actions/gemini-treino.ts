@@ -33,6 +33,7 @@ export type ExercicioGerado = {
   repeticoes: string;
   descanso_segundos: number;
   observacao?: string;
+  gif_id?: string | null;
 };
 
 export type RotinaGerada = {
