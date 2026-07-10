@@ -6,6 +6,13 @@ import { supabase } from '@/utils/supabase-browser';
 import Link from 'next/link';
 import { revisarTreinoComIA, type RevisaoTreino, type RevisaoSugestaoNome } from '@/app/actions/gemini-treino';
 import { consultarUsoIA, type UsoIA } from '@/lib/verificarLimiteIA';
+import {
+  listarGifs,
+  atribuirGifCatalogo,
+  atribuirGifCustom,
+  type ExercicioGifItem,
+} from '@/app/actions/exercicio-gifs';
+import { GRUPOS_MUSCULARES_GIF } from '@/lib/gruposMuscularesGif';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -188,6 +195,58 @@ export default function VerEditarTreinoPage() {
   const searchLoaded = useRef(false);
 
   const [expandedGif, setExpandedGif] = useState<Record<string, boolean>>({});
+  const [profId, setProfId] = useState<string | null>(null);
+
+  // ── seletor de GIF ────────────────────────────────────────────────────────
+  const [gifPickerTeId, setGifPickerTeId] = useState<string | null>(null);
+  const [gifResultados, setGifResultados] = useState<ExercicioGifItem[]>([]);
+  const [gifBusca, setGifBusca] = useState('');
+  const [gifFiltroGrupo, setGifFiltroGrupo] = useState('');
+  const [gifLoading, setGifLoading] = useState(false);
+  const [gifSalvando, setGifSalvando] = useState(false);
+
+  async function buscarGifsNoPicker(busca: string, grupo: string) {
+    setGifLoading(true);
+    const result = await listarGifs(busca, grupo);
+    setGifLoading(false);
+    if (result.ok) setGifResultados(result.gifs);
+  }
+
+  function abrirSeletorGif(teId: string) {
+    setGifPickerTeId(teId);
+    setGifBusca('');
+    setGifFiltroGrupo('');
+    setGifResultados([]);
+    buscarGifsNoPicker('', '');
+  }
+
+  async function selecionarGif(gifId: string | null) {
+    if (!gifPickerTeId || !profId) return;
+    const ex = exercicios.find(e => e.te_id === gifPickerTeId);
+    if (!ex) return;
+
+    setGifSalvando(true);
+    const exercicioId = ex.fonte === 'catalogo' ? ex.catalogo_id : ex.exercicio_id;
+    if (!exercicioId) { setGifSalvando(false); return; }
+
+    const result =
+      ex.fonte === 'catalogo'
+        ? await atribuirGifCatalogo(exercicioId, gifId)
+        : await atribuirGifCustom(exercicioId, gifId, profId);
+
+    setGifSalvando(false);
+    if (!result.ok) { pushToast('Erro ao salvar vídeo: ' + result.error, 'err'); return; }
+
+    setExercicios(prev => prev.map(e => e.te_id === gifPickerTeId ? { ...e, gif_id: gifId } : e));
+    setGifPickerTeId(null);
+  }
+
+  useEffect(() => {
+    if (!gifPickerTeId) return;
+    const t = setTimeout(() => buscarGifsNoPicker(gifBusca, gifFiltroGrupo), 300);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gifBusca, gifFiltroGrupo, gifPickerTeId]);
 
   const [revisando,   setRevisando]   = useState(false);
   const [revisao,     setRevisao]     = useState<RevisaoTreino | null>(null);
@@ -261,6 +320,7 @@ export default function VerEditarTreinoPage() {
 
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push('/login'); return; }
+      setProfId(user.id);
 
       const { data: treinoData, error: treinoErr } = await supabase
         .from('treinos')
@@ -785,6 +845,14 @@ export default function VerEditarTreinoPage() {
                           ▶
                         </button>
                       )}
+                      {/* Trocar GIF */}
+                      <button
+                        onClick={() => abrirSeletorGif(ex.te_id)}
+                        title="Escolher/trocar GIF de demonstração"
+                        className="shrink-0 rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-[10px] text-white/40 hover:text-white/70 hover:bg-white/8 transition-colors"
+                      >
+                        {ex.gif_id ? "trocar gif" : "+ gif"}
+                      </button>
                       {/* Trocar */}
                       <button
                         onClick={() => openReplaceModal(ex.te_id)}
@@ -899,6 +967,81 @@ export default function VerEditarTreinoPage() {
           onCriarCustom={handleCriarCustom}
           onClose={() => setModalState({ open: false })}
         />
+      )}
+
+      {/* Seletor de GIF */}
+      {gifPickerTeId && (
+        <div className="fixed inset-0 bg-black/80 z-[200] flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={() => setGifPickerTeId(null)}>
+          <div
+            className="w-full sm:max-w-xl bg-[#111] border border-white/10 rounded-t-2xl sm:rounded-2xl overflow-hidden flex flex-col max-h-[85vh]"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="px-4 pt-4 pb-3 border-b border-white/8 shrink-0">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-sm font-medium text-white">Escolher GIF de demonstração</p>
+                <button onClick={() => setGifPickerTeId(null)} className="text-white/30 hover:text-white/60 transition-colors text-xl leading-none">×</button>
+              </div>
+              <div className="grid gap-2 sm:grid-cols-2">
+                <input
+                  value={gifBusca}
+                  onChange={e => setGifBusca(e.target.value)}
+                  placeholder="Buscar por nome…"
+                  className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/25 outline-none focus:border-white/25 transition-colors"
+                />
+                <select
+                  value={gifFiltroGrupo}
+                  onChange={e => setGifFiltroGrupo(e.target.value)}
+                  className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-white/25 transition-colors appearance-none"
+                >
+                  <option value="">Todos os grupos musculares</option>
+                  {GRUPOS_MUSCULARES_GIF.map(g => (
+                    <option key={g} value={g}>{g}</option>
+                  ))}
+                </select>
+              </div>
+              {exercicios.find(e => e.te_id === gifPickerTeId)?.gif_id && (
+                <button
+                  type="button"
+                  onClick={() => selecionarGif(null)}
+                  disabled={gifSalvando}
+                  className="mt-3 text-xs font-semibold text-red-300 hover:text-red-200 disabled:opacity-60"
+                >
+                  Remover vídeo atual
+                </button>
+              )}
+            </div>
+
+            <div className="overflow-y-auto flex-1 p-4">
+              {gifLoading ? (
+                <p className="py-8 text-center text-sm text-white/30">Buscando…</p>
+              ) : gifResultados.length === 0 ? (
+                <p className="py-8 text-center text-sm text-white/30">Nenhum vídeo encontrado.</p>
+              ) : (
+                <div className="grid gap-3 sm:grid-cols-3">
+                  {gifResultados.map(g => (
+                    <button
+                      key={g.id}
+                      type="button"
+                      onClick={() => selecionarGif(g.id)}
+                      disabled={gifSalvando}
+                      className="rounded-xl border border-white/10 bg-black/30 p-2 text-left hover:border-white/25 disabled:opacity-60"
+                    >
+                      <img
+                        src={`/api/exercicio-gif/${g.id}`}
+                        alt={g.nome_arquivo}
+                        className="w-full rounded-lg"
+                        loading="lazy"
+                      />
+                      <p className="mt-1.5 text-[11px] font-medium text-white/80 truncate">
+                        {g.nome_arquivo.replace(/\.gif$/i, '')}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Toasts */}
