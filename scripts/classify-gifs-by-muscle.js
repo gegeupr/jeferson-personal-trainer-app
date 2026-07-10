@@ -46,7 +46,7 @@ const REGRAS = [
     "deltoides anterior", "deltoide lateral", "deltoides lateral",
     "voador invertido", "crucifixo invertido",
   ]],
-  ["Peito", ["supino", "crucifixo", "voador", "peck deck", "crossover", "cross over", "flexão", "push up", "pushup", "peitoral"], ["punho", "pulso"]],
+  ["Peito", ["supino", "crucifixo", "voador", "peck deck", "crossover", "cross over", "flexão", "push up", "pushup", "peitoral"], ["punho", "pulso", "flexão de perna", "flexão de pernas"]],
   ["Costas", ["remada", "puxada", "barra fixa", "pulldown", "pullover", "levantamento terra", "terra romeno", "stiff", "hiperextensão", "extensão lombar", "good morning", "bom dia"]],
   ["Glúteos", [
     "glúteo", "gluteo", "hip thrust", "ponte", "abdução de quadril", "abdução do quadril",
