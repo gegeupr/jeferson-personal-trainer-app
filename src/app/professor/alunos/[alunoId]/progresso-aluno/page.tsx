@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { supabase } from "@/utils/supabase-browser";
 import Link from "next/link";
@@ -10,8 +10,16 @@ interface ProgressoFoto {
   url: string;
   descricao: string | null;
   data_foto: string | null;
+  tipo_foto: string | null;
   created_at: string;
 }
+
+const LABEL_TIPO: Record<string, string> = {
+  frente: "Frente",
+  costas: "Costas",
+  perfil_direito: "Perfil Direito",
+  perfil_esquerdo: "Perfil Esquerdo",
+};
 
 interface AlunoProfile {
   nome_completo: string | null;
@@ -102,6 +110,16 @@ export default function ProgressoAlunoProfessorPage() {
 
   const alunoNome = alunoProfile?.nome_completo || "Aluno";
 
+  const sessoes = useMemo(() => {
+    const grupos = new Map<string, ProgressoFoto[]>();
+    for (const f of fotos) {
+      const chave = f.data_foto || f.created_at.slice(0, 10);
+      if (!grupos.has(chave)) grupos.set(chave, []);
+      grupos.get(chave)!.push(f);
+    }
+    return Array.from(grupos.entries()).sort((a, b) => (a[0] < b[0] ? 1 : -1));
+  }, [fotos]);
+
   if (loading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
@@ -128,24 +146,31 @@ export default function ProgressoAlunoProfessorPage() {
           <div className="rounded-xl border border-red-400/15 bg-red-400/8 px-4 py-3 text-sm text-red-300">{error}</div>
         )}
 
-        {fotos.length === 0 ? (
+        {sessoes.length === 0 ? (
           <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-8 text-center">
             <p className="text-white/40 text-sm">O aluno ainda não enviou fotos de progresso.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {fotos.map((foto) => (
-              <div key={foto.id} className="rounded-2xl border border-white/8 bg-white/[0.03] overflow-hidden">
-                <div className="relative w-full h-44 overflow-hidden">
-                  <ProgressPhotoImg src={foto.url} alt={foto.descricao || "Foto de progresso"} />
-                </div>
-                <div className="px-3 py-2.5">
-                  <p className="text-xs font-medium text-white/70">
-                    {foto.data_foto ? formatDateBR(foto.data_foto) : formatDateBR(foto.created_at)}
-                  </p>
-                  {foto.descricao && (
-                    <p className="text-xs text-white/40 mt-0.5 leading-relaxed">{foto.descricao}</p>
-                  )}
+          <div className="space-y-4">
+            {sessoes.map(([data, fotosSessao]) => (
+              <div key={data} className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
+                <p className="text-sm font-semibold text-white/80 mb-3">{formatDateBR(data)}</p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {fotosSessao.map((foto) => (
+                    <div key={foto.id} className="rounded-xl border border-white/8 bg-white/[0.03] overflow-hidden">
+                      <div className="relative w-full h-36 overflow-hidden">
+                        <ProgressPhotoImg src={foto.url} alt={LABEL_TIPO[foto.tipo_foto ?? ""] || foto.descricao || "Foto de progresso"} />
+                      </div>
+                      <div className="px-2 py-2">
+                        <p className="text-[11px] font-medium text-white/70 truncate">
+                          {LABEL_TIPO[foto.tipo_foto ?? ""] || "Sem ângulo definido"}
+                        </p>
+                        {foto.descricao && (
+                          <p className="text-[10px] text-white/40 mt-0.5 leading-relaxed truncate">{foto.descricao}</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}

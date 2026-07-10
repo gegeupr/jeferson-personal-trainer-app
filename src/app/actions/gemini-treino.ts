@@ -81,6 +81,7 @@ export type TreinoGerado = {
   duracao_minutos: number;
   nivel: string;
   divisao: string;
+  avaliacao_visual?: string;
   rotinas: RotinaGerada[];
 };
 
@@ -470,10 +471,10 @@ export async function gerarTreinoComIA(
 
       supabaseAdmin
         .from("progresso_fotos")
-        .select("url, data_foto, descricao")
+        .select("url, data_foto, descricao, tipo_foto")
         .eq("aluno_id", alunoId)
         .order("data_foto", { ascending: false })
-        .limit(4),
+        .limit(8),
 
       supabaseAdmin
         .from("arquivos")
@@ -506,7 +507,13 @@ export async function gerarTreinoComIA(
 
     const aluno = profileResult.data;
     const anamnese = anamneseResult.data;
-    const fotos = fotosResult.data || [];
+    // Só usa fotos da sessão (data_foto) mais recente — evita misturar
+    // ângulos de datas diferentes numa mesma avaliação visual.
+    const fotosBrutas = fotosResult.data || [];
+    const dataSessaoMaisRecente = fotosBrutas[0]?.data_foto ?? null;
+    const fotos = dataSessaoMaisRecente
+      ? fotosBrutas.filter((f) => f.data_foto === dataSessaoMaisRecente)
+      : fotosBrutas.slice(0, 4);
     const arquivos = arquivosResult.data || [];
     const historico = (historicoResult.data || []) as any[];
     const biblioteca = bibResult.data || [];
@@ -658,6 +665,7 @@ Total: 6 a 9 exercícios por rotina, TODOS com padrões de movimento distintos e
   "duracao_minutos": ${config.duracao_minutos},
   "nivel": "${config.nivel}",
   "divisao": "Nome da divisão adotada",
+  "avaliacao_visual": "Se houver fotos: o que você observou (assimetrias, postura) e como isso influenciou o treino. Se não houver fotos ou nada relevante, diga isso explicitamente. NUNCA omita este campo.",
   "rotinas": [
     {
       "nome": "Treino A — [Grupos Musculares do Dia 1]",
@@ -684,24 +692,45 @@ ATENÇÃO: O exemplo acima mostra 2 rotinas, mas você DEVE criar EXATAMENTE ${c
       { type: "text", text: promptTexto },
     ];
 
-    // Adicionar fotos de progresso (máx 4)
+    // Adicionar fotos de progresso (máx 4, mesma sessão/data)
     if (fotos.length > 0) {
+      const fotosSlice = fotos.slice(0, 4);
       const fotosConvertidas = await Promise.all(
-        fotos.slice(0, 4).map((f) => urlParaBase64(f.url))
+        fotosSlice.map((f) => urlParaBase64(f.url))
       );
-      const fotasValidas = fotosConvertidas.filter(Boolean);
-      if (fotasValidas.length > 0) {
+      const LABEL_ANGULO: Record<string, string> = {
+        frente: "Frente",
+        costas: "Costas",
+        perfil_direito: "Perfil Direito",
+        perfil_esquerdo: "Perfil Esquerdo",
+      };
+      const paresValidos = fotosSlice
+        .map((f, i) => ({ foto: f, convertida: fotosConvertidas[i] }))
+        .filter((p) => p.convertida);
+
+      if (paresValidos.length > 0) {
         content.push({
           type: "text",
-          text: `Fotos de progresso do aluno (${fotasValidas.length} mais recentes). Use para avaliar composição corporal e postura:`,
+          text: `=== AVALIAÇÃO VISUAL — FOTOS DE PROGRESSO ===
+${paresValidos.length} foto(s) da sessão mais recente (${fotosSlice[0]?.data_foto ?? "data não informada"}).
+Analise ANTES de montar o treino:
+- Compare lado esquerdo x direito nas fotos de frente e costas: há assimetria visível de ombro, braço, quadril ou perna?
+- Observe a postura: ombros elevados/desnivelados, cabeça anteriorizada, hiperlordose ou hipercifose, desvio lateral de coluna, joelho valgo.
+- Nas fotos de perfil, avalie alinhamento de coluna e báscula pélvica.
+- Se notar algo relevante, ajuste o treino (ex.: mais volume unilateral pro lado mais fraco, exercícios de mobilidade/postura extras) e registre no campo "avaliacao_visual" da resposta.
+- Se as fotos não permitirem avaliação clara ou não houver nada relevante a apontar, diga isso explicitamente em "avaliacao_visual" — não invente achados.`,
         });
-        for (const f of fotasValidas) {
+        for (const { foto, convertida } of paresValidos) {
+          content.push({
+            type: "text",
+            text: `Foto: ${LABEL_ANGULO[foto.tipo_foto ?? ""] ?? foto.descricao ?? "ângulo não informado"}`,
+          });
           content.push({
             type: "image",
             source: {
               type: "base64",
-              media_type: normalizeImageMime(f!.mimeType),
-              data: f!.data,
+              media_type: normalizeImageMime(convertida!.mimeType),
+              data: convertida!.data,
             },
           });
         }

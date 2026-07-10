@@ -202,6 +202,15 @@ function TreinoIAPreview({
             </>
           )}
         </div>
+
+        {treino.avaliacao_visual && (
+          <div className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
+            <p className="text-[10px] font-semibold text-white/50 uppercase tracking-wide mb-1">
+              👁 Avaliação visual da IA (fotos de progresso)
+            </p>
+            <p className="text-xs text-white/70 leading-relaxed">{treino.avaliacao_visual}</p>
+          </div>
+        )}
       </div>
 
       {/* Uma seção por rotina */}
