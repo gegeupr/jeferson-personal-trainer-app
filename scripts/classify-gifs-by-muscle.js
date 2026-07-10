@@ -40,6 +40,11 @@ const REGRAS = [
     "manguito", "encolhimento", "face pull", "rotação externa", "rotação interna",
     "círculos com os braços", "círculos de braço", "elevação de t", "elevação em t",
     "elevação em y", "manguito rotador",
+    // deltoide (qualquer porção) checado ANTES de Peito — "voador"/"crucifixo"
+    // de deltoide posterior não é exercício de peito, é ombro.
+    "deltoide posterior", "deltoides posterior", "deltoide anterior",
+    "deltoides anterior", "deltoide lateral", "deltoides lateral",
+    "voador invertido", "crucifixo invertido",
   ]],
   ["Peito", ["supino", "crucifixo", "voador", "peck deck", "crossover", "cross over", "flexão", "push up", "pushup", "peitoral"], ["punho", "pulso"]],
   ["Costas", ["remada", "puxada", "barra fixa", "pulldown", "pullover", "levantamento terra", "terra romeno", "stiff", "hiperextensão", "extensão lombar", "good morning", "bom dia"]],
