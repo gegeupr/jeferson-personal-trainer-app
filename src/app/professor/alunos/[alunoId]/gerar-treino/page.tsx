@@ -36,6 +36,8 @@ function ExercicioCard({
   onRemove: () => void;
   onEscolherGif: () => void;
 }) {
+  const [gifAberto, setGifAberto] = useState(false);
+
   return (
     <div className="rounded-xl border border-white/8 bg-black/20 p-4 space-y-3">
       <div className="flex items-start justify-between gap-2">
@@ -57,6 +59,15 @@ function ExercicioCard({
           }`}>
             {ex.fonte === "biblioteca" ? "biblioteca" : "catálogo"}
           </span>
+          {ex.gif_id && (
+            <button
+              type="button"
+              onClick={() => setGifAberto((v) => !v)}
+              className="text-[10px] px-2 py-0.5 rounded-full border border-white/10 text-white/40 hover:text-white/70 hover:bg-white/5 transition-colors"
+            >
+              {gifAberto ? "ocultar gif" : "ver gif"}
+            </button>
+          )}
           <button
             type="button"
             onClick={onEscolherGif}
@@ -76,7 +87,7 @@ function ExercicioCard({
         </div>
       </div>
 
-      {ex.gif_id && (
+      {ex.gif_id && gifAberto && (
         <div className="max-w-[160px] overflow-hidden rounded-lg border border-white/10 bg-black/40">
           <img
             src={`/api/exercicio-gif/${ex.gif_id}`}

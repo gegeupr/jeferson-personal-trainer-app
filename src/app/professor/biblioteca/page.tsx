@@ -265,6 +265,8 @@ export default function BibliotecaExerciciosPage() {
   const [gifFiltroGrupo, setGifFiltroGrupo] = useState("");
   const [gifLoading, setGifLoading] = useState(false);
   const [gifSalvando, setGifSalvando] = useState(false);
+  const [expandedGifMine, setExpandedGifMine] = useState<Record<string, boolean>>({});
+  const [expandedGifCat, setExpandedGifCat] = useState<Record<string, boolean>>({});
 
   async function buscarGifsNoPicker(busca: string, grupo: string) {
     setGifLoading(true);
@@ -1203,6 +1205,15 @@ export default function BibliotecaExerciciosPage() {
                             {ex.gif_id ? "Trocar GIF" : "Escolher GIF"}
                           </button>
 
+                          {ex.gif_id ? (
+                            <button
+                              onClick={() => setExpandedGifMine((prev) => ({ ...prev, [ex.id]: !prev[ex.id] }))}
+                              className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/70 hover:bg-white/10"
+                            >
+                              {expandedGifMine[ex.id] ? "Ocultar GIF" : "Ver GIF"}
+                            </button>
+                          ) : null}
+
                           <button
                             onClick={() => openEditModal(ex)}
                             disabled={isSubmitting}
@@ -1221,7 +1232,7 @@ export default function BibliotecaExerciciosPage() {
                         </div>
                       </div>
 
-                      {ex.gif_id ? (
+                      {ex.gif_id && expandedGifMine[ex.id] ? (
                         <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-black/40 max-w-xs">
                           <img
                             src={`/api/exercicio-gif/${ex.gif_id}`}
@@ -1397,6 +1408,15 @@ export default function BibliotecaExerciciosPage() {
                             {c.gif_id ? "Trocar GIF" : "Escolher GIF"}
                           </button>
 
+                          {c.gif_id ? (
+                            <button
+                              onClick={() => setExpandedGifCat((prev) => ({ ...prev, [c.id]: !prev[c.id] }))}
+                              className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/70 hover:bg-white/10"
+                            >
+                              {expandedGifCat[c.id] ? "Ocultar GIF" : "Ver GIF"}
+                            </button>
+                          ) : null}
+
                           <button
                             onClick={() => addFromCatalog(c)}
                             disabled={isSubmitting}
@@ -1407,7 +1427,7 @@ export default function BibliotecaExerciciosPage() {
                         </div>
                       </div>
 
-                      {c.gif_id ? (
+                      {c.gif_id && expandedGifCat[c.id] ? (
                         <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-black/40 max-w-xs">
                           <img
                             src={`/api/exercicio-gif/${c.gif_id}`}
