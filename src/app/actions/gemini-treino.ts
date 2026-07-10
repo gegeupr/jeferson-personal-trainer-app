@@ -463,6 +463,7 @@ export async function gerarTreinoComIA(
       historicoResult,
       bibResult,
       catResult,
+      medidaResult,
     ] = await Promise.all([
       supabaseAdmin
         .from("profiles")
@@ -512,10 +513,19 @@ export async function gerarTreinoComIA(
         .select("id, nome, grupo_muscular, equipamento, nivel, categoria, movement_pattern, contraindicacoes, nivel_minimo")
         .order("nome")
         .limit(3000),
+
+      supabaseAdmin
+        .from("medidas_corporais")
+        .select("data_medicao, peso_kg, altura_cm, braco_cm, cintura_cm, quadril_cm, coxa_cm")
+        .eq("aluno_id", alunoId)
+        .order("data_medicao", { ascending: false })
+        .limit(1)
+        .maybeSingle(),
     ]);
 
     const aluno = profileResult.data;
     const anamnese = anamneseResult.data;
+    const medida = medidaResult.data;
     // Só usa fotos da sessão (data_foto) mais recente — evita misturar
     // ângulos de datas diferentes numa mesma avaliação visual.
     const fotosBrutas = fotosResult.data || [];
@@ -541,16 +551,20 @@ export async function gerarTreinoComIA(
     }
 
     // 2. Montar textos para o prompt
-    const pesoKg = anamnese?.peso_kg as number | null | undefined;
-    const alturaCm = anamnese?.altura_cm as number | null | undefined;
+    // Prioriza a medição corporal mais recente (mais precisa) sobre o snapshot da anamnese
+    const pesoKg = (medida?.peso_kg ?? anamnese?.peso_kg) as number | null | undefined;
+    const alturaCm = (medida?.altura_cm ?? anamnese?.altura_cm) as number | null | undefined;
     const imc = pesoKg && alturaCm ? pesoKg / ((alturaCm / 100) ** 2) : null;
     const condicoesSaude = Array.isArray(anamnese?.condicoes_saude)
       ? (anamnese!.condicoes_saude as string[])
       : [];
+    const medidasTexto = medida
+      ? ` (medido em ${String(medida.data_medicao).slice(0, 10)}${medida.cintura_cm ? `; cintura ${medida.cintura_cm}cm` : ""}${medida.quadril_cm ? `; quadril ${medida.quadril_cm}cm` : ""}${medida.braco_cm ? `; braço ${medida.braco_cm}cm` : ""}${medida.coxa_cm ? `; coxa ${medida.coxa_cm}cm` : ""})`
+      : "";
 
     const anamneseTexto = anamnese
       ? [
-          `Peso: ${pesoKg ? `${pesoKg} kg` : "Não informado"}`,
+          `Peso: ${pesoKg ? `${pesoKg} kg` : "Não informado"}${medidasTexto}`,
           `Altura: ${alturaCm ? `${alturaCm} cm` : "Não informado"}`,
           `IMC: ${imc ? imc.toFixed(1) : "Não calculável"}`,
           `Condições de saúde marcadas: ${condicoesSaude.length > 0 ? condicoesSaude.join(", ") : "Nenhuma"}`,

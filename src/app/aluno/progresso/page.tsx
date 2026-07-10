@@ -25,6 +25,27 @@ interface ProgressoFoto {
   created_at: string;
 }
 
+interface MedidaCorporal {
+  id: string;
+  data_medicao: string;
+  peso_kg: number | null;
+  altura_cm: number | null;
+  braco_cm: number | null;
+  cintura_cm: number | null;
+  quadril_cm: number | null;
+  coxa_cm: number | null;
+  observacoes: string | null;
+}
+
+const CAMPOS_MEDIDA: { key: keyof MedidaCorporal; label: string; suffix: string }[] = [
+  { key: "peso_kg", label: "Peso", suffix: "kg" },
+  { key: "altura_cm", label: "Altura", suffix: "cm" },
+  { key: "braco_cm", label: "Braço", suffix: "cm" },
+  { key: "cintura_cm", label: "Cintura", suffix: "cm" },
+  { key: "quadril_cm", label: "Quadril", suffix: "cm" },
+  { key: "coxa_cm", label: "Coxa", suffix: "cm" },
+];
+
 function formatDateBR(iso: string) {
   try { return new Date(iso).toLocaleDateString("pt-BR"); } catch { return iso; }
 }
@@ -60,6 +81,19 @@ export default function MeuProgressoPage() {
     perfil_esquerdo: null,
   });
 
+  const [medidas, setMedidas] = useState<MedidaCorporal[]>([]);
+  const [medidaForm, setMedidaForm] = useState({
+    data_medicao: todayISO(),
+    peso_kg: "",
+    altura_cm: "",
+    braco_cm: "",
+    cintura_cm: "",
+    quadril_cm: "",
+    coxa_cm: "",
+    observacoes: "",
+  });
+  const [isSubmittingMedida, setIsSubmittingMedida] = useState(false);
+
   const totalSelecionado = useMemo(
     () => Object.values(arquivosPorTipo).filter(Boolean).length,
     [arquivosPorTipo]
@@ -83,10 +117,68 @@ export default function MeuProgressoPage() {
       if (fetchError) setError("Não foi possível carregar suas fotos.");
       else setFotos((data as ProgressoFoto[]) || []);
 
+      const { data: medidasData, error: medidasError } = await supabase
+        .from("medidas_corporais").select("*").eq("aluno_id", user.id)
+        .order("data_medicao", { ascending: false });
+
+      if (!medidasError) setMedidas((medidasData as MedidaCorporal[]) || []);
+
       setPageLoading(false);
     }
     load();
   }, [router]);
+
+  async function handleAddMedida(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null); setOkMsg(null);
+    if (!alunoId) { setError("Sessão expirada."); return; }
+    setIsSubmittingMedida(true);
+
+    try {
+      const toNum = (v: string) => (v.trim() === "" ? null : Number(v));
+      const payload = {
+        aluno_id: alunoId,
+        data_medicao: medidaForm.data_medicao,
+        peso_kg: toNum(medidaForm.peso_kg),
+        altura_cm: toNum(medidaForm.altura_cm),
+        braco_cm: toNum(medidaForm.braco_cm),
+        cintura_cm: toNum(medidaForm.cintura_cm),
+        quadril_cm: toNum(medidaForm.quadril_cm),
+        coxa_cm: toNum(medidaForm.coxa_cm),
+        observacoes: medidaForm.observacoes.trim() || null,
+      };
+
+      const { data, error: dbError } = await supabase
+        .from("medidas_corporais").insert(payload).select().single();
+      if (dbError) throw dbError;
+
+      setMedidas((prev) => [data as MedidaCorporal, ...prev]);
+      setMedidaForm({
+        data_medicao: todayISO(), peso_kg: "", altura_cm: "",
+        braco_cm: "", cintura_cm: "", quadril_cm: "", coxa_cm: "", observacoes: "",
+      });
+      setOkMsg("Medidas registradas!");
+    } catch (err: any) {
+      setError(`Erro ao registrar medidas: ${err?.message || "erro desconhecido"}`);
+    } finally {
+      setIsSubmittingMedida(false);
+    }
+  }
+
+  async function handleDeleteMedida(id: string) {
+    setIsSubmittingMedida(true);
+    setError(null); setOkMsg(null);
+    try {
+      const { error: dbErr } = await supabase.from("medidas_corporais").delete().eq("id", id);
+      if (dbErr) throw dbErr;
+      setMedidas((prev) => prev.filter((m) => m.id !== id));
+      setOkMsg("Registro excluído.");
+    } catch (err: any) {
+      setError(`Erro ao excluir: ${err?.message || "erro desconhecido"}`);
+    } finally {
+      setIsSubmittingMedida(false);
+    }
+  }
 
   async function handleDeleteFoto(foto: ProgressoFoto) {
     setIsSubmitting(true);
@@ -269,6 +361,86 @@ export default function MeuProgressoPage() {
             ))}
           </div>
         )}
+
+        {/* Medidas corporais */}
+        <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-6">
+          <h2 className="font-semibold text-white mb-1">Medidas corporais</h2>
+          <p className="text-white/50 text-sm mb-4">
+            Meça com fita métrica e registre periodicamente — ajuda a acompanhar sua evolução além da balança.
+          </p>
+          <form onSubmit={handleAddMedida} className="space-y-4">
+            <div>
+              <label className="text-sm text-white/60">Data da medição</label>
+              <input type="date" value={medidaForm.data_medicao}
+                onChange={(e) => setMedidaForm((p) => ({ ...p, data_medicao: e.target.value }))} required
+                className="mt-1.5 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-2.5 text-sm text-white outline-none focus:border-white/25 transition-colors" />
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {CAMPOS_MEDIDA.map(({ key, label, suffix }) => (
+                <div key={key}>
+                  <label className="text-sm text-white/60">{label} ({suffix})</label>
+                  <input
+                    type="number" step="0.1" inputMode="decimal"
+                    value={medidaForm[key as Exclude<keyof typeof medidaForm, "data_medicao" | "observacoes">]}
+                    onChange={(e) => setMedidaForm((p) => ({ ...p, [key]: e.target.value }))}
+                    className="mt-1.5 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-2.5 text-sm text-white outline-none focus:border-white/25 transition-colors"
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div>
+              <label className="text-sm text-white/60">Observações (opcional)</label>
+              <input type="text" value={medidaForm.observacoes}
+                onChange={(e) => setMedidaForm((p) => ({ ...p, observacoes: e.target.value }))}
+                placeholder="Ex: medi em jejum, pela manhã"
+                className="mt-1.5 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-2.5 text-sm text-white outline-none focus:border-white/25 transition-colors" />
+            </div>
+
+            <button type="submit" disabled={isSubmittingMedida || !alunoId}
+              className="w-full rounded-xl bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-white/90 disabled:opacity-60 transition-colors">
+              {isSubmittingMedida ? "Salvando…" : "Registrar medidas"}
+            </button>
+          </form>
+
+          {medidas.length > 0 && (
+            <div className="mt-6 space-y-2">
+              <p className="text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Histórico</p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-left text-white/40 text-xs">
+                      <th className="pb-2 pr-3">Data</th>
+                      {CAMPOS_MEDIDA.map(({ key, label }) => (
+                        <th key={key} className="pb-2 pr-3">{label}</th>
+                      ))}
+                      <th className="pb-2"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {medidas.map((m) => (
+                      <tr key={m.id} className="border-t border-white/8 text-white/80">
+                        <td className="py-2 pr-3 whitespace-nowrap">{formatDateBR(m.data_medicao)}</td>
+                        {CAMPOS_MEDIDA.map(({ key, suffix }) => (
+                          <td key={key} className="py-2 pr-3 whitespace-nowrap">
+                            {m[key] != null ? `${m[key]}${suffix}` : "—"}
+                          </td>
+                        ))}
+                        <td className="py-2">
+                          <button onClick={() => handleDeleteMedida(m.id)} disabled={isSubmittingMedida}
+                            className="rounded-lg border border-red-400/20 bg-red-400/10 px-1.5 py-0.5 text-[9px] text-red-300 hover:bg-red-400/15 disabled:opacity-50 transition-colors">
+                            Excluir
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </main>
   );
