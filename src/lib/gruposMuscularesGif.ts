@@ -1,0 +1,15 @@
+export const GRUPOS_MUSCULARES_GIF = [
+  "Costas",
+  "Peito",
+  "Funcional",
+  "Ombro",
+  "Pernas",
+  "Mobilidade",
+  "Bíceps",
+  "Tríceps",
+  "Glúteos",
+  "Panturrilha",
+  "Abdômen",
+  "Cardio",
+  "Não classificado",
+] as const;

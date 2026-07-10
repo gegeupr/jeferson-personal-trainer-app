@@ -3,22 +3,6 @@
 import { createSupabaseServer } from "@/utils/supabase-server";
 import { supabaseAdmin } from "@/utils/supabaseAdmin";
 
-export const GRUPOS_MUSCULARES_GIF = [
-  "Costas",
-  "Peito",
-  "Funcional",
-  "Ombro",
-  "Pernas",
-  "Mobilidade",
-  "Bíceps",
-  "Tríceps",
-  "Glúteos",
-  "Panturrilha",
-  "Abdômen",
-  "Cardio",
-  "Não classificado",
-] as const;
-
 async function assertProfessor(): Promise<string | null> {
   const supabase = await createSupabaseServer();
   const {

@@ -8,9 +8,9 @@ import {
   listarGifs,
   atribuirGifCatalogo,
   atribuirGifCustom,
-  GRUPOS_MUSCULARES_GIF,
   type ExercicioGifItem,
 } from "@/app/actions/exercicio-gifs";
+import { GRUPOS_MUSCULARES_GIF } from "@/lib/gruposMuscularesGif";
 
 interface Exercicio {
   id: string;
