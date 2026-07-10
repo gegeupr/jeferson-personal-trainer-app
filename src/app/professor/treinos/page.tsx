@@ -29,6 +29,7 @@ interface ExercicioCatalogo {
   nivel: string | null;
   descricao_tecnica: string | null;
   link_video: string | null; // youtube
+  gif_id: string | null;
   // se você tiver outras colunas, não tem problema
 }
 
@@ -365,22 +366,28 @@ export default function ProfessorTreinosPage() {
     }
   }
   // -------------------- Fetch catálogo (lazy) --------------------
-  async function fetchCatalogoIfNeeded() {
-    if (catalogo.length > 0) return;
+  // Retorna a lista atual (ou recém-buscada) — não dá pra confiar no state
+  // `catalogo` logo após chamar essa função, pois setState não atualiza o
+  // valor fechado no closure de quem chamou (só dispara um re-render).
+  async function fetchCatalogoIfNeeded(): Promise<ExercicioCatalogo[]> {
+    if (catalogo.length > 0) return catalogo;
     setLoadingCatalogo(true);
     try {
       const { data, error } = await supabase
         .from("exercicios_catalogo")
         .select(
-          "id, nome, categoria, subcategoria, grupo_muscular, musculo_principal, musculos_secundarios, objetivo, equipamento, ambiente, nivel, descricao_tecnica, link_video"
+          "id, nome, categoria, subcategoria, grupo_muscular, musculo_principal, musculos_secundarios, objetivo, equipamento, ambiente, nivel, descricao_tecnica, link_video, gif_id"
         )
         .order("nome", { ascending: true });
 
       if (error) throw error;
-      setCatalogo((data as any) || []);
+      const lista = (data as any) || [];
+      setCatalogo(lista);
+      return lista;
     } catch (e: any) {
       console.error(e?.message);
       setError("Erro ao carregar catálogo premium: " + (e?.message || "desconhecido"));
+      return catalogo;
     } finally {
       setLoadingCatalogo(false);
     }
@@ -694,7 +701,7 @@ export default function ProfessorTreinosPage() {
     setError(null);
     setShowEditRotinaModal(true);
 
-    await fetchCatalogoIfNeeded();
+    const catalogoAtual = await fetchCatalogoIfNeeded();
 
     const base = (rotina.treino_exercicios || []).map((te) => {
       if (te.exercicio_id) {
@@ -715,7 +722,7 @@ export default function ProfessorTreinosPage() {
           link_video: ex?.link_youtube || null,
         } as TreinoExercicioDisplay;
       } else {
-        const cx = catalogo.find((c) => c.id === te.catalogo_id);
+        const cx = catalogoAtual.find((c) => c.id === te.catalogo_id);
         return {
           id: uuidv4(),
           nomeExercicio: cx?.nome || "Exercício (Catálogo)",
