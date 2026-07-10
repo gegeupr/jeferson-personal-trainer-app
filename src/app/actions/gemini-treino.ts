@@ -261,6 +261,16 @@ function getSplitKey(dias: number, tipo: string): string | null {
 const MAX_POR_CATEGORIA_DIA = 25;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+function embaralhar(arr: any[]): any[] {
+  const copia = [...arr];
+  for (let i = copia.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copia[i], copia[j]] = [copia[j], copia[i]];
+  }
+  return copia;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function filtrarDia(catalogo: any[], filtro: DiaFiltro): any[] {
   const porCategoria = new Map<string, any[]>();
   for (const e of catalogo) {
@@ -270,7 +280,9 @@ function filtrarDia(catalogo: any[], filtro: DiaFiltro): any[] {
     porCategoria.get(cat)!.push(e);
   }
   const result: any[] = [];
-  for (const exs of porCategoria.values()) result.push(...exs.slice(0, MAX_POR_CATEGORIA_DIA));
+  // Embaralha antes de cortar — senão o teto por categoria sempre pega os
+  // mesmos primeiros da ordem alfabética, e a IA nunca vê o resto da lista.
+  for (const exs of porCategoria.values()) result.push(...embaralhar(exs).slice(0, MAX_POR_CATEGORIA_DIA));
   return result;
 }
 
@@ -282,9 +294,9 @@ function catExToJson(e: any): string {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildCatalogoSections(catalogo: any[], dias: number, tipo: string): string {
   const splitKey = getSplitKey(dias, tipo);
-  const coreExs = dedupPorBase(
+  const coreExs = embaralhar(dedupPorBase(
     catalogo.filter((e) => categoriaAmpla(e.grupo_muscular) === CORE_CATEGORIA)
-  ).slice(0, 8);
+  )).slice(0, 8);
   const coreTexto = coreExs.length > 0 ? coreExs.map(catExToJson).join('\n') : '(nenhum)';
 
   if (!splitKey) {
@@ -301,7 +313,7 @@ function buildCatalogoSections(catalogo: any[], dias: number, tipo: string): str
       porCategoria.get(cat)!.push(ex);
     }
     const tudo: any[] = [];
-    for (const exs of porCategoria.values()) tudo.push(...exs.slice(0, MAX_POR_CATEGORIA));
+    for (const exs of porCategoria.values()) tudo.push(...embaralhar(exs).slice(0, MAX_POR_CATEGORIA));
 
     return `=== CATÁLOGO — LISTA GLOBAL (use para todos os treinos) ===
 ${tudo.map(catExToJson).join('\n')}
