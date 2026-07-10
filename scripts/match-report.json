@@ -1,0 +1,4482 @@
+[
+  {
+    "catalogo_id": "45ecd58e-bc6a-4677-a07d-6613fed64285",
+    "catalogo_nome": "Ab Wheel Rollout",
+    "nome_base_normalizado": "ab wheel rollout",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "46a52bac-1dc1-4311-a62d-e736287312e5",
+    "catalogo_nome": "Abdominal na Polia (Unilateral)",
+    "nome_base_normalizado": "abdominal na polia",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "53e16a5d-a13c-4ab7-964d-18c43e303711",
+    "catalogo_nome": "Abdominal na Polia Alta",
+    "nome_base_normalizado": "abdominal na polia alta",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "01592483-8094-46bc-b7dc-05d2c9822382",
+    "catalogo_nome": "Abdominal Remador (Barco)",
+    "nome_base_normalizado": "abdominal remador barco",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "0068de4a-a2d8-4c7b-8f0f-0b4ab8df739a",
+    "catalogo_nome": "Air Bike – Contínuo Leve",
+    "nome_base_normalizado": "air bike continuo leve",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "2cf1cef9-9d74-4dc6-adb2-882587e795a5",
+    "catalogo_nome": "Air Bike – EMOM 10–15min",
+    "nome_base_normalizado": "air bike emom 10 15min",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "47438dcf-fc76-45b6-bf43-ca797bb3d17a",
+    "catalogo_nome": "Bear Crawl",
+    "nome_base_normalizado": "bear crawl",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "55212a6b-8f41-4dd5-893a-c789fd7ed437",
+    "catalogo_nome": "Belt Squat (Agachamento com Cinto)",
+    "nome_base_normalizado": "belt squat agachamento com cinto",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "6f95ed88-f631-4d7c-b2f2-d1af445ddb7a",
+    "catalogo_nome": "Belt Squat (Pés Altos na Plataforma)",
+    "nome_base_normalizado": "belt squat pes altos na plataforma",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "ab01b0ca-914d-40f3-af87-4c53ae121ec3",
+    "catalogo_nome": "Box Jump Profundo",
+    "nome_base_normalizado": "box jump profundo",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "4f85a8a9-e764-4534-9235-b86a674b94dc",
+    "catalogo_nome": "Box Jump Profundo (Variação 1)",
+    "nome_base_normalizado": "box jump profundo variacao 1",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "c739332e-1b70-44e3-ae67-7d79e3c3cca5",
+    "catalogo_nome": "Box Jump Profundo (Variação 2)",
+    "nome_base_normalizado": "box jump profundo variacao 2",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "26ae3d6d-d157-492c-8241-1865315956d6",
+    "catalogo_nome": "Box Jump Profundo (Variação 3)",
+    "nome_base_normalizado": "box jump profundo variacao 3",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "e00766dc-28f8-44b2-9146-455c2b4e83b1",
+    "catalogo_nome": "Cable Crunch (Abdominal na Polia)",
+    "nome_base_normalizado": "cable crunch abdominal na polia",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "8e53008b-4f2e-4f0a-8a69-c77e74f97810",
+    "catalogo_nome": "Crunch Abdominal",
+    "nome_base_normalizado": "crunch abdominal",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "75122c0c-d260-420e-ba96-268f7afe14d4",
+    "catalogo_nome": "Crunch Oblíquo",
+    "nome_base_normalizado": "crunch obliquo",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "f39c62e1-f972-4b99-89bf-3d7bbfe46258",
+    "catalogo_nome": "Crunch Reverso",
+    "nome_base_normalizado": "crunch reverso",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "35884a27-2c78-40cd-997c-d3fa5a0d6ec6",
+    "catalogo_nome": "Dead Bug",
+    "nome_base_normalizado": "dead bug",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "2c5ec7b4-9e84-480c-9294-08c333454f22",
+    "catalogo_nome": "Dead Bug com Carga",
+    "nome_base_normalizado": "dead bug com carga",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "c4b8d6a8-a759-4f77-a2df-9fec2a365f2d",
+    "catalogo_nome": "Dead Bug com Carga (Variação 1)",
+    "nome_base_normalizado": "dead bug com carga variacao 1",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "572361d2-e10f-4368-b5de-fa05219f9f57",
+    "catalogo_nome": "Dead Bug com Carga (Variação 2)",
+    "nome_base_normalizado": "dead bug com carga variacao 2",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "896106ef-f849-4bd4-adb0-d32c21f35550",
+    "catalogo_nome": "Dead Bug com Carga (Variação 3)",
+    "nome_base_normalizado": "dead bug com carga variacao 3",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "0caac0ef-81f3-4f26-bdde-bfd437843e26",
+    "catalogo_nome": "Elíptico – Contínuo Moderado",
+    "nome_base_normalizado": "eliptico continuo moderado",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "bbf38512-db12-4cc2-9bec-758f3454c9ad",
+    "catalogo_nome": "Elíptico – Intervalado",
+    "nome_base_normalizado": "eliptico intervalado",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "0b933f10-fc68-4657-b85f-da68de8f5da9",
+    "catalogo_nome": "Escada – Intervalado (Tiros)",
+    "nome_base_normalizado": "escada intervalado tiros",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "6c1e9c09-c7fc-41d4-80d2-788608f214bb",
+    "catalogo_nome": "Escada – Subida Contínua",
+    "nome_base_normalizado": "escada subida continua",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "a34aaf86-2d11-4fc8-bc2c-4fb4bb3aff81",
+    "catalogo_nome": "Farmer Walk",
+    "nome_base_normalizado": "farmer walk",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "046fe249-f220-49f5-a1cf-003868b5f260",
+    "catalogo_nome": "Farmer Walk",
+    "nome_base_normalizado": "farmer walk",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "eaed5843-9db0-4a38-ae31-6dbfab48fb1a",
+    "catalogo_nome": "Farmer Walk (Variação 1)",
+    "nome_base_normalizado": "farmer walk variacao 1",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "83126e33-22ef-4252-8bf8-83630d44f03d",
+    "catalogo_nome": "Farmer Walk (Variação 2)",
+    "nome_base_normalizado": "farmer walk variacao 2",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "59f8ce99-ab78-4296-8a81-e003ddc71545",
+    "catalogo_nome": "Farmer Walk (Variação 3)",
+    "nome_base_normalizado": "farmer walk variacao 3",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "8ed9e757-ff65-48dc-abd8-c83bc1752a1e",
+    "catalogo_nome": "Glute Kickback Machine (Abdução no Topo)",
+    "nome_base_normalizado": "glute kickback machine abducao no topo",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "fb61b124-9221-47a7-b698-3e1f9e039056",
+    "catalogo_nome": "Glute Kickback Machine (Coice)",
+    "nome_base_normalizado": "glute kickback machine coice",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "4f4777e7-077c-4e90-abec-a1bc0a2eba30",
+    "catalogo_nome": "Hack Machine (Hack Squat)",
+    "nome_base_normalizado": "hack machine hack squat",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "1e24ffdd-4546-4130-9a0e-e2a40e7c5404",
+    "catalogo_nome": "Hack Machine (Pés Altos)",
+    "nome_base_normalizado": "hack machine pes altos",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "1b7c02a6-1a66-428b-bdde-70b5448ff78e",
+    "catalogo_nome": "Hip Thrust (1 e 1/2 repetição) (Barra)",
+    "nome_base_normalizado": "hip thrust barra",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "227ff006-a324-4a82-8659-45a512b6c6ec",
+    "catalogo_nome": "Hip Thrust (1 e 1/2 repetição) (Máquina)",
+    "nome_base_normalizado": "hip thrust maquina",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "4f64df6c-06c8-4f73-bbff-5c4a021ae53c",
+    "catalogo_nome": "Hip Thrust (1 e 1/2 repetição) (Smith)",
+    "nome_base_normalizado": "hip thrust smith",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "bed5176b-7805-4313-9663-406dbc83160b",
+    "catalogo_nome": "Hip Thrust (Amplitude Parcial) (Barra)",
+    "nome_base_normalizado": "hip thrust barra",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "20dfd8a6-9005-47b0-b052-558582a3f529",
+    "catalogo_nome": "Hip Thrust (Amplitude Parcial) (Máquina)",
+    "nome_base_normalizado": "hip thrust maquina",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "9a77f22a-3cd7-453a-be1f-618e5ce64c2b",
+    "catalogo_nome": "Hip Thrust (Amplitude Parcial) (Smith)",
+    "nome_base_normalizado": "hip thrust smith",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "c057a09d-8000-482e-80f9-3c73293673e2",
+    "catalogo_nome": "Hip Thrust (Drop-Set) (Barra)",
+    "nome_base_normalizado": "hip thrust barra",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "1b0e4c35-ab96-46ba-b60f-db781f2f27da",
+    "catalogo_nome": "Hip Thrust (Drop-Set) (Máquina)",
+    "nome_base_normalizado": "hip thrust maquina",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "2c396bf6-8fa2-4029-9bb3-1571ac28f94a",
+    "catalogo_nome": "Hip Thrust (Drop-Set) (Smith)",
+    "nome_base_normalizado": "hip thrust smith",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "2ab1c8d5-fd0d-41e1-8ff9-908bbd942a40",
+    "catalogo_nome": "Hip Thrust (Isometria no Alongamento) (Barra)",
+    "nome_base_normalizado": "hip thrust barra",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "ecaa94c4-a85e-4494-ae5e-60df8a403106",
+    "catalogo_nome": "Hip Thrust (Isometria no Alongamento) (Máquina)",
+    "nome_base_normalizado": "hip thrust maquina",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "58822bb3-3cc7-42c6-a0d3-8b85d452989a",
+    "catalogo_nome": "Hip Thrust (Isometria no Alongamento) (Smith)",
+    "nome_base_normalizado": "hip thrust smith",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "cc9e81f8-22e3-4f23-b44a-5c26f87686c3",
+    "catalogo_nome": "Hip Thrust (Isometria no Pico) (Barra)",
+    "nome_base_normalizado": "hip thrust barra",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "2b781cd9-fb04-4352-9caf-11f936e219c4",
+    "catalogo_nome": "Hip Thrust (Isometria no Pico) (Máquina)",
+    "nome_base_normalizado": "hip thrust maquina",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "0becfa83-fac2-427d-a1c9-8e15a2e9c04b",
+    "catalogo_nome": "Hip Thrust (Isometria no Pico) (Smith)",
+    "nome_base_normalizado": "hip thrust smith",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "190f4656-b77e-4a78-91d3-60cb22295c56",
+    "catalogo_nome": "Hip Thrust (Pausas 3x no percurso) (Barra)",
+    "nome_base_normalizado": "hip thrust barra",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "4792d4bd-6573-4e1a-9912-d4b9c1ac59ae",
+    "catalogo_nome": "Hip Thrust (Pausas 3x no percurso) (Máquina)",
+    "nome_base_normalizado": "hip thrust maquina",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "a20250af-9113-4b11-9923-4e85893e5281",
+    "catalogo_nome": "Hip Thrust (Pausas 3x no percurso) (Smith)",
+    "nome_base_normalizado": "hip thrust smith",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "08759263-83be-4eaa-92de-52508e68f1b0",
+    "catalogo_nome": "Hip Thrust (Rest-Pause) (Barra)",
+    "nome_base_normalizado": "hip thrust barra",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "b3d000d6-39a4-40bf-93e0-d2334ee4ece7",
+    "catalogo_nome": "Hip Thrust (Rest-Pause) (Máquina)",
+    "nome_base_normalizado": "hip thrust maquina",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "3a962e1b-c46b-420c-bf8c-081c622dda2e",
+    "catalogo_nome": "Hip Thrust (Rest-Pause) (Smith)",
+    "nome_base_normalizado": "hip thrust smith",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "1b8dad07-2850-4b38-9c44-2ab63a19d66c",
+    "catalogo_nome": "Hip Thrust (Tempo 3-1-1) (Barra)",
+    "nome_base_normalizado": "hip thrust barra",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "9343185e-12b6-4490-923e-f1e1d7502830",
+    "catalogo_nome": "Hip Thrust (Tempo 3-1-1) (Máquina)",
+    "nome_base_normalizado": "hip thrust maquina",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "25b8905d-c388-49c7-866c-7032080ffee1",
+    "catalogo_nome": "Hip Thrust (Tempo 3-1-1) (Smith)",
+    "nome_base_normalizado": "hip thrust smith",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "cb9264fd-1301-4e47-ac0a-eeb45cf3c4da",
+    "catalogo_nome": "Hip Thrust (Tempo 4-0-1) (Barra)",
+    "nome_base_normalizado": "hip thrust barra",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "d8d79ef7-e548-4489-9d70-07d96453ff04",
+    "catalogo_nome": "Hip Thrust (Tempo 4-0-1) (Máquina)",
+    "nome_base_normalizado": "hip thrust maquina",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "74fab2f7-885d-4e07-aad6-83836f105535",
+    "catalogo_nome": "Hip Thrust (Tempo 4-0-1) (Smith)",
+    "nome_base_normalizado": "hip thrust smith",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "421fe2c5-2f38-44eb-b615-4e768eb77478",
+    "catalogo_nome": "Hip Thrust (Unilateral) (Barra)",
+    "nome_base_normalizado": "hip thrust barra",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "8723bd51-ddae-4f9b-98e0-a7f338820afa",
+    "catalogo_nome": "Hip Thrust (Unilateral) (Máquina)",
+    "nome_base_normalizado": "hip thrust maquina",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "583b1e6b-1ff9-4baa-896b-31d5c2712e17",
+    "catalogo_nome": "Hip Thrust (Unilateral) (Smith)",
+    "nome_base_normalizado": "hip thrust smith",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "3d410707-8f20-4506-9679-09b4ea9e0e5e",
+    "catalogo_nome": "Hip Thrust com Barra",
+    "nome_base_normalizado": "hip thrust com barra",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "e2a4c9bc-4148-463b-b5eb-b8da4da266cf",
+    "catalogo_nome": "Hip Thrust Machine",
+    "nome_base_normalizado": "hip thrust machine",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "bc8f88c6-4f21-4b83-b785-5f469947d1d2",
+    "catalogo_nome": "Hip Thrust Machine (Unilateral)",
+    "nome_base_normalizado": "hip thrust machine",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "0231b5f4-b731-45b8-b3ea-651da99feb79",
+    "catalogo_nome": "Hollow Body Hold",
+    "nome_base_normalizado": "hollow body hold",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "1900f52d-1fbd-407d-86a0-e62033c7c3a0",
+    "catalogo_nome": "L-Sit",
+    "nome_base_normalizado": "l sit",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "65a4330c-e6e6-414a-a558-368216d5957d",
+    "catalogo_nome": "Mountain Climber",
+    "nome_base_normalizado": "mountain climber",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "507e4eb6-ee52-4621-bbed-3c980337d608",
+    "catalogo_nome": "Pallof Press",
+    "nome_base_normalizado": "pallof press",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "115b7281-5fb9-4440-ab25-dcb75093c123",
+    "catalogo_nome": "Pallof Press",
+    "nome_base_normalizado": "pallof press",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "18f2dc6a-c533-4773-a316-b9bf5a477d31",
+    "catalogo_nome": "Pallof Press (Variação 1)",
+    "nome_base_normalizado": "pallof press variacao 1",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "b48a9ea8-6341-4998-912a-140cf51f5087",
+    "catalogo_nome": "Pallof Press (Variação 2)",
+    "nome_base_normalizado": "pallof press variacao 2",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "11294585-73b7-40c5-836e-438a63efc250",
+    "catalogo_nome": "Pallof Press (Variação 3)",
+    "nome_base_normalizado": "pallof press variacao 3",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "5d9ea502-d403-49fb-ae3e-4b8a5f389d1e",
+    "catalogo_nome": "Pallof Press com Rotação",
+    "nome_base_normalizado": "pallof press com rotacao",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "4ca00fb3-6e90-4246-ba57-2b93f83fadeb",
+    "catalogo_nome": "Peck Deck (Crucifixo na Máquina)",
+    "nome_base_normalizado": "peck deck crucifixo na maquina",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "ed5be3c0-cf35-4b7f-8237-cc4b05549954",
+    "catalogo_nome": "Pendulum Squat (Agachamento Pendular)",
+    "nome_base_normalizado": "pendulum squat agachamento pendular",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "36c099b9-bc22-41f1-a9b2-21e40953d23a",
+    "catalogo_nome": "Pendulum Squat (Ênfase Glúteos)",
+    "nome_base_normalizado": "pendulum squat enfase gluteos",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "1443910c-f657-4a68-a31c-4c605bfde2fe",
+    "catalogo_nome": "Prancha Abdominal",
+    "nome_base_normalizado": "prancha abdominal",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "4461d79f-28ef-43b7-9e83-e45d0c804884",
+    "catalogo_nome": "Prancha com Alcance",
+    "nome_base_normalizado": "prancha com alcance",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "94cd6136-c70d-48b5-b0a9-195a10b4e95a",
+    "catalogo_nome": "Prancha com Toque de Ombro",
+    "nome_base_normalizado": "prancha com toque de ombro",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "7b64aa3b-6535-40c3-b0bb-b7b3dceb372e",
+    "catalogo_nome": "Prancha Dinâmica (Up-Down)",
+    "nome_base_normalizado": "prancha dinamica up down",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "aa2f8003-89f9-4077-8567-ff30b4c8c486",
+    "catalogo_nome": "Prancha Isométrica",
+    "nome_base_normalizado": "prancha isometrica",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "5c9e2245-2906-480d-b7f5-9802b38a9f7e",
+    "catalogo_nome": "Prancha Lateral",
+    "nome_base_normalizado": "prancha lateral",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "2eb6e4db-c9a3-4704-860e-3f6c154a3714",
+    "catalogo_nome": "Prancha Lateral",
+    "nome_base_normalizado": "prancha lateral",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "f2901872-f590-4bed-96d7-7420d324738c",
+    "catalogo_nome": "Remo – Intervalado 500m",
+    "nome_base_normalizado": "remo intervalado 500m",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "28c4590e-c1f9-4a7c-83f6-ba4e01c06614",
+    "catalogo_nome": "Remo – Técnica (Cadência Controlada)",
+    "nome_base_normalizado": "remo tecnica cadencia controlada",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "cef3166b-6d7a-45ff-a5b1-4be79080597b",
+    "catalogo_nome": "Reverse Hyper (Extensão de Quadril)",
+    "nome_base_normalizado": "reverse hyper extensao de quadril",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "124ebd57-c2f4-495e-8e12-81bf0e47f62c",
+    "catalogo_nome": "Reverse Hyper (Reabilitação/Leve)",
+    "nome_base_normalizado": "reverse hyper reabilitacao leve",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "c4f5f402-35e7-46a7-87a3-0ff2e0b33cbc",
+    "catalogo_nome": "Russian Twist",
+    "nome_base_normalizado": "russian twist",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "76dbe7b6-83fa-4c16-a30c-4039b152d957",
+    "catalogo_nome": "Russian Twist com Anilha",
+    "nome_base_normalizado": "russian twist com anilha",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "1e86716d-f063-4894-a1f2-ab194afdf634",
+    "catalogo_nome": "Sandbag Carry",
+    "nome_base_normalizado": "sandbag carry",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "9150ef61-a0f0-47dd-9e2e-348b3d4c53c5",
+    "catalogo_nome": "Sandbag Carry (Variação 1)",
+    "nome_base_normalizado": "sandbag carry variacao 1",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "ad2853a1-a11d-495f-944c-b20c575ff71f",
+    "catalogo_nome": "Sandbag Carry (Variação 2)",
+    "nome_base_normalizado": "sandbag carry variacao 2",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "a502be39-a01e-42e9-9be5-38d0e3f881f2",
+    "catalogo_nome": "Sandbag Carry (Variação 3)",
+    "nome_base_normalizado": "sandbag carry variacao 3",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "95f3ce05-dc1d-44d9-aece-f7ec8dcd140b",
+    "catalogo_nome": "Seated Calf Raise (Panturrilha Sentado)",
+    "nome_base_normalizado": "seated calf raise panturrilha sentado",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "1a84f323-4ad6-40ce-85d5-480549b879cf",
+    "catalogo_nome": "Sit Up Completo",
+    "nome_base_normalizado": "sit up completo",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "e1975246-a1d1-4be3-8dd5-cb4506ca2898",
+    "catalogo_nome": "Sled Push",
+    "nome_base_normalizado": "sled push",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "ba910c43-1f3a-4c30-b0ad-6292a5ae0648",
+    "catalogo_nome": "Sled Push (Variação 1)",
+    "nome_base_normalizado": "sled push variacao 1",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "0793ae3f-fa2c-49ed-9b90-115bad7ed994",
+    "catalogo_nome": "Sled Push (Variação 2)",
+    "nome_base_normalizado": "sled push variacao 2",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "4a8e3515-85f0-419a-acf2-759523423b93",
+    "catalogo_nome": "Sled Push (Variação 3)",
+    "nome_base_normalizado": "sled push variacao 3",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "2a914b7c-e4c4-44be-a87b-58aa795ed65d",
+    "catalogo_nome": "Sprint Resistido Elástico",
+    "nome_base_normalizado": "sprint resistido elastico",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "4703e729-07db-4a7f-acca-f88787315fdb",
+    "catalogo_nome": "Sprint Resistido Elástico (Variação 1)",
+    "nome_base_normalizado": "sprint resistido elastico variacao 1",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "aba037b6-8b4f-47f0-8987-c9f05f6a801a",
+    "catalogo_nome": "Sprint Resistido Elástico (Variação 2)",
+    "nome_base_normalizado": "sprint resistido elastico variacao 2",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "bf3e7c53-c209-423f-be1f-5193a2fd1fa3",
+    "catalogo_nome": "Sprint Resistido Elástico (Variação 3)",
+    "nome_base_normalizado": "sprint resistido elastico variacao 3",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "fe28c76e-2127-406c-956e-b11babb4099b",
+    "catalogo_nome": "Standing Calf Machine (Panturrilha em Pé)",
+    "nome_base_normalizado": "standing calf machine panturrilha em pe",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "507f4160-7e5e-48a9-bef5-35c40e7f8f51",
+    "catalogo_nome": "Standing Calf Machine (Pés Para Dentro)",
+    "nome_base_normalizado": "standing calf machine pes para dentro",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "4c7cabb0-b304-4d98-a2be-dea9ab34f92f",
+    "catalogo_nome": "Stir the Pot",
+    "nome_base_normalizado": "stir the pot",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "6c1b1229-fd59-4da4-82cd-1ca836f461f4",
+    "catalogo_nome": "Suitcase Carry",
+    "nome_base_normalizado": "suitcase carry",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "cd41e4c2-a895-4e38-a146-6b3ed395177a",
+    "catalogo_nome": "TRX Remada Baixa",
+    "nome_base_normalizado": "trx remada baixa",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "947670a8-8a89-444b-b0a0-66a27a990d8c",
+    "catalogo_nome": "TRX Remada Baixa (Variação 1)",
+    "nome_base_normalizado": "trx remada baixa variacao 1",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "3a244a7e-82a7-4cf6-a3b9-00aed36a37d4",
+    "catalogo_nome": "TRX Remada Baixa (Variação 2)",
+    "nome_base_normalizado": "trx remada baixa variacao 2",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "b12e0e71-ebf8-43f6-89bf-1fce4662d68c",
+    "catalogo_nome": "TRX Remada Baixa (Variação 3)",
+    "nome_base_normalizado": "trx remada baixa variacao 3",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "3ceff4ec-80ec-438b-aac1-8f506d8b701e",
+    "catalogo_nome": "Windshield Wiper",
+    "nome_base_normalizado": "windshield wiper",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "05006210-1ce6-43cc-a240-81c969a57238",
+    "catalogo_nome": "Y Raise Inclinado",
+    "nome_base_normalizado": "y raise inclinado",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "3a7d0f75-489b-45df-b7e1-36ec91384e5a",
+    "catalogo_nome": "Y Raise Inclinado (Variação 1)",
+    "nome_base_normalizado": "y raise inclinado variacao 1",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "41f5ae38-8016-4090-8c5e-ca18ea5ffbf8",
+    "catalogo_nome": "Y Raise Inclinado (Variação 2)",
+    "nome_base_normalizado": "y raise inclinado variacao 2",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "e8bfefb1-398c-48d7-b63c-e90b19316d22",
+    "catalogo_nome": "Y Raise Inclinado (Variação 3)",
+    "nome_base_normalizado": "y raise inclinado variacao 3",
+    "gif_sugerido": null,
+    "confianca": 0
+  },
+  {
+    "catalogo_id": "b4125482-a5ae-4a28-b902-4f1de618a8ee",
+    "catalogo_nome": "Joelhos ao Peito na Barra Fixa",
+    "nome_base_normalizado": "joelhos ao peito na barra fixa",
+    "gif_sugerido": "Joelhos altos contra a parede.gif",
+    "confianca": 0.25
+  },
+  {
+    "catalogo_id": "d9fc7ea5-565d-427e-b7c7-7ea037f6ce9a",
+    "catalogo_nome": "Bicicleta Abdominal",
+    "nome_base_normalizado": "bicicleta abdominal",
+    "gif_sugerido": "Bicicleta Ergométrica Reclinada.gif",
+    "confianca": 0.33
+  },
+  {
+    "catalogo_id": "7b1652cc-f44d-403b-86c9-b4603520bbef",
+    "catalogo_nome": "Glúteo na Polia (Kickback)",
+    "nome_base_normalizado": "gluteo na polia kickback",
+    "gif_sugerido": "Glúteo Coice com Gymstick.gif",
+    "confianca": 0.33
+  },
+  {
+    "catalogo_id": "305580e8-e57a-431e-9eff-d02df68b5922",
+    "catalogo_nome": "Kettlebell Swing",
+    "nome_base_normalizado": "kettlebell swing",
+    "gif_sugerido": "Kettlebell em Forma de Oito.gif",
+    "confianca": 0.33
+  },
+  {
+    "catalogo_id": "0f754c2a-4bc0-4806-a0f9-384fc34c52da",
+    "catalogo_nome": "Kettlebell Swing (Variação 1)",
+    "nome_base_normalizado": "kettlebell swing variacao 1",
+    "gif_sugerido": "Kettlebell em Forma de Oito.gif",
+    "confianca": 0.33
+  },
+  {
+    "catalogo_id": "ea2df984-a967-424f-8057-c271b5d3d18e",
+    "catalogo_nome": "Kettlebell Swing (Variação 2)",
+    "nome_base_normalizado": "kettlebell swing variacao 2",
+    "gif_sugerido": "Kettlebell em Forma de Oito.gif",
+    "confianca": 0.33
+  },
+  {
+    "catalogo_id": "88b25e87-b5b6-4f80-9c29-a70fd59bddbe",
+    "catalogo_nome": "Kettlebell Swing (Variação 3)",
+    "nome_base_normalizado": "kettlebell swing variacao 3",
+    "gif_sugerido": "Kettlebell em Forma de Oito.gif",
+    "confianca": 0.33
+  },
+  {
+    "catalogo_id": "23e2f575-0f3e-4294-b7b5-33b45ae35468",
+    "catalogo_nome": "Panturrilha Sentado (1 e 1/2 repetição) (Máquina)",
+    "nome_base_normalizado": "panturrilha sentado maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.33
+  },
+  {
+    "catalogo_id": "007da1b3-d78f-4dad-8a93-0641257b12c1",
+    "catalogo_nome": "Panturrilha Sentado (Amplitude Parcial) (Máquina)",
+    "nome_base_normalizado": "panturrilha sentado maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.33
+  },
+  {
+    "catalogo_id": "b5776b97-dba2-476b-8353-fa4613a3ea42",
+    "catalogo_nome": "Panturrilha Sentado (Drop-Set) (Máquina)",
+    "nome_base_normalizado": "panturrilha sentado maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.33
+  },
+  {
+    "catalogo_id": "a0ce757d-549b-4f89-a660-038f123dc17c",
+    "catalogo_nome": "Panturrilha Sentado (Isometria no Alongamento) (Máquina)",
+    "nome_base_normalizado": "panturrilha sentado maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.33
+  },
+  {
+    "catalogo_id": "5db08568-3723-437b-af52-7ed60b1bb0cf",
+    "catalogo_nome": "Panturrilha Sentado (Isometria no Pico) (Máquina)",
+    "nome_base_normalizado": "panturrilha sentado maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.33
+  },
+  {
+    "catalogo_id": "1fe767da-6f3a-4c00-bc55-3399e651947a",
+    "catalogo_nome": "Panturrilha Sentado (Pausas 3x no percurso) (Máquina)",
+    "nome_base_normalizado": "panturrilha sentado maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.33
+  },
+  {
+    "catalogo_id": "145f4c3b-692a-49ec-a039-503f0743a9e0",
+    "catalogo_nome": "Panturrilha Sentado (Rest-Pause) (Máquina)",
+    "nome_base_normalizado": "panturrilha sentado maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.33
+  },
+  {
+    "catalogo_id": "86801af9-bc18-4f85-bd8d-fa54a5024ad1",
+    "catalogo_nome": "Panturrilha Sentado (Tempo 3-1-1) (Máquina)",
+    "nome_base_normalizado": "panturrilha sentado maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.33
+  },
+  {
+    "catalogo_id": "0842b9bf-1f47-4772-b03b-4a96fb610195",
+    "catalogo_nome": "Panturrilha Sentado (Tempo 4-0-1) (Máquina)",
+    "nome_base_normalizado": "panturrilha sentado maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.33
+  },
+  {
+    "catalogo_id": "d7d9fcae-0b04-48bd-a6ee-18877dcbaa4a",
+    "catalogo_nome": "Panturrilha Sentado (Unilateral) (Máquina)",
+    "nome_base_normalizado": "panturrilha sentado maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.33
+  },
+  {
+    "catalogo_id": "1763e65f-99fa-416d-bea9-e7a10577e720",
+    "catalogo_nome": "Panturrilha Sentado na Máquina",
+    "nome_base_normalizado": "panturrilha sentado na maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.33
+  },
+  {
+    "catalogo_id": "34b0f2d4-8ae9-43c0-b1bc-f18417661abc",
+    "catalogo_nome": "Adução de Quadril na Máquina",
+    "nome_base_normalizado": "aducao de quadril na maquina",
+    "gif_sugerido": "Adução do Quadril Lateral com Alavanca.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "6e2b9360-c51c-498b-9ade-318a0f2de87d",
+    "catalogo_nome": "Adução de Quadril na Polia",
+    "nome_base_normalizado": "aducao de quadril na polia",
+    "gif_sugerido": "Adução do Quadril Lateral com Alavanca.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "3745c3ba-a1cf-44e1-9de8-8eb42aac1b0b",
+    "catalogo_nome": "Cadeira Abdutora",
+    "nome_base_normalizado": "cadeira abdutora",
+    "gif_sugerido": "Cadeira extensora.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "0b8cc5d5-0496-4e65-844e-2cc60fd1c1a9",
+    "catalogo_nome": "Cadeira Abdutora (Inclinado à Frente)",
+    "nome_base_normalizado": "cadeira abdutora inclinado a frente",
+    "gif_sugerido": "Cadeira extensora.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "323e3502-0d80-429a-90a1-f628fceec6d9",
+    "catalogo_nome": "Cadeira Adutora",
+    "nome_base_normalizado": "cadeira adutora",
+    "gif_sugerido": "Cadeira extensora.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "cb4f4572-ad8d-45ba-95ce-b57fab861ed6",
+    "catalogo_nome": "Crossover na Polia Alta",
+    "nome_base_normalizado": "crossover na polia alta",
+    "gif_sugerido": "Crossover na Alavanca.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "0d5ed3e8-4c3f-47a8-8167-fc18e4012091",
+    "catalogo_nome": "Crossover na Polia Baixa",
+    "nome_base_normalizado": "crossover na polia baixa",
+    "gif_sugerido": "Crossover na Alavanca.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "028cb95a-775f-44b6-92d2-019626466bef",
+    "catalogo_nome": "Crossover na Polia Média",
+    "nome_base_normalizado": "crossover na polia media",
+    "gif_sugerido": "Crossover na Alavanca.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "8635225c-6d42-4147-848e-0108cdb7b06a",
+    "catalogo_nome": "Crucifixo Invertido (1 e 1/2 repetição) (Máquina)",
+    "nome_base_normalizado": "crucifixo invertido maquina",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "c099bc25-144a-4c7a-baa3-c77a013cca96",
+    "catalogo_nome": "Crucifixo Invertido (Amplitude Parcial) (Máquina)",
+    "nome_base_normalizado": "crucifixo invertido maquina",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "b9c3d6de-03ef-40e5-a85b-b16b73f626ec",
+    "catalogo_nome": "Crucifixo Invertido (Drop-Set) (Máquina)",
+    "nome_base_normalizado": "crucifixo invertido maquina",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "b4c285d1-a6d1-4ade-8b34-d6a0a08b6219",
+    "catalogo_nome": "Crucifixo Invertido (Isometria no Alongamento) (Máquina)",
+    "nome_base_normalizado": "crucifixo invertido maquina",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "cf98b54b-8ac6-4fd3-8ec0-5bbe83b4a24a",
+    "catalogo_nome": "Crucifixo Invertido (Isometria no Pico) (Máquina)",
+    "nome_base_normalizado": "crucifixo invertido maquina",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "b884d942-052c-4093-b381-3b857653bb63",
+    "catalogo_nome": "Crucifixo Invertido (Pausas 3x no percurso) (Máquina)",
+    "nome_base_normalizado": "crucifixo invertido maquina",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "fc78a75c-4854-4a40-a917-32dc7dc5416e",
+    "catalogo_nome": "Crucifixo Invertido (Peck Deck Reverso)",
+    "nome_base_normalizado": "crucifixo invertido peck deck reverso",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "f6730eb2-d9ca-4012-8803-fa7c1746de0b",
+    "catalogo_nome": "Crucifixo Invertido (Rest-Pause) (Máquina)",
+    "nome_base_normalizado": "crucifixo invertido maquina",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "28a10ea7-5aad-49d8-b948-191017d1c3cb",
+    "catalogo_nome": "Crucifixo Invertido (Tempo 3-1-1) (Máquina)",
+    "nome_base_normalizado": "crucifixo invertido maquina",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "68635b9b-7915-414e-a43d-831800644320",
+    "catalogo_nome": "Crucifixo Invertido (Tempo 4-0-1) (Máquina)",
+    "nome_base_normalizado": "crucifixo invertido maquina",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "46bd551a-fdc0-4f2f-996c-e08b3b7ddc92",
+    "catalogo_nome": "Crucifixo Invertido (Unilateral) (Máquina)",
+    "nome_base_normalizado": "crucifixo invertido maquina",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "d77aad15-d456-45d6-b919-9e3d1e1a291d",
+    "catalogo_nome": "Encolhimento com Barra",
+    "nome_base_normalizado": "encolhimento com barra",
+    "gif_sugerido": "Encolhimento com Cabo.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "1b0125ae-4856-41fc-ad2a-cfcfa3cafbf4",
+    "catalogo_nome": "Encolhimento no Smith",
+    "nome_base_normalizado": "encolhimento no smith",
+    "gif_sugerido": "Encolhimento com Cabo.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "39e9aabb-90a1-4b57-8211-625ef65f68c5",
+    "catalogo_nome": "Esteira – Caminhada Inclinada",
+    "nome_base_normalizado": "esteira caminhada inclinada",
+    "gif_sugerido": "Esteira com Inclinação.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "4937abc0-76d2-4b8e-ab2f-53e5ba818ccc",
+    "catalogo_nome": "Esteira – Corrida Intervalada (HIIT)",
+    "nome_base_normalizado": "esteira corrida intervalada hiit",
+    "gif_sugerido": "Esteira com Inclinação.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "ff182c51-2bd1-4f5c-96e3-cb426400833d",
+    "catalogo_nome": "Ponte Glútea Terapêutica",
+    "nome_base_normalizado": "ponte glutea terapeutica",
+    "gif_sugerido": "Ponte com Halteres.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "d1588452-3c07-446d-b5c8-566c8ffe48d0",
+    "catalogo_nome": "Ponte Glútea Terapêutica (Variação 1)",
+    "nome_base_normalizado": "ponte glutea terapeutica variacao 1",
+    "gif_sugerido": "Ponte com Halteres.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "3d18ca8b-8d8a-4338-bd71-cdc619508071",
+    "catalogo_nome": "Ponte Glútea Terapêutica (Variação 2)",
+    "nome_base_normalizado": "ponte glutea terapeutica variacao 2",
+    "gif_sugerido": "Ponte com Halteres.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "d33ea1e6-309d-46fa-84ab-418748482c3a",
+    "catalogo_nome": "Ponte Glútea Terapêutica (Variação 3)",
+    "nome_base_normalizado": "ponte glutea terapeutica variacao 3",
+    "gif_sugerido": "Ponte com Halteres.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "26e12a5f-dd23-48ba-a63c-186b6d49581f",
+    "catalogo_nome": "Pulldown (1 e 1/2 repetição) (Máquina)",
+    "nome_base_normalizado": "pulldown maquina",
+    "gif_sugerido": "Pulldown com corda.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "ba627e32-dcf9-4d47-be2a-5c8c22456607",
+    "catalogo_nome": "Pulldown (Amplitude Parcial) (Máquina)",
+    "nome_base_normalizado": "pulldown maquina",
+    "gif_sugerido": "Pulldown com corda.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "dc562d8e-20a6-4714-aad1-3ed7c2a59ac5",
+    "catalogo_nome": "Pulldown (Drop-Set) (Máquina)",
+    "nome_base_normalizado": "pulldown maquina",
+    "gif_sugerido": "Pulldown com corda.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "7a07764f-8d39-447b-ad4e-929857362ec9",
+    "catalogo_nome": "Pulldown (Isometria no Alongamento) (Máquina)",
+    "nome_base_normalizado": "pulldown maquina",
+    "gif_sugerido": "Pulldown com corda.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "9293c8a5-a905-4516-a421-ac44e6a44603",
+    "catalogo_nome": "Pulldown (Isometria no Pico) (Máquina)",
+    "nome_base_normalizado": "pulldown maquina",
+    "gif_sugerido": "Pulldown com corda.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "0b34bd78-c993-4f42-a31c-6be5d5278462",
+    "catalogo_nome": "Pulldown (Pausas 3x no percurso) (Máquina)",
+    "nome_base_normalizado": "pulldown maquina",
+    "gif_sugerido": "Pulldown com corda.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "d2591335-7022-4727-8ee2-ffbcfaa97189",
+    "catalogo_nome": "Pulldown (Rest-Pause) (Máquina)",
+    "nome_base_normalizado": "pulldown maquina",
+    "gif_sugerido": "Pulldown com corda.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "df111c01-a0a4-46bd-b19c-21a67573e5eb",
+    "catalogo_nome": "Pulldown (Tempo 3-1-1) (Máquina)",
+    "nome_base_normalizado": "pulldown maquina",
+    "gif_sugerido": "Pulldown com corda.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "ea1fa6b5-6338-44ac-8171-81f78757eed5",
+    "catalogo_nome": "Pulldown (Tempo 4-0-1) (Máquina)",
+    "nome_base_normalizado": "pulldown maquina",
+    "gif_sugerido": "Pulldown com corda.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "5ef60305-e6c3-4d09-b481-0ea1ddb7e88e",
+    "catalogo_nome": "Pulldown (Unilateral) (Máquina)",
+    "nome_base_normalizado": "pulldown maquina",
+    "gif_sugerido": "Pulldown com corda.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "500946ca-8fb5-435b-bcbb-ff684d7a218d",
+    "catalogo_nome": "Pulldown na Polia (Pegada Aberta)",
+    "nome_base_normalizado": "pulldown na polia pegada aberta",
+    "gif_sugerido": "Pulldown com corda.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "74a4238a-9588-45b5-adff-1c382299b00f",
+    "catalogo_nome": "Pulldown na Polia (Pegada Fechada)",
+    "nome_base_normalizado": "pulldown na polia pegada fechada",
+    "gif_sugerido": "Pulldown com corda.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "b23197b6-c319-4324-86d2-4bbc87fe2d3f",
+    "catalogo_nome": "Pullover com Halter",
+    "nome_base_normalizado": "pullover com halter",
+    "gif_sugerido": "Pullover com Barra.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "ab3bd953-3a31-463e-bdf6-ee349ee5bcc6",
+    "catalogo_nome": "Pullover na Polia",
+    "nome_base_normalizado": "pullover na polia",
+    "gif_sugerido": "Pullover com Barra.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "a8497e66-c189-43f9-8300-e32dbff97803",
+    "catalogo_nome": "Remada Baixa na Polia",
+    "nome_base_normalizado": "remada baixa na polia",
+    "gif_sugerido": "Remada Alta (1).gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "db827f10-6ab1-4631-bd2f-d88d772fe332",
+    "catalogo_nome": "Step Down Controle Joelho",
+    "nome_base_normalizado": "step down controle joelho",
+    "gif_sugerido": "Step com elástico.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "aa24da52-d6bc-4a7e-bdcd-80e30af761a9",
+    "catalogo_nome": "Step Down Controle Joelho (Variação 1)",
+    "nome_base_normalizado": "step down controle joelho variacao 1",
+    "gif_sugerido": "Step com elástico.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "36a1ca32-acdf-4cc2-9ee3-9aa043aba972",
+    "catalogo_nome": "Step Down Controle Joelho (Variação 2)",
+    "nome_base_normalizado": "step down controle joelho variacao 2",
+    "gif_sugerido": "Step com elástico.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "3bd4b695-2cfe-4407-af61-947a8d0b34e7",
+    "catalogo_nome": "Step Down Controle Joelho (Variação 3)",
+    "nome_base_normalizado": "step down controle joelho variacao 3",
+    "gif_sugerido": "Step com elástico.gif",
+    "confianca": 0.5
+  },
+  {
+    "catalogo_id": "8a66d95d-6b1c-4e94-ab75-dd2411161f3b",
+    "catalogo_nome": "Abdução de Quadril na Máquina",
+    "nome_base_normalizado": "abducao de quadril na maquina",
+    "gif_sugerido": "Abdução de Quadril com Faixa.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "38b8db5c-108a-4e4c-b03b-34fb10f11674",
+    "catalogo_nome": "Crossover (1 e 1/2 repetição) (Cabo/Polia)",
+    "nome_base_normalizado": "crossover cabo polia",
+    "gif_sugerido": "Crossover Unilateral com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "66158266-6098-4af6-86c8-cad69ce4d9ea",
+    "catalogo_nome": "Crossover (Amplitude Parcial) (Cabo/Polia)",
+    "nome_base_normalizado": "crossover cabo polia",
+    "gif_sugerido": "Crossover Unilateral com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "8a298a46-dfd0-47bd-b984-14511a786e6e",
+    "catalogo_nome": "Crossover (Drop-Set) (Cabo/Polia)",
+    "nome_base_normalizado": "crossover cabo polia",
+    "gif_sugerido": "Crossover Unilateral com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "6a273722-5c82-4ad3-b4d5-a2d4bdb0e29d",
+    "catalogo_nome": "Crossover (Isometria no Alongamento) (Cabo/Polia)",
+    "nome_base_normalizado": "crossover cabo polia",
+    "gif_sugerido": "Crossover Unilateral com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "67fbca1f-579b-405e-a6c8-ae423f556772",
+    "catalogo_nome": "Crossover (Isometria no Pico) (Cabo/Polia)",
+    "nome_base_normalizado": "crossover cabo polia",
+    "gif_sugerido": "Crossover Unilateral com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "d8437ca4-2d45-4688-aef6-37816928fd6f",
+    "catalogo_nome": "Crossover (Pausas 3x no percurso) (Cabo/Polia)",
+    "nome_base_normalizado": "crossover cabo polia",
+    "gif_sugerido": "Crossover Unilateral com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "9c211741-cd5e-461c-a11f-efe7d55df25c",
+    "catalogo_nome": "Crossover (Rest-Pause) (Cabo/Polia)",
+    "nome_base_normalizado": "crossover cabo polia",
+    "gif_sugerido": "Crossover Unilateral com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "308b27fa-a242-4801-8ce6-1017dece894b",
+    "catalogo_nome": "Crossover (Tempo 3-1-1) (Cabo/Polia)",
+    "nome_base_normalizado": "crossover cabo polia",
+    "gif_sugerido": "Crossover Unilateral com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "7d7bdf97-a9b4-4da9-bda9-8be12b84cb55",
+    "catalogo_nome": "Crossover (Tempo 4-0-1) (Cabo/Polia)",
+    "nome_base_normalizado": "crossover cabo polia",
+    "gif_sugerido": "Crossover Unilateral com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "ae93cbc2-9952-47c2-a676-20c1ee1c9504",
+    "catalogo_nome": "Crossover (Unilateral) (Cabo/Polia)",
+    "nome_base_normalizado": "crossover cabo polia",
+    "gif_sugerido": "Crossover Unilateral com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "f0fdff4c-53b6-4467-9cf2-0cf9761488ed",
+    "catalogo_nome": "Crucifixo Invertido (1 e 1/2 repetição) (Cabo/Polia)",
+    "nome_base_normalizado": "crucifixo invertido cabo polia",
+    "gif_sugerido": "Crucifixo com Cabo Declinado.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "58810365-acd7-4942-a0a3-f70dcb2846bc",
+    "catalogo_nome": "Crucifixo Invertido (Amplitude Parcial) (Cabo/Polia)",
+    "nome_base_normalizado": "crucifixo invertido cabo polia",
+    "gif_sugerido": "Crucifixo com Cabo Declinado.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "52ca88d6-4bbc-4c9e-aa66-d932aca6952e",
+    "catalogo_nome": "Crucifixo Invertido (Drop-Set) (Cabo/Polia)",
+    "nome_base_normalizado": "crucifixo invertido cabo polia",
+    "gif_sugerido": "Crucifixo com Cabo Declinado.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "2225e3e5-7ae5-4b58-a22f-96970085568a",
+    "catalogo_nome": "Crucifixo Invertido (Isometria no Alongamento) (Cabo/Polia)",
+    "nome_base_normalizado": "crucifixo invertido cabo polia",
+    "gif_sugerido": "Crucifixo com Cabo Declinado.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "966044c7-34c8-4b3d-b4a7-7937558c7eee",
+    "catalogo_nome": "Crucifixo Invertido (Isometria no Pico) (Cabo/Polia)",
+    "nome_base_normalizado": "crucifixo invertido cabo polia",
+    "gif_sugerido": "Crucifixo com Cabo Declinado.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "dfcd2810-4334-4bd1-8ccc-75835c56abd9",
+    "catalogo_nome": "Crucifixo Invertido (Pausas 3x no percurso) (Cabo/Polia)",
+    "nome_base_normalizado": "crucifixo invertido cabo polia",
+    "gif_sugerido": "Crucifixo com Cabo Declinado.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "280c0b87-dd04-4735-b04f-a3ec441d23f8",
+    "catalogo_nome": "Crucifixo Invertido (Rest-Pause) (Cabo/Polia)",
+    "nome_base_normalizado": "crucifixo invertido cabo polia",
+    "gif_sugerido": "Crucifixo com Cabo Declinado.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "b406e560-e543-4354-9674-4fb356fb38d9",
+    "catalogo_nome": "Crucifixo Invertido (Tempo 3-1-1) (Cabo/Polia)",
+    "nome_base_normalizado": "crucifixo invertido cabo polia",
+    "gif_sugerido": "Crucifixo com Cabo Declinado.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "b9237dfd-05dc-4c81-8037-af765024bea7",
+    "catalogo_nome": "Crucifixo Invertido (Tempo 4-0-1) (Cabo/Polia)",
+    "nome_base_normalizado": "crucifixo invertido cabo polia",
+    "gif_sugerido": "Crucifixo com Cabo Declinado.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "91cf03aa-fbe1-4869-a567-e101ead021bc",
+    "catalogo_nome": "Crucifixo Invertido (Unilateral) (Cabo/Polia)",
+    "nome_base_normalizado": "crucifixo invertido cabo polia",
+    "gif_sugerido": "Crucifixo com Cabo Declinado.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "6dffb514-644d-42f6-b9bb-a8fe568cafa8",
+    "catalogo_nome": "Elevação de Pernas na Barra Fixa",
+    "nome_base_normalizado": "elevacao de pernas na barra fixa",
+    "gif_sugerido": "Elevação com Barra em Degrau.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "e2f82a4d-e7b5-4664-9f77-bf04ec445ef5",
+    "catalogo_nome": "Extensão Lombar Isométrica",
+    "nome_base_normalizado": "extensao lombar isometrica",
+    "gif_sugerido": "Extensão Lombar com Peso.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "5ae86784-b313-47d6-9c13-68da318224c8",
+    "catalogo_nome": "Extensão Lombar Isométrica (Variação 1)",
+    "nome_base_normalizado": "extensao lombar isometrica variacao 1",
+    "gif_sugerido": "Extensão Lombar com Peso.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "73f2089b-12a9-4cb9-a75c-0e5ed41ad494",
+    "catalogo_nome": "Extensão Lombar Isométrica (Variação 2)",
+    "nome_base_normalizado": "extensao lombar isometrica variacao 2",
+    "gif_sugerido": "Extensão Lombar com Peso.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "ec9adfc7-80e1-4923-b0ce-6ae679f7174f",
+    "catalogo_nome": "Extensão Lombar Isométrica (Variação 3)",
+    "nome_base_normalizado": "extensao lombar isometrica variacao 3",
+    "gif_sugerido": "Extensão Lombar com Peso.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "4c9ca218-69e7-4d35-bd97-2da64da488cb",
+    "catalogo_nome": "Extensão Lombar na Máquina",
+    "nome_base_normalizado": "extensao lombar na maquina",
+    "gif_sugerido": "Extensão Lombar com Peso.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "48f998ad-92df-4ab3-8773-6417eb3f65fa",
+    "catalogo_nome": "Extensão Lombar no Banco Romano",
+    "nome_base_normalizado": "extensao lombar no banco romano",
+    "gif_sugerido": "Extensão de Quadril no Banco.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "eef98fa6-382c-4f44-9d15-4f272da47a52",
+    "catalogo_nome": "Panturrilha em Pé (1 e 1/2 repetição) (Máquina)",
+    "nome_base_normalizado": "panturrilha em pe maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "7fc74f36-386a-4a2f-bb61-502310e55c02",
+    "catalogo_nome": "Panturrilha em Pé (Amplitude Parcial) (Máquina)",
+    "nome_base_normalizado": "panturrilha em pe maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "47270408-f3fb-47a8-a3de-e4660ca6c0a8",
+    "catalogo_nome": "Panturrilha em Pé (Drop-Set) (Máquina)",
+    "nome_base_normalizado": "panturrilha em pe maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "4c1a7a03-d318-48ae-ba49-7e2c347cf597",
+    "catalogo_nome": "Panturrilha em Pé (Isometria no Alongamento) (Máquina)",
+    "nome_base_normalizado": "panturrilha em pe maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "969916f7-b837-4fd8-93aa-9466d73938cf",
+    "catalogo_nome": "Panturrilha em Pé (Isometria no Pico) (Máquina)",
+    "nome_base_normalizado": "panturrilha em pe maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "6b7c18fa-5c62-4fb1-bc51-e8273a554b7f",
+    "catalogo_nome": "Panturrilha em Pé (Pausas 3x no percurso) (Máquina)",
+    "nome_base_normalizado": "panturrilha em pe maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "ddd81033-be62-4272-a472-9490c54acbb7",
+    "catalogo_nome": "Panturrilha em Pé (Rest-Pause) (Máquina)",
+    "nome_base_normalizado": "panturrilha em pe maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "18b00394-1283-4f37-b2f1-f03ce840fb4a",
+    "catalogo_nome": "Panturrilha em Pé (Tempo 3-1-1) (Máquina)",
+    "nome_base_normalizado": "panturrilha em pe maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "9ab6c30a-7a80-43b5-8b20-a3655c0f9f82",
+    "catalogo_nome": "Panturrilha em Pé (Tempo 4-0-1) (Máquina)",
+    "nome_base_normalizado": "panturrilha em pe maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "fc0c1d70-7e30-44dc-8c05-3625d6f3ec0b",
+    "catalogo_nome": "Panturrilha em Pé (Unilateral) (Máquina)",
+    "nome_base_normalizado": "panturrilha em pe maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "08994ce4-f263-4974-aa5f-0dbd3165bb8f",
+    "catalogo_nome": "Panturrilha em Pé na Máquina",
+    "nome_base_normalizado": "panturrilha em pe na maquina",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "29977fb5-51b1-4526-bbfa-cd54804c23a4",
+    "catalogo_nome": "Pulldown (1 e 1/2 repetição) (Cabo/Polia)",
+    "nome_base_normalizado": "pulldown cabo polia",
+    "gif_sugerido": "Pulldown Unilateral no Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "3498809e-aa71-4405-b9f0-dc55a365cdba",
+    "catalogo_nome": "Pulldown (Amplitude Parcial) (Cabo/Polia)",
+    "nome_base_normalizado": "pulldown cabo polia",
+    "gif_sugerido": "Pulldown Unilateral no Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "0af88c2c-19c4-4ad4-9543-b0be303513f5",
+    "catalogo_nome": "Pulldown (Drop-Set) (Cabo/Polia)",
+    "nome_base_normalizado": "pulldown cabo polia",
+    "gif_sugerido": "Pulldown Unilateral no Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "38f1283f-c6d5-4a37-8252-6e23eabb8ff0",
+    "catalogo_nome": "Pulldown (Isometria no Alongamento) (Cabo/Polia)",
+    "nome_base_normalizado": "pulldown cabo polia",
+    "gif_sugerido": "Pulldown Unilateral no Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "12abcfd5-a815-4399-98fc-1f859495d1d5",
+    "catalogo_nome": "Pulldown (Isometria no Pico) (Cabo/Polia)",
+    "nome_base_normalizado": "pulldown cabo polia",
+    "gif_sugerido": "Pulldown Unilateral no Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "26175f19-c898-4129-8c0a-c31866aedb64",
+    "catalogo_nome": "Pulldown (Pausas 3x no percurso) (Cabo/Polia)",
+    "nome_base_normalizado": "pulldown cabo polia",
+    "gif_sugerido": "Pulldown Unilateral no Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "986f3b82-4c66-433f-9876-46b07dd8b3c6",
+    "catalogo_nome": "Pulldown (Rest-Pause) (Cabo/Polia)",
+    "nome_base_normalizado": "pulldown cabo polia",
+    "gif_sugerido": "Pulldown Unilateral no Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "070a3b04-9428-4def-8e5c-12119f66aaf8",
+    "catalogo_nome": "Pulldown (Tempo 3-1-1) (Cabo/Polia)",
+    "nome_base_normalizado": "pulldown cabo polia",
+    "gif_sugerido": "Pulldown Unilateral no Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "5e9e76ec-a3cc-4259-896b-8b8839bc7e7c",
+    "catalogo_nome": "Pulldown (Tempo 4-0-1) (Cabo/Polia)",
+    "nome_base_normalizado": "pulldown cabo polia",
+    "gif_sugerido": "Pulldown Unilateral no Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "de4a4971-cc7f-4040-9c28-a807903a5894",
+    "catalogo_nome": "Pulldown (Unilateral) (Cabo/Polia)",
+    "nome_base_normalizado": "pulldown cabo polia",
+    "gif_sugerido": "Pulldown Unilateral no Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "0a62569d-0fbf-4450-9b8c-ef0d3febe5c4",
+    "catalogo_nome": "Remada (1 e 1/2 repetição) (Halteres)",
+    "nome_base_normalizado": "remada halteres",
+    "gif_sugerido": "Remada curvada com halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "e9799723-8046-43d4-b322-6be3567e5f23",
+    "catalogo_nome": "Remada (1 e 1/2 repetição) (Máquina)",
+    "nome_base_normalizado": "remada maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "bb3f9ddc-28c6-49d7-a8e3-2a95239d3d06",
+    "catalogo_nome": "Remada (Amplitude Parcial) (Halteres)",
+    "nome_base_normalizado": "remada halteres",
+    "gif_sugerido": "Remada curvada com halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "28a8343d-dacc-4727-9200-60cf86673d00",
+    "catalogo_nome": "Remada (Amplitude Parcial) (Máquina)",
+    "nome_base_normalizado": "remada maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "20db9d6b-9b60-4b97-8171-ebfc4c881d6b",
+    "catalogo_nome": "Remada (Drop-Set) (Halteres)",
+    "nome_base_normalizado": "remada halteres",
+    "gif_sugerido": "Remada curvada com halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "c5f81ecc-b007-4b1e-992d-6a36111ac5fe",
+    "catalogo_nome": "Remada (Drop-Set) (Máquina)",
+    "nome_base_normalizado": "remada maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "f5dc3c9c-d69e-4df6-8d8e-6e855bf2444e",
+    "catalogo_nome": "Remada (Isometria no Alongamento) (Halteres)",
+    "nome_base_normalizado": "remada halteres",
+    "gif_sugerido": "Remada curvada com halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "4ee2f0f9-530d-44b7-8b03-b52afc09f70f",
+    "catalogo_nome": "Remada (Isometria no Alongamento) (Máquina)",
+    "nome_base_normalizado": "remada maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "20939c5e-4072-4545-94e8-b172164b0b3a",
+    "catalogo_nome": "Remada (Isometria no Pico) (Halteres)",
+    "nome_base_normalizado": "remada halteres",
+    "gif_sugerido": "Remada curvada com halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "2a198330-7f2c-476d-bcc1-63eb77ea7659",
+    "catalogo_nome": "Remada (Isometria no Pico) (Máquina)",
+    "nome_base_normalizado": "remada maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "53d7175c-f3d1-4985-bbce-d97c5a3d0d82",
+    "catalogo_nome": "Remada (Pausas 3x no percurso) (Halteres)",
+    "nome_base_normalizado": "remada halteres",
+    "gif_sugerido": "Remada curvada com halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "c7ae63f9-f129-4217-8161-915b6a9e1b0c",
+    "catalogo_nome": "Remada (Pausas 3x no percurso) (Máquina)",
+    "nome_base_normalizado": "remada maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "5d91d2f3-1753-41e8-a5a6-f8993f44ff1e",
+    "catalogo_nome": "Remada (Rest-Pause) (Halteres)",
+    "nome_base_normalizado": "remada halteres",
+    "gif_sugerido": "Remada curvada com halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "d00a4420-694e-49b6-99ef-31b96ce1103a",
+    "catalogo_nome": "Remada (Rest-Pause) (Máquina)",
+    "nome_base_normalizado": "remada maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "58ad4c6b-05ab-433a-ac19-f8e2a0497e55",
+    "catalogo_nome": "Remada (Tempo 3-1-1) (Halteres)",
+    "nome_base_normalizado": "remada halteres",
+    "gif_sugerido": "Remada curvada com halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "b0939765-0699-4a8a-8868-a4b329763be1",
+    "catalogo_nome": "Remada (Tempo 3-1-1) (Máquina)",
+    "nome_base_normalizado": "remada maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "4f789af5-c8c9-499e-ab66-aec09d465faa",
+    "catalogo_nome": "Remada (Tempo 4-0-1) (Halteres)",
+    "nome_base_normalizado": "remada halteres",
+    "gif_sugerido": "Remada curvada com halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "29ec7a3a-844c-42c7-ad6b-535ad19b4f6d",
+    "catalogo_nome": "Remada (Tempo 4-0-1) (Máquina)",
+    "nome_base_normalizado": "remada maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "25adb0b4-9928-4054-9ed7-812c2b7b5b34",
+    "catalogo_nome": "Remada (Unilateral) (Halteres)",
+    "nome_base_normalizado": "remada halteres",
+    "gif_sugerido": "Remada curvada com halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "d8f899ab-b5e9-4ec0-a59d-5730151a176f",
+    "catalogo_nome": "Remada (Unilateral) (Máquina)",
+    "nome_base_normalizado": "remada maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "9291fb78-2e77-4b08-943e-e5735bf0c5ad",
+    "catalogo_nome": "Remada Baixa (1 e 1/2 repetição) (Cabo/Polia)",
+    "nome_base_normalizado": "remada baixa cabo polia",
+    "gif_sugerido": "Remada Alta com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "893f5c46-487a-4399-bb6a-909da2bf245f",
+    "catalogo_nome": "Remada Baixa (1 e 1/2 repetição) (Máquina)",
+    "nome_base_normalizado": "remada baixa maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "17fbf43f-6c08-4cbe-b621-696401cf783e",
+    "catalogo_nome": "Remada Baixa (Amplitude Parcial) (Cabo/Polia)",
+    "nome_base_normalizado": "remada baixa cabo polia",
+    "gif_sugerido": "Remada Alta com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "e8d3a63d-0aa3-48d6-92b1-a9735cae598d",
+    "catalogo_nome": "Remada Baixa (Amplitude Parcial) (Máquina)",
+    "nome_base_normalizado": "remada baixa maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "257464ee-cf8a-4c14-a1d6-558bcae50909",
+    "catalogo_nome": "Remada Baixa (Drop-Set) (Cabo/Polia)",
+    "nome_base_normalizado": "remada baixa cabo polia",
+    "gif_sugerido": "Remada Alta com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "64acc5c7-1ff1-481d-976b-f7162682c60c",
+    "catalogo_nome": "Remada Baixa (Drop-Set) (Máquina)",
+    "nome_base_normalizado": "remada baixa maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "598e005d-0159-45de-86b5-521e6e01936b",
+    "catalogo_nome": "Remada Baixa (Isometria no Alongamento) (Cabo/Polia)",
+    "nome_base_normalizado": "remada baixa cabo polia",
+    "gif_sugerido": "Remada Alta com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "e4afe368-553c-4302-9301-f4e1830f7c5a",
+    "catalogo_nome": "Remada Baixa (Isometria no Alongamento) (Máquina)",
+    "nome_base_normalizado": "remada baixa maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "c4277188-3259-464b-914b-1594658bd3a2",
+    "catalogo_nome": "Remada Baixa (Isometria no Pico) (Cabo/Polia)",
+    "nome_base_normalizado": "remada baixa cabo polia",
+    "gif_sugerido": "Remada Alta com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "6bf7eac6-914f-4046-ab0c-b533984be7f0",
+    "catalogo_nome": "Remada Baixa (Isometria no Pico) (Máquina)",
+    "nome_base_normalizado": "remada baixa maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "ac8bc846-02f0-4c83-8037-a5c7b5e3b51f",
+    "catalogo_nome": "Remada Baixa (Pausas 3x no percurso) (Cabo/Polia)",
+    "nome_base_normalizado": "remada baixa cabo polia",
+    "gif_sugerido": "Remada Alta com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "0e1176bd-6a69-4eb7-a33e-b7824a788ecd",
+    "catalogo_nome": "Remada Baixa (Pausas 3x no percurso) (Máquina)",
+    "nome_base_normalizado": "remada baixa maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "db38d3c2-2eba-41fd-aed5-af163207edf2",
+    "catalogo_nome": "Remada Baixa (Rest-Pause) (Cabo/Polia)",
+    "nome_base_normalizado": "remada baixa cabo polia",
+    "gif_sugerido": "Remada Alta com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "aea352c2-06b8-4de0-9160-f9857965f4a9",
+    "catalogo_nome": "Remada Baixa (Rest-Pause) (Máquina)",
+    "nome_base_normalizado": "remada baixa maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "5746da5c-2b39-4380-9b47-4590edf8a83b",
+    "catalogo_nome": "Remada Baixa (Tempo 3-1-1) (Cabo/Polia)",
+    "nome_base_normalizado": "remada baixa cabo polia",
+    "gif_sugerido": "Remada Alta com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "019dcc0b-ae8c-4246-a66b-83cc2d3534d4",
+    "catalogo_nome": "Remada Baixa (Tempo 3-1-1) (Máquina)",
+    "nome_base_normalizado": "remada baixa maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "d877304f-209d-4e73-b685-f12430bd713b",
+    "catalogo_nome": "Remada Baixa (Tempo 4-0-1) (Cabo/Polia)",
+    "nome_base_normalizado": "remada baixa cabo polia",
+    "gif_sugerido": "Remada Alta com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "9379018c-cef6-4dbd-a98d-65f273ef2e04",
+    "catalogo_nome": "Remada Baixa (Tempo 4-0-1) (Máquina)",
+    "nome_base_normalizado": "remada baixa maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "833568b5-2cd4-4eac-97d8-ba380ea8fb27",
+    "catalogo_nome": "Remada Baixa (Unilateral) (Cabo/Polia)",
+    "nome_base_normalizado": "remada baixa cabo polia",
+    "gif_sugerido": "Remada Alta com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "72777c5e-97b8-41c4-b2da-fc0ca2b98751",
+    "catalogo_nome": "Remada Baixa (Unilateral) (Máquina)",
+    "nome_base_normalizado": "remada baixa maquina",
+    "gif_sugerido": "Remada Sentada na Máquina.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "1e4988a8-523f-4f22-9dbc-bb1b3000aca7",
+    "catalogo_nome": "Remada Cavalinho (T-Bar)",
+    "nome_base_normalizado": "remada cavalinho t bar",
+    "gif_sugerido": "Remada Curvada em T.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "93682dc2-76a3-4021-931f-157b9b57f536",
+    "catalogo_nome": "Remada Unilateral com Halter",
+    "nome_base_normalizado": "remada unilateral com halter",
+    "gif_sugerido": "Remada Alta com Halter.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "9ba59ae3-9495-4ae3-b65e-30ef9ccdfa5b",
+    "catalogo_nome": "Rosca Scott na Máquina",
+    "nome_base_normalizado": "rosca scott na maquina",
+    "gif_sugerido": "Rosca Scott com Alavanca.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "5088c90f-d512-41dc-b523-4a463fb1f1b4",
+    "catalogo_nome": "Stiff (1 e 1/2 repetição) (Halteres)",
+    "nome_base_normalizado": "stiff halteres",
+    "gif_sugerido": "Stiff Unilateral com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "2fdd350e-9856-4963-9b26-8f267b11ddc8",
+    "catalogo_nome": "Stiff (Amplitude Parcial) (Halteres)",
+    "nome_base_normalizado": "stiff halteres",
+    "gif_sugerido": "Stiff Unilateral com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "0f383b2b-c896-4d8f-af4c-6c9a6d920382",
+    "catalogo_nome": "Stiff (Drop-Set) (Halteres)",
+    "nome_base_normalizado": "stiff halteres",
+    "gif_sugerido": "Stiff Unilateral com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "8bc54c03-198b-4bcb-a0a3-3ca1675776f1",
+    "catalogo_nome": "Stiff (Isometria no Alongamento) (Halteres)",
+    "nome_base_normalizado": "stiff halteres",
+    "gif_sugerido": "Stiff Unilateral com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "88600eb5-f615-4e8b-b57d-91d27e1daf23",
+    "catalogo_nome": "Stiff (Isometria no Pico) (Halteres)",
+    "nome_base_normalizado": "stiff halteres",
+    "gif_sugerido": "Stiff Unilateral com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "ffa2fb76-80fe-44b1-85e5-5b35b0677bfb",
+    "catalogo_nome": "Stiff (Pausas 3x no percurso) (Halteres)",
+    "nome_base_normalizado": "stiff halteres",
+    "gif_sugerido": "Stiff Unilateral com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "b6e8560c-c538-4fd7-b222-ee596ba088a1",
+    "catalogo_nome": "Stiff (Rest-Pause) (Halteres)",
+    "nome_base_normalizado": "stiff halteres",
+    "gif_sugerido": "Stiff Unilateral com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "e6ae778d-15d8-4b7b-8ebd-f0515b6cb4fb",
+    "catalogo_nome": "Stiff (Tempo 3-1-1) (Halteres)",
+    "nome_base_normalizado": "stiff halteres",
+    "gif_sugerido": "Stiff Unilateral com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "4bb4ae7c-81ac-4492-aca3-609d1c37b0ce",
+    "catalogo_nome": "Stiff (Tempo 4-0-1) (Halteres)",
+    "nome_base_normalizado": "stiff halteres",
+    "gif_sugerido": "Stiff Unilateral com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "e278768f-843c-4451-ae46-94a1cbdceca4",
+    "catalogo_nome": "Stiff (Unilateral) (Halteres)",
+    "nome_base_normalizado": "stiff halteres",
+    "gif_sugerido": "Stiff Unilateral com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "097cc5f0-5a02-4ee1-bf98-36f5b26e80ce",
+    "catalogo_nome": "Tríceps na Polia (1 e 1/2 repetição) (Cabo/Polia)",
+    "nome_base_normalizado": "triceps na polia cabo polia",
+    "gif_sugerido": "Tríceps Coice com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "8ffa4a61-4f24-48e2-8b6a-db07443ea091",
+    "catalogo_nome": "Tríceps na Polia (Amplitude Parcial) (Cabo/Polia)",
+    "nome_base_normalizado": "triceps na polia cabo polia",
+    "gif_sugerido": "Tríceps Coice com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "ee05b51c-99ac-406a-acee-23945688c196",
+    "catalogo_nome": "Tríceps na Polia (Barra Reta)",
+    "nome_base_normalizado": "triceps na polia barra reta",
+    "gif_sugerido": "Tríceps pulley barra.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "4bc291b7-72f1-4b29-8774-412f5ffda027",
+    "catalogo_nome": "Tríceps na Polia (Drop-Set) (Cabo/Polia)",
+    "nome_base_normalizado": "triceps na polia cabo polia",
+    "gif_sugerido": "Tríceps Coice com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "82f5f566-368d-477b-a316-c27dbbb0db99",
+    "catalogo_nome": "Tríceps na Polia (Isometria no Alongamento) (Cabo/Polia)",
+    "nome_base_normalizado": "triceps na polia cabo polia",
+    "gif_sugerido": "Tríceps Coice com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "8ad299ec-b0af-4cc0-b6a0-d320058d7c9f",
+    "catalogo_nome": "Tríceps na Polia (Isometria no Pico) (Cabo/Polia)",
+    "nome_base_normalizado": "triceps na polia cabo polia",
+    "gif_sugerido": "Tríceps Coice com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "84ec8bd8-f8c5-4a49-a570-9d1d2e43a25f",
+    "catalogo_nome": "Tríceps na Polia (Pausas 3x no percurso) (Cabo/Polia)",
+    "nome_base_normalizado": "triceps na polia cabo polia",
+    "gif_sugerido": "Tríceps Coice com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "0cb86de3-bc3a-4a18-931e-3df3ea5431a0",
+    "catalogo_nome": "Tríceps na Polia (Rest-Pause) (Cabo/Polia)",
+    "nome_base_normalizado": "triceps na polia cabo polia",
+    "gif_sugerido": "Tríceps Coice com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "63caad78-0e42-40cf-8474-b88bcee52937",
+    "catalogo_nome": "Tríceps na Polia (Tempo 3-1-1) (Cabo/Polia)",
+    "nome_base_normalizado": "triceps na polia cabo polia",
+    "gif_sugerido": "Tríceps Coice com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "7246f78e-952f-4968-9797-d8e5c70c34fd",
+    "catalogo_nome": "Tríceps na Polia (Tempo 4-0-1) (Cabo/Polia)",
+    "nome_base_normalizado": "triceps na polia cabo polia",
+    "gif_sugerido": "Tríceps Coice com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "850f4e30-475e-44e5-ba45-c542a31d26bd",
+    "catalogo_nome": "Tríceps na Polia (Unilateral) (Cabo/Polia)",
+    "nome_base_normalizado": "triceps na polia cabo polia",
+    "gif_sugerido": "Tríceps Coice com Cabo.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "f7e996fe-d9b0-414a-afa1-7874a2819b9b",
+    "catalogo_nome": "Tríceps Testa (1 e 1/2 repetição) (Halteres)",
+    "nome_base_normalizado": "triceps testa halteres",
+    "gif_sugerido": "Tríceps Coice com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "4d42d810-dc45-4327-9589-ba8866c9bff9",
+    "catalogo_nome": "Tríceps Testa (Amplitude Parcial) (Halteres)",
+    "nome_base_normalizado": "triceps testa halteres",
+    "gif_sugerido": "Tríceps Coice com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "661f4f40-e764-48f8-ad0f-b3fb0922bec0",
+    "catalogo_nome": "Tríceps Testa (Drop-Set) (Halteres)",
+    "nome_base_normalizado": "triceps testa halteres",
+    "gif_sugerido": "Tríceps Coice com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "19cff919-7990-43ef-94c2-c165abfbd972",
+    "catalogo_nome": "Tríceps Testa (Isometria no Alongamento) (Halteres)",
+    "nome_base_normalizado": "triceps testa halteres",
+    "gif_sugerido": "Tríceps Coice com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "94355036-641e-4d35-b2d9-cc4048a03c02",
+    "catalogo_nome": "Tríceps Testa (Isometria no Pico) (Halteres)",
+    "nome_base_normalizado": "triceps testa halteres",
+    "gif_sugerido": "Tríceps Coice com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "86db3819-2277-4ac7-a39b-7a2f72a733df",
+    "catalogo_nome": "Tríceps Testa (Pausas 3x no percurso) (Halteres)",
+    "nome_base_normalizado": "triceps testa halteres",
+    "gif_sugerido": "Tríceps Coice com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "0adb6b1a-64c3-4943-aa93-2167741ef3a0",
+    "catalogo_nome": "Tríceps Testa (Rest-Pause) (Halteres)",
+    "nome_base_normalizado": "triceps testa halteres",
+    "gif_sugerido": "Tríceps Coice com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "43341e85-50a7-47ef-9ecc-566ca8b559ca",
+    "catalogo_nome": "Tríceps Testa (Tempo 3-1-1) (Halteres)",
+    "nome_base_normalizado": "triceps testa halteres",
+    "gif_sugerido": "Tríceps Coice com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "794fa1da-2a04-4a58-b98f-cc927bf489ec",
+    "catalogo_nome": "Tríceps Testa (Tempo 4-0-1) (Halteres)",
+    "nome_base_normalizado": "triceps testa halteres",
+    "gif_sugerido": "Tríceps Coice com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "1e8f3a6d-d1e8-411f-b7aa-e4b0caaa3d8e",
+    "catalogo_nome": "Tríceps Testa (Unilateral) (Halteres)",
+    "nome_base_normalizado": "triceps testa halteres",
+    "gif_sugerido": "Tríceps Coice com Halteres.gif",
+    "confianca": 0.67
+  },
+  {
+    "catalogo_id": "b87b2256-e403-4640-9069-ca81c3dd37af",
+    "catalogo_nome": "Desenvolvimento com Halteres Sentado",
+    "nome_base_normalizado": "desenvolvimento com halteres sentado",
+    "gif_sugerido": "Desenvolvimento cubano sentado com halteres.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "bfdfd5cf-6abc-41cc-bef4-6efa85246b40",
+    "catalogo_nome": "Elevação de Pernas Deitado",
+    "nome_base_normalizado": "elevacao de pernas deitado",
+    "gif_sugerido": "Elevação de Pernas deitado de Lado.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "abca9c3e-f1f7-469e-90bc-3ccf39bde420",
+    "catalogo_nome": "Elevação Lateral (1 e 1/2 repetição) (Cabo/Polia)",
+    "nome_base_normalizado": "elevacao lateral cabo polia",
+    "gif_sugerido": "Elevação lateral de braços com cabo.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "5593c4f9-45e2-4952-a570-0387def5b00a",
+    "catalogo_nome": "Elevação Lateral (1 e 1/2 repetição) (Halteres)",
+    "nome_base_normalizado": "elevacao lateral halteres",
+    "gif_sugerido": "Elevação lateral alternada com halteres.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "1ef017a2-faee-4a1c-9bd3-f1158e3c473b",
+    "catalogo_nome": "Elevação Lateral (Amplitude Parcial) (Cabo/Polia)",
+    "nome_base_normalizado": "elevacao lateral cabo polia",
+    "gif_sugerido": "Elevação lateral de braços com cabo.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "85a58c32-b080-48d8-9d0f-9da6909c0ce0",
+    "catalogo_nome": "Elevação Lateral (Amplitude Parcial) (Halteres)",
+    "nome_base_normalizado": "elevacao lateral halteres",
+    "gif_sugerido": "Elevação lateral alternada com halteres.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "a8ebc994-97fb-42b0-9c89-e08a803b23f7",
+    "catalogo_nome": "Elevação Lateral (Drop-Set) (Cabo/Polia)",
+    "nome_base_normalizado": "elevacao lateral cabo polia",
+    "gif_sugerido": "Elevação lateral de braços com cabo.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "fdb2a2c0-cb30-4ac0-b3e5-98cc7798da67",
+    "catalogo_nome": "Elevação Lateral (Drop-Set) (Halteres)",
+    "nome_base_normalizado": "elevacao lateral halteres",
+    "gif_sugerido": "Elevação lateral alternada com halteres.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "591e35ca-e400-420a-b1a8-77a4580865f9",
+    "catalogo_nome": "Elevação Lateral (Isometria no Alongamento) (Cabo/Polia)",
+    "nome_base_normalizado": "elevacao lateral cabo polia",
+    "gif_sugerido": "Elevação lateral de braços com cabo.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "0c60fe0a-ef47-427f-add0-36f71b78b189",
+    "catalogo_nome": "Elevação Lateral (Isometria no Alongamento) (Halteres)",
+    "nome_base_normalizado": "elevacao lateral halteres",
+    "gif_sugerido": "Elevação lateral alternada com halteres.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "9b8642e9-2956-46b0-afc7-af8eb1f5f38d",
+    "catalogo_nome": "Elevação Lateral (Isometria no Pico) (Cabo/Polia)",
+    "nome_base_normalizado": "elevacao lateral cabo polia",
+    "gif_sugerido": "Elevação lateral de braços com cabo.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "5f12efd1-ba92-4837-bd8e-6ec2e63f9508",
+    "catalogo_nome": "Elevação Lateral (Isometria no Pico) (Halteres)",
+    "nome_base_normalizado": "elevacao lateral halteres",
+    "gif_sugerido": "Elevação lateral alternada com halteres.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "4aa6d886-1688-4fc2-95b1-68d8fbb5c1b8",
+    "catalogo_nome": "Elevação Lateral (Pausas 3x no percurso) (Cabo/Polia)",
+    "nome_base_normalizado": "elevacao lateral cabo polia",
+    "gif_sugerido": "Elevação lateral de braços com cabo.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "33152d9e-92ad-4ef9-a89c-2b4c7179992b",
+    "catalogo_nome": "Elevação Lateral (Pausas 3x no percurso) (Halteres)",
+    "nome_base_normalizado": "elevacao lateral halteres",
+    "gif_sugerido": "Elevação lateral alternada com halteres.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "bcf1f7b2-7e0b-458e-a530-00c580c02731",
+    "catalogo_nome": "Elevação Lateral (Rest-Pause) (Cabo/Polia)",
+    "nome_base_normalizado": "elevacao lateral cabo polia",
+    "gif_sugerido": "Elevação lateral de braços com cabo.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "ba3609c4-0925-4a8b-aa94-3917098793bd",
+    "catalogo_nome": "Elevação Lateral (Rest-Pause) (Halteres)",
+    "nome_base_normalizado": "elevacao lateral halteres",
+    "gif_sugerido": "Elevação lateral alternada com halteres.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "86d2e28f-5a45-4aaf-be4f-ef200784ff4a",
+    "catalogo_nome": "Elevação Lateral (Tempo 3-1-1) (Cabo/Polia)",
+    "nome_base_normalizado": "elevacao lateral cabo polia",
+    "gif_sugerido": "Elevação lateral de braços com cabo.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "ead13c08-a17c-468f-877d-b305463d5330",
+    "catalogo_nome": "Elevação Lateral (Tempo 3-1-1) (Halteres)",
+    "nome_base_normalizado": "elevacao lateral halteres",
+    "gif_sugerido": "Elevação lateral alternada com halteres.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "a04e176d-487a-431f-ba28-6ef5c80398cb",
+    "catalogo_nome": "Elevação Lateral (Tempo 4-0-1) (Cabo/Polia)",
+    "nome_base_normalizado": "elevacao lateral cabo polia",
+    "gif_sugerido": "Elevação lateral de braços com cabo.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "437a5549-5965-41a3-8f6a-1a77b17b4b8e",
+    "catalogo_nome": "Elevação Lateral (Tempo 4-0-1) (Halteres)",
+    "nome_base_normalizado": "elevacao lateral halteres",
+    "gif_sugerido": "Elevação lateral alternada com halteres.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "974fe6b2-ebe3-42d1-84a2-c45176c4c23b",
+    "catalogo_nome": "Elevação Lateral (Unilateral) (Cabo/Polia)",
+    "nome_base_normalizado": "elevacao lateral cabo polia",
+    "gif_sugerido": "Elevação lateral de braços com cabo.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "e2806e3b-ac02-46e8-bfff-fca5d7f3ff9e",
+    "catalogo_nome": "Elevação Lateral (Unilateral) (Halteres)",
+    "nome_base_normalizado": "elevacao lateral halteres",
+    "gif_sugerido": "Elevação lateral alternada com halteres.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "d1bd7c78-ac09-4df4-92e4-880bce91c563",
+    "catalogo_nome": "Elevação Lateral com Halteres",
+    "nome_base_normalizado": "elevacao lateral com halteres",
+    "gif_sugerido": "Elevação lateral alternada com halteres.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "00f02b94-7185-41b6-85cf-b6f207be28d2",
+    "catalogo_nome": "Elevação Lateral no Cabo",
+    "nome_base_normalizado": "elevacao lateral no cabo",
+    "gif_sugerido": "Elevação lateral de braços com cabo.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "40b1227e-3626-444e-9670-4cf51f37e835",
+    "catalogo_nome": "Supino Declinado no Smith",
+    "nome_base_normalizado": "supino declinado no smith",
+    "gif_sugerido": "Supino declinado na máquina Smith.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "a0fc84a2-424e-4868-8c43-2f89148c5e6b",
+    "catalogo_nome": "Supino Inclinado (1 e 1/2 repetição) (Smith)",
+    "nome_base_normalizado": "supino inclinado smith",
+    "gif_sugerido": "Supino com banco inclinado no Smith.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "bcea532f-8b14-414f-a680-fd82f9e1a1bf",
+    "catalogo_nome": "Supino Inclinado (Amplitude Parcial) (Smith)",
+    "nome_base_normalizado": "supino inclinado smith",
+    "gif_sugerido": "Supino com banco inclinado no Smith.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "5ee8ed4d-0397-46b9-abe2-00e776417ab6",
+    "catalogo_nome": "Supino Inclinado (Drop-Set) (Smith)",
+    "nome_base_normalizado": "supino inclinado smith",
+    "gif_sugerido": "Supino com banco inclinado no Smith.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "d0f6f7ea-c5cc-4e3c-b58a-fca4a0a5d7cf",
+    "catalogo_nome": "Supino Inclinado (Isometria no Alongamento) (Smith)",
+    "nome_base_normalizado": "supino inclinado smith",
+    "gif_sugerido": "Supino com banco inclinado no Smith.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "0724aa43-f339-4027-a2cc-816a7c3a3e44",
+    "catalogo_nome": "Supino Inclinado (Isometria no Pico) (Smith)",
+    "nome_base_normalizado": "supino inclinado smith",
+    "gif_sugerido": "Supino com banco inclinado no Smith.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "d10123df-b585-4862-83ba-f23b8e98bcd5",
+    "catalogo_nome": "Supino Inclinado (Pausas 3x no percurso) (Smith)",
+    "nome_base_normalizado": "supino inclinado smith",
+    "gif_sugerido": "Supino com banco inclinado no Smith.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "cb006e65-4264-4d03-9f46-5f0d4adb9856",
+    "catalogo_nome": "Supino Inclinado (Rest-Pause) (Smith)",
+    "nome_base_normalizado": "supino inclinado smith",
+    "gif_sugerido": "Supino com banco inclinado no Smith.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "8e3779f0-f1aa-4b5b-9819-5dbcc4cac4f8",
+    "catalogo_nome": "Supino Inclinado (Tempo 3-1-1) (Smith)",
+    "nome_base_normalizado": "supino inclinado smith",
+    "gif_sugerido": "Supino com banco inclinado no Smith.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "1edb4dd8-d440-4e33-8b2b-207aeeddac7a",
+    "catalogo_nome": "Supino Inclinado (Tempo 4-0-1) (Smith)",
+    "nome_base_normalizado": "supino inclinado smith",
+    "gif_sugerido": "Supino com banco inclinado no Smith.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "dec7e2f9-9b8a-449e-a239-9bfe48c6a295",
+    "catalogo_nome": "Supino Inclinado (Unilateral) (Smith)",
+    "nome_base_normalizado": "supino inclinado smith",
+    "gif_sugerido": "Supino com banco inclinado no Smith.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "410acb40-be02-4561-8270-e20558a1d987",
+    "catalogo_nome": "Supino Inclinado no Smith",
+    "nome_base_normalizado": "supino inclinado no smith",
+    "gif_sugerido": "Supino com banco inclinado no Smith.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "7455c659-1829-4a4a-8859-48445a234dac",
+    "catalogo_nome": "Tríceps Francês com Halter (Unilateral)",
+    "nome_base_normalizado": "triceps frances com halter",
+    "gif_sugerido": "Tríceps Francês com Halter Bilateral.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "e60164ec-d734-4539-9527-71a0db881df6",
+    "catalogo_nome": "Tríceps na Polia (Corda)",
+    "nome_base_normalizado": "triceps na polia corda",
+    "gif_sugerido": "Tríceps francês na polia com corda.gif",
+    "confianca": 0.75
+  },
+  {
+    "catalogo_id": "6684f86a-3555-402a-94da-cd12d61fad63",
+    "catalogo_nome": "Agachamento (1 e 1/2 repetição) (Barra)",
+    "nome_base_normalizado": "agachamento barra",
+    "gif_sugerido": "Agachamento Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "093c82ac-108f-47a5-aa02-f18d903f7ac5",
+    "catalogo_nome": "Agachamento (1 e 1/2 repetição) (Halteres)",
+    "nome_base_normalizado": "agachamento halteres",
+    "gif_sugerido": "Agachamento.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "18540b17-0866-4942-9d44-0175b85d2b83",
+    "catalogo_nome": "Agachamento (1 e 1/2 repetição) (Smith)",
+    "nome_base_normalizado": "agachamento smith",
+    "gif_sugerido": "Agachamento no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "e6e32029-7988-42d0-8e82-aab1b9b4d141",
+    "catalogo_nome": "Agachamento (Amplitude Parcial) (Barra)",
+    "nome_base_normalizado": "agachamento barra",
+    "gif_sugerido": "Agachamento Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "34fbec28-724d-4dd2-a110-a5999ae3af9e",
+    "catalogo_nome": "Agachamento (Amplitude Parcial) (Halteres)",
+    "nome_base_normalizado": "agachamento halteres",
+    "gif_sugerido": "Agachamento.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "eed77c5d-07bb-4e51-9a99-d80ed8013063",
+    "catalogo_nome": "Agachamento (Amplitude Parcial) (Smith)",
+    "nome_base_normalizado": "agachamento smith",
+    "gif_sugerido": "Agachamento no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "8de10c9c-20ff-4d2f-a492-0f033f7bd4c6",
+    "catalogo_nome": "Agachamento (Drop-Set) (Barra)",
+    "nome_base_normalizado": "agachamento barra",
+    "gif_sugerido": "Agachamento Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "cbc4f812-a040-47fc-a24a-2c8dae92c554",
+    "catalogo_nome": "Agachamento (Drop-Set) (Halteres)",
+    "nome_base_normalizado": "agachamento halteres",
+    "gif_sugerido": "Agachamento.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "114aeb3c-1bd9-4068-b19d-ea80a5222066",
+    "catalogo_nome": "Agachamento (Drop-Set) (Smith)",
+    "nome_base_normalizado": "agachamento smith",
+    "gif_sugerido": "Agachamento no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "959607d1-f774-4b56-a96e-f55d3273f5c2",
+    "catalogo_nome": "Agachamento (Isometria no Alongamento) (Barra)",
+    "nome_base_normalizado": "agachamento barra",
+    "gif_sugerido": "Agachamento Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "835b2b0d-edcd-475c-89a4-8b7f090da76a",
+    "catalogo_nome": "Agachamento (Isometria no Alongamento) (Halteres)",
+    "nome_base_normalizado": "agachamento halteres",
+    "gif_sugerido": "Agachamento.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "926e1438-07e5-40cc-98e8-9472ffbc87e0",
+    "catalogo_nome": "Agachamento (Isometria no Alongamento) (Smith)",
+    "nome_base_normalizado": "agachamento smith",
+    "gif_sugerido": "Agachamento no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "03bb80c8-814c-4fdd-ba81-73d40c8e2505",
+    "catalogo_nome": "Agachamento (Isometria no Pico) (Barra)",
+    "nome_base_normalizado": "agachamento barra",
+    "gif_sugerido": "Agachamento Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "eba0ca5f-8c3c-4876-bd5a-23f2a59b5766",
+    "catalogo_nome": "Agachamento (Isometria no Pico) (Halteres)",
+    "nome_base_normalizado": "agachamento halteres",
+    "gif_sugerido": "Agachamento.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "449ef5b7-9a63-46cc-9c20-2d0ebe3eb7f8",
+    "catalogo_nome": "Agachamento (Isometria no Pico) (Smith)",
+    "nome_base_normalizado": "agachamento smith",
+    "gif_sugerido": "Agachamento no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "b1ddb47b-7945-4446-ac41-2ed718856331",
+    "catalogo_nome": "Agachamento (Pausas 3x no percurso) (Barra)",
+    "nome_base_normalizado": "agachamento barra",
+    "gif_sugerido": "Agachamento Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "43c1cabf-54e6-4d42-9848-b9cdb3fbc66f",
+    "catalogo_nome": "Agachamento (Pausas 3x no percurso) (Halteres)",
+    "nome_base_normalizado": "agachamento halteres",
+    "gif_sugerido": "Agachamento.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "357f5247-b16e-4e09-9e4f-a1291319e1f0",
+    "catalogo_nome": "Agachamento (Pausas 3x no percurso) (Smith)",
+    "nome_base_normalizado": "agachamento smith",
+    "gif_sugerido": "Agachamento no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "1fc3f137-34e7-47c8-91b0-6ac268a0e565",
+    "catalogo_nome": "Agachamento (Rest-Pause) (Barra)",
+    "nome_base_normalizado": "agachamento barra",
+    "gif_sugerido": "Agachamento Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "f6e43365-f7b4-4cf0-848e-fc69237670a3",
+    "catalogo_nome": "Agachamento (Rest-Pause) (Halteres)",
+    "nome_base_normalizado": "agachamento halteres",
+    "gif_sugerido": "Agachamento.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "13e49faf-a861-4c6d-8e7d-acfc5aec8209",
+    "catalogo_nome": "Agachamento (Rest-Pause) (Smith)",
+    "nome_base_normalizado": "agachamento smith",
+    "gif_sugerido": "Agachamento no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "b44f4d62-22bc-49a8-897b-6c46f846eb32",
+    "catalogo_nome": "Agachamento (Tempo 3-1-1) (Barra)",
+    "nome_base_normalizado": "agachamento barra",
+    "gif_sugerido": "Agachamento Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "41bd027a-63ab-44a5-8c5a-79b344961b8e",
+    "catalogo_nome": "Agachamento (Tempo 3-1-1) (Halteres)",
+    "nome_base_normalizado": "agachamento halteres",
+    "gif_sugerido": "Agachamento.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "a1fef9e3-a874-49cf-b7dc-64bc6f5802c4",
+    "catalogo_nome": "Agachamento (Tempo 3-1-1) (Smith)",
+    "nome_base_normalizado": "agachamento smith",
+    "gif_sugerido": "Agachamento no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "64a080f0-506d-4aee-98c0-d64cf02ce1b7",
+    "catalogo_nome": "Agachamento (Tempo 4-0-1) (Barra)",
+    "nome_base_normalizado": "agachamento barra",
+    "gif_sugerido": "Agachamento Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "942e973e-5526-42f1-84d9-4611de2e3bd1",
+    "catalogo_nome": "Agachamento (Tempo 4-0-1) (Halteres)",
+    "nome_base_normalizado": "agachamento halteres",
+    "gif_sugerido": "Agachamento.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "d57694fa-8a01-47c1-998d-8ba341859341",
+    "catalogo_nome": "Agachamento (Tempo 4-0-1) (Smith)",
+    "nome_base_normalizado": "agachamento smith",
+    "gif_sugerido": "Agachamento no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "58faa39b-8b1a-4853-ae4c-4a360a52dac3",
+    "catalogo_nome": "Agachamento (Unilateral) (Barra)",
+    "nome_base_normalizado": "agachamento barra",
+    "gif_sugerido": "Agachamento Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "d74879a8-17ce-4ca8-9f52-e510e97b8208",
+    "catalogo_nome": "Agachamento (Unilateral) (Halteres)",
+    "nome_base_normalizado": "agachamento halteres",
+    "gif_sugerido": "Agachamento.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "01a6cbd3-3df0-49bc-86c6-455c7ddf374e",
+    "catalogo_nome": "Agachamento (Unilateral) (Smith)",
+    "nome_base_normalizado": "agachamento smith",
+    "gif_sugerido": "Agachamento no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "2e7ccaa1-6e9c-466d-9ce6-3dd98dc1c60d",
+    "catalogo_nome": "Agachamento Frontal",
+    "nome_base_normalizado": "agachamento frontal",
+    "gif_sugerido": "Agachamento Frontal.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "2ad00ad0-9901-4761-a68e-47135bd5bd71",
+    "catalogo_nome": "Agachamento Livre",
+    "nome_base_normalizado": "agachamento livre",
+    "gif_sugerido": "Agachamento.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "4cbe3b39-ccd0-4b39-bb77-b1d3ff811eb1",
+    "catalogo_nome": "Barra Fixa Pronada",
+    "nome_base_normalizado": "barra fixa pronada",
+    "gif_sugerido": "Barra fixa.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "06984623-0d73-4389-af12-b97e9d3a0975",
+    "catalogo_nome": "Barra Fixa Supinada",
+    "nome_base_normalizado": "barra fixa supinada",
+    "gif_sugerido": "Barra fixa.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "39da427e-caac-4062-a74f-43610f84155d",
+    "catalogo_nome": "Bike – Endurance (Zona 2)",
+    "nome_base_normalizado": "bike endurance zona 2",
+    "gif_sugerido": "Bike.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "3f37be47-aad5-4118-9fa2-3790f7a14626",
+    "catalogo_nome": "Bike – Sprint Intervalado",
+    "nome_base_normalizado": "bike sprint intervalado",
+    "gif_sugerido": "Bike.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "f26e3c6b-d183-4955-8481-8a98b565f6ba",
+    "catalogo_nome": "Cadeira Extensora",
+    "nome_base_normalizado": "cadeira extensora",
+    "gif_sugerido": "Cadeira extensora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "2e738363-096d-4ba2-b337-41954ad3b9dc",
+    "catalogo_nome": "Cadeira Extensora (1 e 1/2 repetição) (Máquina)",
+    "nome_base_normalizado": "cadeira extensora maquina",
+    "gif_sugerido": "Cadeira extensora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "5a95fc42-33d9-4d7b-a94d-1927036643be",
+    "catalogo_nome": "Cadeira Extensora (Amplitude Parcial) (Máquina)",
+    "nome_base_normalizado": "cadeira extensora maquina",
+    "gif_sugerido": "Cadeira extensora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "c040f467-8399-485c-a7de-909306369e9b",
+    "catalogo_nome": "Cadeira Extensora (Drop-Set) (Máquina)",
+    "nome_base_normalizado": "cadeira extensora maquina",
+    "gif_sugerido": "Cadeira extensora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "0460b2ed-8ff3-4688-829d-dbad2f366927",
+    "catalogo_nome": "Cadeira Extensora (Isometria no Alongamento) (Máquina)",
+    "nome_base_normalizado": "cadeira extensora maquina",
+    "gif_sugerido": "Cadeira extensora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "84011649-e8df-4670-ae78-04c5f0e37d3f",
+    "catalogo_nome": "Cadeira Extensora (Isometria no Pico) (Máquina)",
+    "nome_base_normalizado": "cadeira extensora maquina",
+    "gif_sugerido": "Cadeira extensora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "f5d9c0eb-8b19-467a-8514-3a5384b138dc",
+    "catalogo_nome": "Cadeira Extensora (Pausas 3x no percurso) (Máquina)",
+    "nome_base_normalizado": "cadeira extensora maquina",
+    "gif_sugerido": "Cadeira extensora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "30522fdd-af84-46a7-9012-41be424b9349",
+    "catalogo_nome": "Cadeira Extensora (Rest-Pause) (Máquina)",
+    "nome_base_normalizado": "cadeira extensora maquina",
+    "gif_sugerido": "Cadeira extensora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "7c8ba88a-0d57-4d3e-99af-7ce33dfdc758",
+    "catalogo_nome": "Cadeira Extensora (Tempo 3-1-1) (Máquina)",
+    "nome_base_normalizado": "cadeira extensora maquina",
+    "gif_sugerido": "Cadeira extensora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "96fe1857-fef1-40bb-8a4b-3ea5a2dbee6c",
+    "catalogo_nome": "Cadeira Extensora (Tempo 4-0-1) (Máquina)",
+    "nome_base_normalizado": "cadeira extensora maquina",
+    "gif_sugerido": "Cadeira extensora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "0d1adb3a-1343-4f97-9983-b6066191423b",
+    "catalogo_nome": "Cadeira Extensora (Unilateral) (Máquina)",
+    "nome_base_normalizado": "cadeira extensora maquina",
+    "gif_sugerido": "Cadeira extensora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "27dd75cd-f8d7-45ba-8dea-2c8cc9997506",
+    "catalogo_nome": "Crucifixo Declinado com Halteres",
+    "nome_base_normalizado": "crucifixo declinado com halteres",
+    "gif_sugerido": "Crucifixo com Halteres Declinado.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "04c8662f-29ab-4696-a060-e92294d786b8",
+    "catalogo_nome": "Crucifixo Inclinado com Halteres",
+    "nome_base_normalizado": "crucifixo inclinado com halteres",
+    "gif_sugerido": "Crucifixo com Halteres Inclinado.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "b49e4471-e071-4416-88d7-6dda5d877886",
+    "catalogo_nome": "Crucifixo Invertido (1 e 1/2 repetição) (Halteres)",
+    "nome_base_normalizado": "crucifixo invertido halteres",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "597156f8-e9db-428d-825c-8380fac99dbc",
+    "catalogo_nome": "Crucifixo Invertido (Amplitude Parcial) (Halteres)",
+    "nome_base_normalizado": "crucifixo invertido halteres",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "441d173e-a8ba-44c5-94ed-2ae0effd9ec4",
+    "catalogo_nome": "Crucifixo Invertido (Drop-Set) (Halteres)",
+    "nome_base_normalizado": "crucifixo invertido halteres",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "c8c85963-0268-43a7-a390-7e809e09d27b",
+    "catalogo_nome": "Crucifixo Invertido (Isometria no Alongamento) (Halteres)",
+    "nome_base_normalizado": "crucifixo invertido halteres",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "da9c4601-2648-46fd-8d41-12ae68b01412",
+    "catalogo_nome": "Crucifixo Invertido (Isometria no Pico) (Halteres)",
+    "nome_base_normalizado": "crucifixo invertido halteres",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "0702a6eb-9b1e-4b77-a063-9493d1793bcb",
+    "catalogo_nome": "Crucifixo Invertido (Pausas 3x no percurso) (Halteres)",
+    "nome_base_normalizado": "crucifixo invertido halteres",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "31e22d34-458e-427b-b4c6-c307c00b8066",
+    "catalogo_nome": "Crucifixo Invertido (Rest-Pause) (Halteres)",
+    "nome_base_normalizado": "crucifixo invertido halteres",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "dce6a3d9-18c1-446e-af40-f8c177714644",
+    "catalogo_nome": "Crucifixo Invertido (Tempo 3-1-1) (Halteres)",
+    "nome_base_normalizado": "crucifixo invertido halteres",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "5a294546-e747-48fc-984a-7c944043cea7",
+    "catalogo_nome": "Crucifixo Invertido (Tempo 4-0-1) (Halteres)",
+    "nome_base_normalizado": "crucifixo invertido halteres",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "06b544a1-d874-42f3-8dc2-1145b44d6e5f",
+    "catalogo_nome": "Crucifixo Invertido (Unilateral) (Halteres)",
+    "nome_base_normalizado": "crucifixo invertido halteres",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "ac2bf7e8-f99c-4cf7-aa1e-44754a17542f",
+    "catalogo_nome": "Crucifixo Reto com Halteres",
+    "nome_base_normalizado": "crucifixo reto com halteres",
+    "gif_sugerido": "Crucifixo com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "1dbb2cf0-b279-4287-a90f-a22e9048e07a",
+    "catalogo_nome": "Desenvolvimento Arnold",
+    "nome_base_normalizado": "desenvolvimento arnold",
+    "gif_sugerido": "Desenvolvimento Arnold.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "15e9e052-8605-4e1a-885f-c2c959794be8",
+    "catalogo_nome": "Desenvolvimento Militar com Barra",
+    "nome_base_normalizado": "desenvolvimento militar com barra",
+    "gif_sugerido": "Desenvolvimento militar com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "2d3cff95-fad0-43dc-a4e5-7b7af72e05e5",
+    "catalogo_nome": "Elevação Lateral (1 e 1/2 repetição) (Máquina)",
+    "nome_base_normalizado": "elevacao lateral maquina",
+    "gif_sugerido": "Elevação lateral na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "2db94527-fdba-44c0-acd4-4ca46e458a2d",
+    "catalogo_nome": "Elevação Lateral (Amplitude Parcial) (Máquina)",
+    "nome_base_normalizado": "elevacao lateral maquina",
+    "gif_sugerido": "Elevação lateral na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "f5665165-5c0a-4050-aff1-58d4577cac76",
+    "catalogo_nome": "Elevação Lateral (Drop-Set) (Máquina)",
+    "nome_base_normalizado": "elevacao lateral maquina",
+    "gif_sugerido": "Elevação lateral na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "c424b6ed-ac0f-4dad-beff-6a60ebb953da",
+    "catalogo_nome": "Elevação Lateral (Isometria no Alongamento) (Máquina)",
+    "nome_base_normalizado": "elevacao lateral maquina",
+    "gif_sugerido": "Elevação lateral na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "801c079b-46d0-4a80-b25d-9fdb8bc80401",
+    "catalogo_nome": "Elevação Lateral (Isometria no Pico) (Máquina)",
+    "nome_base_normalizado": "elevacao lateral maquina",
+    "gif_sugerido": "Elevação lateral na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "95db41e7-5f71-45ff-966a-12d74908594d",
+    "catalogo_nome": "Elevação Lateral (Pausas 3x no percurso) (Máquina)",
+    "nome_base_normalizado": "elevacao lateral maquina",
+    "gif_sugerido": "Elevação lateral na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "0f1be405-bcc5-417c-979f-cdeae72e53ee",
+    "catalogo_nome": "Elevação Lateral (Rest-Pause) (Máquina)",
+    "nome_base_normalizado": "elevacao lateral maquina",
+    "gif_sugerido": "Elevação lateral na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "5c51221c-31bc-4e66-8086-25d7e8b2c307",
+    "catalogo_nome": "Elevação Lateral (Tempo 3-1-1) (Máquina)",
+    "nome_base_normalizado": "elevacao lateral maquina",
+    "gif_sugerido": "Elevação lateral na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "f86cfdd0-3c0a-4dc0-9653-690d08086207",
+    "catalogo_nome": "Elevação Lateral (Tempo 4-0-1) (Máquina)",
+    "nome_base_normalizado": "elevacao lateral maquina",
+    "gif_sugerido": "Elevação lateral na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "9b0a26b9-727e-4c33-8301-070bf406833b",
+    "catalogo_nome": "Elevação Lateral (Unilateral) (Máquina)",
+    "nome_base_normalizado": "elevacao lateral maquina",
+    "gif_sugerido": "Elevação lateral na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "f3ac0adc-d98d-42eb-a2bc-d536d2e6c6b9",
+    "catalogo_nome": "Extensão de Tríceps Acima da Cabeça no Cabo",
+    "nome_base_normalizado": "extensao de triceps acima da cabeca no cabo",
+    "gif_sugerido": "Extensão de tríceps.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "6d2bc8e9-ba77-48d4-adae-0b92cf4dc2ad",
+    "catalogo_nome": "Face Pull",
+    "nome_base_normalizado": "face pull",
+    "gif_sugerido": "Face Pull.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "6bbac0f6-aa34-47ad-88d6-211a5a2e569e",
+    "catalogo_nome": "Face Pull (Ênfase Rotação Externa)",
+    "nome_base_normalizado": "face pull enfase rotacao externa",
+    "gif_sugerido": "Face Pull.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "b305fbf7-71a6-45c2-ba40-e8047afe57b3",
+    "catalogo_nome": "Face Pull com Rotação",
+    "nome_base_normalizado": "face pull com rotacao",
+    "gif_sugerido": "Face Pull.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "739db794-6628-4aa4-aad0-a95557a605a5",
+    "catalogo_nome": "Face Pull com Rotação (Variação 1)",
+    "nome_base_normalizado": "face pull com rotacao variacao 1",
+    "gif_sugerido": "Face Pull.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "a7e62057-4cd7-4435-b95b-b4b06e4cd69b",
+    "catalogo_nome": "Face Pull com Rotação (Variação 2)",
+    "nome_base_normalizado": "face pull com rotacao variacao 2",
+    "gif_sugerido": "Face Pull.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "d901c41a-ac12-4150-93e3-349d35676c2f",
+    "catalogo_nome": "Face Pull com Rotação (Variação 3)",
+    "nome_base_normalizado": "face pull com rotacao variacao 3",
+    "gif_sugerido": "Face Pull.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "062aa257-9493-4da4-8b90-a9e9dea8499d",
+    "catalogo_nome": "Leg Press (1 e 1/2 repetição) (Máquina)",
+    "nome_base_normalizado": "leg press maquina",
+    "gif_sugerido": "Leg Press.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "2cfb45a9-ad0a-44b9-b53f-bec3f40b5844",
+    "catalogo_nome": "Leg Press (Amplitude Parcial) (Máquina)",
+    "nome_base_normalizado": "leg press maquina",
+    "gif_sugerido": "Leg Press.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "e9f9a634-ef5a-4398-9186-f83f054c6373",
+    "catalogo_nome": "Leg Press (Drop-Set) (Máquina)",
+    "nome_base_normalizado": "leg press maquina",
+    "gif_sugerido": "Leg Press.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "c2d3dc37-fd14-4556-81fe-fa7f565a923b",
+    "catalogo_nome": "Leg Press (Isometria no Alongamento) (Máquina)",
+    "nome_base_normalizado": "leg press maquina",
+    "gif_sugerido": "Leg Press.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "0a86ac53-9abe-418e-968e-576a31d90224",
+    "catalogo_nome": "Leg Press (Isometria no Pico) (Máquina)",
+    "nome_base_normalizado": "leg press maquina",
+    "gif_sugerido": "Leg Press.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "fe9f1f04-0546-41b0-b837-0897292b9481",
+    "catalogo_nome": "Leg Press (Pausas 3x no percurso) (Máquina)",
+    "nome_base_normalizado": "leg press maquina",
+    "gif_sugerido": "Leg Press.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "ae1f651a-ffe5-4acf-a7fe-4d7771b28206",
+    "catalogo_nome": "Leg Press (Rest-Pause) (Máquina)",
+    "nome_base_normalizado": "leg press maquina",
+    "gif_sugerido": "Leg Press.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "ce9058c5-8a92-4895-b1e8-d85b4881e3c7",
+    "catalogo_nome": "Leg Press (Tempo 3-1-1) (Máquina)",
+    "nome_base_normalizado": "leg press maquina",
+    "gif_sugerido": "Leg Press.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "e0b04142-4475-4507-a3e4-1a887d5f918b",
+    "catalogo_nome": "Leg Press (Tempo 4-0-1) (Máquina)",
+    "nome_base_normalizado": "leg press maquina",
+    "gif_sugerido": "Leg Press.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "cc8f73ab-0cf7-4f56-bc23-68be41cf4ffa",
+    "catalogo_nome": "Leg Press (Unilateral) (Máquina)",
+    "nome_base_normalizado": "leg press maquina",
+    "gif_sugerido": "Leg Press.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "2d486da1-11c9-4075-b3b2-5c411d27d4ad",
+    "catalogo_nome": "Leg Press 45°",
+    "nome_base_normalizado": "leg press 45",
+    "gif_sugerido": "Leg Press.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "5cae4acc-c756-4ac0-b5d8-7118b6527f4b",
+    "catalogo_nome": "Levantamento Terra Convencional",
+    "nome_base_normalizado": "levantamento terra convencional",
+    "gif_sugerido": "Levantamento Terra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "fb3d9e64-d515-4c2e-a48c-82e9a8b4b5ca",
+    "catalogo_nome": "Levantamento Terra Romeno",
+    "nome_base_normalizado": "levantamento terra romeno",
+    "gif_sugerido": "Levantamento Terra Romeno.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "e1c30fa9-84fd-4175-b360-2ad5a20597df",
+    "catalogo_nome": "Mesa Flexora",
+    "nome_base_normalizado": "mesa flexora",
+    "gif_sugerido": "Mesa flexora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "80cb2a90-4ca8-401e-b3e2-e4c4fc076fcf",
+    "catalogo_nome": "Mesa Flexora (1 e 1/2 repetição) (Máquina)",
+    "nome_base_normalizado": "mesa flexora maquina",
+    "gif_sugerido": "Mesa flexora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "b4c675ed-d825-4232-b476-80172600757c",
+    "catalogo_nome": "Mesa Flexora (Amplitude Parcial) (Máquina)",
+    "nome_base_normalizado": "mesa flexora maquina",
+    "gif_sugerido": "Mesa flexora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "84200666-098c-4eb6-8561-5d60a37faa74",
+    "catalogo_nome": "Mesa Flexora (Drop-Set) (Máquina)",
+    "nome_base_normalizado": "mesa flexora maquina",
+    "gif_sugerido": "Mesa flexora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "ee109a26-c649-4e66-9cb0-bf53a0559c35",
+    "catalogo_nome": "Mesa Flexora (Isometria no Alongamento) (Máquina)",
+    "nome_base_normalizado": "mesa flexora maquina",
+    "gif_sugerido": "Mesa flexora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "e50be5de-e7a2-4d5f-88fc-786b3b528c34",
+    "catalogo_nome": "Mesa Flexora (Isometria no Pico) (Máquina)",
+    "nome_base_normalizado": "mesa flexora maquina",
+    "gif_sugerido": "Mesa flexora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "7eb91466-3f63-498a-b8a1-19494ff05638",
+    "catalogo_nome": "Mesa Flexora (Pausas 3x no percurso) (Máquina)",
+    "nome_base_normalizado": "mesa flexora maquina",
+    "gif_sugerido": "Mesa flexora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "e6a9e22f-afec-4014-b97a-f3c2f2e2cb77",
+    "catalogo_nome": "Mesa Flexora (Rest-Pause) (Máquina)",
+    "nome_base_normalizado": "mesa flexora maquina",
+    "gif_sugerido": "Mesa flexora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "bb195785-0972-4afb-aef1-3c95bd081772",
+    "catalogo_nome": "Mesa Flexora (Tempo 3-1-1) (Máquina)",
+    "nome_base_normalizado": "mesa flexora maquina",
+    "gif_sugerido": "Mesa flexora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "2c534fe3-b629-4ddb-9683-168175d2a4a0",
+    "catalogo_nome": "Mesa Flexora (Tempo 4-0-1) (Máquina)",
+    "nome_base_normalizado": "mesa flexora maquina",
+    "gif_sugerido": "Mesa flexora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "b47b993b-da2a-41df-a874-7efa621ea4e2",
+    "catalogo_nome": "Mesa Flexora (Unilateral) (Máquina)",
+    "nome_base_normalizado": "mesa flexora maquina",
+    "gif_sugerido": "Mesa flexora.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "19ee09f2-dd45-4bb0-961f-840606874d95",
+    "catalogo_nome": "Panturrilha em Pé (1 e 1/2 repetição) (Smith)",
+    "nome_base_normalizado": "panturrilha em pe smith",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "02c93da5-37a0-4c03-9f4b-8c075da7943c",
+    "catalogo_nome": "Panturrilha em Pé (Amplitude Parcial) (Smith)",
+    "nome_base_normalizado": "panturrilha em pe smith",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "ed9f22b1-dcc2-4590-8dfc-eb81f8a93aaf",
+    "catalogo_nome": "Panturrilha em Pé (Drop-Set) (Smith)",
+    "nome_base_normalizado": "panturrilha em pe smith",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "ccba9517-3c7c-478e-8499-48c4e66dc7a9",
+    "catalogo_nome": "Panturrilha em Pé (Isometria no Alongamento) (Smith)",
+    "nome_base_normalizado": "panturrilha em pe smith",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "f5c5129e-12a4-4b3f-ac2e-ce4fdcfd723e",
+    "catalogo_nome": "Panturrilha em Pé (Isometria no Pico) (Smith)",
+    "nome_base_normalizado": "panturrilha em pe smith",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "30070291-e182-416a-bb85-f607cf11012e",
+    "catalogo_nome": "Panturrilha em Pé (Pausas 3x no percurso) (Smith)",
+    "nome_base_normalizado": "panturrilha em pe smith",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "51c89ece-5828-4fc0-8093-61e2f727faf0",
+    "catalogo_nome": "Panturrilha em Pé (Rest-Pause) (Smith)",
+    "nome_base_normalizado": "panturrilha em pe smith",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "d6a529ed-9d9e-4f21-b1d1-365b6ea87d5d",
+    "catalogo_nome": "Panturrilha em Pé (Tempo 3-1-1) (Smith)",
+    "nome_base_normalizado": "panturrilha em pe smith",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "3805d5b5-2602-415e-940b-ac365a4c3d16",
+    "catalogo_nome": "Panturrilha em Pé (Tempo 4-0-1) (Smith)",
+    "nome_base_normalizado": "panturrilha em pe smith",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "bdd937b3-efe4-42f4-800f-14f862f88202",
+    "catalogo_nome": "Panturrilha em Pé (Unilateral) (Smith)",
+    "nome_base_normalizado": "panturrilha em pe smith",
+    "gif_sugerido": "Panturrilha em Pé no Smith.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "27c672ac-3628-4910-a2db-2542891d8475",
+    "catalogo_nome": "Remada (1 e 1/2 repetição) (Barra)",
+    "nome_base_normalizado": "remada barra",
+    "gif_sugerido": "Remada com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "99384323-18f6-4776-8de7-7ea9ae0b9582",
+    "catalogo_nome": "Remada (Amplitude Parcial) (Barra)",
+    "nome_base_normalizado": "remada barra",
+    "gif_sugerido": "Remada com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "a9d4910a-dc38-4331-a844-e132d569cc5a",
+    "catalogo_nome": "Remada (Drop-Set) (Barra)",
+    "nome_base_normalizado": "remada barra",
+    "gif_sugerido": "Remada com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "017049c5-806b-4c6c-bd31-e0db0150c3a5",
+    "catalogo_nome": "Remada (Isometria no Alongamento) (Barra)",
+    "nome_base_normalizado": "remada barra",
+    "gif_sugerido": "Remada com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "b75f266e-3615-4c68-944a-a3ee75a5e793",
+    "catalogo_nome": "Remada (Isometria no Pico) (Barra)",
+    "nome_base_normalizado": "remada barra",
+    "gif_sugerido": "Remada com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "2d5d3f99-d19c-45f4-bf1c-4743557bf049",
+    "catalogo_nome": "Remada (Pausas 3x no percurso) (Barra)",
+    "nome_base_normalizado": "remada barra",
+    "gif_sugerido": "Remada com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "87cdb877-06e5-448c-a34c-5b71d29f520e",
+    "catalogo_nome": "Remada (Rest-Pause) (Barra)",
+    "nome_base_normalizado": "remada barra",
+    "gif_sugerido": "Remada com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "ba9c1a88-ab1b-4d13-929f-94f1a7a1c723",
+    "catalogo_nome": "Remada (Tempo 3-1-1) (Barra)",
+    "nome_base_normalizado": "remada barra",
+    "gif_sugerido": "Remada com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "a9ded474-e1a4-475b-af2f-20a23a59d28f",
+    "catalogo_nome": "Remada (Tempo 4-0-1) (Barra)",
+    "nome_base_normalizado": "remada barra",
+    "gif_sugerido": "Remada com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "b81c3084-b1b2-459a-9c6e-82447b49c0b0",
+    "catalogo_nome": "Remada (Unilateral) (Barra)",
+    "nome_base_normalizado": "remada barra",
+    "gif_sugerido": "Remada com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "37926327-36d4-48b2-ac8e-770f9ba4451e",
+    "catalogo_nome": "Remada Alta no Cabo",
+    "nome_base_normalizado": "remada alta no cabo",
+    "gif_sugerido": "Remada Alta com Cabo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "af498cd6-4f13-4edd-9a2d-a484a3657e42",
+    "catalogo_nome": "Remada Curvada com Barra",
+    "nome_base_normalizado": "remada curvada com barra",
+    "gif_sugerido": "Remada Curvada com Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "abb5fb5b-6e29-4439-9fef-acad5b9738f9",
+    "catalogo_nome": "Rosca Alternada com Halteres",
+    "nome_base_normalizado": "rosca alternada com halteres",
+    "gif_sugerido": "Rosca com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "723186f6-49b3-4dcc-a9c6-a06be73743a9",
+    "catalogo_nome": "Rosca Direta (1 e 1/2 repetição) (Barra W)",
+    "nome_base_normalizado": "rosca direta barra w",
+    "gif_sugerido": "Rosca direta com barra w.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "4938fc3d-03c3-4fbd-9d0f-74b7d7042f9d",
+    "catalogo_nome": "Rosca Direta (1 e 1/2 repetição) (Barra)",
+    "nome_base_normalizado": "rosca direta barra",
+    "gif_sugerido": "Rosca Direta com Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "8dd84223-ea01-4d46-b612-b58986f116a4",
+    "catalogo_nome": "Rosca Direta (1 e 1/2 repetição) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca direta cabo polia",
+    "gif_sugerido": "Rosca no Cabo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "938bbd1c-98ec-4571-8a91-a379e9580b43",
+    "catalogo_nome": "Rosca Direta (Amplitude Parcial) (Barra W)",
+    "nome_base_normalizado": "rosca direta barra w",
+    "gif_sugerido": "Rosca direta com barra w.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "891b7aa3-3685-4d77-b753-b19d9ba6005b",
+    "catalogo_nome": "Rosca Direta (Amplitude Parcial) (Barra)",
+    "nome_base_normalizado": "rosca direta barra",
+    "gif_sugerido": "Rosca Direta com Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "090fc21d-4fc3-4bf5-ab0f-593d3c0bdbf6",
+    "catalogo_nome": "Rosca Direta (Amplitude Parcial) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca direta cabo polia",
+    "gif_sugerido": "Rosca no Cabo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "98f2a604-a2bc-4ae4-b0ee-5ca4d8178067",
+    "catalogo_nome": "Rosca Direta (Drop-Set) (Barra W)",
+    "nome_base_normalizado": "rosca direta barra w",
+    "gif_sugerido": "Rosca direta com barra w.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "36d33078-f0ad-4367-a34d-691b4751188f",
+    "catalogo_nome": "Rosca Direta (Drop-Set) (Barra)",
+    "nome_base_normalizado": "rosca direta barra",
+    "gif_sugerido": "Rosca Direta com Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "5716f136-1c3d-4c37-ac90-c30cae4e6ec1",
+    "catalogo_nome": "Rosca Direta (Drop-Set) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca direta cabo polia",
+    "gif_sugerido": "Rosca no Cabo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "e4e5b7fd-0ba6-4c7b-8ff0-1229bc4726e1",
+    "catalogo_nome": "Rosca Direta (Isometria no Alongamento) (Barra W)",
+    "nome_base_normalizado": "rosca direta barra w",
+    "gif_sugerido": "Rosca direta com barra w.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "f24d468a-26a9-4038-a35f-4494c871fc9b",
+    "catalogo_nome": "Rosca Direta (Isometria no Alongamento) (Barra)",
+    "nome_base_normalizado": "rosca direta barra",
+    "gif_sugerido": "Rosca Direta com Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "0c3a559e-0b0d-4ae9-aa71-d00daf4625d2",
+    "catalogo_nome": "Rosca Direta (Isometria no Alongamento) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca direta cabo polia",
+    "gif_sugerido": "Rosca no Cabo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "ea2f0c4e-1f9f-46a7-950f-d90485d6652e",
+    "catalogo_nome": "Rosca Direta (Isometria no Pico) (Barra W)",
+    "nome_base_normalizado": "rosca direta barra w",
+    "gif_sugerido": "Rosca direta com barra w.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "8287a917-e332-4dcd-9af5-1b63a3f90471",
+    "catalogo_nome": "Rosca Direta (Isometria no Pico) (Barra)",
+    "nome_base_normalizado": "rosca direta barra",
+    "gif_sugerido": "Rosca Direta com Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "a3f53e25-64bc-4ae0-b3bf-b232b86c8c74",
+    "catalogo_nome": "Rosca Direta (Isometria no Pico) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca direta cabo polia",
+    "gif_sugerido": "Rosca no Cabo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "87aad8d5-4c6c-4f79-9255-63387acf4424",
+    "catalogo_nome": "Rosca Direta (Pausas 3x no percurso) (Barra W)",
+    "nome_base_normalizado": "rosca direta barra w",
+    "gif_sugerido": "Rosca direta com barra w.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "6f27370a-7b4d-42cd-9117-b4908696d8c7",
+    "catalogo_nome": "Rosca Direta (Pausas 3x no percurso) (Barra)",
+    "nome_base_normalizado": "rosca direta barra",
+    "gif_sugerido": "Rosca Direta com Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "d122b5de-9b87-47a1-871f-30f038c24088",
+    "catalogo_nome": "Rosca Direta (Pausas 3x no percurso) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca direta cabo polia",
+    "gif_sugerido": "Rosca no Cabo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "5fc9dec1-a2b6-47fe-8fd4-75e367a79883",
+    "catalogo_nome": "Rosca Direta (Rest-Pause) (Barra W)",
+    "nome_base_normalizado": "rosca direta barra w",
+    "gif_sugerido": "Rosca direta com barra w.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "6eae3fb7-9c21-4fd6-8a1c-b2006dcb8c12",
+    "catalogo_nome": "Rosca Direta (Rest-Pause) (Barra)",
+    "nome_base_normalizado": "rosca direta barra",
+    "gif_sugerido": "Rosca Direta com Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "548c0cc1-2173-48db-a777-ca5d5a328fe5",
+    "catalogo_nome": "Rosca Direta (Rest-Pause) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca direta cabo polia",
+    "gif_sugerido": "Rosca no Cabo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "0610e990-b246-4409-9ead-8eac3c14bc52",
+    "catalogo_nome": "Rosca Direta (Tempo 3-1-1) (Barra W)",
+    "nome_base_normalizado": "rosca direta barra w",
+    "gif_sugerido": "Rosca direta com barra w.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "0f5a723e-f7bb-4f4a-a6c9-37f85cf67776",
+    "catalogo_nome": "Rosca Direta (Tempo 3-1-1) (Barra)",
+    "nome_base_normalizado": "rosca direta barra",
+    "gif_sugerido": "Rosca Direta com Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "73844ef0-59a1-4619-a90f-6a782766226a",
+    "catalogo_nome": "Rosca Direta (Tempo 3-1-1) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca direta cabo polia",
+    "gif_sugerido": "Rosca no Cabo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "e0bc67c7-adb3-48c2-ae4a-428e3aa276ae",
+    "catalogo_nome": "Rosca Direta (Tempo 4-0-1) (Barra W)",
+    "nome_base_normalizado": "rosca direta barra w",
+    "gif_sugerido": "Rosca direta com barra w.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "635206c9-1885-48da-8eed-dc20a1a54d40",
+    "catalogo_nome": "Rosca Direta (Tempo 4-0-1) (Barra)",
+    "nome_base_normalizado": "rosca direta barra",
+    "gif_sugerido": "Rosca Direta com Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "9fe1546a-8ef3-49ea-8e75-62f10d9dc58c",
+    "catalogo_nome": "Rosca Direta (Tempo 4-0-1) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca direta cabo polia",
+    "gif_sugerido": "Rosca no Cabo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "a5770347-c69e-4c5f-b09a-459b46e1a8a9",
+    "catalogo_nome": "Rosca Direta (Unilateral) (Barra W)",
+    "nome_base_normalizado": "rosca direta barra w",
+    "gif_sugerido": "Rosca direta com barra w.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "5475218a-963b-4542-b0b0-5d73154e15df",
+    "catalogo_nome": "Rosca Direta (Unilateral) (Barra)",
+    "nome_base_normalizado": "rosca direta barra",
+    "gif_sugerido": "Rosca Direta com Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "e179ed96-2b08-4dd8-969d-e7d6e6873380",
+    "catalogo_nome": "Rosca Direta (Unilateral) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca direta cabo polia",
+    "gif_sugerido": "Rosca no Cabo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "8ac8e5d4-53db-4017-a618-7c7515b946ec",
+    "catalogo_nome": "Rosca Direta com Barra",
+    "nome_base_normalizado": "rosca direta com barra",
+    "gif_sugerido": "Rosca Direta com Barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "39f6d20b-eecb-4dd6-bebc-cf00c5fd7eb4",
+    "catalogo_nome": "Rosca Direta com Barra W",
+    "nome_base_normalizado": "rosca direta com barra w",
+    "gif_sugerido": "Rosca direta com barra w.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "5612b80f-017d-4ad2-a46e-1f90fde437d1",
+    "catalogo_nome": "Rosca Inclinada com Halteres",
+    "nome_base_normalizado": "rosca inclinada com halteres",
+    "gif_sugerido": "Rosca com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "fe583621-ea9b-4404-b355-2326ace56072",
+    "catalogo_nome": "Rosca Martelo",
+    "nome_base_normalizado": "rosca martelo",
+    "gif_sugerido": "Rosca martelo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "bfcddb3b-4f59-4791-bfc1-234a77a4febe",
+    "catalogo_nome": "Rosca Martelo (1 e 1/2 repetição) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca martelo cabo polia",
+    "gif_sugerido": "Rosca martelo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "6aabfda6-f043-4ded-8f25-5e1e51591ba4",
+    "catalogo_nome": "Rosca Martelo (1 e 1/2 repetição) (Halteres)",
+    "nome_base_normalizado": "rosca martelo halteres",
+    "gif_sugerido": "Rosca com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "88592da7-950d-404a-a25e-1b50a7efc289",
+    "catalogo_nome": "Rosca Martelo (Amplitude Parcial) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca martelo cabo polia",
+    "gif_sugerido": "Rosca martelo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "f2d07c1e-dcca-48a6-9c90-dabd24104880",
+    "catalogo_nome": "Rosca Martelo (Amplitude Parcial) (Halteres)",
+    "nome_base_normalizado": "rosca martelo halteres",
+    "gif_sugerido": "Rosca com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "e2967dfc-0ab6-4087-839f-07d0f641fce1",
+    "catalogo_nome": "Rosca Martelo (Drop-Set) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca martelo cabo polia",
+    "gif_sugerido": "Rosca martelo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "75c17a7b-90ad-452f-8f8d-51b6e2958b45",
+    "catalogo_nome": "Rosca Martelo (Drop-Set) (Halteres)",
+    "nome_base_normalizado": "rosca martelo halteres",
+    "gif_sugerido": "Rosca com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "a5342d62-512b-4e80-b0b3-a86d8bbd7b7c",
+    "catalogo_nome": "Rosca Martelo (Isometria no Alongamento) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca martelo cabo polia",
+    "gif_sugerido": "Rosca martelo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "22bebc2d-2762-48b0-85da-074caeaa1671",
+    "catalogo_nome": "Rosca Martelo (Isometria no Alongamento) (Halteres)",
+    "nome_base_normalizado": "rosca martelo halteres",
+    "gif_sugerido": "Rosca com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "e8998894-1cd6-42e6-9cae-f70c1b84aa5c",
+    "catalogo_nome": "Rosca Martelo (Isometria no Pico) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca martelo cabo polia",
+    "gif_sugerido": "Rosca martelo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "714fde43-720e-40ac-b756-a0fe477d4539",
+    "catalogo_nome": "Rosca Martelo (Isometria no Pico) (Halteres)",
+    "nome_base_normalizado": "rosca martelo halteres",
+    "gif_sugerido": "Rosca com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "45e039da-9669-41fc-988a-d12be1af133c",
+    "catalogo_nome": "Rosca Martelo (Pausas 3x no percurso) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca martelo cabo polia",
+    "gif_sugerido": "Rosca martelo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "624fac8b-60f3-4fb0-8ae2-2eb45a6d3175",
+    "catalogo_nome": "Rosca Martelo (Pausas 3x no percurso) (Halteres)",
+    "nome_base_normalizado": "rosca martelo halteres",
+    "gif_sugerido": "Rosca com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "ad6ca6bc-4fae-42da-b899-761ad4f871f2",
+    "catalogo_nome": "Rosca Martelo (Rest-Pause) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca martelo cabo polia",
+    "gif_sugerido": "Rosca martelo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "4fb8cdd8-978a-4bae-985e-f2714f309084",
+    "catalogo_nome": "Rosca Martelo (Rest-Pause) (Halteres)",
+    "nome_base_normalizado": "rosca martelo halteres",
+    "gif_sugerido": "Rosca com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "bf7fd9b3-85b2-43c7-bd91-0ee98e6f73ae",
+    "catalogo_nome": "Rosca Martelo (Tempo 3-1-1) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca martelo cabo polia",
+    "gif_sugerido": "Rosca martelo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "f488413a-030d-46b6-a1fc-549781eec886",
+    "catalogo_nome": "Rosca Martelo (Tempo 3-1-1) (Halteres)",
+    "nome_base_normalizado": "rosca martelo halteres",
+    "gif_sugerido": "Rosca com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "bc1ba878-732c-4d0e-bd15-ee089ed32599",
+    "catalogo_nome": "Rosca Martelo (Tempo 4-0-1) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca martelo cabo polia",
+    "gif_sugerido": "Rosca martelo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "e3421a87-3d17-486b-8998-057f7d38cc8e",
+    "catalogo_nome": "Rosca Martelo (Tempo 4-0-1) (Halteres)",
+    "nome_base_normalizado": "rosca martelo halteres",
+    "gif_sugerido": "Rosca com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "d9532916-2466-4d50-a48f-66a32cc93b1f",
+    "catalogo_nome": "Rosca Martelo (Unilateral) (Cabo/Polia)",
+    "nome_base_normalizado": "rosca martelo cabo polia",
+    "gif_sugerido": "Rosca martelo.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "ab6e37af-3248-4720-9904-db86a5a055cf",
+    "catalogo_nome": "Rosca Martelo (Unilateral) (Halteres)",
+    "nome_base_normalizado": "rosca martelo halteres",
+    "gif_sugerido": "Rosca com halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "7f909906-9c34-4398-87ed-078dea63fec6",
+    "catalogo_nome": "Rosca no Cabo (Barra Reta)",
+    "nome_base_normalizado": "rosca no cabo barra reta",
+    "gif_sugerido": "Rosca com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "e19743cb-32f1-4a2d-a0d3-7e27b562d51c",
+    "catalogo_nome": "Rotação Externa Ombro Polia",
+    "nome_base_normalizado": "rotacao externa ombro polia",
+    "gif_sugerido": "Rotação externa do ombro.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "24d1d2db-f3ba-401f-b74e-4da4af99d899",
+    "catalogo_nome": "Rotação Externa Ombro Polia (Variação 1)",
+    "nome_base_normalizado": "rotacao externa ombro polia variacao 1",
+    "gif_sugerido": "Rotação externa do ombro.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "3cfb8560-7d96-4bc6-bb9e-d0b238b32ced",
+    "catalogo_nome": "Rotação Externa Ombro Polia (Variação 2)",
+    "nome_base_normalizado": "rotacao externa ombro polia variacao 2",
+    "gif_sugerido": "Rotação externa do ombro.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "96f2a3b4-43d6-4e04-84dd-af42fe70c3e5",
+    "catalogo_nome": "Rotação Externa Ombro Polia (Variação 3)",
+    "nome_base_normalizado": "rotacao externa ombro polia variacao 3",
+    "gif_sugerido": "Rotação externa do ombro.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "f9abd15e-9875-4efa-a573-a5e4059c5d6a",
+    "catalogo_nome": "Stiff (1 e 1/2 repetição) (Barra)",
+    "nome_base_normalizado": "stiff barra",
+    "gif_sugerido": "Stiff com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "fbaa9969-26fe-4171-92e1-90df52b7871e",
+    "catalogo_nome": "Stiff (Amplitude Parcial) (Barra)",
+    "nome_base_normalizado": "stiff barra",
+    "gif_sugerido": "Stiff com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "a292bab5-2ba0-4af5-a269-5a0139ba66d9",
+    "catalogo_nome": "Stiff (Drop-Set) (Barra)",
+    "nome_base_normalizado": "stiff barra",
+    "gif_sugerido": "Stiff com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "24bdf43e-7a52-4c7e-9196-8f03e4dd7b11",
+    "catalogo_nome": "Stiff (Isometria no Alongamento) (Barra)",
+    "nome_base_normalizado": "stiff barra",
+    "gif_sugerido": "Stiff com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "5b166b49-4dff-43d4-972a-2d1a1cc4c746",
+    "catalogo_nome": "Stiff (Isometria no Pico) (Barra)",
+    "nome_base_normalizado": "stiff barra",
+    "gif_sugerido": "Stiff com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "dff55548-8148-482d-9133-c2c0a2255420",
+    "catalogo_nome": "Stiff (Pausas 3x no percurso) (Barra)",
+    "nome_base_normalizado": "stiff barra",
+    "gif_sugerido": "Stiff com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "672051ee-43b9-4e23-9572-b2e29ef38cf8",
+    "catalogo_nome": "Stiff (Rest-Pause) (Barra)",
+    "nome_base_normalizado": "stiff barra",
+    "gif_sugerido": "Stiff com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "f3b11003-9f45-48de-a6a8-9cd8fe550b66",
+    "catalogo_nome": "Stiff (Tempo 3-1-1) (Barra)",
+    "nome_base_normalizado": "stiff barra",
+    "gif_sugerido": "Stiff com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "bdc87536-7c84-4285-b29f-5faa3e015c1a",
+    "catalogo_nome": "Stiff (Tempo 4-0-1) (Barra)",
+    "nome_base_normalizado": "stiff barra",
+    "gif_sugerido": "Stiff com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "43f1673d-6df0-4a6d-a1dc-8e884be06743",
+    "catalogo_nome": "Stiff (Unilateral) (Barra)",
+    "nome_base_normalizado": "stiff barra",
+    "gif_sugerido": "Stiff com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "b5313d5b-a286-46d3-9498-65c96b6f7f03",
+    "catalogo_nome": "Stiff com Barra",
+    "nome_base_normalizado": "stiff com barra",
+    "gif_sugerido": "Stiff com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "0fd08d75-6b64-40d1-b031-69e141514e4a",
+    "catalogo_nome": "Supino Declinado com Barra",
+    "nome_base_normalizado": "supino declinado com barra",
+    "gif_sugerido": "Supino com barra declinado.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "4ebc287d-83b9-4122-ac7b-e2937f60f046",
+    "catalogo_nome": "Supino Declinado com Halteres",
+    "nome_base_normalizado": "supino declinado com halteres",
+    "gif_sugerido": "Supino Declinado com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "e12d059a-80e5-4ca3-98eb-a643e2bb92cf",
+    "catalogo_nome": "Supino Fechado com Barra",
+    "nome_base_normalizado": "supino fechado com barra",
+    "gif_sugerido": "Supino Fechado.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "3c3d155e-70a6-4e18-962a-247fb6bbe1de",
+    "catalogo_nome": "Supino Inclinado (1 e 1/2 repetição) (Barra)",
+    "nome_base_normalizado": "supino inclinado barra",
+    "gif_sugerido": "Supino inclinado com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "6bec9037-4fcc-49b3-b4f8-6591ec35fe83",
+    "catalogo_nome": "Supino Inclinado (1 e 1/2 repetição) (Halteres)",
+    "nome_base_normalizado": "supino inclinado halteres",
+    "gif_sugerido": "Supino Inclinado com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "d5e25a7e-964a-45f5-87e4-de51683be0f2",
+    "catalogo_nome": "Supino Inclinado (1 e 1/2 repetição) (Máquina)",
+    "nome_base_normalizado": "supino inclinado maquina",
+    "gif_sugerido": "Supino inclinado na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "f7defe2a-6a63-47cb-89e2-14b42f179e35",
+    "catalogo_nome": "Supino Inclinado (Amplitude Parcial) (Barra)",
+    "nome_base_normalizado": "supino inclinado barra",
+    "gif_sugerido": "Supino inclinado com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "20c72844-08b0-416f-84e8-6923fe2b2ec2",
+    "catalogo_nome": "Supino Inclinado (Amplitude Parcial) (Halteres)",
+    "nome_base_normalizado": "supino inclinado halteres",
+    "gif_sugerido": "Supino Inclinado com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "6ebfa573-d254-4f93-822d-7b57e8944f1b",
+    "catalogo_nome": "Supino Inclinado (Amplitude Parcial) (Máquina)",
+    "nome_base_normalizado": "supino inclinado maquina",
+    "gif_sugerido": "Supino inclinado na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "ae2ea67b-2793-44a8-ad12-9f3a2f442f54",
+    "catalogo_nome": "Supino Inclinado (Drop-Set) (Barra)",
+    "nome_base_normalizado": "supino inclinado barra",
+    "gif_sugerido": "Supino inclinado com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "e382a635-0ccd-4625-b3c8-abd7e3d9d596",
+    "catalogo_nome": "Supino Inclinado (Drop-Set) (Halteres)",
+    "nome_base_normalizado": "supino inclinado halteres",
+    "gif_sugerido": "Supino Inclinado com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "8b206d8c-5aeb-4260-83f9-a707c248c156",
+    "catalogo_nome": "Supino Inclinado (Drop-Set) (Máquina)",
+    "nome_base_normalizado": "supino inclinado maquina",
+    "gif_sugerido": "Supino inclinado na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "befe520a-e785-445b-83a8-351e476c54b6",
+    "catalogo_nome": "Supino Inclinado (Isometria no Alongamento) (Barra)",
+    "nome_base_normalizado": "supino inclinado barra",
+    "gif_sugerido": "Supino inclinado com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "47bb51e7-70c1-4a68-9748-6ab06242ab3e",
+    "catalogo_nome": "Supino Inclinado (Isometria no Alongamento) (Halteres)",
+    "nome_base_normalizado": "supino inclinado halteres",
+    "gif_sugerido": "Supino Inclinado com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "85b725de-9a07-4531-86d9-c3b5eacaaf78",
+    "catalogo_nome": "Supino Inclinado (Isometria no Alongamento) (Máquina)",
+    "nome_base_normalizado": "supino inclinado maquina",
+    "gif_sugerido": "Supino inclinado na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "5960e7b6-f273-4614-9ffc-ee9f8fc4c140",
+    "catalogo_nome": "Supino Inclinado (Isometria no Pico) (Barra)",
+    "nome_base_normalizado": "supino inclinado barra",
+    "gif_sugerido": "Supino inclinado com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "abe974b4-7ce4-42d5-bf6b-8b4942e7ff62",
+    "catalogo_nome": "Supino Inclinado (Isometria no Pico) (Halteres)",
+    "nome_base_normalizado": "supino inclinado halteres",
+    "gif_sugerido": "Supino Inclinado com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "6eccea67-a52f-46d0-b77b-0b5c9b1c1ab2",
+    "catalogo_nome": "Supino Inclinado (Isometria no Pico) (Máquina)",
+    "nome_base_normalizado": "supino inclinado maquina",
+    "gif_sugerido": "Supino inclinado na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "e08c98e9-3122-4375-85d0-d3b481ddbade",
+    "catalogo_nome": "Supino Inclinado (Pausas 3x no percurso) (Barra)",
+    "nome_base_normalizado": "supino inclinado barra",
+    "gif_sugerido": "Supino inclinado com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "ea0828ba-3f95-44a9-a86f-43d51977b5e0",
+    "catalogo_nome": "Supino Inclinado (Pausas 3x no percurso) (Halteres)",
+    "nome_base_normalizado": "supino inclinado halteres",
+    "gif_sugerido": "Supino Inclinado com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "b46855b3-3273-422e-b8c4-fcf5870a5902",
+    "catalogo_nome": "Supino Inclinado (Pausas 3x no percurso) (Máquina)",
+    "nome_base_normalizado": "supino inclinado maquina",
+    "gif_sugerido": "Supino inclinado na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "5f6ee7d8-94ac-4161-a778-9dc0d1947960",
+    "catalogo_nome": "Supino Inclinado (Rest-Pause) (Barra)",
+    "nome_base_normalizado": "supino inclinado barra",
+    "gif_sugerido": "Supino inclinado com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "0419216c-233f-464a-a571-d6221b49475a",
+    "catalogo_nome": "Supino Inclinado (Rest-Pause) (Halteres)",
+    "nome_base_normalizado": "supino inclinado halteres",
+    "gif_sugerido": "Supino Inclinado com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "48703f4a-8641-46c8-886a-96c193e947f2",
+    "catalogo_nome": "Supino Inclinado (Rest-Pause) (Máquina)",
+    "nome_base_normalizado": "supino inclinado maquina",
+    "gif_sugerido": "Supino inclinado na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "55c2d40e-60d4-409f-b8c1-19284be76fd5",
+    "catalogo_nome": "Supino Inclinado (Tempo 3-1-1) (Barra)",
+    "nome_base_normalizado": "supino inclinado barra",
+    "gif_sugerido": "Supino inclinado com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "1121bab6-e7ff-430c-9974-c6629291b2c1",
+    "catalogo_nome": "Supino Inclinado (Tempo 3-1-1) (Halteres)",
+    "nome_base_normalizado": "supino inclinado halteres",
+    "gif_sugerido": "Supino Inclinado com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "ebbf63f3-974e-412d-9359-3176c32315b5",
+    "catalogo_nome": "Supino Inclinado (Tempo 3-1-1) (Máquina)",
+    "nome_base_normalizado": "supino inclinado maquina",
+    "gif_sugerido": "Supino inclinado na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "200dabcc-c5f4-44fc-940c-850736b201d5",
+    "catalogo_nome": "Supino Inclinado (Tempo 4-0-1) (Barra)",
+    "nome_base_normalizado": "supino inclinado barra",
+    "gif_sugerido": "Supino inclinado com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "35159ecf-8e87-46df-8b0a-b39a26871467",
+    "catalogo_nome": "Supino Inclinado (Tempo 4-0-1) (Halteres)",
+    "nome_base_normalizado": "supino inclinado halteres",
+    "gif_sugerido": "Supino Inclinado com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "98102d08-d947-4800-84e6-d3cf6862f73e",
+    "catalogo_nome": "Supino Inclinado (Tempo 4-0-1) (Máquina)",
+    "nome_base_normalizado": "supino inclinado maquina",
+    "gif_sugerido": "Supino inclinado na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "b30552e0-109f-4aa6-81cc-6a815f26ba77",
+    "catalogo_nome": "Supino Inclinado (Unilateral) (Barra)",
+    "nome_base_normalizado": "supino inclinado barra",
+    "gif_sugerido": "Supino inclinado com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "ed22bd9e-5824-43d5-a53d-86718b61f417",
+    "catalogo_nome": "Supino Inclinado (Unilateral) (Halteres)",
+    "nome_base_normalizado": "supino inclinado halteres",
+    "gif_sugerido": "Supino Inclinado com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "778c89e0-57c8-4af6-a1bf-c968d5ffb57a",
+    "catalogo_nome": "Supino Inclinado (Unilateral) (Máquina)",
+    "nome_base_normalizado": "supino inclinado maquina",
+    "gif_sugerido": "Supino inclinado na máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "07fbe12f-e149-4e46-8432-bbaa793b540b",
+    "catalogo_nome": "Supino Inclinado com Barra",
+    "nome_base_normalizado": "supino inclinado com barra",
+    "gif_sugerido": "Supino inclinado com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "109ce95f-eadd-462c-b290-a0377fd21806",
+    "catalogo_nome": "Supino Inclinado com Halteres",
+    "nome_base_normalizado": "supino inclinado com halteres",
+    "gif_sugerido": "Supino Inclinado com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "cd9dceb6-4dc6-4146-9d1b-d6043ab9f4ce",
+    "catalogo_nome": "Supino Reto (1 e 1/2 repetição) (Barra)",
+    "nome_base_normalizado": "supino reto barra",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "f1dedd30-f222-442d-8539-16839e9c01ee",
+    "catalogo_nome": "Supino Reto (1 e 1/2 repetição) (Halteres)",
+    "nome_base_normalizado": "supino reto halteres",
+    "gif_sugerido": "Supino com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "3e0fd58b-bf87-4b9c-8971-a92cf118400a",
+    "catalogo_nome": "Supino Reto (1 e 1/2 repetição) (Máquina)",
+    "nome_base_normalizado": "supino reto maquina",
+    "gif_sugerido": "Supino Reto na Máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "4197e077-0bfd-4114-acde-2ae99c73b127",
+    "catalogo_nome": "Supino Reto (1 e 1/2 repetição) (Smith)",
+    "nome_base_normalizado": "supino reto smith",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "d233319a-7ed3-4bbe-ab5c-0b5f91b6272d",
+    "catalogo_nome": "Supino Reto (Amplitude Parcial) (Barra)",
+    "nome_base_normalizado": "supino reto barra",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "dcdfe5bc-2be6-4401-990a-02ec2e918523",
+    "catalogo_nome": "Supino Reto (Amplitude Parcial) (Halteres)",
+    "nome_base_normalizado": "supino reto halteres",
+    "gif_sugerido": "Supino com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "9146816c-3434-4025-a00d-876c90fb72d5",
+    "catalogo_nome": "Supino Reto (Amplitude Parcial) (Máquina)",
+    "nome_base_normalizado": "supino reto maquina",
+    "gif_sugerido": "Supino Reto na Máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "2464f911-4667-454c-91d8-493751b1ce80",
+    "catalogo_nome": "Supino Reto (Amplitude Parcial) (Smith)",
+    "nome_base_normalizado": "supino reto smith",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "31abc1cb-ea8f-499c-b2e2-0ecd9aa00d71",
+    "catalogo_nome": "Supino Reto (Drop-Set) (Barra)",
+    "nome_base_normalizado": "supino reto barra",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "636ba9cd-c42a-4658-8a01-dc884f1d5a1e",
+    "catalogo_nome": "Supino Reto (Drop-Set) (Halteres)",
+    "nome_base_normalizado": "supino reto halteres",
+    "gif_sugerido": "Supino com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "4907136c-f5ff-4d3a-88fb-434e932107b4",
+    "catalogo_nome": "Supino Reto (Drop-Set) (Máquina)",
+    "nome_base_normalizado": "supino reto maquina",
+    "gif_sugerido": "Supino Reto na Máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "3b43297c-826a-4f35-a50a-4c71b7882fdf",
+    "catalogo_nome": "Supino Reto (Drop-Set) (Smith)",
+    "nome_base_normalizado": "supino reto smith",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "4223e669-b5bc-4600-b111-301f2da0cf8f",
+    "catalogo_nome": "Supino Reto (Isometria no Alongamento) (Barra)",
+    "nome_base_normalizado": "supino reto barra",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "4edf1dc8-4273-4606-b33f-2d04c22b93bc",
+    "catalogo_nome": "Supino Reto (Isometria no Alongamento) (Halteres)",
+    "nome_base_normalizado": "supino reto halteres",
+    "gif_sugerido": "Supino com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "45911138-e0e0-4376-a12b-93adcaba00e1",
+    "catalogo_nome": "Supino Reto (Isometria no Alongamento) (Máquina)",
+    "nome_base_normalizado": "supino reto maquina",
+    "gif_sugerido": "Supino Reto na Máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "b3b8c75a-9ac5-4bdb-9d98-249f4acdb650",
+    "catalogo_nome": "Supino Reto (Isometria no Alongamento) (Smith)",
+    "nome_base_normalizado": "supino reto smith",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "fc51fce3-d643-4bda-9bb7-6f5130d3eeb1",
+    "catalogo_nome": "Supino Reto (Isometria no Pico) (Barra)",
+    "nome_base_normalizado": "supino reto barra",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "76a1cbf9-fd92-4e75-80f9-e96837c85e3b",
+    "catalogo_nome": "Supino Reto (Isometria no Pico) (Halteres)",
+    "nome_base_normalizado": "supino reto halteres",
+    "gif_sugerido": "Supino com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "bc27cf8e-c0fc-4f04-9806-b1355610022f",
+    "catalogo_nome": "Supino Reto (Isometria no Pico) (Máquina)",
+    "nome_base_normalizado": "supino reto maquina",
+    "gif_sugerido": "Supino Reto na Máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "a1e78819-5df3-44d6-be1b-a776ee0b05ff",
+    "catalogo_nome": "Supino Reto (Isometria no Pico) (Smith)",
+    "nome_base_normalizado": "supino reto smith",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "15c4c691-14ba-4294-b5b6-78ed460495b5",
+    "catalogo_nome": "Supino Reto (Pausas 3x no percurso) (Barra)",
+    "nome_base_normalizado": "supino reto barra",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "a923d1f4-4c2f-4851-a8c6-d65712ea2e0c",
+    "catalogo_nome": "Supino Reto (Pausas 3x no percurso) (Halteres)",
+    "nome_base_normalizado": "supino reto halteres",
+    "gif_sugerido": "Supino com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "31d9564f-f23f-4617-976f-dfe59ef371f0",
+    "catalogo_nome": "Supino Reto (Pausas 3x no percurso) (Máquina)",
+    "nome_base_normalizado": "supino reto maquina",
+    "gif_sugerido": "Supino Reto na Máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "227920fb-8412-45c1-8f35-6cf78af98046",
+    "catalogo_nome": "Supino Reto (Pausas 3x no percurso) (Smith)",
+    "nome_base_normalizado": "supino reto smith",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "6d839450-7717-438c-9810-a6f6d467a4fc",
+    "catalogo_nome": "Supino Reto (Rest-Pause) (Barra)",
+    "nome_base_normalizado": "supino reto barra",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "6f51d9c7-49f9-4644-941d-69210dde0cd0",
+    "catalogo_nome": "Supino Reto (Rest-Pause) (Halteres)",
+    "nome_base_normalizado": "supino reto halteres",
+    "gif_sugerido": "Supino com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "4a1800d3-96fd-4c30-bce8-0243b5cfcf32",
+    "catalogo_nome": "Supino Reto (Rest-Pause) (Máquina)",
+    "nome_base_normalizado": "supino reto maquina",
+    "gif_sugerido": "Supino Reto na Máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "84ea76c1-9387-4cdb-9321-8944a4a846aa",
+    "catalogo_nome": "Supino Reto (Rest-Pause) (Smith)",
+    "nome_base_normalizado": "supino reto smith",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "2c97c4db-bad4-43dd-9d9a-af90154777c7",
+    "catalogo_nome": "Supino Reto (Tempo 3-1-1) (Barra)",
+    "nome_base_normalizado": "supino reto barra",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "3466c447-3838-451c-ab46-ed0f8ca0e977",
+    "catalogo_nome": "Supino Reto (Tempo 3-1-1) (Halteres)",
+    "nome_base_normalizado": "supino reto halteres",
+    "gif_sugerido": "Supino com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "c93b5ca2-2f8f-4b83-be2f-a9c0cf3cc52c",
+    "catalogo_nome": "Supino Reto (Tempo 3-1-1) (Máquina)",
+    "nome_base_normalizado": "supino reto maquina",
+    "gif_sugerido": "Supino Reto na Máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "b94ff754-bac1-4e42-822b-6743eb5bb432",
+    "catalogo_nome": "Supino Reto (Tempo 3-1-1) (Smith)",
+    "nome_base_normalizado": "supino reto smith",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "c29aae38-f3bd-4895-935a-07c4df9cc800",
+    "catalogo_nome": "Supino Reto (Tempo 4-0-1) (Barra)",
+    "nome_base_normalizado": "supino reto barra",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "c9e1495c-f131-44de-a1d7-32eab95863f4",
+    "catalogo_nome": "Supino Reto (Tempo 4-0-1) (Halteres)",
+    "nome_base_normalizado": "supino reto halteres",
+    "gif_sugerido": "Supino com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "16e9c7d4-0008-422e-a814-08bf46c637ac",
+    "catalogo_nome": "Supino Reto (Tempo 4-0-1) (Máquina)",
+    "nome_base_normalizado": "supino reto maquina",
+    "gif_sugerido": "Supino Reto na Máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "dcc276a5-d98e-4ef1-95d1-f1563bc56516",
+    "catalogo_nome": "Supino Reto (Tempo 4-0-1) (Smith)",
+    "nome_base_normalizado": "supino reto smith",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "8af2ece3-5e8e-4797-9c6c-72383297b2eb",
+    "catalogo_nome": "Supino Reto (Unilateral) (Barra)",
+    "nome_base_normalizado": "supino reto barra",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "800fb33a-f48c-4f8e-9fe2-bad2faab8103",
+    "catalogo_nome": "Supino Reto (Unilateral) (Halteres)",
+    "nome_base_normalizado": "supino reto halteres",
+    "gif_sugerido": "Supino com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "cc90976a-dba8-4195-b9f3-defe0054aee4",
+    "catalogo_nome": "Supino Reto (Unilateral) (Máquina)",
+    "nome_base_normalizado": "supino reto maquina",
+    "gif_sugerido": "Supino Reto na Máquina.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "ff638149-9882-4e03-b121-18f67ffa8d31",
+    "catalogo_nome": "Supino Reto (Unilateral) (Smith)",
+    "nome_base_normalizado": "supino reto smith",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "8dc225e3-7a35-4a7a-a006-467bdb14e5db",
+    "catalogo_nome": "Supino Reto com Barra",
+    "nome_base_normalizado": "supino reto com barra",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "efde6b5f-c5cd-4bd3-b9bc-b0613f18ff43",
+    "catalogo_nome": "Supino Reto com Halteres",
+    "nome_base_normalizado": "supino reto com halteres",
+    "gif_sugerido": "Supino com Halteres.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "f9ab833f-07d9-4a01-8822-ebb5b8f70544",
+    "catalogo_nome": "Supino Reto no Smith",
+    "nome_base_normalizado": "supino reto no smith",
+    "gif_sugerido": "Supino Reto.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "f6a9fa41-b2e4-4664-918e-0d2c67e7afcf",
+    "catalogo_nome": "Tríceps Testa (1 e 1/2 repetição) (Barra W)",
+    "nome_base_normalizado": "triceps testa barra w",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "5627ee17-bdf1-4f39-a264-296549153fb8",
+    "catalogo_nome": "Tríceps Testa (1 e 1/2 repetição) (Barra)",
+    "nome_base_normalizado": "triceps testa barra",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "1580bcea-f1b5-439d-a5e1-c76ba7d72461",
+    "catalogo_nome": "Tríceps Testa (Amplitude Parcial) (Barra W)",
+    "nome_base_normalizado": "triceps testa barra w",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "d98bf15b-c6b6-4ef5-813c-e7bc8b0f4149",
+    "catalogo_nome": "Tríceps Testa (Amplitude Parcial) (Barra)",
+    "nome_base_normalizado": "triceps testa barra",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "8f7164ce-aafc-446b-9d75-be62e4f42fc6",
+    "catalogo_nome": "Tríceps Testa (Drop-Set) (Barra W)",
+    "nome_base_normalizado": "triceps testa barra w",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "217ecf0b-d878-4e26-ba7c-e2517782c67f",
+    "catalogo_nome": "Tríceps Testa (Drop-Set) (Barra)",
+    "nome_base_normalizado": "triceps testa barra",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "abaef378-f3f3-4ff0-bce7-6e1cf42c3e45",
+    "catalogo_nome": "Tríceps Testa (Isometria no Alongamento) (Barra W)",
+    "nome_base_normalizado": "triceps testa barra w",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "b5ddc4a4-16ca-4cf1-9e2e-7ebacaa9b0d9",
+    "catalogo_nome": "Tríceps Testa (Isometria no Alongamento) (Barra)",
+    "nome_base_normalizado": "triceps testa barra",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "8d4cbb0c-094a-4d4d-bf49-54308fd1b15a",
+    "catalogo_nome": "Tríceps Testa (Isometria no Pico) (Barra W)",
+    "nome_base_normalizado": "triceps testa barra w",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "44d62ca0-2200-4f6d-bc02-386f8fd10695",
+    "catalogo_nome": "Tríceps Testa (Isometria no Pico) (Barra)",
+    "nome_base_normalizado": "triceps testa barra",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "6a152236-854d-4681-b6cd-f2ddfcd6a91d",
+    "catalogo_nome": "Tríceps Testa (Pausas 3x no percurso) (Barra W)",
+    "nome_base_normalizado": "triceps testa barra w",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "0f1970c2-f9aa-418a-a7e1-c88e4903266e",
+    "catalogo_nome": "Tríceps Testa (Pausas 3x no percurso) (Barra)",
+    "nome_base_normalizado": "triceps testa barra",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "3b7e7f5d-cf87-48ba-a724-75d0afcfd5e6",
+    "catalogo_nome": "Tríceps Testa (Rest-Pause) (Barra W)",
+    "nome_base_normalizado": "triceps testa barra w",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "af9644e1-85f4-45ca-a9c5-16dd8f4fa4fd",
+    "catalogo_nome": "Tríceps Testa (Rest-Pause) (Barra)",
+    "nome_base_normalizado": "triceps testa barra",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "ac905336-368f-47b1-a39c-c0a279975adb",
+    "catalogo_nome": "Tríceps Testa (Tempo 3-1-1) (Barra W)",
+    "nome_base_normalizado": "triceps testa barra w",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "eda22874-4c09-43f6-99e3-7f59b5f7e9aa",
+    "catalogo_nome": "Tríceps Testa (Tempo 3-1-1) (Barra)",
+    "nome_base_normalizado": "triceps testa barra",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "ad1cfbe3-cd41-4612-92c1-a452019b273f",
+    "catalogo_nome": "Tríceps Testa (Tempo 4-0-1) (Barra W)",
+    "nome_base_normalizado": "triceps testa barra w",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "10ee0f53-0cfb-42ef-a9f4-f88538acb2eb",
+    "catalogo_nome": "Tríceps Testa (Tempo 4-0-1) (Barra)",
+    "nome_base_normalizado": "triceps testa barra",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "c1cf75a7-dde0-4cf3-ad40-bd1936e81f39",
+    "catalogo_nome": "Tríceps Testa (Unilateral) (Barra W)",
+    "nome_base_normalizado": "triceps testa barra w",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "77456273-2443-4b71-959e-a4bd5e05eaa9",
+    "catalogo_nome": "Tríceps Testa (Unilateral) (Barra)",
+    "nome_base_normalizado": "triceps testa barra",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  },
+  {
+    "catalogo_id": "8699f17d-f288-4b4a-b2d8-2f3817b63433",
+    "catalogo_nome": "Tríceps Testa com Barra W",
+    "nome_base_normalizado": "triceps testa com barra w",
+    "gif_sugerido": "Tríceps testa com barra.gif",
+    "confianca": 1
+  }
+]

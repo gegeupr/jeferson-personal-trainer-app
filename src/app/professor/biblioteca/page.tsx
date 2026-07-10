@@ -4,6 +4,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/utils/supabase-browser";
+import {
+  listarGifs,
+  atribuirGifCatalogo,
+  atribuirGifCustom,
+  GRUPOS_MUSCULARES_GIF,
+  type ExercicioGifItem,
+} from "@/app/actions/exercicio-gifs";
 
 interface Exercicio {
   id: string;
@@ -11,6 +18,7 @@ interface Exercicio {
   descricao: string | null;
   link_youtube: string | null;
   professor_id: string;
+  gif_id: string | null;
 }
 
 interface ExercicioCatalogo {
@@ -27,6 +35,7 @@ interface ExercicioCatalogo {
   nivel: string | null;
   descricao_tecnica: string | null;
   link_video: string | null;
+  gif_id: string | null;
 }
 
 // -----------------------------
@@ -242,6 +251,73 @@ export default function BibliotecaExerciciosPage() {
   // confirm
   const [confirmState, setConfirmState] = useState<{ msg: string; onOk: () => void } | null>(null);
   function showConfirm(msg: string, onOk: () => void) { setConfirmState({ msg, onOk }); }
+
+  // -----------------------------
+  // Seletor de vídeo (GIF)
+  // -----------------------------
+  const [gifPickerTarget, setGifPickerTarget] = useState<{
+    origem: "minha" | "catalogo";
+    exercicioId: string;
+    nomeExercicio: string;
+  } | null>(null);
+  const [gifResultados, setGifResultados] = useState<ExercicioGifItem[]>([]);
+  const [gifBusca, setGifBusca] = useState("");
+  const [gifFiltroGrupo, setGifFiltroGrupo] = useState("");
+  const [gifLoading, setGifLoading] = useState(false);
+  const [gifSalvando, setGifSalvando] = useState(false);
+
+  async function buscarGifsNoPicker(busca: string, grupo: string) {
+    setGifLoading(true);
+    const result = await listarGifs(busca, grupo);
+    setGifLoading(false);
+    if (result.ok) setGifResultados(result.gifs);
+    else fireToast("error", "Erro ao buscar vídeos", result.error);
+  }
+
+  function abrirSeletorGif(origem: "minha" | "catalogo", exercicioId: string, nomeExercicio: string) {
+    setGifPickerTarget({ origem, exercicioId, nomeExercicio });
+    setGifBusca("");
+    setGifFiltroGrupo("");
+    setGifResultados([]);
+    buscarGifsNoPicker("", "");
+  }
+
+  async function selecionarGif(gifId: string | null) {
+    if (!gifPickerTarget || !professorId) return;
+    setGifSalvando(true);
+
+    const result =
+      gifPickerTarget.origem === "catalogo"
+        ? await atribuirGifCatalogo(gifPickerTarget.exercicioId, gifId)
+        : await atribuirGifCustom(gifPickerTarget.exercicioId, gifId, professorId);
+
+    setGifSalvando(false);
+
+    if (!result.ok) {
+      fireToast("error", "Erro ao salvar vídeo", result.error);
+      return;
+    }
+
+    if (gifPickerTarget.origem === "catalogo") {
+      setCatalogo((prev) =>
+        prev.map((c) => (c.id === gifPickerTarget.exercicioId ? { ...c, gif_id: gifId } : c))
+      );
+    } else {
+      setExercicios((prev) =>
+        prev.map((e) => (e.id === gifPickerTarget.exercicioId ? { ...e, gif_id: gifId } : e))
+      );
+    }
+
+    fireToast("success", gifId ? "Vídeo vinculado" : "Vídeo removido");
+    setGifPickerTarget(null);
+  }
+
+  useEffect(() => {
+    if (!gifPickerTarget) return;
+    const t = setTimeout(() => buscarGifsNoPicker(gifBusca, gifFiltroGrupo), 300);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gifBusca, gifFiltroGrupo, gifPickerTarget]);
 
   // -----------------------------
   // Auth + fetch Minha
@@ -1115,6 +1191,19 @@ export default function BibliotecaExerciciosPage() {
 
                         <div className="flex flex-wrap gap-2">
                           <button
+                            onClick={() => abrirSeletorGif("minha", ex.id, ex.nome)}
+                            disabled={isSubmitting}
+                            className={cx(
+                              "rounded-2xl border px-4 py-2 text-sm font-bold disabled:opacity-60",
+                              ex.gif_id
+                                ? "border-white/15 bg-white/8 text-white/80 hover:bg-white/10"
+                                : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
+                            )}
+                          >
+                            {ex.gif_id ? "Trocar GIF" : "Escolher GIF"}
+                          </button>
+
+                          <button
                             onClick={() => openEditModal(ex)}
                             disabled={isSubmitting}
                             className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/80 hover:bg-white/10 disabled:opacity-60"
@@ -1131,6 +1220,16 @@ export default function BibliotecaExerciciosPage() {
                           </button>
                         </div>
                       </div>
+
+                      {ex.gif_id ? (
+                        <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-black/40 max-w-xs">
+                          <img
+                            src={`/api/exercicio-gif/${ex.gif_id}`}
+                            alt={`Demonstração — ${ex.nome}`}
+                            className="w-full"
+                          />
+                        </div>
+                      ) : null}
 
                       {yid && isOpen ? (
                         <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-black/40">
@@ -1286,6 +1385,19 @@ export default function BibliotecaExerciciosPage() {
                           </label>
 
                           <button
+                            onClick={() => abrirSeletorGif("catalogo", c.id, c.nome)}
+                            disabled={isSubmitting}
+                            className={cx(
+                              "rounded-2xl border px-4 py-2 text-sm font-bold disabled:opacity-60",
+                              c.gif_id
+                                ? "border-white/15 bg-white/8 text-white/80 hover:bg-white/10"
+                                : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
+                            )}
+                          >
+                            {c.gif_id ? "Trocar GIF" : "Escolher GIF"}
+                          </button>
+
+                          <button
                             onClick={() => addFromCatalog(c)}
                             disabled={isSubmitting}
                             className="rounded-2xl bg-white px-4 py-2 text-sm font-extrabold text-black hover:bg-white/90 disabled:opacity-60"
@@ -1294,6 +1406,16 @@ export default function BibliotecaExerciciosPage() {
                           </button>
                         </div>
                       </div>
+
+                      {c.gif_id ? (
+                        <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-black/40 max-w-xs">
+                          <img
+                            src={`/api/exercicio-gif/${c.gif_id}`}
+                            alt={`Demonstração — ${c.nome}`}
+                            className="w-full"
+                          />
+                        </div>
+                      ) : null}
 
                       {yid && isOpen ? (
                         <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-black/40">
@@ -1455,6 +1577,83 @@ export default function BibliotecaExerciciosPage() {
             </button>
           </div>
         </form>
+      </Modal>
+
+      {/* SELETOR DE VIDEO (GIF) */}
+      <Modal
+        open={!!gifPickerTarget}
+        title="Escolher vídeo de demonstração"
+        subtitle={gifPickerTarget ? `Para: ${gifPickerTarget.nomeExercicio}` : undefined}
+        onClose={() => setGifPickerTarget(null)}
+      >
+        <div className="space-y-4">
+          <div className="grid gap-3 md:grid-cols-2">
+            <input
+              value={gifBusca}
+              onChange={(e) => setGifBusca(e.target.value)}
+              placeholder="Buscar por nome do exercício…"
+              className="w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-2.5 text-sm text-white placeholder:text-white/35 outline-none focus:border-white/25"
+            />
+            <select
+              value={gifFiltroGrupo}
+              onChange={(e) => setGifFiltroGrupo(e.target.value)}
+              className="w-full rounded-2xl border border-white/10 bg-black/40 px-3 py-2.5 text-sm text-white outline-none focus:border-white/25 appearance-none"
+            >
+              <option value="">Todos os grupos musculares</option>
+              {GRUPOS_MUSCULARES_GIF.map((g) => (
+                <option key={g} value={g}>{g}</option>
+              ))}
+            </select>
+          </div>
+
+          {gifPickerTarget && (
+            (gifPickerTarget.origem === "catalogo"
+              ? catalogo.find((c) => c.id === gifPickerTarget.exercicioId)?.gif_id
+              : exercicios.find((e) => e.id === gifPickerTarget.exercicioId)?.gif_id) ? (
+              <button
+                type="button"
+                onClick={() => selecionarGif(null)}
+                disabled={gifSalvando}
+                className="text-xs font-bold text-red-300 hover:text-red-200 disabled:opacity-60"
+              >
+                Remover vídeo atual
+              </button>
+            ) : null
+          )}
+
+          <div className="max-h-[50vh] overflow-y-auto">
+            {gifLoading ? (
+              <p className="py-8 text-center text-sm text-white/50">Buscando…</p>
+            ) : gifResultados.length === 0 ? (
+              <p className="py-8 text-center text-sm text-white/50">Nenhum vídeo encontrado.</p>
+            ) : (
+              <div className="grid gap-3 sm:grid-cols-2">
+                {gifResultados.map((g) => (
+                  <button
+                    key={g.id}
+                    type="button"
+                    onClick={() => selecionarGif(g.id)}
+                    disabled={gifSalvando}
+                    className="rounded-2xl border border-white/10 bg-black/30 p-2 text-left hover:border-white/25 disabled:opacity-60"
+                  >
+                    <img
+                      src={`/api/exercicio-gif/${g.id}`}
+                      alt={g.nome_arquivo}
+                      className="w-full rounded-xl"
+                      loading="lazy"
+                    />
+                    <p className="mt-2 text-xs font-semibold text-white/85 truncate">
+                      {g.nome_arquivo.replace(/\.gif$/i, "")}
+                    </p>
+                    {g.grupo_muscular_amplo ? (
+                      <p className="text-[11px] text-white/45">{g.grupo_muscular_amplo}</p>
+                    ) : null}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </Modal>
 
       {confirmState && (
