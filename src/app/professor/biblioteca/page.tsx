@@ -11,6 +11,13 @@ import {
   type ExercicioGifItem,
 } from "@/app/actions/exercicio-gifs";
 import { GRUPOS_MUSCULARES_GIF } from "@/lib/gruposMuscularesGif";
+import { categoriaAmpla, CATEGORIAS_AMPLAS, type CategoriaAmpla } from "@/lib/categoriaAmpla";
+import { inferirEquipamentos, EQUIPAMENTO_TAGS, type EquipamentoTag } from "@/lib/inferirEquipamento";
+import { CorpoHumano } from "@/components/CorpoHumano";
+
+const CATEGORIAS_SEM_CORPO: CategoriaAmpla[] = CATEGORIAS_AMPLAS.filter(
+  (c) => !["Peito", "Costas", "Ombro", "Bíceps", "Tríceps", "Glúteos", "Panturrilha", "Pernas", "Abdômen"].includes(c)
+);
 
 interface Exercicio {
   id: string;
@@ -214,10 +221,15 @@ export default function BibliotecaExerciciosPage() {
   const [queryCat, setQueryCat] = useState("");
   const [onlyWithVideoCat, setOnlyWithVideoCat] = useState(false);
   const [sortCat, setSortCat] = useState<"az" | "za">("az");
-  const [filterCategoria, setFilterCategoria] = useState("");
-  const [filterGrupo, setFilterGrupo] = useState("");
-  const [filterEquip, setFilterEquip] = useState("");
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState<CategoriaAmpla | null>(null);
+  const [equipamentosSelecionados, setEquipamentosSelecionados] = useState<EquipamentoTag[]>([]);
   const [filterNivel, setFilterNivel] = useState("");
+
+  function toggleEquipamentoFiltro(tag: EquipamentoTag) {
+    setEquipamentosSelecionados((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+  }
 
   // modal add/edit (Minha)
   const [showAddModal, setShowAddModal] = useState(false);
@@ -457,12 +469,21 @@ export default function BibliotecaExerciciosPage() {
     [catalogo]
   );
 
-  const categorias = useMemo(() => uniqSorted(catalogo.map((c) => c.categoria)), [catalogo]);
-  const grupos = useMemo(() => uniqSorted(catalogo.map((c) => c.grupo_muscular)), [catalogo]);
-  const equips = useMemo(() => uniqSorted(catalogo.map((c) => c.equipamento)), [catalogo]);
   const niveis = useMemo(() => uniqSorted(catalogo.map((c) => c.nivel)), [catalogo]);
 
+  // Sem nenhum filtro/busca ativo, não mostramos os ~2750 itens de uma vez —
+  // só depois que o professor escolhe uma parte do corpo, equipamento, nível
+  // ou digita uma busca.
+  const semFiltroAtivo =
+    !categoriaSelecionada &&
+    equipamentosSelecionados.length === 0 &&
+    !filterNivel &&
+    !onlyWithVideoCat &&
+    !queryCat.trim();
+
   const filteredCat = useMemo(() => {
+    if (semFiltroAtivo) return [];
+
     const q = queryCat.trim().toLowerCase();
 
     let list = catalogo.slice();
@@ -488,9 +509,17 @@ export default function BibliotecaExerciciosPage() {
       });
     }
 
-    if (filterCategoria) list = list.filter((c) => (c.categoria || "") === filterCategoria);
-    if (filterGrupo) list = list.filter((c) => (c.grupo_muscular || "") === filterGrupo);
-    if (filterEquip) list = list.filter((c) => (c.equipamento || "") === filterEquip);
+    if (categoriaSelecionada) {
+      list = list.filter((c) => categoriaAmpla(c.grupo_muscular) === categoriaSelecionada);
+    }
+
+    if (equipamentosSelecionados.length > 0) {
+      list = list.filter((c) => {
+        const tags = inferirEquipamentos(c.nome, c.equipamento);
+        return equipamentosSelecionados.some((tag) => tags.includes(tag));
+      });
+    }
+
     if (filterNivel) list = list.filter((c) => (c.nivel || "") === filterNivel);
 
     if (onlyWithVideoCat) {
@@ -505,7 +534,7 @@ export default function BibliotecaExerciciosPage() {
     });
 
     return list;
-  }, [catalogo, queryCat, filterCategoria, filterGrupo, filterEquip, filterNivel, onlyWithVideoCat, sortCat]);
+  }, [catalogo, queryCat, categoriaSelecionada, equipamentosSelecionados, filterNivel, onlyWithVideoCat, sortCat, semFiltroAtivo]);
 
   const selectedCount = useMemo(
     () => Object.values(selectedCatalog).filter(Boolean).length,
@@ -802,7 +831,7 @@ export default function BibliotecaExerciciosPage() {
                     Biblioteca
                   </h1>
                   <p className="mt-2 max-w-2xl text-sm text-white/70 leading-relaxed">
-                    Use sua biblioteca própria ou copie do catálogo global premium. Você mantém liberdade total e ganha velocidade de montagem.
+                    Use sua biblioteca própria ou copie da Biblioteca Inteligente, o catálogo global com mapa do corpo humano. Você mantém liberdade total e ganha velocidade de montagem.
                   </p>
 
                   {/* Tabs */}
@@ -830,7 +859,7 @@ export default function BibliotecaExerciciosPage() {
                           : "bg-white/5 text-white/70 border-white/10 hover:bg-white/10"
                       )}
                     >
-                      Catálogo Premium
+                      Biblioteca Inteligente
                     </button>
 
                     {tab === "catalogo" ? (
@@ -892,7 +921,7 @@ export default function BibliotecaExerciciosPage() {
                 <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
                   <p className="text-xs text-white/60">{tab === "minha" ? "Total na sua biblioteca" : "Total no catálogo"}</p>
                   <p className="mt-2 text-3xl font-extrabold text-white">{tab === "minha" ? totalMine : totalCat}</p>
-                  <p className="mt-2 text-xs text-white/40">{tab === "minha" ? "Seus exercícios para usar em treinos" : "Exercícios premium prontos para copiar"}</p>
+                  <p className="mt-2 text-xs text-white/40">{tab === "minha" ? "Seus exercícios para usar em treinos" : "Exercícios prontos para copiar"}</p>
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
@@ -902,7 +931,7 @@ export default function BibliotecaExerciciosPage() {
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
-                  <p className="text-xs text-white/60">Dica premium</p>
+                  <p className="text-xs text-white/60">Dica</p>
                   <p className="mt-2 text-sm text-white/75 leading-relaxed">
                     {tab === "minha"
                       ? "Use descrições curtas e objetivas. Seu aluno entende rápido e você reduz mensagens repetidas."
@@ -997,9 +1026,8 @@ export default function BibliotecaExerciciosPage() {
                           setQueryCat("");
                           setOnlyWithVideoCat(false);
                           setSortCat("az");
-                          setFilterCategoria("");
-                          setFilterGrupo("");
-                          setFilterEquip("");
+                          setCategoriaSelecionada(null);
+                          setEquipamentosSelecionados([]);
                           setFilterNivel("");
                         }}
                         className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm font-bold text-white/70 hover:bg-white/5"
@@ -1009,69 +1037,70 @@ export default function BibliotecaExerciciosPage() {
                     </div>
                   </div>
 
-                  <div className="grid gap-3 md:grid-cols-4">
-                    <div>
-                      <label className="text-xs text-white/50">Grupo muscular</label>
-                      <select
-                        value={filterCategoria}
-                        onChange={(e) => setFilterCategoria(e.target.value)}
-                        className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-white/25"
-                      >
-                        <option value="">Todos</option>
-                        {categorias.map((x) => (
-                          <option key={x} value={x}>
-                            {x}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                  {/* Mapa do corpo humano + filtros de equipamento/nível */}
+                  <div className="grid gap-4 md:grid-cols-[auto_1fr] md:items-start rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <CorpoHumano categoriaSelecionada={categoriaSelecionada} onSelecionar={(c) => setCategoriaSelecionada((prev) => (prev === c ? null : c))} />
 
-                    <div>
-                      <label className="text-xs text-white/50">Músculo primário</label>
-                      <select
-                        value={filterGrupo}
-                        onChange={(e) => setFilterGrupo(e.target.value)}
-                        className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-white/25"
-                      >
-                        <option value="">Todos</option>
-                        {grupos.map((x) => (
-                          <option key={x} value={x}>
-                            {x}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="text-xs text-white/50">Outros grupos (sem região no corpo)</label>
+                        <div className="mt-1.5 flex flex-wrap gap-1.5">
+                          {CATEGORIAS_SEM_CORPO.map((c) => {
+                            const ativo = categoriaSelecionada === c;
+                            return (
+                              <button
+                                key={c}
+                                type="button"
+                                onClick={() => setCategoriaSelecionada((prev) => (prev === c ? null : c))}
+                                className={cx(
+                                  "rounded-full border px-3 py-1.5 text-xs font-bold transition",
+                                  ativo ? "border-white/40 bg-white/20 text-white" : "border-white/10 bg-white/5 text-white/60 hover:bg-white/10"
+                                )}
+                              >
+                                {c}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
 
-                    <div>
-                      <label className="text-xs text-white/50">Equipamento</label>
-                      <select
-                        value={filterEquip}
-                        onChange={(e) => setFilterEquip(e.target.value)}
-                        className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-white/25"
-                      >
-                        <option value="">Todos</option>
-                        {equips.map((x) => (
-                          <option key={x} value={x}>
-                            {x}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                      <div>
+                        <label className="text-xs text-white/50">Equipamento</label>
+                        <div className="mt-1.5 flex flex-wrap gap-1.5">
+                          {EQUIPAMENTO_TAGS.map((tag) => {
+                            const ativo = equipamentosSelecionados.includes(tag);
+                            return (
+                              <button
+                                key={tag}
+                                type="button"
+                                onClick={() => toggleEquipamentoFiltro(tag)}
+                                className={cx(
+                                  "rounded-full border px-3 py-1.5 text-xs font-bold transition",
+                                  ativo ? "border-white/40 bg-white/20 text-white" : "border-white/10 bg-white/5 text-white/60 hover:bg-white/10"
+                                )}
+                              >
+                                {tag}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
 
-                    <div>
-                      <label className="text-xs text-white/50">Nível</label>
-                      <select
-                        value={filterNivel}
-                        onChange={(e) => setFilterNivel(e.target.value)}
-                        className="mt-1 w-full rounded-2xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-white/25"
-                      >
-                        <option value="">Todos</option>
-                        {niveis.map((x) => (
-                          <option key={x} value={x}>
-                            {x}
-                          </option>
-                        ))}
-                      </select>
+                      <div className="max-w-[12rem]">
+                        <label className="text-xs text-white/50">Nível</label>
+                        <select
+                          value={filterNivel}
+                          onChange={(e) => setFilterNivel(e.target.value)}
+                          className="mt-1.5 w-full rounded-2xl border border-white/10 bg-black/40 px-3 py-2.5 text-sm text-white outline-none focus:border-white/25"
+                        >
+                          <option value="">Todos os níveis</option>
+                          {niveis.map((x) => (
+                            <option key={x} value={x}>
+                              {x}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                     </div>
                   </div>
 
@@ -1268,6 +1297,13 @@ export default function BibliotecaExerciciosPage() {
               <div className="rounded-[2rem] border border-white/10 bg-white/5 p-10 text-center shadow-2xl">
                 <p className="text-white/70">Carregando catálogo…</p>
               </div>
+            ) : semFiltroAtivo ? (
+              <div className="rounded-[2rem] border border-white/10 bg-white/5 p-10 text-center shadow-2xl">
+                <p className="text-xl font-extrabold text-white">Escolha uma parte do corpo pra começar</p>
+                <p className="mt-2 text-sm text-white/60 max-w-md mx-auto">
+                  Toque numa região no diagrama acima, use os filtros de equipamento/nível, ou busque pelo nome do exercício. A lista completa não fica aberta de uma vez.
+                </p>
+              </div>
             ) : filteredCat.length === 0 ? (
               <div className="rounded-[2rem] border border-white/10 bg-white/5 p-10 text-center shadow-2xl">
                 <p className="text-xl font-extrabold text-white">Nada encontrado…</p>
@@ -1278,9 +1314,8 @@ export default function BibliotecaExerciciosPage() {
                       setQueryCat("");
                       setOnlyWithVideoCat(false);
                       setSortCat("az");
-                      setFilterCategoria("");
-                      setFilterGrupo("");
-                      setFilterEquip("");
+                      setCategoriaSelecionada(null);
+                      setEquipamentosSelecionados([]);
                       setFilterNivel("");
                     }}
                     className="rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-bold text-white/80 hover:bg-white/10"
@@ -1459,7 +1494,7 @@ export default function BibliotecaExerciciosPage() {
         </div>
 
         {/* FOOT */}
-        <div className="mt-8 text-center text-xs text-white/40">Motion • Biblioteca Premium</div>
+        <div className="mt-8 text-center text-xs text-white/40">Motion • Biblioteca</div>
       </div>
 
       {/* ADD MODAL (Minha) */}

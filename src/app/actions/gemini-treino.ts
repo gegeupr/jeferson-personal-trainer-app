@@ -6,6 +6,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { verificarEIncrementarUsoIA } from "@/lib/verificarLimiteIA";
 import { criarNotificacao } from "@/lib/criarNotificacao";
 import { SPLIT_MAP, getSplitKey, type DiaFiltro } from "@/lib/splitDias";
+import { categoriaAmpla } from "@/lib/categoriaAmpla";
 
 async function assertUserId(expectedId: string): Promise<true | { ok: false; error: string }> {
   const supabase = await createSupabaseServer();
@@ -210,30 +211,6 @@ function dedupPorBase(exercicios: any[]): any[] {
     result.push(candidatos.reduce((a: any, b: any) => (a.nome as string).length <= (b.nome as string).length ? a : b));
   }
   return result;
-}
-
-// Normaliza QUALQUER grupo_muscular (granular antigo tipo "Peitoral maior",
-// ou amplo novo tipo "Peito") pra uma das categorias fixas abaixo. Isso é
-// mais confiável que depender de movement_pattern, que só está preenchido
-// pros ~640 exercícios curados originalmente — os ~2100 vindos do GIF usam
-// só grupo_muscular.
-function categoriaAmpla(grupoMuscular: string | null | undefined): string {
-  const g = (grupoMuscular ?? '').toLowerCase();
-  if (g.includes('peitoral') || g === 'peito') return 'Peito';
-  if (g.includes('dorsal') || g.includes('romboide') || g.includes('trapézio') || g.includes('lombar') || g.includes('eretor') || g === 'costas') return 'Costas';
-  if (g.includes('deltoide') || g === 'ombro' || g === 'ombros') return 'Ombro';
-  // "tríceps braquial" contém "braquial" — checar tríceps ANTES do bíceps
-  // pra não cair na categoria errada.
-  if (g.includes('tríceps')) return 'Tríceps';
-  if (g.includes('bíceps') || g.includes('braquial')) return 'Bíceps';
-  if (g.includes('glúteo')) return 'Glúteos';
-  if (g.includes('gastrocnêmio') || g.includes('sóleo') || g === 'panturrilha') return 'Panturrilha';
-  if (g.includes('quadríceps') || g.includes('posterior de coxa') || g.includes('adutor') || g === 'pernas') return 'Pernas';
-  if (g.includes('core') || g.includes('oblíquo') || g.includes('abdominal') || g.includes('abdome') || g === 'abdômen') return 'Abdômen';
-  if (g.includes('cardiorrespirat') || g === 'cardio') return 'Cardio';
-  if (g === 'mobilidade' || g === 'alongamento') return 'Mobilidade';
-  if (g === 'funcional') return 'Funcional';
-  return 'Outro';
 }
 
 const CORE_CATEGORIA = 'Abdômen';
