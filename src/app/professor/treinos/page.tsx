@@ -373,12 +373,15 @@ export default function ProfessorTreinosPage() {
     if (catalogo.length > 0) return catalogo;
     setLoadingCatalogo(true);
     try {
+      // Sem .limit() explícito, o Supabase corta em 1000 linhas por padrão —
+      // com 2754 exercícios isso truncava o catálogo silenciosamente.
       const { data, error } = await supabase
         .from("exercicios_catalogo")
         .select(
           "id, nome, categoria, subcategoria, grupo_muscular, musculo_principal, musculos_secundarios, objetivo, equipamento, ambiente, nivel, descricao_tecnica, link_video, gif_id"
         )
-        .order("nome", { ascending: true });
+        .order("nome", { ascending: true })
+        .limit(5000);
 
       if (error) throw error;
       const lista = (data as any) || [];

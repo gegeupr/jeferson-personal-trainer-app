@@ -204,7 +204,6 @@ export default function BibliotecaExerciciosPage() {
 
   // Catálogo
   const [catalogo, setCatalogo] = useState<ExercicioCatalogo[]>([]);
-  const [expandedVideoCat, setExpandedVideoCat] = useState<Record<string, boolean>>({});
   const [selectedCatalog, setSelectedCatalog] = useState<Record<string, boolean>>({});
 
   // Loading
@@ -219,7 +218,7 @@ export default function BibliotecaExerciciosPage() {
 
   // UI: Catálogo
   const [queryCat, setQueryCat] = useState("");
-  const [onlyWithVideoCat, setOnlyWithVideoCat] = useState(false);
+  const [onlyWithGifCat, setOnlyWithGifCat] = useState(false);
   const [sortCat, setSortCat] = useState<"az" | "za">("az");
   const [categoriaSelecionada, setCategoriaSelecionada] = useState<CategoriaAmpla | null>(null);
   const [equipamentosSelecionados, setEquipamentosSelecionados] = useState<EquipamentoTag[]>([]);
@@ -400,11 +399,16 @@ export default function BibliotecaExerciciosPage() {
   async function fetchCatalogo() {
     setLoadingCatalogo(true);
 
+    // Sem .limit() explícito, o Supabase corta silenciosamente em 1000 linhas
+    // (default do PostgREST) — com 2754 exercícios ordenados por categoria,
+    // isso cortava categorias inteiras no meio (ex: "Ombros" sumia quase
+    // por completo). 5000 dá folga confortável acima do total atual.
     const { data, error } = await supabase
       .from("exercicios_catalogo")
       .select("*")
       .order("categoria", { ascending: true })
-      .order("nome", { ascending: true });
+      .order("nome", { ascending: true })
+      .limit(5000);
 
     if (error) {
       fireToast("error", "Erro ao carregar catálogo", error.message);
@@ -464,8 +468,11 @@ export default function BibliotecaExerciciosPage() {
   // Derived - Catálogo
   // -----------------------------
   const totalCat = catalogo.length;
-  const comVideoCat = useMemo(
-    () => catalogo.filter((c) => !!getYouTubeId(c.link_video)).length,
+  // O catálogo global usa GIF como demonstração — link_video nunca é
+  // preenchido nele (fica só pros exercícios que o professor cria em "Minha
+  // biblioteca"). Por isso a métrica/filtro do catálogo é por GIF, não vídeo.
+  const comGifCat = useMemo(
+    () => catalogo.filter((c) => !!c.gif_id).length,
     [catalogo]
   );
 
@@ -478,7 +485,7 @@ export default function BibliotecaExerciciosPage() {
     !categoriaSelecionada &&
     equipamentosSelecionados.length === 0 &&
     !filterNivel &&
-    !onlyWithVideoCat &&
+    !onlyWithGifCat &&
     !queryCat.trim();
 
   const filteredCat = useMemo(() => {
@@ -522,8 +529,8 @@ export default function BibliotecaExerciciosPage() {
 
     if (filterNivel) list = list.filter((c) => (c.nivel || "") === filterNivel);
 
-    if (onlyWithVideoCat) {
-      list = list.filter((c) => !!getYouTubeId(c.link_video));
+    if (onlyWithGifCat) {
+      list = list.filter((c) => !!c.gif_id);
     }
 
     list.sort((a, b) => {
@@ -534,7 +541,7 @@ export default function BibliotecaExerciciosPage() {
     });
 
     return list;
-  }, [catalogo, queryCat, categoriaSelecionada, equipamentosSelecionados, filterNivel, onlyWithVideoCat, sortCat, semFiltroAtivo]);
+  }, [catalogo, queryCat, categoriaSelecionada, equipamentosSelecionados, filterNivel, onlyWithGifCat, sortCat, semFiltroAtivo]);
 
   const selectedCount = useMemo(
     () => Object.values(selectedCatalog).filter(Boolean).length,
@@ -864,7 +871,7 @@ export default function BibliotecaExerciciosPage() {
 
                     {tab === "catalogo" ? (
                       <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-bold text-white/60">
-                        {totalCat} itens • {comVideoCat} com vídeo
+                        {totalCat} itens • {comGifCat} com GIF
                       </span>
                     ) : (
                       <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-bold text-white/60">
@@ -925,9 +932,9 @@ export default function BibliotecaExerciciosPage() {
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
-                  <p className="text-xs text-white/60">Com vídeo</p>
-                  <p className="mt-2 text-3xl font-extrabold text-white">{tab === "minha" ? comVideoMine : comVideoCat}</p>
-                  <p className="mt-2 text-xs text-white/40">Preview direto (YouTube)</p>
+                  <p className="text-xs text-white/60">{tab === "minha" ? "Com vídeo" : "Com GIF"}</p>
+                  <p className="mt-2 text-3xl font-extrabold text-white">{tab === "minha" ? comVideoMine : comGifCat}</p>
+                  <p className="mt-2 text-xs text-white/40">{tab === "minha" ? "Preview direto (YouTube)" : "Demonstração animada"}</p>
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
@@ -1003,15 +1010,15 @@ export default function BibliotecaExerciciosPage() {
 
                     <div className="flex flex-wrap items-end gap-2">
                       <button
-                        onClick={() => setOnlyWithVideoCat((v) => !v)}
+                        onClick={() => setOnlyWithGifCat((v) => !v)}
                         className={cx(
                           "rounded-2xl border px-4 py-3 text-sm font-bold transition",
-                          onlyWithVideoCat
+                          onlyWithGifCat
                             ? "border-white/15 bg-white/8 text-white/70"
                             : "border-white/10 bg-white/5 text-white/75 hover:bg-white/10"
                         )}
                       >
-                        {onlyWithVideoCat ? "Só com vídeo ✓" : "Só com vídeo"}
+                        {onlyWithGifCat ? "Só com GIF ✓" : "Só com GIF"}
                       </button>
 
                       <button
@@ -1024,7 +1031,7 @@ export default function BibliotecaExerciciosPage() {
                       <button
                         onClick={() => {
                           setQueryCat("");
-                          setOnlyWithVideoCat(false);
+                          setOnlyWithGifCat(false);
                           setSortCat("az");
                           setCategoriaSelecionada(null);
                           setEquipamentosSelecionados([]);
@@ -1312,7 +1319,7 @@ export default function BibliotecaExerciciosPage() {
                   <button
                     onClick={() => {
                       setQueryCat("");
-                      setOnlyWithVideoCat(false);
+                      setOnlyWithGifCat(false);
                       setSortCat("az");
                       setCategoriaSelecionada(null);
                       setEquipamentosSelecionados([]);
@@ -1327,8 +1334,6 @@ export default function BibliotecaExerciciosPage() {
             ) : (
               <div className="grid gap-4">
                 {filteredCat.map((c) => {
-                  const yid = getYouTubeId(c.link_video);
-                  const isOpen = !!expandedVideoCat[c.id];
                   const checked = !!selectedCatalog[c.id];
 
                   return (
@@ -1344,13 +1349,13 @@ export default function BibliotecaExerciciosPage() {
                           <div className="flex flex-wrap items-center gap-2">
                             <p className="text-lg font-extrabold text-white truncate">{c.nome}</p>
 
-                            {yid ? (
+                            {c.gif_id ? (
                               <span className="rounded-full border border-white/15 bg-white/8 px-3 py-1 text-xs font-bold text-white/70">
-                                Vídeo
+                                GIF
                               </span>
                             ) : (
                               <span className="rounded-full border border-white/10 bg-black/30 px-3 py-1 text-xs font-bold text-white/60">
-                                Sem vídeo
+                                Sem GIF
                               </span>
                             )}
 
@@ -1391,30 +1396,6 @@ export default function BibliotecaExerciciosPage() {
                           ) : (
                             <p className="mt-3 text-sm text-white/40 italic">Sem descrição técnica.</p>
                           )}
-
-                          <div className="mt-3 flex flex-wrap gap-2">
-                            {c.link_video ? (
-                              <a
-                                href={c.link_video}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="rounded-2xl border border-white/10 bg-black/30 px-4 py-2 text-xs font-bold text-white/80 hover:bg-white/5"
-                              >
-                                Abrir vídeo →
-                              </a>
-                            ) : null}
-
-                            {yid ? (
-                              <button
-                                onClick={() =>
-                                  setExpandedVideoCat((prev) => ({ ...prev, [c.id]: !prev[c.id] }))
-                                }
-                                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold text-white/70 hover:bg-white/10"
-                              >
-                                {isOpen ? "Ocultar preview" : "Ver preview"}
-                              </button>
-                            ) : null}
-                          </div>
                         </div>
 
                         <div className="flex flex-col gap-2 md:items-end">
@@ -1469,20 +1450,6 @@ export default function BibliotecaExerciciosPage() {
                             alt={`Demonstração — ${c.nome}`}
                             className="w-full"
                           />
-                        </div>
-                      ) : null}
-
-                      {yid && isOpen ? (
-                        <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-black/40">
-                          <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
-                            <iframe
-                              className="absolute inset-0 h-full w-full"
-                              src={`https://www.youtube.com/embed/${yid}`}
-                              title={`YouTube preview - ${c.nome}`}
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                            />
-                          </div>
                         </div>
                       ) : null}
                     </div>
