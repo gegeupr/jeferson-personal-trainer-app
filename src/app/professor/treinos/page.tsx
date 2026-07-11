@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import Link from "next/link";
 import { supabase } from "@/utils/supabase-browser";
+import { fetchAllRows } from "@/lib/fetchAllRows";
 
 // -------------------- Interfaces --------------------
 interface Exercicio {
@@ -373,15 +374,19 @@ export default function ProfessorTreinosPage() {
     if (catalogo.length > 0) return catalogo;
     setLoadingCatalogo(true);
     try {
-      // Sem .limit() explícito, o Supabase corta em 1000 linhas por padrão —
-      // com 2754 exercícios isso truncava o catálogo silenciosamente.
-      const { data, error } = await supabase
-        .from("exercicios_catalogo")
-        .select(
-          "id, nome, categoria, subcategoria, grupo_muscular, musculo_principal, musculos_secundarios, objetivo, equipamento, ambiente, nivel, descricao_tecnica, link_video, gif_id"
-        )
-        .order("nome", { ascending: true })
-        .limit(5000);
+      // O projeto Supabase tem um teto de ~1000 linhas por requisição na
+      // plataforma — .limit() no client não passa disso. Com 2754
+      // exercícios isso truncava o catálogo silenciosamente. Pagina em
+      // lotes de 1000 pra trazer tudo.
+      const { data, error } = await fetchAllRows<ExercicioCatalogo>((from, to) =>
+        supabase
+          .from("exercicios_catalogo")
+          .select(
+            "id, nome, categoria, subcategoria, grupo_muscular, musculo_principal, musculos_secundarios, objetivo, equipamento, ambiente, nivel, descricao_tecnica, link_video, gif_id"
+          )
+          .order("nome", { ascending: true })
+          .range(from, to)
+      );
 
       if (error) throw error;
       const lista = (data as any) || [];

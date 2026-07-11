@@ -14,6 +14,7 @@ import { GRUPOS_MUSCULARES_GIF } from "@/lib/gruposMuscularesGif";
 import { categoriaAmpla, CATEGORIAS_AMPLAS, type CategoriaAmpla } from "@/lib/categoriaAmpla";
 import { inferirEquipamentos, EQUIPAMENTO_TAGS, type EquipamentoTag } from "@/lib/inferirEquipamento";
 import { CorpoHumano } from "@/components/CorpoHumano";
+import { fetchAllRows } from "@/lib/fetchAllRows";
 
 const CATEGORIAS_SEM_CORPO: CategoriaAmpla[] = CATEGORIAS_AMPLAS.filter(
   (c) => !["Peito", "Costas", "Ombro", "Bíceps", "Tríceps", "Glúteos", "Panturrilha", "Pernas", "Abdômen"].includes(c)
@@ -399,16 +400,19 @@ export default function BibliotecaExerciciosPage() {
   async function fetchCatalogo() {
     setLoadingCatalogo(true);
 
-    // Sem .limit() explícito, o Supabase corta silenciosamente em 1000 linhas
-    // (default do PostgREST) — com 2754 exercícios ordenados por categoria,
-    // isso cortava categorias inteiras no meio (ex: "Ombros" sumia quase
-    // por completo). 5000 dá folga confortável acima do total atual.
-    const { data, error } = await supabase
-      .from("exercicios_catalogo")
-      .select("*")
-      .order("categoria", { ascending: true })
-      .order("nome", { ascending: true })
-      .limit(5000);
+    // O projeto Supabase tem um teto de ~1000 linhas por requisição
+    // configurado na plataforma (não dá pra contornar com .limit() maior) —
+    // com 2754 exercícios ordenados por categoria, isso cortava categorias
+    // inteiras no meio (ex: "Ombros" sumia quase por completo). Pagina em
+    // lotes pra trazer tudo de qualquer forma.
+    const { data, error } = await fetchAllRows<ExercicioCatalogo>((from, to) =>
+      supabase
+        .from("exercicios_catalogo")
+        .select("*")
+        .order("categoria", { ascending: true })
+        .order("nome", { ascending: true })
+        .range(from, to)
+    );
 
     if (error) {
       fireToast("error", "Erro ao carregar catálogo", error.message);

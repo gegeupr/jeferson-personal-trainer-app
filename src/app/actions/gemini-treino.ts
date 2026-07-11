@@ -7,6 +7,7 @@ import { verificarEIncrementarUsoIA } from "@/lib/verificarLimiteIA";
 import { criarNotificacao } from "@/lib/criarNotificacao";
 import { SPLIT_MAP, getSplitKey, type DiaFiltro } from "@/lib/splitDias";
 import { categoriaAmpla } from "@/lib/categoriaAmpla";
+import { fetchAllRows } from "@/lib/fetchAllRows";
 
 async function assertUserId(expectedId: string): Promise<true | { ok: false; error: string }> {
   const supabase = await createSupabaseServer();
@@ -476,11 +477,21 @@ export async function gerarTreinoComIA(
         .eq("professor_id", profId)
         .order("nome"),
 
-      supabaseAdmin
-        .from("exercicios_catalogo")
-        .select("id, nome, grupo_muscular, equipamento, nivel, categoria, movement_pattern, contraindicacoes, nivel_minimo")
-        .order("nome")
-        .limit(3000),
+      // O projeto Supabase tem um teto de ~1000 linhas por requisição na
+      // plataforma — .limit() no client não passa disso. Com 2754
+      // exercícios no catálogo, isso fazia a IA nunca ver ~64% dele
+      // (tudo alfabeticamente após a linha 1000). Pagina em lotes de 1000.
+      fetchAllRows<{
+        id: string; nome: string; grupo_muscular: string | null; equipamento: string | null;
+        nivel: string | null; categoria: string | null; movement_pattern: string | null;
+        contraindicacoes: string[] | null; nivel_minimo: string | null;
+      }>((from, to) =>
+        supabaseAdmin
+          .from("exercicios_catalogo")
+          .select("id, nome, grupo_muscular, equipamento, nivel, categoria, movement_pattern, contraindicacoes, nivel_minimo")
+          .order("nome")
+          .range(from, to)
+      ),
 
       supabaseAdmin
         .from("medidas_corporais")
@@ -974,11 +985,17 @@ export async function gerarTreinoModeloComIA(
         .eq("professor_id", profId)
         .order("nome"),
 
-      supabaseAdmin
-        .from("exercicios_catalogo")
-        .select("id, nome, grupo_muscular, equipamento, nivel, categoria, movement_pattern, contraindicacoes, nivel_minimo")
-        .order("nome")
-        .limit(3000),
+      fetchAllRows<{
+        id: string; nome: string; grupo_muscular: string | null; equipamento: string | null;
+        nivel: string | null; categoria: string | null; movement_pattern: string | null;
+        contraindicacoes: string[] | null; nivel_minimo: string | null;
+      }>((from, to) =>
+        supabaseAdmin
+          .from("exercicios_catalogo")
+          .select("id, nome, grupo_muscular, equipamento, nivel, categoria, movement_pattern, contraindicacoes, nivel_minimo")
+          .order("nome")
+          .range(from, to)
+      ),
     ]);
 
     const biblioteca = bibResult.data || [];
