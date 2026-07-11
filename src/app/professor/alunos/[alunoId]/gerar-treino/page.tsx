@@ -22,6 +22,7 @@ import {
   type ExercicioGifItem,
 } from "@/app/actions/exercicio-gifs";
 import { GRUPOS_MUSCULARES_GIF } from "@/lib/gruposMuscularesGif";
+import { EQUIPAMENTO_TAGS } from "@/lib/inferirEquipamento";
 
 // ─── Preview component ────────────────────────────────────────────────────────
 
@@ -276,9 +277,11 @@ const DIVISOES = [
 
 // ─── Wizard passo 2: personalização por rotina ────────────────────────────────
 
-const EQUIPAMENTO_OPTIONS = [
-  "Halteres", "Barra", "Máquina", "Cabo/Polia", "Peso corporal", "Elásticos", "Kettlebell",
-];
+// Mesma vocabulário do inferirEquipamentos() — necessário pra o filtro do
+// servidor (buildCatalogoSections/filtrarDia) reconhecer o que foi marcado
+// aqui. Se essas listas divergirem, o filtro por equipamento vira um hint
+// de texto que a IA pode ignorar (era exatamente o bug antes desse fix).
+const EQUIPAMENTO_OPTIONS = EQUIPAMENTO_TAGS;
 
 const FOCO_POR_CATEGORIA: Record<string, string[]> = {
   Peito: ["Peito superior", "Peito inferior"],

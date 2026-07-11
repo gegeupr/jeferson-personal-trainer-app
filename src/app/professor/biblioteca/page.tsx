@@ -405,10 +405,13 @@ export default function BibliotecaExerciciosPage() {
     // com 2754 exercícios ordenados por categoria, isso cortava categorias
     // inteiras no meio (ex: "Ombros" sumia quase por completo). Pagina em
     // lotes pra trazer tudo de qualquer forma.
+    // Exercício sem GIF não serve pra nada aqui — a Biblioteca Inteligente é
+    // GIF-first, então nem mostramos os ~137 itens legados sem demonstração.
     const { data, error } = await fetchAllRows<ExercicioCatalogo>((from, to) =>
       supabase
         .from("exercicios_catalogo")
         .select("*")
+        .not("gif_id", "is", null)
         .order("categoria", { ascending: true })
         .order("nome", { ascending: true })
         .range(from, to)

@@ -8,6 +8,7 @@ import { criarNotificacao } from "@/lib/criarNotificacao";
 import { SPLIT_MAP, getSplitKey, type DiaFiltro } from "@/lib/splitDias";
 import { categoriaAmpla } from "@/lib/categoriaAmpla";
 import { fetchAllRows } from "@/lib/fetchAllRows";
+import { inferirEquipamentos, EQUIPAMENTO_TAGS, type EquipamentoTag } from "@/lib/inferirEquipamento";
 
 async function assertUserId(expectedId: string): Promise<true | { ok: false; error: string }> {
   const supabase = await createSupabaseServer();
@@ -229,7 +230,7 @@ function embaralhar(arr: any[]): any[] {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function filtrarDia(catalogo: any[], filtro: DiaFiltro): any[] {
+function filtrarDia(catalogo: any[], filtro: DiaFiltro, equipamentoFiltro?: EquipamentoTag[]): any[] {
   const porCategoria = new Map<string, any[]>();
   for (const e of catalogo) {
     const cat = categoriaAmpla(e.grupo_muscular);
@@ -240,13 +241,41 @@ function filtrarDia(catalogo: any[], filtro: DiaFiltro): any[] {
   const result: any[] = [];
   // Embaralha antes de cortar — senão o teto por categoria sempre pega os
   // mesmos primeiros da ordem alfabética, e a IA nunca vê o resto da lista.
-  for (const exs of porCategoria.values()) result.push(...embaralhar(exs).slice(0, MAX_POR_CATEGORIA_DIA));
+  for (const exs of porCategoria.values()) {
+    // Equipamento do wizard (passo 2) era só um hint de texto no prompt —
+    // a IA ignorava na prática (ex: pediu "Máquina" no dia de glúteos e
+    // recebeu "Abdução de Quadril com Ponte", que é peso corporal). Agora
+    // filtra de verdade os candidatos; se o filtro zerar a categoria
+    // (equipamento raro pra aquele grupo), cai pro conjunto completo em
+    // vez de arriscar um dia sem exercício nenhum.
+    let candidatos = exs;
+    if (equipamentoFiltro && equipamentoFiltro.length > 0) {
+      const filtrados = exs.filter((e) => {
+        const tags = inferirEquipamentos(e.nome, e.equipamento);
+        return equipamentoFiltro.some((eq) => tags.includes(eq));
+      });
+      if (filtrados.length > 0) candidatos = filtrados;
+    }
+    result.push(...embaralhar(candidatos).slice(0, MAX_POR_CATEGORIA_DIA));
+  }
   return result;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function catExToJson(e: any): string {
   return `{"fonte":"catalogo","id":"${e.id}","nome":"${e.nome}","grupo":"${e.grupo_muscular ?? ''}","equip":"${e.equipamento ?? ''}","nivel":"${e.nivel_minimo ?? e.nivel ?? ''}","cat":"${e.categoria ?? ''}","pattern":"${e.movement_pattern ?? ''}"}`;
+}
+
+// Converte o texto de equipamento do wizard (ex: "Halteres, Máquina") nas
+// tags reconhecidas por inferirEquipamentos — ignora o que não bater com
+// nenhuma tag conhecida em vez de quebrar o filtro.
+function parseEquipamentoTags(equipamentoTexto: string | undefined): EquipamentoTag[] | undefined {
+  if (!equipamentoTexto) return undefined;
+  const tags = equipamentoTexto
+    .split(',')
+    .map((s) => s.trim())
+    .filter((s): s is EquipamentoTag => (EQUIPAMENTO_TAGS as readonly string[]).includes(s));
+  return tags.length > 0 ? tags : undefined;
 }
 
 // Monta a linha de preferências específicas de um dia (wizard passo 2) pra
@@ -307,7 +336,8 @@ ${prefsPorDia.length > 0 ? `\n--- PREFERÊNCIAS DO PROFESSOR POR DIA ---\n${pref
 
   for (let i = 0; i < dias; i++) {
     const filtro = filtros[i % filtros.length];
-    const exsDoDia = dedupPorBase(filtrarDia(catalogo, filtro));
+    const equipamentoFiltro = parseEquipamentoTags(rotinasConfig?.[i]?.equipamento);
+    const exsDoDia = dedupPorBase(filtrarDia(catalogo, filtro, equipamentoFiltro));
     partes.push(`--- Treino ${labels[i]}: ${filtro.label} (${exsDoDia.length} exercícios disponíveis) ---${formatRotinaConfig(rotinasConfig?.[i])}
 ${exsDoDia.map(catExToJson).join('\n')}`);
   }
@@ -489,6 +519,11 @@ export async function gerarTreinoComIA(
         supabaseAdmin
           .from("exercicios_catalogo")
           .select("id, nome, grupo_muscular, equipamento, nivel, categoria, movement_pattern, contraindicacoes, nivel_minimo")
+          // Exercício sem GIF não tem demonstração pro aluno — a Biblioteca
+          // Inteligente é GIF-first, então a IA nunca deve sugerir esses
+          // ~137 itens legados (ex: "Kettlebell Swing", "Hip Thrust
+          // (Drop-Set) (Smith)" apareciam sem vídeo nenhum nos treinos).
+          .not("gif_id", "is", null)
           .order("nome")
           .range(from, to)
       ),
@@ -634,6 +669,7 @@ PROIBIDO em uma mesma rotina:
 - 2 ou mais Face Pull
 - Barra Fixa Pronada + Barra Fixa Supinada = mesmo padrão de puxada vertical, grip diferente = escolha 1 (pronada ou supinada, nunca as duas no mesmo dia)
 - Puxada Frontal Aberta + Puxada Frontal Fechada + Puxada Neutra = mesmo movimento = escolha 1
+- 2 ou mais "Ponte" de glúteo (Ponte de Glúteo Baixa no Chão + Ponte Declinada Posterior + Abdução de Quadril com Ponte etc = todas são variação de ponte/glute bridge = escolha 1)
 
 REGRA: para cada padrão de movimento, escolha UM exercício. Se quiser usar técnica especial (drop-set, rest-pause), aplique ao exercício escolhido via "observacao".
 EXEMPLO CORRETO: {"nome": "Crossover na Polia Alta", "series": 4, "repeticoes": "10-12", "observacao": "Última série em drop-set: reduzir 20% e continuar até a falha."}
@@ -993,6 +1029,11 @@ export async function gerarTreinoModeloComIA(
         supabaseAdmin
           .from("exercicios_catalogo")
           .select("id, nome, grupo_muscular, equipamento, nivel, categoria, movement_pattern, contraindicacoes, nivel_minimo")
+          // Exercício sem GIF não tem demonstração pro aluno — a Biblioteca
+          // Inteligente é GIF-first, então a IA nunca deve sugerir esses
+          // ~137 itens legados (ex: "Kettlebell Swing", "Hip Thrust
+          // (Drop-Set) (Smith)" apareciam sem vídeo nenhum nos treinos).
+          .not("gif_id", "is", null)
           .order("nome")
           .range(from, to)
       ),

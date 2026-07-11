@@ -378,12 +378,15 @@ export default function ProfessorTreinosPage() {
       // plataforma — .limit() no client não passa disso. Com 2754
       // exercícios isso truncava o catálogo silenciosamente. Pagina em
       // lotes de 1000 pra trazer tudo.
+      // Exercício sem GIF não serve pra nada aqui — a Biblioteca Inteligente
+      // é GIF-first, então nem mostramos os itens legados sem demonstração.
       const { data, error } = await fetchAllRows<ExercicioCatalogo>((from, to) =>
         supabase
           .from("exercicios_catalogo")
           .select(
             "id, nome, categoria, subcategoria, grupo_muscular, musculo_principal, musculos_secundarios, objetivo, equipamento, ambiente, nivel, descricao_tecnica, link_video, gif_id"
           )
+          .not("gif_id", "is", null)
           .order("nome", { ascending: true })
           .range(from, to)
       );
